@@ -1,5 +1,5 @@
 import { Box, Typography, TextField } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import type { Stats } from "../types/stats";
 import { JOBS } from "../types/job";
 
@@ -28,7 +28,7 @@ export default function StatTable({ stats, onStatsChange, selectedJob }: StatTab
     buffAttack: 0,
   });
 
-  const currentStats = stats || localStats;
+  const baseStats = stats || localStats;
 
   // 현재 직업 정보 가져오기
   const currentJob = JOBS.find((job) => job.engName === selectedJob);
@@ -37,29 +37,37 @@ export default function StatTable({ stats, onStatsChange, selectedJob }: StatTab
     : null;
 
   // 총 AP 계산
-  const totalAP =
-    20 + currentStats.level * 5 + (currentStats.level >= 70 ? 5 : 0) + (currentStats.level >= 120 ? 5 : 0);
+  const totalAP = 20 + baseStats.level * 5 + (baseStats.level >= 70 ? 5 : 0) + (baseStats.level >= 120 ? 5 : 0);
 
-  // 레벨 변경 시 주스탯 자동 증가
-  useEffect(() => {
-    if (!mainStatKey) return;
+  // 주스탯을 자동 계산하여 포함한 최종 스탯
+  const currentStats = useMemo(() => {
+    if (!mainStatKey) return baseStats;
 
     const otherStats = ["pureStr", "pureDex", "pureInt", "pureLuk"].filter((s) => s !== mainStatKey);
-    const otherStatsSum = otherStats.reduce((sum, stat) => sum + (currentStats[stat as keyof Stats] as number), 0);
+    const otherStatsSum = otherStats.reduce((sum, stat) => sum + (baseStats[stat as keyof Stats] as number), 0);
     const newMainStat = totalAP - otherStatsSum;
 
-    if (currentStats[mainStatKey] !== newMainStat) {
-      const newStats = { ...currentStats, [mainStatKey]: newMainStat };
-      setLocalStats(newStats);
-      onStatsChange?.(newStats);
-    }
-  }, [currentStats.level, selectedJob]);
+    return { ...baseStats, [mainStatKey]: newMainStat };
+  }, [baseStats, mainStatKey, totalAP]);
 
   const handleLevelChange = (value: string) => {
     const numValue = Math.max(1, parseInt(value) || 1);
-    const newStats = { ...currentStats, level: numValue };
-    setLocalStats(newStats);
-    onStatsChange?.(newStats);
+    const newBaseStats = { ...baseStats, level: numValue };
+
+    // 주스탯 계산
+    if (mainStatKey) {
+      const otherStats = ["pureStr", "pureDex", "pureInt", "pureLuk"].filter((s) => s !== mainStatKey);
+      const otherStatsSum = otherStats.reduce((sum, stat) => sum + (newBaseStats[stat as keyof Stats] as number), 0);
+      const newTotalAP = 20 + numValue * 5 + (numValue >= 70 ? 5 : 0) + (numValue >= 120 ? 5 : 0);
+      const newMainStat = newTotalAP - otherStatsSum;
+
+      const newStats = { ...newBaseStats, [mainStatKey]: newMainStat };
+      setLocalStats(newStats);
+      onStatsChange?.(newStats);
+    } else {
+      setLocalStats(newBaseStats);
+      onStatsChange?.(newBaseStats);
+    }
   };
 
   const handlePureStatChange = (stat: "pureStr" | "pureDex" | "pureInt" | "pureLuk", value: string) => {
@@ -67,10 +75,10 @@ export default function StatTable({ stats, onStatsChange, selectedJob }: StatTab
 
     const numValue = Math.max(4, parseInt(value) || 4);
     const otherStats = ["pureStr", "pureDex", "pureInt", "pureLuk"].filter((s) => s !== mainStatKey && s !== stat);
-    const otherStatsSum = otherStats.reduce((sum, s) => sum + (currentStats[s as keyof Stats] as number), 0);
+    const otherStatsSum = otherStats.reduce((sum, s) => sum + (baseStats[s as keyof Stats] as number), 0);
     const newMainStat = totalAP - numValue - otherStatsSum;
 
-    const newStats = { ...currentStats, [stat]: numValue, [mainStatKey]: newMainStat };
+    const newStats = { ...baseStats, [stat]: numValue, [mainStatKey]: newMainStat };
     setLocalStats(newStats);
     onStatsChange?.(newStats);
   };
