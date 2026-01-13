@@ -1,9 +1,24 @@
 import { Box, Divider, Typography, Select, MenuItem, FormControl, TextField, Button } from "@mui/material";
-import { useState } from "react";
-import { EQUIPMENT_SLOTS, type Equipment } from "../types/equipment";
+import { useState, useEffect } from "react";
+import { EQUIPMENT_SLOTS } from "../types/equipment";
+import type { Item } from "../types/item";
+import weaponsData from "../data/items/weapons.json";
+import helmetsData from "../data/items/helmets.json";
 
 // 필터 영역 컴포넌트
-function FilterSection({ selectedSlot, onSlotChange }: { selectedSlot: string; onSlotChange: (slot: string) => void }) {
+function FilterSection({
+  selectedSlot,
+  onSlotChange,
+  availableItems,
+  selectedItemName,
+  onItemSelect,
+}: {
+  selectedSlot: string;
+  onSlotChange: (slot: string) => void;
+  availableItems: Item[];
+  selectedItemName: string;
+  onItemSelect: (itemName: string) => void;
+}) {
   return (
     <Box sx={{ flex: 1, px: 2, display: "flex", flexDirection: "column", gap: 1.5 }}>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
@@ -37,17 +52,23 @@ function FilterSection({ selectedSlot, onSlotChange }: { selectedSlot: string; o
         </Typography>
         <FormControl size="small" fullWidth>
           <Select
-            value=""
+            value={selectedItemName}
+            onChange={(e) => onItemSelect(e.target.value)}
             displayEmpty
-            disabled
+            disabled={!selectedSlot || availableItems.length === 0}
             sx={{
               fontSize: "0.875rem",
               bgcolor: "white",
             }}
           >
             <MenuItem value="" disabled>
-              <em>구현예정</em>
+              <em>{availableItems.length === 0 ? "아이템 없음" : "선택하세요"}</em>
             </MenuItem>
+            {availableItems.map((item) => (
+              <MenuItem key={item.name} value={item.name}>
+                {item.name}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Box>
@@ -56,37 +77,58 @@ function FilterSection({ selectedSlot, onSlotChange }: { selectedSlot: string; o
 }
 
 // 아이템 정보 영역 컴포넌트
-function ItemInfoSection({ itemStats }: { itemStats: Equipment | null }) {
+function ItemInfoSection({ item }: { item: Item | null }) {
   return (
     <Box sx={{ flex: 2, px: 2, display: "flex", flexDirection: "column", gap: 1 }}>
       <Typography variant="body2" sx={{ fontSize: "0.875rem", fontWeight: "bold" }}>
         아이템 정보
       </Typography>
-      {itemStats ? (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
-          <Typography variant="body2" sx={{ fontSize: "0.75rem" }}>
-            이름: {itemStats.name || "없음"}
-          </Typography>
-          <Typography variant="body2" sx={{ fontSize: "0.75rem" }}>
-            공격력: {itemStats.attack || 0}
-          </Typography>
-          <Typography variant="body2" sx={{ fontSize: "0.75rem" }}>
-            힘: {itemStats.str || 0}
-          </Typography>
-          <Typography variant="body2" sx={{ fontSize: "0.75rem" }}>
-            민첩: {itemStats.dex || 0}
-          </Typography>
-          <Typography variant="body2" sx={{ fontSize: "0.75rem" }}>
-            지력: {itemStats.int || 0}
-          </Typography>
-          <Typography variant="body2" sx={{ fontSize: "0.75rem" }}>
-            행운: {itemStats.luk || 0}
-          </Typography>
+      {item ? (
+        <Box sx={{ display: "flex", gap: 2 }}>
+          {/* 아이콘 영역 */}
+          <Box
+            sx={{
+              width: 60,
+              height: 60,
+              border: "1px solid #ddd",
+              borderRadius: 1,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              bgcolor: "white",
+              flexShrink: 0,
+            }}
+          >
+            {/* 아이콘 자리 */}
+          </Box>
+          {/* 정보 영역 */}
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+            <Typography variant="body2" sx={{ fontSize: "0.875rem", fontWeight: "bold" }}>
+              {item.name}
+            </Typography>
+            <Typography variant="body2" sx={{ fontSize: "0.75rem", color: "#666" }}>
+              공격력: {item.stats.attack}
+            </Typography>
+            <Typography variant="body2" sx={{ fontSize: "0.75rem", color: "#666" }}>
+              힘: {item.stats.str}
+            </Typography>
+            <Typography variant="body2" sx={{ fontSize: "0.75rem", color: "#666" }}>
+              민첩: {item.stats.dex}
+            </Typography>
+            <Typography variant="body2" sx={{ fontSize: "0.75rem", color: "#666" }}>
+              지력: {item.stats.int}
+            </Typography>
+            <Typography variant="body2" sx={{ fontSize: "0.75rem", color: "#666" }}>
+              행운: {item.stats.luk}
+            </Typography>
+          </Box>
         </Box>
       ) : (
-        <Typography variant="body2" sx={{ fontSize: "0.75rem", color: "#999" }}>
-          아이템을 선택하세요
-        </Typography>
+        <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Typography variant="body2" sx={{ fontSize: "1rem", color: "#999" }}>
+            아이템을 선택하세요
+          </Typography>
+        </Box>
       )}
     </Box>
   );
@@ -94,19 +136,19 @@ function ItemInfoSection({ itemStats }: { itemStats: Equipment | null }) {
 
 // 아이템 수정 영역 컴포넌트
 function ItemEditSection({
-  itemStats,
+  item,
   onStatsChange,
   onEquip,
   onSave,
 }: {
-  itemStats: Equipment | null;
-  onStatsChange: (stats: Partial<Equipment>) => void;
+  item: Item | null;
+  onStatsChange: (stat: keyof Item["stats"], value: number) => void;
   onEquip: () => void;
   onSave: () => void;
 }) {
-  const handleStatChange = (stat: keyof Equipment, value: string) => {
+  const handleStatChange = (stat: keyof Item["stats"], value: string) => {
     const numValue = parseInt(value) || 0;
-    onStatsChange({ [stat]: numValue });
+    onStatsChange(stat, numValue);
   };
 
   return (
@@ -122,7 +164,7 @@ function ItemEditSection({
           <TextField
             type="number"
             size="small"
-            value={itemStats?.attack || 0}
+            value={item?.stats.attack || 0}
             onChange={(e) => handleStatChange("attack", e.target.value)}
             sx={{
               "& .MuiInputBase-input": {
@@ -147,7 +189,7 @@ function ItemEditSection({
           <TextField
             type="number"
             size="small"
-            value={itemStats?.str || 0}
+            value={item?.stats.str || 0}
             onChange={(e) => handleStatChange("str", e.target.value)}
             sx={{
               "& .MuiInputBase-input": {
@@ -172,7 +214,7 @@ function ItemEditSection({
           <TextField
             type="number"
             size="small"
-            value={itemStats?.dex || 0}
+            value={item?.stats.dex || 0}
             onChange={(e) => handleStatChange("dex", e.target.value)}
             sx={{
               "& .MuiInputBase-input": {
@@ -197,7 +239,7 @@ function ItemEditSection({
           <TextField
             type="number"
             size="small"
-            value={itemStats?.int || 0}
+            value={item?.stats.int || 0}
             onChange={(e) => handleStatChange("int", e.target.value)}
             sx={{
               "& .MuiInputBase-input": {
@@ -222,7 +264,7 @@ function ItemEditSection({
           <TextField
             type="number"
             size="small"
-            value={itemStats?.luk || 0}
+            value={item?.stats.luk || 0}
             onChange={(e) => handleStatChange("luk", e.target.value)}
             sx={{
               "& .MuiInputBase-input": {
@@ -280,37 +322,78 @@ function ItemEditSection({
   );
 }
 
-export default function ItemMaker() {
+export default function ItemMaker({ onEquip }: { onEquip?: (item: Item) => void }) {
   const [selectedSlot, setSelectedSlot] = useState("");
-  const [selectedItem, setSelectedItem] = useState<Equipment | null>(null);
-  const [editedStats, setEditedStats] = useState<Equipment | null>(null);
+  const [selectedItemName, setSelectedItemName] = useState("");
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const [editedItem, setEditedItem] = useState<Item | null>(null);
 
-  // 아이템 선택 시 초기값 설정
-  const handleItemSelect = (item: Equipment) => {
-    setSelectedItem(item);
-    setEditedStats({ ...item });
+  // 전체 아이템 데이터
+  const allItems: Item[] = [...weaponsData, ...helmetsData];
+
+  // 선택된 슬롯에 따라 필터링된 아이템 목록
+  const availableItems = selectedSlot ? allItems.filter((item) => item.slot === selectedSlot) : [];
+
+  // 착용 부위 변경 시
+  const handleSlotChange = (slot: string) => {
+    setSelectedSlot(slot);
+    setSelectedItemName("");
+    setSelectedItem(null);
+    setEditedItem(null);
   };
 
-  // 스탯 변경 핸들러
-  const handleStatsChange = (stats: Partial<Equipment>) => {
-    if (editedStats) {
-      setEditedStats({ ...editedStats, ...stats });
+  // 아이템 선택 시 초기값 설정
+  const handleItemNameSelect = (itemName: string) => {
+    setSelectedItemName(itemName);
+    const item = allItems.find((i) => i.name === itemName);
+    if (item) {
+      setSelectedItem(item);
+      setEditedItem({ ...item, stats: { ...item.stats } });
     }
   };
 
-  // 현재 표시할 아이템 스탯 (편집된 값 우선)
-  const displayStats = editedStats || selectedItem;
+  // 스탯 변경 핸들러
+  const handleStatsChange = (stat: keyof Item["stats"], value: number) => {
+    if (editedItem) {
+      setEditedItem({
+        ...editedItem,
+        stats: {
+          ...editedItem.stats,
+          [stat]: value,
+        },
+      });
+    }
+  };
+
+  // 현재 표시할 아이템 (편집된 값 우선)
+  const displayItem = editedItem || selectedItem;
 
   // 장착 버튼 핸들러
   const handleEquip = () => {
-    // TODO: 장비창에 아이템 장착 로직 구현
-    console.log("장착된 아이템:", editedStats);
+    if (editedItem && onEquip) {
+      onEquip(editedItem);
+      // 초기화
+      setSelectedSlot("");
+      setSelectedItemName("");
+      setSelectedItem(null);
+      setEditedItem(null);
+    }
   };
 
   // 저장 버튼 핸들러
   const handleSave = () => {
-    // TODO: 아이템 저장 로직 구현
-    console.log("저장된 아이템:", editedStats);
+    if (editedItem) {
+      // localStorage에 저장
+      const savedItems = JSON.parse(localStorage.getItem("savedItems") || "[]");
+      savedItems.push(editedItem);
+      localStorage.setItem("savedItems", JSON.stringify(savedItems));
+      console.log("저장된 아이템:", editedItem);
+      // 초기화
+      setSelectedSlot("");
+      setSelectedItemName("");
+      setSelectedItem(null);
+      setEditedItem(null);
+    }
   };
 
   return (
@@ -334,12 +417,18 @@ export default function ItemMaker() {
 
       {/* 바디 영역 */}
       <Box sx={{ display: "flex", flex: 1, pt: 1 }}>
-        <FilterSection selectedSlot={selectedSlot} onSlotChange={setSelectedSlot} />
+        <FilterSection
+          selectedSlot={selectedSlot}
+          onSlotChange={handleSlotChange}
+          availableItems={availableItems}
+          selectedItemName={selectedItemName}
+          onItemSelect={handleItemNameSelect}
+        />
         <Divider orientation="vertical" flexItem sx={{ my: 2 }} />
-        <ItemInfoSection itemStats={displayStats} />
+        <ItemInfoSection item={displayItem} />
         <Divider orientation="vertical" flexItem sx={{ my: 2 }} />
         <ItemEditSection
-          itemStats={displayStats}
+          item={displayItem}
           onStatsChange={handleStatsChange}
           onEquip={handleEquip}
           onSave={handleSave}
