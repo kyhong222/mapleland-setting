@@ -40,9 +40,7 @@ function App() {
           <BuffTable
             mapleWarriorLevel={mapleWarriorLevel}
             onMapleWarriorLevelChange={setMapleWarriorLevel}
-            buff1Attack={buff1Attack}
             onBuff1AttackChange={setBuff1Attack}
-            buff2Attack={buff2Attack}
             onBuff2AttackChange={setBuff2Attack}
             heroEchoEnabled={heroEchoEnabled}
             onHeroEchoChange={setHeroEchoEnabled}

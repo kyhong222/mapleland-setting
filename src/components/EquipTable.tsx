@@ -24,7 +24,7 @@ export default function EquipTable({ equipments = [] }: EquipTableProps) {
         p: 2,
       }}
     >
-      <Typography variant="h6" sx={{ mb: 2, textAlign: "center" }}>
+      <Typography variant="body2" sx={{ mb: 1, fontWeight: "bold" }}>
         장비창
       </Typography>
       <Box
