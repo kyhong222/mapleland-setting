@@ -9,9 +9,20 @@ interface StatTableProps {
   onStatsChange?: (stats: Stats) => void;
   selectedJob: string;
   mapleWarriorLevel: number;
+  buff1Attack: number;
+  buff2Attack: number;
+  heroEchoEnabled: boolean;
 }
 
-export default function StatTable({ stats, onStatsChange, selectedJob, mapleWarriorLevel }: StatTableProps) {
+export default function StatTable({
+  stats,
+  onStatsChange,
+  selectedJob,
+  mapleWarriorLevel,
+  buff1Attack,
+  buff2Attack,
+  heroEchoEnabled,
+}: StatTableProps) {
   const [localStats, setLocalStats] = useState<Stats>({
     level: 1,
     pureStr: 4,
@@ -32,10 +43,6 @@ export default function StatTable({ stats, onStatsChange, selectedJob, mapleWarr
 
   const baseStats = stats || localStats;
 
-  // 메이플용사 효과 계산
-  const mapleWarriorEffect = mapleWarriorData.table.find((item) => item.level === mapleWarriorLevel);
-  const mapleWarriorBonus = mapleWarriorEffect ? mapleWarriorEffect.x / 100 : 0;
-
   // 현재 직업 정보 가져오기
   const currentJob = JOBS.find((job) => job.engName === selectedJob);
   const mainStatKey = currentJob
@@ -55,6 +62,17 @@ export default function StatTable({ stats, onStatsChange, selectedJob, mapleWarr
 
     return { ...baseStats, [mainStatKey]: newMainStat };
   }, [baseStats, mainStatKey, totalAP]);
+
+  // 메이플용사 효과 계산
+  const mapleWarriorEffect = mapleWarriorData.table.find((item) => item.level === mapleWarriorLevel);
+  const mapleWarriorBonus = mapleWarriorEffect ? mapleWarriorEffect.x / 100 : 0;
+
+  // 공격력 계산: (장비공격력 + 버프1 + 버프2) * 영웅의메아리
+  const totalBuffAttack = buff1Attack + buff2Attack;
+  const heroEchoMultiplier = heroEchoEnabled ? 1.04 : 1;
+  const totalAttackBeforeEcho = currentStats.equipAttack + totalBuffAttack;
+  const finalAttack = Math.floor(totalAttackBeforeEcho * heroEchoMultiplier);
+  const heroEchoBonus = heroEchoEnabled ? Math.floor(totalAttackBeforeEcho * 0.04) : 0;
 
   const handleLevelChange = (value: string) => {
     const numValue = Math.max(1, parseInt(value) || 1);
@@ -93,8 +111,8 @@ export default function StatTable({ stats, onStatsChange, selectedJob, mapleWarr
     {
       name: "공격력",
       col1: currentStats.equipAttack,
-      col2: currentStats.buffAttack,
-      col3: currentStats.equipAttack + currentStats.buffAttack,
+      col2: totalBuffAttack + heroEchoBonus,
+      col3: finalAttack,
       isAttack: true,
     },
     {

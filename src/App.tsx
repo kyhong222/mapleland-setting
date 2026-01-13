@@ -12,6 +12,9 @@ import "./App.css";
 function App() {
   const [selectedJob, setSelectedJob] = useState("");
   const [mapleWarriorLevel, setMapleWarriorLevel] = useState(1);
+  const [buff1Attack, setBuff1Attack] = useState(0);
+  const [buff2Attack, setBuff2Attack] = useState(0);
+  const [heroEchoEnabled, setHeroEchoEnabled] = useState(false);
 
   const handleJobChange = (event: SelectChangeEvent) => {
     setSelectedJob(event.target.value);
@@ -26,9 +29,24 @@ function App() {
         <Box sx={{ display: "flex", gap: 3, justifyContent: "center", height: 500 }}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2, flex: "0 0 300px" }}>
             <EquipTable />
-            <StatTable selectedJob={selectedJob} mapleWarriorLevel={mapleWarriorLevel} />
+            <StatTable
+              selectedJob={selectedJob}
+              mapleWarriorLevel={mapleWarriorLevel}
+              buff1Attack={buff1Attack}
+              buff2Attack={buff2Attack}
+              heroEchoEnabled={heroEchoEnabled}
+            />
           </Box>
-          <BuffTable mapleWarriorLevel={mapleWarriorLevel} onMapleWarriorLevelChange={setMapleWarriorLevel} />
+          <BuffTable
+            mapleWarriorLevel={mapleWarriorLevel}
+            onMapleWarriorLevelChange={setMapleWarriorLevel}
+            buff1Attack={buff1Attack}
+            onBuff1AttackChange={setBuff1Attack}
+            buff2Attack={buff2Attack}
+            onBuff2AttackChange={setBuff2Attack}
+            heroEchoEnabled={heroEchoEnabled}
+            onHeroEchoChange={setHeroEchoEnabled}
+          />
           <DamageTable />
         </Box>
 

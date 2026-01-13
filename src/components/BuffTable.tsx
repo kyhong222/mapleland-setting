@@ -10,14 +10,28 @@ import {
   Radio,
   RadioGroup,
   FormControlLabel,
+  styled,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import mapleWarriorData from "../data/buff/MapleWarrior/MapleWarrior.json";
 import herosEchoIcon from "../data/buff/HerosEcho/HerosEcho.png";
+import buff1Data from "../data/buff/buff/buff1.json";
+import buff2Data from "../data/buff/buff/buff2.json";
+
+const BuffSectionBox = styled(Box)(({ theme }) => ({
+  width: 400,
+  height: 125,
+  padding: theme.spacing(2),
+  boxSizing: "border-box",
+}));
 
 interface BuffTableProps {
   mapleWarriorLevel: number;
   onMapleWarriorLevelChange: (level: number) => void;
+  onBuff1AttackChange: (attack: number) => void;
+  onBuff2AttackChange: (attack: number) => void;
+  heroEchoEnabled: boolean;
+  onHeroEchoChange: (enabled: boolean) => void;
 }
 
 // 메이플용사 영역 컴포넌트
@@ -35,10 +49,8 @@ function MapleWarriorSection({
   };
 
   return (
-    <Box
+    <BuffSectionBox
       sx={{
-        flex: 1,
-        p: 2,
         borderBottom: "1px solid #e0e0e0",
       }}
     >
@@ -199,7 +211,7 @@ function MapleWarriorSection({
           </Typography>
         </Box>
       </Box>
-    </Box>
+    </BuffSectionBox>
   );
 }
 
@@ -210,18 +222,20 @@ function BuffSlot({
   onBuffTypeChange,
   customAttack,
   onCustomAttackChange,
+  buffData,
 }: {
   title: string;
   buffType: string;
   onBuffTypeChange: (value: string) => void;
   customAttack: number;
   onCustomAttackChange: (value: number) => void;
+  buffData: { skills: { name: string; x: number }[] };
 }) {
+  const selectedSkill = buffData.skills.find((skill) => skill.name === buffType);
+
   return (
-    <Box
+    <BuffSectionBox
       sx={{
-        flex: 1,
-        p: 2,
         borderBottom: "1px solid #e0e0e0",
       }}
     >
@@ -269,8 +283,11 @@ function BuffSlot({
                 <em>버프 선택</em>
               </MenuItem>
               <MenuItem value="custom">직접 입력</MenuItem>
-              <MenuItem value="buff1">버프1</MenuItem>
-              <MenuItem value="buff2">버프2</MenuItem>
+              {buffData.skills.map((skill) => (
+                <MenuItem key={skill.name} value={skill.name}>
+                  {skill.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
           <Divider sx={{ my: 0.5 }} />
@@ -304,6 +321,10 @@ function BuffSlot({
                 증가
               </Typography>
             </Box>
+          ) : selectedSkill ? (
+            <Typography variant="body2" sx={{ fontSize: "0.875rem", color: "#333", fontWeight: "500" }}>
+              공격력 {selectedSkill.x} 증가
+            </Typography>
           ) : (
             <Typography variant="body2" sx={{ fontSize: "0.875rem", color: "#333", fontWeight: "500" }}>
               {/* 설명 자리 */}
@@ -311,19 +332,14 @@ function BuffSlot({
           )}
         </Box>
       </Box>
-    </Box>
+    </BuffSectionBox>
   );
 }
 
 // 영웅의 메아리 영역 컴포넌트
 function HeroEchoSection({ isEnabled, onToggle }: { isEnabled: boolean; onToggle: (enabled: boolean) => void }) {
   return (
-    <Box
-      sx={{
-        flex: 1,
-        p: 2,
-      }}
-    >
+    <BuffSectionBox>
       <Typography variant="body2" sx={{ fontWeight: "bold", mb: 1 }}>
         영웅의 메아리
       </Typography>
@@ -380,22 +396,51 @@ function HeroEchoSection({ isEnabled, onToggle }: { isEnabled: boolean; onToggle
           </Typography>
         </Box>
       </Box>
-    </Box>
+    </BuffSectionBox>
   );
 }
 
-export default function BuffTable({ mapleWarriorLevel, onMapleWarriorLevelChange }: BuffTableProps) {
+export default function BuffTable({
+  mapleWarriorLevel,
+  onMapleWarriorLevelChange,
+  onBuff1AttackChange,
+  onBuff2AttackChange,
+  heroEchoEnabled,
+  onHeroEchoChange,
+}: BuffTableProps) {
   const [buff1Type, setBuff1Type] = useState("");
   const [buff1CustomAttack, setBuff1CustomAttack] = useState(0);
   const [buff2Type, setBuff2Type] = useState("");
   const [buff2CustomAttack, setBuff2CustomAttack] = useState(0);
-  const [heroEchoEnabled, setHeroEchoEnabled] = useState(false);
+
+  // 버프1 공격력 계산 및 전달
+  useEffect(() => {
+    if (buff1Type === "custom") {
+      onBuff1AttackChange(buff1CustomAttack);
+    } else if (buff1Type) {
+      const skill = buff1Data.skills.find((s) => s.name === buff1Type);
+      onBuff1AttackChange(skill ? skill.x : 0);
+    } else {
+      onBuff1AttackChange(0);
+    }
+  }, [buff1Type, buff1CustomAttack, onBuff1AttackChange]);
+
+  // 버프2 공격력 계산 및 전달
+  useEffect(() => {
+    if (buff2Type === "custom") {
+      onBuff2AttackChange(buff2CustomAttack);
+    } else if (buff2Type) {
+      const skill = buff2Data.skills.find((s) => s.name === buff2Type);
+      onBuff2AttackChange(skill ? skill.x : 0);
+    } else {
+      onBuff2AttackChange(0);
+    }
+  }, [buff2Type, buff2CustomAttack, onBuff2AttackChange]);
 
   return (
     <Box
       sx={{
         width: 400,
-        height: "100%",
         border: "1px solid #ccc",
         borderRadius: 1,
         display: "flex",
@@ -410,6 +455,7 @@ export default function BuffTable({ mapleWarriorLevel, onMapleWarriorLevelChange
         onBuffTypeChange={setBuff1Type}
         customAttack={buff1CustomAttack}
         onCustomAttackChange={setBuff1CustomAttack}
+        buffData={buff1Data}
       />
       <BuffSlot
         title="버프2"
@@ -417,8 +463,9 @@ export default function BuffTable({ mapleWarriorLevel, onMapleWarriorLevelChange
         onBuffTypeChange={setBuff2Type}
         customAttack={buff2CustomAttack}
         onCustomAttackChange={setBuff2CustomAttack}
+        buffData={buff2Data}
       />
-      <HeroEchoSection isEnabled={heroEchoEnabled} onToggle={setHeroEchoEnabled} />
+      <HeroEchoSection isEnabled={heroEchoEnabled} onToggle={onHeroEchoChange} />
     </Box>
   );
 }
