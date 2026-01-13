@@ -22,6 +22,7 @@ function App() {
       <TopAppBar selectedJob={selectedJob} onJobChange={handleJobChange} />
 
       <Box sx={{ p: 3, flex: 1, display: "flex", flexDirection: "column" }}>
+        {/* TopBox */}
         <Box sx={{ display: "flex", gap: 3, justifyContent: "center", height: 500 }}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2, flex: "0 0 300px" }}>
             <EquipTable />
@@ -31,6 +32,7 @@ function App() {
           <DamageTable />
         </Box>
 
+        {/* BottomBox */}
         <Box sx={{ mt: 3 }}>
           <ItemMaker />
         </Box>
