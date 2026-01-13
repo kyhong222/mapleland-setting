@@ -11,6 +11,7 @@ import "./App.css";
 
 function App() {
   const [selectedJob, setSelectedJob] = useState("");
+  const [mapleWarriorLevel, setMapleWarriorLevel] = useState(1);
 
   const handleJobChange = (event: SelectChangeEvent) => {
     setSelectedJob(event.target.value);
@@ -24,9 +25,9 @@ function App() {
         <Box sx={{ display: "flex", gap: 3, justifyContent: "center", height: 500 }}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2, flex: "0 0 300px" }}>
             <EquipTable />
-            <StatTable selectedJob={selectedJob} />
+            <StatTable selectedJob={selectedJob} mapleWarriorLevel={mapleWarriorLevel} />
           </Box>
-          <BuffTable />
+          <BuffTable mapleWarriorLevel={mapleWarriorLevel} onMapleWarriorLevelChange={setMapleWarriorLevel} />
           <DamageTable />
         </Box>
 

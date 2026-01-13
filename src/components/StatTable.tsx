@@ -2,14 +2,16 @@ import { Box, Typography, TextField } from "@mui/material";
 import { useState, useMemo } from "react";
 import type { Stats } from "../types/stats";
 import { JOBS } from "../types/job";
+import mapleWarriorData from "../data/buff/MapleWarrior/MapleWarrior.json";
 
 interface StatTableProps {
   stats?: Stats;
   onStatsChange?: (stats: Stats) => void;
   selectedJob: string;
+  mapleWarriorLevel: number;
 }
 
-export default function StatTable({ stats, onStatsChange, selectedJob }: StatTableProps) {
+export default function StatTable({ stats, onStatsChange, selectedJob, mapleWarriorLevel }: StatTableProps) {
   const [localStats, setLocalStats] = useState<Stats>({
     level: 1,
     pureStr: 4,
@@ -29,6 +31,10 @@ export default function StatTable({ stats, onStatsChange, selectedJob }: StatTab
   });
 
   const baseStats = stats || localStats;
+
+  // 메이플용사 효과 계산
+  const mapleWarriorEffect = mapleWarriorData.table.find((item) => item.level === mapleWarriorLevel);
+  const mapleWarriorBonus = mapleWarriorEffect ? mapleWarriorEffect.x / 100 : 0;
 
   // 현재 직업 정보 가져오기
   const currentJob = JOBS.find((job) => job.engName === selectedJob);
@@ -94,8 +100,15 @@ export default function StatTable({ stats, onStatsChange, selectedJob }: StatTab
     {
       name: "힘",
       col1: currentStats.pureStr,
-      col2: currentStats.equipStr + currentStats.buffStr,
-      col3: currentStats.pureStr + currentStats.equipStr + currentStats.buffStr,
+      col2:
+        currentStats.equipStr +
+        currentStats.buffStr +
+        Math.floor((currentStats.pureStr + currentStats.equipStr) * mapleWarriorBonus),
+      col3:
+        currentStats.pureStr +
+        currentStats.equipStr +
+        currentStats.buffStr +
+        Math.floor((currentStats.pureStr + currentStats.equipStr) * mapleWarriorBonus),
       isAttack: false,
       statKey: "pureStr" as const,
       statType: "str" as const,
@@ -103,8 +116,15 @@ export default function StatTable({ stats, onStatsChange, selectedJob }: StatTab
     {
       name: "민첩",
       col1: currentStats.pureDex,
-      col2: currentStats.equipDex + currentStats.buffDex,
-      col3: currentStats.pureDex + currentStats.equipDex + currentStats.buffDex,
+      col2:
+        currentStats.equipDex +
+        currentStats.buffDex +
+        Math.floor((currentStats.pureDex + currentStats.equipDex) * mapleWarriorBonus),
+      col3:
+        currentStats.pureDex +
+        currentStats.equipDex +
+        currentStats.buffDex +
+        Math.floor((currentStats.pureDex + currentStats.equipDex) * mapleWarriorBonus),
       isAttack: false,
       statKey: "pureDex" as const,
       statType: "dex" as const,
@@ -112,8 +132,15 @@ export default function StatTable({ stats, onStatsChange, selectedJob }: StatTab
     {
       name: "지력",
       col1: currentStats.pureInt,
-      col2: currentStats.equipInt + currentStats.buffInt,
-      col3: currentStats.pureInt + currentStats.equipInt + currentStats.buffInt,
+      col2:
+        currentStats.equipInt +
+        currentStats.buffInt +
+        Math.floor((currentStats.pureInt + currentStats.equipInt) * mapleWarriorBonus),
+      col3:
+        currentStats.pureInt +
+        currentStats.equipInt +
+        currentStats.buffInt +
+        Math.floor((currentStats.pureInt + currentStats.equipInt) * mapleWarriorBonus),
       isAttack: false,
       statKey: "pureInt" as const,
       statType: "int" as const,
@@ -121,8 +148,15 @@ export default function StatTable({ stats, onStatsChange, selectedJob }: StatTab
     {
       name: "행운",
       col1: currentStats.pureLuk,
-      col2: currentStats.equipLuk + currentStats.buffLuk,
-      col3: currentStats.pureLuk + currentStats.equipLuk + currentStats.buffLuk,
+      col2:
+        currentStats.equipLuk +
+        currentStats.buffLuk +
+        Math.floor((currentStats.pureLuk + currentStats.equipLuk) * mapleWarriorBonus),
+      col3:
+        currentStats.pureLuk +
+        currentStats.equipLuk +
+        currentStats.buffLuk +
+        Math.floor((currentStats.pureLuk + currentStats.equipLuk) * mapleWarriorBonus),
       isAttack: false,
       statKey: "pureLuk" as const,
       statType: "luk" as const,
