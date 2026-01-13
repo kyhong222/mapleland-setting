@@ -98,6 +98,7 @@ export default function StatTable({ stats, onStatsChange, selectedJob }: StatTab
       col3: currentStats.pureStr + currentStats.equipStr + currentStats.buffStr,
       isAttack: false,
       statKey: "pureStr" as const,
+      statType: "str" as const,
     },
     {
       name: "민첩",
@@ -106,6 +107,7 @@ export default function StatTable({ stats, onStatsChange, selectedJob }: StatTab
       col3: currentStats.pureDex + currentStats.equipDex + currentStats.buffDex,
       isAttack: false,
       statKey: "pureDex" as const,
+      statType: "dex" as const,
     },
     {
       name: "지력",
@@ -114,6 +116,7 @@ export default function StatTable({ stats, onStatsChange, selectedJob }: StatTab
       col3: currentStats.pureInt + currentStats.equipInt + currentStats.buffInt,
       isAttack: false,
       statKey: "pureInt" as const,
+      statType: "int" as const,
     },
     {
       name: "행운",
@@ -122,6 +125,7 @@ export default function StatTable({ stats, onStatsChange, selectedJob }: StatTab
       col3: currentStats.pureLuk + currentStats.equipLuk + currentStats.buffLuk,
       isAttack: false,
       statKey: "pureLuk" as const,
+      statType: "luk" as const,
     },
   ];
 
@@ -210,114 +214,125 @@ export default function StatTable({ stats, onStatsChange, selectedJob }: StatTab
       </Box>
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-        {statRows.map((row) => (
-          <Box
-            key={row.name}
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "80px 1fr 1fr 1fr",
-              gap: 1,
-              alignItems: "center",
-            }}
-          >
-            <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-              {row.name}
-            </Typography>
-            {row.isAttack ? (
-              <>
-                <Box
-                  sx={{
-                    p: 0.5,
-                    bgcolor: "#f5f5f5",
-                    border: "1px solid #ddd",
-                    borderRadius: 1,
-                    textAlign: "center",
-                    fontSize: "0.875rem",
-                    color: "#999",
-                  }}
-                >
-                  {row.col1}
-                </Box>
-                <Box
-                  sx={{
-                    p: 0.5,
-                    bgcolor: "#f5f5f5",
-                    border: "1px solid #ddd",
-                    borderRadius: 1,
-                    textAlign: "center",
-                    fontSize: "0.875rem",
-                    color: "#999",
-                  }}
-                >
-                  {row.col2}
-                </Box>
-                <Box
-                  sx={{
-                    p: 0.5,
-                    bgcolor: "#e3f2fd",
-                    border: "1px solid #90caf9",
-                    borderRadius: 1,
-                    textAlign: "center",
-                    fontSize: "0.875rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {row.col3}
-                </Box>
-              </>
-            ) : (
-              <>
-                <TextField
-                  type="number"
-                  value={row.col1}
-                  onChange={(e) => handlePureStatChange(row.statKey!, e.target.value)}
-                  size="small"
-                  inputProps={{ min: 4 }}
-                  sx={{
-                    "& .MuiInputBase-input": {
+        {statRows.map((row) => {
+          const isMainStat = !row.isAttack && currentJob?.mainStat === row.statType;
+          const isSubStat = !row.isAttack && currentJob?.subStat === row.statType;
+
+          return (
+            <Box
+              key={row.name}
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "80px 1fr 1fr 1fr",
+                gap: 1,
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                variant="body2"
+                sx={{
+                  fontWeight: isMainStat || isSubStat ? "bold" : "normal",
+                }}
+              >
+                {isMainStat ? "* " : ""}
+                {row.name}
+              </Typography>
+              {row.isAttack ? (
+                <>
+                  <Box
+                    sx={{
                       p: 0.5,
-                      fontSize: "0.875rem",
+                      bgcolor: "#f5f5f5",
+                      border: "1px solid #ddd",
+                      borderRadius: 1,
                       textAlign: "center",
-                      bgcolor: "white",
-                    },
-                    "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
-                      display: "none",
-                    },
-                    "& input[type=number]": {
-                      MozAppearance: "textfield",
-                    },
-                  }}
-                />
-                <Box
-                  sx={{
-                    p: 0.5,
-                    bgcolor: "#f5f5f5",
-                    border: "1px solid #ddd",
-                    borderRadius: 1,
-                    textAlign: "center",
-                    fontSize: "0.875rem",
-                    color: "#999",
-                  }}
-                >
-                  {row.col2}
-                </Box>
-                <Box
-                  sx={{
-                    p: 0.5,
-                    bgcolor: "#e3f2fd",
-                    border: "1px solid #90caf9",
-                    borderRadius: 1,
-                    textAlign: "center",
-                    fontSize: "0.875rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {row.col3}
-                </Box>
-              </>
-            )}
-          </Box>
-        ))}
+                      fontSize: "0.875rem",
+                      color: "#999",
+                    }}
+                  >
+                    {row.col1}
+                  </Box>
+                  <Box
+                    sx={{
+                      p: 0.5,
+                      bgcolor: "#f5f5f5",
+                      border: "1px solid #ddd",
+                      borderRadius: 1,
+                      textAlign: "center",
+                      fontSize: "0.875rem",
+                      color: "#999",
+                    }}
+                  >
+                    {row.col2}
+                  </Box>
+                  <Box
+                    sx={{
+                      p: 0.5,
+                      bgcolor: "#e3f2fd",
+                      border: "1px solid #90caf9",
+                      borderRadius: 1,
+                      textAlign: "center",
+                      fontSize: "0.875rem",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {row.col3}
+                  </Box>
+                </>
+              ) : (
+                <>
+                  <TextField
+                    type="number"
+                    value={row.col1}
+                    onChange={(e) => handlePureStatChange(row.statKey!, e.target.value)}
+                    size="small"
+                    inputProps={{ min: 4 }}
+                    sx={{
+                      "& .MuiInputBase-input": {
+                        p: 0.5,
+                        fontSize: "0.875rem",
+                        textAlign: "center",
+                        bgcolor: "white",
+                      },
+                      "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
+                        display: "none",
+                      },
+                      "& input[type=number]": {
+                        MozAppearance: "textfield",
+                      },
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      p: 0.5,
+                      bgcolor: "#f5f5f5",
+                      border: "1px solid #ddd",
+                      borderRadius: 1,
+                      textAlign: "center",
+                      fontSize: "0.875rem",
+                      color: "#999",
+                    }}
+                  >
+                    {row.col2}
+                  </Box>
+                  <Box
+                    sx={{
+                      p: 0.5,
+                      bgcolor: "#e3f2fd",
+                      border: "1px solid #90caf9",
+                      borderRadius: 1,
+                      textAlign: "center",
+                      fontSize: "0.875rem",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {row.col3}
+                  </Box>
+                </>
+              )}
+            </Box>
+          );
+        })}
       </Box>
     </Box>
   );
