@@ -1,5 +1,5 @@
 import { Box, Divider, Typography, Select, MenuItem, FormControl, TextField, Button } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { EQUIPMENT_SLOTS } from "../types/equipment";
 import type { Item } from "../types/item";
 import weaponsData from "../data/items/weapons.json";
@@ -329,7 +329,7 @@ export default function ItemMaker({ onEquip }: { onEquip?: (item: Item) => void 
   const [editedItem, setEditedItem] = useState<Item | null>(null);
 
   // 전체 아이템 데이터
-  const allItems: Item[] = [...weaponsData, ...helmetsData];
+  const allItems: Item[] = [...(weaponsData as Item[]), ...(helmetsData as Item[])];
 
   // 선택된 슬롯에 따라 필터링된 아이템 목록
   const availableItems = selectedSlot ? allItems.filter((item) => item.slot === selectedSlot) : [];
