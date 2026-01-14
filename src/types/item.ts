@@ -3,6 +3,7 @@ import type { EquipmentSlot } from "./equipment";
 // 아이템 타입 정의
 export type ItemType =
   | "방어구"
+  | "전신"
   | "한손검"
   | "한손도끼"
   | "한손둔기"

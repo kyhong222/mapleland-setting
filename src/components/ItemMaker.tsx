@@ -1,9 +1,22 @@
 import { Box, Divider, Typography, Select, MenuItem, FormControl, TextField, Button } from "@mui/material";
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { EQUIPMENT_SLOTS } from "../types/equipment";
 import type { Item } from "../types/item";
-import weaponsData from "../data/items/weapons.json";
-import helmetsData from "../data/items/helmets.json";
+
+// Common items
+import commonCap from "../data/items/common/cap.json";
+import commonEaracc from "../data/items/common/earacc.json";
+import commonEyeacc from "../data/items/common/eyeacc.json";
+import commonForehead from "../data/items/common/forehead.json";
+import commonMantle from "../data/items/common/mantle.json";
+import commonMedal from "../data/items/common/medal.json";
+import commonPendant from "../data/items/common/pendant.json";
+
+// Warrior items
+import warriorGloves from "../data/items/warrior/gloves.json";
+import warriorOverall from "../data/items/warrior/overall.json";
+import warriorShoes from "../data/items/warrior/shoes.json";
+import warriorWeapon from "../data/items/warrior/weapon.json";
 
 // 필터 영역 컴포넌트
 function FilterSection({
@@ -322,14 +335,55 @@ function ItemEditSection({
   );
 }
 
-export default function ItemMaker({ onEquip }: { onEquip?: (item: Item) => void }) {
+export default function ItemMaker({
+  onEquip,
+  selectedJob,
+  initialSlot,
+}: {
+  onEquip?: (item: Item) => void;
+  selectedJob?: string;
+  initialSlot?: string;
+}) {
   const [selectedSlot, setSelectedSlot] = useState("");
   const [selectedItemName, setSelectedItemName] = useState("");
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [editedItem, setEditedItem] = useState<Item | null>(null);
 
-  // 전체 아이템 데이터
-  const allItems: Item[] = [...(weaponsData as Item[]), ...(helmetsData as Item[])];
+  // initialSlot이 변경되면 selectedSlot 업데이트
+  useEffect(() => {
+    if (initialSlot) {
+      setSelectedSlot(initialSlot);
+      setSelectedItemName("");
+      setSelectedItem(null);
+      setEditedItem(null);
+    }
+  }, [initialSlot]);
+
+  // 전체 아이템 데이터 - 직업에 따라 동적으로 로드
+  const allItems: Item[] = useMemo(() => {
+    const commonItems = [
+      ...(commonCap as Item[]),
+      ...(commonEaracc as Item[]),
+      ...(commonEyeacc as Item[]),
+      ...(commonForehead as Item[]),
+      ...(commonMantle as Item[]),
+      ...(commonMedal as Item[]),
+      ...(commonPendant as Item[]),
+    ];
+
+    let jobItems: Item[] = [];
+    if (selectedJob === "warrior") {
+      jobItems = [
+        ...(warriorGloves as Item[]),
+        ...(warriorOverall as Item[]),
+        ...(warriorShoes as Item[]),
+        ...(warriorWeapon as Item[]),
+      ];
+    }
+    // TODO: 다른 직업 추가 (archer, magician, thief)
+
+    return [...commonItems, ...jobItems];
+  }, [selectedJob]);
 
   // 선택된 슬롯에 따라 필터링된 아이템 목록
   const availableItems = selectedSlot ? allItems.filter((item) => item.slot === selectedSlot) : [];

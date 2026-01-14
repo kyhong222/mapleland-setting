@@ -118,15 +118,12 @@ export default function StatTable({
     {
       name: "힘",
       col1: currentStats.pureStr,
-      col2:
-        currentStats.equipStr +
-        currentStats.buffStr +
-        Math.floor((currentStats.pureStr + currentStats.equipStr) * mapleWarriorBonus),
+      col2: currentStats.equipStr + currentStats.buffStr + Math.floor(currentStats.pureStr * mapleWarriorBonus),
       col3:
         currentStats.pureStr +
         currentStats.equipStr +
         currentStats.buffStr +
-        Math.floor((currentStats.pureStr + currentStats.equipStr) * mapleWarriorBonus),
+        Math.floor(currentStats.pureStr * mapleWarriorBonus),
       isAttack: false,
       statKey: "pureStr" as const,
       statType: "str" as const,
@@ -134,15 +131,12 @@ export default function StatTable({
     {
       name: "민첩",
       col1: currentStats.pureDex,
-      col2:
-        currentStats.equipDex +
-        currentStats.buffDex +
-        Math.floor((currentStats.pureDex + currentStats.equipDex) * mapleWarriorBonus),
+      col2: currentStats.equipDex + currentStats.buffDex + Math.floor(currentStats.pureDex * mapleWarriorBonus),
       col3:
         currentStats.pureDex +
         currentStats.equipDex +
         currentStats.buffDex +
-        Math.floor((currentStats.pureDex + currentStats.equipDex) * mapleWarriorBonus),
+        Math.floor(currentStats.pureDex * mapleWarriorBonus),
       isAttack: false,
       statKey: "pureDex" as const,
       statType: "dex" as const,
@@ -150,15 +144,12 @@ export default function StatTable({
     {
       name: "지력",
       col1: currentStats.pureInt,
-      col2:
-        currentStats.equipInt +
-        currentStats.buffInt +
-        Math.floor((currentStats.pureInt + currentStats.equipInt) * mapleWarriorBonus),
+      col2: currentStats.equipInt + currentStats.buffInt + Math.floor(currentStats.pureInt * mapleWarriorBonus),
       col3:
         currentStats.pureInt +
         currentStats.equipInt +
         currentStats.buffInt +
-        Math.floor((currentStats.pureInt + currentStats.equipInt) * mapleWarriorBonus),
+        Math.floor(currentStats.pureInt * mapleWarriorBonus),
       isAttack: false,
       statKey: "pureInt" as const,
       statType: "int" as const,
@@ -166,15 +157,12 @@ export default function StatTable({
     {
       name: "행운",
       col1: currentStats.pureLuk,
-      col2:
-        currentStats.equipLuk +
-        currentStats.buffLuk +
-        Math.floor((currentStats.pureLuk + currentStats.equipLuk) * mapleWarriorBonus),
+      col2: currentStats.equipLuk + currentStats.buffLuk + Math.floor(currentStats.pureLuk * mapleWarriorBonus),
       col3:
         currentStats.pureLuk +
         currentStats.equipLuk +
         currentStats.buffLuk +
-        Math.floor((currentStats.pureLuk + currentStats.equipLuk) * mapleWarriorBonus),
+        Math.floor(currentStats.pureLuk * mapleWarriorBonus),
       isAttack: false,
       statKey: "pureLuk" as const,
       statType: "luk" as const,

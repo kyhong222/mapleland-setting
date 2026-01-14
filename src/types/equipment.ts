@@ -1,6 +1,7 @@
 export interface Equipment {
   slot: string;
   name: string | null;
+  type?: string;
   icon?: string;
   attack?: number;
   str?: number;
@@ -19,6 +20,7 @@ export const EQUIPMENT_LAYOUT = [
 export const EQUIPMENT_SLOTS = [
   "투구",
   "목걸이",
+  "전신",
   "상의",
   "하의",
   "망토",

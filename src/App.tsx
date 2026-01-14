@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Box } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material";
 import TopAppBar from "./components/TopAppBar";
@@ -36,30 +36,11 @@ function App() {
     buffLuk: 0,
     buffAttack: 0,
   });
+  const [selectedSlotForItemMaker, setSelectedSlotForItemMaker] = useState<string>();
 
-  const handleJobChange = (event: SelectChangeEvent) => {
-    setSelectedJob(event.target.value);
-  };
-
-  // 장착 핸들러: Item을 Equipment로 변환하여 장착
-  const handleEquipItem = (item: Item) => {
-    const newEquipment: Equipment = {
-      slot: item.slot,
-      name: item.name,
-      attack: item.stats.attack,
-      str: item.stats.str,
-      dex: item.stats.dex,
-      int: item.stats.int,
-      luk: item.stats.luk,
-    };
-
-    // 기존 장비에서 같은 슬롯 제거 후 새 장비 추가
-    setEquipments((prev) => [...prev.filter((eq) => eq.slot !== item.slot), newEquipment]);
-  };
-
-  // 장비로부터 얻은 스탯 계산 및 업데이트
-  useEffect(() => {
-    const equipStats = equipments.reduce(
+  // 장비로부터 얻은 스탯 계산 (useMemo 사용)
+  const equipStats = useMemo(() => {
+    return equipments.reduce(
       (acc, eq) => ({
         equipAttack: acc.equipAttack + (eq.attack || 0),
         equipStr: acc.equipStr + (eq.str || 0),
@@ -69,16 +50,73 @@ function App() {
       }),
       { equipAttack: 0, equipStr: 0, equipDex: 0, equipInt: 0, equipLuk: 0 }
     );
+  }, [equipments]);
 
-    setStats((prev) => ({
-      ...prev,
+  // 장비 스탯과 통합된 최종 스탯
+  const finalStats = useMemo(
+    () => ({
+      ...stats,
       equipAttack: equipStats.equipAttack,
       equipStr: equipStats.equipStr,
       equipDex: equipStats.equipDex,
       equipInt: equipStats.equipInt,
       equipLuk: equipStats.equipLuk,
-    }));
-  }, [equipments]);
+    }),
+    [stats, equipStats]
+  );
+
+  const handleJobChange = (event: SelectChangeEvent) => {
+    setSelectedJob(event.target.value);
+  };
+
+  // 장착 핸들러: Item을 Equipment로 변환하여 장착
+  const handleEquipItem = (item: Item) => {
+    // 전신은 상의 슬롯에 장착
+    const targetSlot = item.slot === "전신" ? "상의" : item.slot;
+
+    const newEquipment: Equipment = {
+      slot: targetSlot,
+      name: item.name,
+      type: item.type,
+      attack: item.stats.attack,
+      str: item.stats.str,
+      dex: item.stats.dex,
+      int: item.stats.int,
+      luk: item.stats.luk,
+    };
+
+    setEquipments((prev) => {
+      // 전신 장착 시 (slot이 "전신"인 경우)
+      if (item.slot === "전신") {
+        const hasBottom = prev.some((eq) => eq.slot === "하의");
+        if (hasBottom) {
+          return prev; // 하의가 있으면 전신 장착 불가
+        }
+        return [...prev.filter((eq) => eq.slot !== "상의" && eq.slot !== "하의"), newEquipment];
+      }
+
+      // 하의 장착 시 상의에 전신(slot="전신")이 있으면 장착 불가
+      if (item.slot === "하의") {
+        const hasOverall = prev.some((eq) => eq.slot === "상의");
+        if (hasOverall) {
+          return prev; // 상의에 뭔가 있으면(전신 포함) 하의 장착 불가
+        }
+      }
+
+      // 기존 같은 슬롯 제거 후 새 장비 추가
+      return [...prev.filter((eq) => eq.slot !== targetSlot), newEquipment];
+    });
+  };
+
+  // 장착 해제 핸들러
+  const handleUnequipItem = (slot: string) => {
+    setEquipments((prev) => prev.filter((eq) => eq.slot !== slot));
+  };
+
+  // 빈 슬롯 클릭 핸들러
+  const handleSlotClick = (slot: string) => {
+    setSelectedSlotForItemMaker(slot);
+  };
 
   return (
     <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
@@ -88,9 +126,9 @@ function App() {
         {/* TopBox */}
         <Box sx={{ display: "flex", gap: 3, justifyContent: "center", height: 500 }}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2, flex: "0 0 300px" }}>
-            <EquipTable equipments={equipments} />
+            <EquipTable equipments={equipments} onUnequip={handleUnequipItem} onSlotClick={handleSlotClick} />
             <StatTable
-              stats={stats}
+              stats={finalStats}
               onStatsChange={setStats}
               selectedJob={selectedJob}
               mapleWarriorLevel={mapleWarriorLevel}
@@ -112,7 +150,7 @@ function App() {
 
         {/* BottomBox */}
         <Box sx={{ mt: 3 }}>
-          <ItemMaker onEquip={handleEquipItem} />
+          <ItemMaker onEquip={handleEquipItem} selectedJob={selectedJob} initialSlot={selectedSlotForItemMaker} />
         </Box>
       </Box>
     </Box>
