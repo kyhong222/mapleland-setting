@@ -8,13 +8,15 @@ import BuffTable from "./components/BuffTable";
 import DamageTable from "./components/DamageTable";
 import ItemMaker from "./components/ItemMaker";
 import type { Equipment } from "./types/equipment";
-import type { Item } from "./types/item";
+import type { Item, ItemType } from "./types/item";
 import type { Stats } from "./types/stats";
+import { JOBS } from "./types/job";
+import mapleWarriorData from "./data/buff/MapleWarrior/MapleWarrior.json";
 import "./App.css";
 
 function App() {
   const [selectedJob, setSelectedJob] = useState("");
-  const [mapleWarriorLevel, setMapleWarriorLevel] = useState(1);
+  const [mapleWarriorLevel, setMapleWarriorLevel] = useState(0);
   const [buff1Attack, setBuff1Attack] = useState(0);
   const [buff2Attack, setBuff2Attack] = useState(0);
   const [heroEchoEnabled, setHeroEchoEnabled] = useState(false);
@@ -68,6 +70,64 @@ function App() {
   const handleJobChange = (event: SelectChangeEvent) => {
     setSelectedJob(event.target.value);
   };
+
+  // 현재 직업 정보
+  const currentJob = JOBS.find((job) => job.engName === selectedJob);
+
+  // 메이플용사 보너스 계산
+  const mapleWarriorBonus = useMemo(() => {
+    const effect = mapleWarriorData.table.find(
+      (item: { level: number; x: number }) => item.level === mapleWarriorLevel
+    );
+    return effect ? effect.x / 100 : 0;
+  }, [mapleWarriorLevel]);
+
+  // 총 주스탯 계산
+  const mainStat = useMemo(() => {
+    if (!currentJob) return 0;
+    const mainStatKey = currentJob.mainStat as "str" | "dex" | "int" | "luk";
+    const pureStatKey = `pure${mainStatKey.charAt(0).toUpperCase() + mainStatKey.slice(1)}` as keyof Stats;
+    const equipStatKey = `equip${mainStatKey.charAt(0).toUpperCase() + mainStatKey.slice(1)}` as keyof Stats;
+    const buffStatKey = `buff${mainStatKey.charAt(0).toUpperCase() + mainStatKey.slice(1)}` as keyof Stats;
+
+    const pureStat = (finalStats[pureStatKey] as number) || 0;
+    const equipStat = (finalStats[equipStatKey] as number) || 0;
+    const buffStat = (finalStats[buffStatKey] as number) || 0;
+    const mapleWarriorStat = Math.floor(pureStat * mapleWarriorBonus);
+
+    return pureStat + equipStat + buffStat + mapleWarriorStat;
+  }, [currentJob, finalStats, mapleWarriorBonus]);
+
+  // 총 부스탯 계산 (직업별로 정해진 부스탯만 적용)
+  const subStat = useMemo(() => {
+    if (!currentJob) return 0;
+
+    const subStatKey = currentJob.subStat as "str" | "dex" | "int" | "luk";
+    const pureStatKey = `pure${subStatKey.charAt(0).toUpperCase() + subStatKey.slice(1)}` as keyof Stats;
+    const equipStatKey = `equip${subStatKey.charAt(0).toUpperCase() + subStatKey.slice(1)}` as keyof Stats;
+    const buffStatKey = `buff${subStatKey.charAt(0).toUpperCase() + subStatKey.slice(1)}` as keyof Stats;
+
+    const pureStat = (finalStats[pureStatKey] as number) || 0;
+    const equipStat = (finalStats[equipStatKey] as number) || 0;
+    const buffStat = (finalStats[buffStatKey] as number) || 0;
+    const mapleWarriorStat = Math.floor(pureStat * mapleWarriorBonus);
+
+    return pureStat + equipStat + buffStat + mapleWarriorStat;
+  }, [currentJob, finalStats, mapleWarriorBonus]);
+
+  // 장착한 무기 타입
+  const weaponType = useMemo(() => {
+    const weapon = equipments.find((eq) => eq.slot === "무기");
+    return weapon?.type as ItemType | undefined;
+  }, [equipments]);
+
+  // 최종 공격력 계산 (장비 + 버프1 + 버프2) * 영웅의메아리
+  const totalAttack = useMemo(() => {
+    const totalBuffAttack = buff1Attack + buff2Attack;
+    const heroEchoMultiplier = heroEchoEnabled ? 1.04 : 1;
+    const totalAttackBeforeEcho = finalStats.equipAttack + totalBuffAttack;
+    return Math.floor(totalAttackBeforeEcho * heroEchoMultiplier);
+  }, [finalStats.equipAttack, buff1Attack, buff2Attack, heroEchoEnabled]);
 
   // 장착 핸들러: Item을 Equipment로 변환하여 장착
   const handleEquipItem = (item: Item) => {
@@ -145,7 +205,7 @@ function App() {
             heroEchoEnabled={heroEchoEnabled}
             onHeroEchoChange={setHeroEchoEnabled}
           />
-          <DamageTable />
+          <DamageTable statAttack={totalAttack} mainStat={mainStat} subStat={subStat} weaponType={weaponType} />
         </Box>
 
         {/* BottomBox */}
