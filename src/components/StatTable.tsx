@@ -60,11 +60,6 @@ export default function StatTable() {
         flexDirection: "column",
       }}
     >
-      {/* 타이틀 */}
-      <Typography variant="body2" sx={{ fontWeight: "bold", p: 1.5, borderBottom: "1px solid #ccc" }}>
-        스탯
-      </Typography>
-
       {/* 스탯 내용 */}
       <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 1.5 }}>
         {/* 레벨 */}
