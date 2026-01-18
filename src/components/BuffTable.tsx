@@ -1,5 +1,80 @@
-import { Box, Typography, Slider, TextField, Checkbox, FormControlLabel } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  Checkbox,
+  Divider,
+  InputAdornment,
+  Button,
+  Select,
+  MenuItem,
+  Switch,
+} from "@mui/material";
 import { useCharacter } from "../contexts/CharacterContext";
+import mapleWarriorData from "../data/buff/MapleWarrior/MapleWarrior.json";
+import herosEchoImg from "../data/buff/HerosEcho/HerosEcho.png";
+import mastery1Data from "../data/buff/mastery/mastery1.json";
+import mastery2Data from "../data/buff/mastery/mastery2.json";
+
+interface BuffOption {
+  id: string;
+  name: string;
+  description: string;
+}
+
+const BuffSection = ({
+  icon,
+  name,
+  description,
+  children,
+}: {
+  icon: string;
+  name: string;
+  description: string;
+  children: React.ReactNode;
+}) => (
+  <Box
+    sx={{
+      display: "flex",
+      gap: 1.5,
+      padding: 1.5,
+      borderRadius: 1,
+      bgcolor: "#f5f5f5",
+    }}
+  >
+    {/* 아이콘 */}
+    <Box
+      sx={{
+        minWidth: 50,
+        height: 50,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        bgcolor: "#f0f0f0",
+        borderRadius: 1,
+        fontSize: "1.5rem",
+      }}
+    >
+      {icon}
+    </Box>
+
+    {/* 정보 영역 */}
+    <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+      {/* 이름 */}
+      <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: "0.875rem" }}>
+        {name}
+      </Typography>
+
+      {/* 설명 */}
+      <Typography variant="caption" sx={{ color: "#666", fontSize: "0.75rem", mb: 1 }}>
+        {description}
+      </Typography>
+
+      {/* 내용 */}
+      {children}
+    </Box>
+  </Box>
+);
 
 export default function BuffTable() {
   const {
@@ -10,6 +85,14 @@ export default function BuffTable() {
     setHeroEchoEnabled,
     buff1Attack,
     buff2Attack,
+    buff1Type,
+    buff2Type,
+    setBuff1Type,
+    setBuff2Type,
+    buff1Name,
+    buff2Name,
+    setBuff1Name,
+    setBuff2Name,
   } = useCharacter();
 
   const mapleWarrior = character.getBuff("mapleWarrior");
@@ -24,11 +107,33 @@ export default function BuffTable() {
     label: i % 5 === 0 ? i.toString() : undefined,
   }));
 
+  // 버프 옵션 (추후 데이터로 제공받을 예정)
+  const buffOptions: BuffOption[] = [
+    { id: "custom", name: "직접 입력", description: "" },
+    // 추후 추가될 프리셋 버프들
+  ];
+
+  // 무기 타입을 mastery1.json의 키로 변환
+  const getWeaponKey = (weaponType: string | null): string | null => {
+    if (!weaponType) return null;
+    const keyMap: { [key: string]: string } = {
+      검: "sword",
+      도끼: "axe",
+      둔기: "mace",
+      창: "spear",
+      폴암: "polearm",
+      활: "bow",
+      석궁: "crossbow",
+      단검: "dagger",
+      자벨린: "javelin",
+    };
+    return keyMap[weaponType] || null;
+  };
+
   return (
     <Box
       sx={{
-        width: 400,
-        height: 500,
+        width: 320,
         border: "1px solid #ccc",
         borderRadius: 1,
         bgcolor: "#f5f5f5",
@@ -41,72 +146,445 @@ export default function BuffTable() {
         버프
       </Typography>
 
-      {/* 버프 내용 */}
-      <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 3 }}>
+      {/* 버프 섹션 */}
+      <Box sx={{ p: 1.5, display: "flex", flexDirection: "column", gap: 1.5 }}>
         {/* 메이플 용사 */}
-        <Box>
-          <Typography variant="body2" sx={{ fontWeight: "bold", mb: 1 }}>
-            메이플 용사: {mapleWarrior?.level || 0}
-          </Typography>
-          <Box sx={{ px: 2 }}>
-            <Slider
-              value={mapleWarrior?.level || 0}
-              onChange={handleMapleWarriorChange}
-              min={0}
-              max={20}
-              step={1}
-              marks={mapleWarriorMarks}
-              valueLabelDisplay="auto"
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1.5,
+            padding: 1.5,
+            borderRadius: 1,
+            bgcolor: "#f5f5f5",
+          }}
+        >
+          {/* 아이콘 */}
+          <Box
+            sx={{
+              minWidth: 50,
+              height: 50,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              bgcolor: "#f0f0f0",
+              borderRadius: 1,
+              overflow: "hidden",
+            }}
+          >
+            <img
+              src={`data:image/png;base64,${mapleWarriorData.icon}`}
+              alt="메이플 용사"
+              style={{ width: "100%", height: "100%", objectFit: "contain" }}
             />
+          </Box>
+
+          {/* 정보 영역 */}
+          <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", gap: 1 }}>
+            {/* 제목과 레벨 입력 */}
+            <Box sx={{ display: "flex", gap: 1, alignItems: "center", justifyContent: "space-between" }}>
+              <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: "0.875rem" }}>
+                메이플 용사
+              </Typography>
+              <TextField
+                type="number"
+                size="small"
+                value={mapleWarrior?.level || 0}
+                onChange={(e) => handleMapleWarriorChange(null, parseInt(e.target.value) || 0)}
+                inputProps={{ min: 0, max: 20 }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start" sx={{ fontSize: "0.65rem", userSelect: "none" }}>
+                      Lv
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  width: 70,
+                  "& .MuiInputBase-input": {
+                    bgcolor: "white",
+                    p: 0.5,
+                    textAlign: "center",
+                    fontSize: "0.75rem",
+                  },
+                }}
+              />
+            </Box>
+
+            <Divider sx={{ my: 0 }} />
+
+            {/* 설명 */}
+            <Box sx={{ display: "flex", gap: 0.5, alignItems: "center", justifyContent: "space-between" }}>
+              <Typography variant="caption" sx={{ color: "#666", fontSize: "0.75rem" }}>
+                스탯 {Math.floor(((mapleWarrior?.level || 0) + 1) / 2)}% 증가
+              </Typography>
+              <Box sx={{ display: "flex", gap: 0.5 }}>
+                <Button
+                  size="small"
+                  variant={mapleWarrior?.level === 0 ? "contained" : "outlined"}
+                  onClick={() => handleMapleWarriorChange(null, 0)}
+                  sx={{
+                    minWidth: 28,
+                    height: 28,
+                    p: 0,
+                    fontSize: "0.65rem",
+                  }}
+                >
+                  0
+                </Button>
+                <Button
+                  size="small"
+                  variant={mapleWarrior?.level === 10 ? "contained" : "outlined"}
+                  onClick={() => handleMapleWarriorChange(null, 10)}
+                  sx={{
+                    minWidth: 28,
+                    height: 28,
+                    p: 0,
+                    fontSize: "0.65rem",
+                  }}
+                >
+                  10
+                </Button>
+                <Button
+                  size="small"
+                  variant={mapleWarrior?.level === 20 ? "contained" : "outlined"}
+                  onClick={() => handleMapleWarriorChange(null, 20)}
+                  sx={{
+                    minWidth: 28,
+                    height: 28,
+                    p: 0,
+                    fontSize: "0.65rem",
+                  }}
+                >
+                  20
+                </Button>
+              </Box>
+            </Box>
           </Box>
         </Box>
 
         {/* 버프 1 */}
-        <Box>
-          <Typography variant="body2" sx={{ fontWeight: "bold", mb: 1 }}>
-            버프 1 공격력
-          </Typography>
-          <TextField
-            type="number"
-            size="small"
-            value={buff1Attack}
-            onChange={(e) => setBuff1Attack(parseInt(e.target.value) || 0)}
-            fullWidth
+        <Divider sx={{ my: 0 }} />
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1.5,
+            padding: 1.5,
+            borderRadius: 1,
+            bgcolor: "#f5f5f5",
+          }}
+        >
+          {/* 아이콘 */}
+          <Box
             sx={{
-              "& .MuiInputBase-input": {
-                bgcolor: "white",
-              },
+              minWidth: 50,
+              height: 50,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              bgcolor: "#f0f0f0",
+              borderRadius: 1,
+              fontSize: "1.5rem",
             }}
-          />
+          >
+            ⚡
+          </Box>
+
+          {/* 정보 영역 */}
+          <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", gap: 1 }}>
+            {/* 드롭다운 메뉴 */}
+            <Select
+              value={buff1Type}
+              onChange={(e) => {
+                setBuff1Type(e.target.value as "custom" | "preset");
+                if (e.target.value === "custom") {
+                  setBuff1Name("직접 입력");
+                }
+              }}
+              size="small"
+              sx={{
+                width: "100%",
+                height: 32,
+                fontSize: "0.875rem",
+                "& .MuiOutlinedInput-input": {
+                  p: 0.75,
+                },
+              }}
+            >
+              <MenuItem value="custom">직접 입력</MenuItem>
+            </Select>
+
+            <Divider sx={{ my: 0 }} />
+
+            {/* 설명 */}
+            <Box sx={{ display: "flex", gap: 0.5, alignItems: "center" }}>
+              <Typography variant="caption" sx={{ color: "#666", fontSize: "0.75rem" }}>
+                공격력
+              </Typography>
+              <TextField
+                type="number"
+                size="small"
+                value={buff1Attack}
+                onChange={(e) => setBuff1Attack(parseInt(e.target.value) || 0)}
+                sx={{
+                  width: 60,
+                  "& .MuiInputBase-input": {
+                    bgcolor: "white",
+                    p: 0.5,
+                    fontSize: "0.75rem",
+                    textAlign: "center",
+                  },
+                }}
+              />
+              <Typography variant="caption" sx={{ color: "#666", fontSize: "0.75rem" }}>
+                증가
+              </Typography>
+            </Box>
+          </Box>
         </Box>
 
         {/* 버프 2 */}
-        <Box>
-          <Typography variant="body2" sx={{ fontWeight: "bold", mb: 1 }}>
-            버프 2 공격력
-          </Typography>
-          <TextField
-            type="number"
-            size="small"
-            value={buff2Attack}
-            onChange={(e) => setBuff2Attack(parseInt(e.target.value) || 0)}
-            fullWidth
+        <Divider sx={{ my: 0 }} />
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1.5,
+            padding: 1.5,
+            borderRadius: 1,
+            bgcolor: "#f5f5f5",
+          }}
+        >
+          {/* 아이콘 */}
+          <Box
             sx={{
-              "& .MuiInputBase-input": {
-                bgcolor: "white",
-              },
+              minWidth: 50,
+              height: 50,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              bgcolor: "#f0f0f0",
+              borderRadius: 1,
+              fontSize: "1.5rem",
             }}
-          />
+          >
+            ✨
+          </Box>
+
+          {/* 정보 영역 */}
+          <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", gap: 1 }}>
+            {/* 드롭다운 메뉴 */}
+            <Select
+              value={buff2Type}
+              onChange={(e) => {
+                setBuff2Type(e.target.value as "custom" | "preset");
+                if (e.target.value === "custom") {
+                  setBuff2Name("직접 입력");
+                }
+              }}
+              size="small"
+              sx={{
+                width: "100%",
+                height: 32,
+                fontSize: "0.875rem",
+                "& .MuiOutlinedInput-input": {
+                  p: 0.75,
+                },
+              }}
+            >
+              <MenuItem value="custom">직접 입력</MenuItem>
+            </Select>
+
+            <Divider sx={{ my: 0 }} />
+
+            {/* 설명 */}
+            <Box sx={{ display: "flex", gap: 0.5, alignItems: "center" }}>
+              <Typography variant="caption" sx={{ color: "#666", fontSize: "0.75rem" }}>
+                공격력
+              </Typography>
+              <TextField
+                type="number"
+                size="small"
+                value={buff2Attack}
+                onChange={(e) => setBuff2Attack(parseInt(e.target.value) || 0)}
+                sx={{
+                  width: 60,
+                  "& .MuiInputBase-input": {
+                    bgcolor: "white",
+                    p: 0.5,
+                    fontSize: "0.75rem",
+                    textAlign: "center",
+                  },
+                }}
+              />
+              <Typography variant="caption" sx={{ color: "#666", fontSize: "0.75rem" }}>
+                증가
+              </Typography>
+            </Box>
+          </Box>
         </Box>
 
         {/* 영웅의 메아리 */}
-        <Box>
-          <FormControlLabel
-            control={
-              <Checkbox checked={heroEcho?.enabled || false} onChange={(e) => setHeroEchoEnabled(e.target.checked)} />
+        <Divider sx={{ my: 0 }} />
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1.5,
+            padding: 1.5,
+            borderRadius: 1,
+            bgcolor: "#f5f5f5",
+          }}
+        >
+          {/* 아이콘 */}
+          <Box
+            sx={{
+              minWidth: 50,
+              height: 50,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              bgcolor: "#f0f0f0",
+              borderRadius: 1,
+              overflow: "hidden",
+            }}
+          >
+            <img
+              src={herosEchoImg}
+              alt="영웅의 메아리"
+              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+            />
+          </Box>
+
+          {/* 정보 영역 */}
+          <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", gap: 1 }}>
+            {/* 제목과 스위치 */}
+            <Box sx={{ display: "flex", gap: 1, alignItems: "center", justifyContent: "space-between" }}>
+              <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: "0.875rem" }}>
+                영웅의 메아리
+              </Typography>
+              <Switch
+                checked={heroEcho?.enabled || false}
+                onChange={(e) => setHeroEchoEnabled(e.target.checked)}
+                size="small"
+                sx={{ m: 0 }}
+              />
+            </Box>
+
+            <Divider sx={{ my: 0 }} />
+
+            {/* 설명 */}
+            <Typography variant="caption" sx={{ color: "#666", fontSize: "0.75rem" }}>
+              총 공격력/마력 4% 증가
+            </Typography>
+          </Box>
+        </Box>
+
+        {/* 마스터리 스킬 */}
+        <Divider sx={{ my: 0 }} />
+        <Box
+          sx={{
+            padding: 1.5,
+            borderRadius: 1,
+            bgcolor: "#f5f5f5",
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 1,
+            minHeight: 70,
+          }}
+        >
+          {/* 스킬 1 - 장착 무기에 따라 변동 */}
+          {(() => {
+            const weaponKey = getWeaponKey(character.getWeaponType());
+            const iconData =
+              weaponKey && mastery1Data.icons[weaponKey as keyof typeof mastery1Data.icons]
+                ? mastery1Data.icons[weaponKey as keyof typeof mastery1Data.icons]
+                : null;
+            const skillName =
+              weaponKey && mastery1Data.names[weaponKey as keyof typeof mastery1Data.names]
+                ? mastery1Data.names[weaponKey as keyof typeof mastery1Data.names]
+                : "마스터리";
+
+            return (
+              <Box sx={{ display: "flex", gap: 1 }}>
+                <Box
+                  sx={{
+                    minWidth: 40,
+                    height: 40,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    bgcolor: "#f0f0f0",
+                    borderRadius: 1,
+                    fontSize: "1.5rem",
+                    overflow: "hidden",
+                  }}
+                >
+                  {iconData && (
+                    <img
+                      src={`data:image/png;base64,${iconData}`}
+                      alt={skillName}
+                      style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                    />
+                  )}
+                </Box>
+                <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                  <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                    {skillName}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: "#666", fontSize: "0.65rem" }}>
+                    {character.getWeaponType() ? "공격력 증가" : "무기 장착 필요"}
+                  </Typography>
+                </Box>
+              </Box>
+            );
+          })()}
+
+          {/* 스킬 2 */}
+          {(() => {
+            const weaponType = character.getWeaponType();
+            let skillName = "추가 마스터리";
+            let hasSkill = false;
+
+            if (weaponType === "활") {
+              skillName = mastery2Data.bowExpert.koreanName;
+              hasSkill = true;
+            } else if (weaponType === "석궁") {
+              skillName = mastery2Data.crossbowExpert.koreanName;
+              hasSkill = true;
+            } else if (weaponType === "창" || weaponType === "폴암") {
+              skillName = mastery2Data.beholder.koreanName;
+              hasSkill = true;
+            } else if (weaponType) {
+              skillName = "없음";
+              hasSkill = false;
             }
-            label="영웅의 메아리 (+4%)"
-          />
+
+            return (
+              <Box sx={{ display: "flex", gap: 1 }}>
+                <Box
+                  sx={{
+                    minWidth: 40,
+                    height: 40,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    bgcolor: "#f0f0f0",
+                    borderRadius: 1,
+                    fontSize: "1.5rem",
+                    overflow: "hidden",
+                  }}
+                >
+                  {/* 아이콘 없음 */}
+                </Box>
+                <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                  <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                    {skillName}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: "#666", fontSize: "0.65rem" }}>
+                    {!weaponType ? "무기 장착 필요" : hasSkill ? "공격력 증가" : "없음"}
+                  </Typography>
+                </Box>
+              </Box>
+            );
+          })()}
         </Box>
       </Box>
     </Box>

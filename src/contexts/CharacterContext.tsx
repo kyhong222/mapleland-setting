@@ -28,6 +28,16 @@ interface CharacterContextValue {
   setBuff2Attack: (attack: number) => void;
   setHeroEchoEnabled: (enabled: boolean) => void;
 
+  // Buff selection (직접 입력 vs 드롭다운)
+  buff1Type: "custom" | "preset";
+  buff2Type: "custom" | "preset";
+  setBuff1Type: (type: "custom" | "preset") => void;
+  setBuff2Type: (type: "custom" | "preset") => void;
+  buff1Name: string;
+  buff2Name: string;
+  setBuff1Name: (name: string) => void;
+  setBuff2Name: (name: string) => void;
+
   // Buff attack values (외부 상태)
   buff1Attack: number;
   buff2Attack: number;
@@ -40,6 +50,10 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
   const [version, setVersion] = useState(0);
   const [buff1Attack, setBuff1AttackState] = useState(0);
   const [buff2Attack, setBuff2AttackState] = useState(0);
+  const [buff1Type, setBuff1TypeState] = useState<"custom" | "preset">("custom");
+  const [buff2Type, setBuff2TypeState] = useState<"custom" | "preset">("custom");
+  const [buff1Name, setBuff1NameState] = useState("직접 입력");
+  const [buff2Name, setBuff2NameState] = useState("직접 입력");
 
   const refresh = useCallback(() => {
     setVersion((v) => v + 1);
@@ -123,6 +137,22 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     setBuff2AttackState(attack);
   }, []);
 
+  const setBuff1Type = useCallback((type: "custom" | "preset") => {
+    setBuff1TypeState(type);
+  }, []);
+
+  const setBuff2Type = useCallback((type: "custom" | "preset") => {
+    setBuff2TypeState(type);
+  }, []);
+
+  const setBuff1Name = useCallback((name: string) => {
+    setBuff1NameState(name);
+  }, []);
+
+  const setBuff2Name = useCallback((name: string) => {
+    setBuff2NameState(name);
+  }, []);
+
   const setHeroEchoEnabled = useCallback(
     (enabled: boolean) => {
       character.setBuffEnabled("heroEcho", enabled);
@@ -149,6 +179,14 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
         setHeroEchoEnabled,
         buff1Attack,
         buff2Attack,
+        buff1Type,
+        buff2Type,
+        setBuff1Type,
+        setBuff2Type,
+        buff1Name,
+        buff2Name,
+        setBuff1Name,
+        setBuff2Name,
       }}
     >
       {children}

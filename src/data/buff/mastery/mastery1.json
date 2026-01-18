@@ -1,0 +1,47 @@
+{
+  "icons": {
+    "sword": "",
+    "axe": "",
+    "mace": "",
+    "spear": "",
+    "polearm": "",
+    "bow": "",
+    "crossbow": "",
+    "dagger": "",
+    "javelin": ""
+  },
+  "names": {
+    "sword": "소드 마스터리",
+    "axe": "도끼 마스터리",
+    "mace": "둔기 마스터리",
+    "spear": "창 마스터리",
+    "polearm": "폴암 마스터리",
+    "bow": "활 마스터리",
+    "crossbow": "석궁 마스터리",
+    "dagger": "단검 마스터리",
+    "javelin": "자벨린 마스터리"
+  },
+  "properties": [
+    { "level": 0, "mastery": 10 },
+    { "level": 1, "mastery": 15 },
+    { "level": 2, "mastery": 15 },
+    { "level": 3, "mastery": 20 },
+    { "level": 4, "mastery": 20 },
+    { "level": 5, "mastery": 25 },
+    { "level": 6, "mastery": 25 },
+    { "level": 7, "mastery": 30 },
+    { "level": 8, "mastery": 30 },
+    { "level": 9, "mastery": 35 },
+    { "level": 10, "mastery": 35 },
+    { "level": 11, "mastery": 40 },
+    { "level": 12, "mastery": 40 },
+    { "level": 13, "mastery": 45 },
+    { "level": 14, "mastery": 45 },
+    { "level": 15, "mastery": 50 },
+    { "level": 16, "mastery": 50 },
+    { "level": 17, "mastery": 55 },
+    { "level": 18, "mastery": 55 },
+    { "level": 19, "mastery": 60 },
+    { "level": 20, "mastery": 60 }
+  ]
+}
