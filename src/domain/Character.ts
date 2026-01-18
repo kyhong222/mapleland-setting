@@ -21,7 +21,7 @@ export class Character {
 
   constructor() {
     this.stats = {
-      level: 1,
+      level: 10,
       pureStr: 4,
       pureDex: 4,
       pureInt: 4,
@@ -249,15 +249,41 @@ export class Character {
     const buffStats = this.getBuffStats(buff1Attack, buff2Attack);
     const mapleWarriorBonus = this.getMapleWarriorBonus();
 
-    const mapleWarriorStr = Math.floor(this.stats.pureStr * mapleWarriorBonus);
-    const mapleWarriorDex = Math.floor(this.stats.pureDex * mapleWarriorBonus);
-    const mapleWarriorInt = Math.floor(this.stats.pureInt * mapleWarriorBonus);
-    const mapleWarriorLuk = Math.floor(this.stats.pureLuk * mapleWarriorBonus);
+    // 주스탯 자동 계산 (StatTable과 동일한 로직)
+    let pureStr = this.stats.pureStr;
+    let pureDex = this.stats.pureDex;
+    let pureInt = this.stats.pureInt;
+    let pureLuk = this.stats.pureLuk;
 
-    const totalStr = this.stats.pureStr + equipStats.str + buffStats.str + mapleWarriorStr;
-    const totalDex = this.stats.pureDex + equipStats.dex + buffStats.dex + mapleWarriorDex;
-    const totalInt = this.stats.pureInt + equipStats.int + buffStats.int + mapleWarriorInt;
-    const totalLuk = this.stats.pureLuk + equipStats.luk + buffStats.luk + mapleWarriorLuk;
+    if (this.job) {
+      const totalAP = 20 + this.stats.level * 5 + (this.stats.level >= 70 ? 5 : 0) + (this.stats.level >= 120 ? 5 : 0);
+      const mainStatKey = this.job.mainStat;
+
+      // 주스탯이 아닌 스탯들의 합계
+      const otherStatsSum =
+        (mainStatKey !== "str" ? this.stats.pureStr : 0) +
+        (mainStatKey !== "dex" ? this.stats.pureDex : 0) +
+        (mainStatKey !== "int" ? this.stats.pureInt : 0) +
+        (mainStatKey !== "luk" ? this.stats.pureLuk : 0);
+
+      // 주스탯 = 전체 AP - 다른 스탯들의 합
+      const mainStatValue = totalAP - otherStatsSum;
+
+      if (mainStatKey === "str") pureStr = mainStatValue;
+      else if (mainStatKey === "dex") pureDex = mainStatValue;
+      else if (mainStatKey === "int") pureInt = mainStatValue;
+      else if (mainStatKey === "luk") pureLuk = mainStatValue;
+    }
+
+    const mapleWarriorStr = Math.floor(pureStr * mapleWarriorBonus);
+    const mapleWarriorDex = Math.floor(pureDex * mapleWarriorBonus);
+    const mapleWarriorInt = Math.floor(pureInt * mapleWarriorBonus);
+    const mapleWarriorLuk = Math.floor(pureLuk * mapleWarriorBonus);
+
+    const totalStr = pureStr + equipStats.str + buffStats.str + mapleWarriorStr;
+    const totalDex = pureDex + equipStats.dex + buffStats.dex + mapleWarriorDex;
+    const totalInt = pureInt + equipStats.int + buffStats.int + mapleWarriorInt;
+    const totalLuk = pureLuk + equipStats.luk + buffStats.luk + mapleWarriorLuk;
     const totalAttack = equipStats.attack + buffStats.attack;
 
     let mainStat = 0;
