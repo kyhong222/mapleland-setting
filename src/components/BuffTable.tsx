@@ -1,5 +1,6 @@
-import { Box, Typography, TextField, Divider, InputAdornment, Button, Select, MenuItem, Switch } from "@mui/material";
+import { Box, Typography, TextField, Divider, InputAdornment, Button, MenuItem, Switch, Menu } from "@mui/material";
 import { useCharacter } from "../contexts/CharacterContext";
+import { useState } from "react";
 import mapleWarriorData from "../data/buff/MapleWarrior/MapleWarrior.json";
 import herosEchoData from "../data/buff/HerosEcho/herosecho.json";
 import mastery1Data from "../data/buff/mastery/mastery1.json";
@@ -16,11 +17,16 @@ export default function BuffTable() {
     setHeroEchoEnabled,
     buff1Attack,
     buff2Attack,
-    buff1Type,
-    buff2Type,
-    setBuff1Type,
-    setBuff2Type,
   } = useCharacter();
+
+  const [buff1Menu, setBuff1Menu] = useState<null | HTMLElement>(null);
+  const [buff2Menu, setBuff2Menu] = useState<null | HTMLElement>(null);
+  const [buff1Label, setBuff1Label] = useState("버프 선택");
+  const [buff2Label, setBuff2Label] = useState("버프 선택");
+  const [buff1Icon, setBuff1Icon] = useState<string | null>(null);
+  const [buff2Icon, setBuff2Icon] = useState<string | null>(null);
+  const [buff1IsManual, setBuff1IsManual] = useState(false);
+  const [buff2IsManual, setBuff2IsManual] = useState(false);
 
   const mapleWarrior = character.getBuff("mapleWarrior");
   const heroEcho = character.getBuff("heroEcho");
@@ -197,95 +203,96 @@ export default function BuffTable() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              bgcolor: buff1Type === "custom" ? "#ffffff" : "#f0f0f0",
+              bgcolor: "#ffffff",
               borderRadius: 1,
               overflow: "hidden",
+              fontSize: 30,
             }}
           >
-            {buff1Type !== "custom" &&
-              buff1Data.skills &&
-              buff1Data.skills.length > 0 &&
-              (() => {
-                const selectedIndex = parseInt(buff1Type.split("-")[1] || "0");
-                return (
-                  buff1Data.skills[selectedIndex] && (
-                    <img
-                      src={`data:image/png;base64,${buff1Data.skills[selectedIndex].icon}`}
-                      alt="버프 1"
-                      style={{ width: "100%", height: "100%", objectFit: "contain" }}
-                    />
-                  )
-                );
-              })()}
+            {buff1Icon && !buff1IsManual ? (
+              <img
+                src={`data:image/webp;base64,${buff1Icon}`}
+                alt={buff1Label}
+                style={{ width: "100%", height: "100%", objectFit: "contain" }}
+              />
+            ) : buff1IsManual ? (
+              "⚔️"
+            ) : null}
           </Box>
 
           {/* 정보 영역 */}
           <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", gap: 1 }}>
-            {/* 드롭다운 메뉴 */}
-            <Select
-              value={buff1Type}
-              onChange={(e) => {
-                setBuff1Type(e.target.value as "custom" | "preset");
-              }}
+            {/* 드롭다운 버튼 */}
+            <Button
+              onClick={(e) => setBuff1Menu(e.currentTarget)}
               size="small"
               sx={{
                 width: "100%",
                 height: 32,
                 fontSize: "0.875rem",
-                "& .MuiOutlinedInput-input": {
-                  p: 0.75,
-                },
+                justifyContent: "flex-start",
+                textTransform: "none",
+                color: "#333",
+                border: "1px solid #ccc",
+                backgroundColor: "#fff",
               }}
             >
-              <MenuItem value="custom">직접 입력</MenuItem>
-              {buff1Data.skills &&
-                buff1Data.skills.map((skill, index) => (
-                  <MenuItem key={index} value={`preset-${index}`}>
-                    {skill.name}
-                  </MenuItem>
-                ))}
-            </Select>
-
-            <Divider sx={{ my: 0 }} />
+              {buff1Label}
+            </Button>
+            <Menu anchorEl={buff1Menu} open={Boolean(buff1Menu)} onClose={() => setBuff1Menu(null)}>
+              <MenuItem
+                onClick={() => {
+                  setBuff1Menu(null);
+                  setBuff1Label("직접입력");
+                  setBuff1Icon(null);
+                  setBuff1IsManual(true);
+                }}
+              >
+                직접입력
+              </MenuItem>
+              {buff1Data.skills?.map((skill) => (
+                <MenuItem
+                  key={skill.name}
+                  onClick={() => {
+                    setBuff1Menu(null);
+                    setBuff1Label(skill.name);
+                    setBuff1Attack(skill.x || 0);
+                    setBuff1Icon(skill.icon);
+                    setBuff1IsManual(false);
+                  }}
+                >
+                  {skill.name}
+                </MenuItem>
+              ))}
+            </Menu>
 
             {/* 설명 */}
             <Box sx={{ display: "flex", gap: 0.5, alignItems: "center", height: 20 }}>
               <Typography variant="caption" sx={{ color: "#666", fontSize: "0.75rem", lineHeight: 1 }}>
                 공격력
               </Typography>
-              {buff1Type === "custom" ? (
-                <TextField
-                  type="number"
-                  size="small"
-                  value={buff1Attack}
-                  onChange={(e) => setBuff1Attack(parseInt(e.target.value) || 0)}
-                  sx={{
-                    width: 50,
+              <TextField
+                type="number"
+                size="small"
+                value={buff1Attack}
+                onChange={(e) => buff1IsManual && setBuff1Attack(parseInt(e.target.value) || 0)}
+                disabled={!buff1IsManual}
+                sx={{
+                  width: 50,
+                  height: 20,
+                  "& .MuiOutlinedInput-root": {
                     height: 20,
-                    "& .MuiOutlinedInput-root": {
-                      height: 20,
-                      minHeight: 20,
-                    },
-                    "& .MuiInputBase-input": {
-                      bgcolor: "white",
-                      p: "0px 4px",
-                      fontSize: "0.75rem",
-                      textAlign: "center",
-                      lineHeight: 1.4,
-                    },
-                  }}
-                />
-              ) : (
-                (() => {
-                  const selectedIndex = parseInt(buff1Type.split("-")[1] || "0");
-                  const selectedSkill = buff1Data.skills?.[selectedIndex];
-                  return (
-                    <Typography variant="caption" sx={{ color: "#666", fontSize: "0.75rem", fontWeight: "bold", lineHeight: 1 }}>
-                      {selectedSkill?.x || 0}
-                    </Typography>
-                  );
-                })()
-              )}
+                    minHeight: 20,
+                  },
+                  "& .MuiInputBase-input": {
+                    bgcolor: buff1IsManual ? "white" : "#f0f0f0",
+                    p: "0px 4px",
+                    fontSize: "0.75rem",
+                    textAlign: "center",
+                    lineHeight: 1.4,
+                  },
+                }}
+              />
               <Typography variant="caption" sx={{ color: "#666", fontSize: "0.75rem", lineHeight: 1 }}>
                 증가
               </Typography>
@@ -312,95 +319,96 @@ export default function BuffTable() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              bgcolor: buff2Type === "custom" ? "#ffffff" : "#f0f0f0",
+              bgcolor: "#ffffff",
               borderRadius: 1,
               overflow: "hidden",
+              fontSize: 30,
             }}
           >
-            {buff2Type !== "custom" &&
-              buff2Data.skills &&
-              buff2Data.skills.length > 0 &&
-              (() => {
-                const selectedIndex = parseInt(buff2Type.split("-")[1] || "0");
-                return (
-                  buff2Data.skills[selectedIndex] && (
-                    <img
-                      src={`data:image/png;base64,${buff2Data.skills[selectedIndex].icon}`}
-                      alt="버프 2"
-                      style={{ width: "100%", height: "100%", objectFit: "contain" }}
-                    />
-                  )
-                );
-              })()}
+            {buff2Icon && !buff2IsManual ? (
+              <img
+                src={`data:image/webp;base64,${buff2Icon}`}
+                alt={buff2Label}
+                style={{ width: "100%", height: "100%", objectFit: "contain" }}
+              />
+            ) : buff2IsManual ? (
+              "🛡️"
+            ) : null}
           </Box>
 
           {/* 정보 영역 */}
           <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", gap: 1 }}>
-            {/* 드롭다운 메뉴 */}
-            <Select
-              value={buff2Type}
-              onChange={(e) => {
-                setBuff2Type(e.target.value as "custom" | "preset");
-              }}
+            {/* 드롭다운 버튼 */}
+            <Button
+              onClick={(e) => setBuff2Menu(e.currentTarget)}
               size="small"
               sx={{
                 width: "100%",
                 height: 32,
                 fontSize: "0.875rem",
-                "& .MuiOutlinedInput-input": {
-                  p: 0.75,
-                },
+                justifyContent: "flex-start",
+                textTransform: "none",
+                color: "#333",
+                border: "1px solid #ccc",
+                backgroundColor: "#fff",
               }}
             >
-              <MenuItem value="custom">직접 입력</MenuItem>
-              {buff2Data.skills &&
-                buff2Data.skills.map((skill, index) => (
-                  <MenuItem key={index} value={`preset-${index}`}>
-                    {skill.name}
-                  </MenuItem>
-                ))}
-            </Select>
-
-            <Divider sx={{ my: 0 }} />
+              {buff2Label}
+            </Button>
+            <Menu anchorEl={buff2Menu} open={Boolean(buff2Menu)} onClose={() => setBuff2Menu(null)}>
+              <MenuItem
+                onClick={() => {
+                  setBuff2Menu(null);
+                  setBuff2Label("직접입력");
+                  setBuff2Icon(null);
+                  setBuff2IsManual(true);
+                }}
+              >
+                직접입력
+              </MenuItem>
+              {buff2Data.skills?.map((skill) => (
+                <MenuItem
+                  key={skill.name}
+                  onClick={() => {
+                    setBuff2Menu(null);
+                    setBuff2Label(skill.name);
+                    setBuff2Attack(skill.x || 0);
+                    setBuff2Icon(skill.icon);
+                    setBuff2IsManual(false);
+                  }}
+                >
+                  {skill.name}
+                </MenuItem>
+              ))}
+            </Menu>
 
             {/* 설명 */}
             <Box sx={{ display: "flex", gap: 0.5, alignItems: "center", height: 20 }}>
               <Typography variant="caption" sx={{ color: "#666", fontSize: "0.75rem", lineHeight: 1 }}>
                 공격력
               </Typography>
-              {buff2Type === "custom" ? (
-                <TextField
-                  type="number"
-                  size="small"
-                  value={buff2Attack}
-                  onChange={(e) => setBuff2Attack(parseInt(e.target.value) || 0)}
-                  sx={{
-                    width: 50,
+              <TextField
+                type="number"
+                size="small"
+                value={buff2Attack}
+                onChange={(e) => buff2IsManual && setBuff2Attack(parseInt(e.target.value) || 0)}
+                disabled={!buff2IsManual}
+                sx={{
+                  width: 50,
+                  height: 20,
+                  "& .MuiOutlinedInput-root": {
                     height: 20,
-                    "& .MuiOutlinedInput-root": {
-                      height: 20,
-                      minHeight: 20,
-                    },
-                    "& .MuiInputBase-input": {
-                      bgcolor: "white",
-                      p: "0px 4px",
-                      fontSize: "0.75rem",
-                      textAlign: "center",
-                      lineHeight: 1.4,
-                    },
-                  }}
-                />
-              ) : (
-                (() => {
-                  const selectedIndex = parseInt(buff2Type.split("-")[1] || "0");
-                  const selectedSkill = buff2Data.skills?.[selectedIndex];
-                  return (
-                    <Typography variant="caption" sx={{ color: "#666", fontSize: "0.75rem", fontWeight: "bold", lineHeight: 1 }}>
-                      {selectedSkill?.x || 0}
-                    </Typography>
-                  );
-                })()
-              )}
+                    minHeight: 20,
+                  },
+                  "& .MuiInputBase-input": {
+                    bgcolor: buff2IsManual ? "white" : "#f0f0f0",
+                    p: "0px 4px",
+                    fontSize: "0.75rem",
+                    textAlign: "center",
+                    lineHeight: 1.4,
+                  },
+                }}
+              />
               <Typography variant="caption" sx={{ color: "#666", fontSize: "0.75rem", lineHeight: 1 }}>
                 증가
               </Typography>
