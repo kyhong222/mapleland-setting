@@ -35,7 +35,6 @@ export default function EquipTable() {
             : ""
         }
         placement="top"
-        disableInteractivePopover
       >
         <Box
           onDoubleClick={() => equipment && handleDoubleClick(slotName)}
@@ -53,11 +52,10 @@ export default function EquipTable() {
             textAlign: "center",
             p: 0.5,
             wordBreak: "keep-all",
-            "&:hover": equipment
-              ? {
-                  bgcolor: isBottomSlotBlocked ? "#FFAB91" : "#e3f2fd",
-                }
-              : {},
+            userSelect: "none",
+            "&:hover": {
+              bgcolor: isBottomSlotBlocked ? "#FFAB91" : equipment ? "#e3f2fd" : "#eeeeee",
+            },
           }}
         >
           {equipment ? equipment.name : slotName}
