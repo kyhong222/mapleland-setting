@@ -96,7 +96,12 @@ export default function BuffTable() {
             <img
               src={`data:image/png;base64,${mapleWarriorData.icon}`}
               alt="메이플 용사"
-              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                filter: (mapleWarrior?.level || 0) === 0 ? "grayscale(100%)" : "none",
+              }}
             />
           </Box>
 
@@ -443,7 +448,12 @@ export default function BuffTable() {
             <img
               src={`data:image/webp;base64,${herosEchoData.icon}`}
               alt="영웅의 메아리"
-              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                filter: !heroEcho?.enabled ? "grayscale(100%)" : "none",
+              }}
             />
           </Box>
 
