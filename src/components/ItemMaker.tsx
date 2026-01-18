@@ -1,5 +1,5 @@
 import { Box, Divider, Typography, Select, MenuItem, FormControl, TextField, Button } from "@mui/material";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { EQUIPMENT_SLOTS } from "../types/equipment";
 import type { Item } from "../types/item";
 
@@ -348,10 +348,12 @@ export default function ItemMaker({
   const [selectedItemName, setSelectedItemName] = useState("");
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [editedItem, setEditedItem] = useState<Item | null>(null);
+  const prevInitialSlotRef = useRef<string>();
 
   // initialSlot이 변경되면 selectedSlot 업데이트
   useEffect(() => {
-    if (initialSlot) {
+    if (initialSlot && initialSlot !== prevInitialSlotRef.current) {
+      prevInitialSlotRef.current = initialSlot;
       setSelectedSlot(initialSlot);
       setSelectedItemName("");
       setSelectedItem(null);
