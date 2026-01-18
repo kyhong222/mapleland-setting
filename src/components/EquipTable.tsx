@@ -29,12 +29,13 @@ export default function EquipTable() {
         key={slotName}
         title={
           equipment
-            ? `${equipment.name}\n공: ${equipment.attack || 0} 힘: ${equipment.str || 0} 덱: ${
+            ? `${equipment.name}\n공: ${equipment.attack || 0} | 힘: ${equipment.str || 0} | 민: ${
                 equipment.dex || 0
-              } 인: ${equipment.int || 0} 럭: ${equipment.luk || 0}`
+              } | 지: ${equipment.int || 0} | 럭: ${equipment.luk || 0}`
             : ""
         }
         placement="top"
+        disableInteractivePopover
       >
         <Box
           onDoubleClick={() => equipment && handleDoubleClick(slotName)}
@@ -68,7 +69,7 @@ export default function EquipTable() {
   return (
     <Box
       sx={{
-        width: 300,
+        width: 320,
         border: "1px solid #ccc",
         borderRadius: 1,
         bgcolor: "#f5f5f5",

@@ -109,12 +109,12 @@ export class Character {
   equip(item: Item): boolean {
     const targetSlot = item.slot === "전신" ? "상의" : item.slot;
 
-    // 전신 장착 시 하의가 있으면 실패
+    // 전신 장착 시 하의가 있으면 자동 해제
     if (item.slot === "전신" && this.equipments.has("하의")) {
-      return false;
+      this.equipments.delete("하의");
     }
 
-    // 하의 장착 시 상의가 있으면 실패
+    // 하의 장착 시 상의가 있으면 실패 (상의에 전신이 들어있을 수 있으므로)
     if (item.slot === "하의" && this.equipments.has("상의")) {
       return false;
     }
