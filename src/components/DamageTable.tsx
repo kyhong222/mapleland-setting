@@ -1,8 +1,7 @@
 import { Box, Typography, Slider } from "@mui/material";
 import { useState, useMemo } from "react";
-import type { ItemType } from "../types/item";
+import { useCharacter } from "../contexts/CharacterContext";
 
-// 무기상수 정의 (최소, 최대)
 const WEAPON_CONSTANTS: Record<string, { min: number; max: number }> = {
   한손검: { min: 4.0, max: 4.0 },
   한손도끼: { min: 3.2, max: 4.4 },
@@ -18,49 +17,32 @@ const WEAPON_CONSTANTS: Record<string, { min: number; max: number }> = {
   아대: { min: 3.6, max: 3.6 },
 };
 
-interface DamageTableProps {
-  masteryDisabled?: boolean;
-  statAttack?: number;
-  mainStat?: number; // 총 주스텟
-  subStat?: number; // 총 부스텟
-  weaponType?: ItemType; // 무기 종류
-  showReserve1?: boolean;
-  showReserve2?: boolean;
-}
-
-export default function DamageTable({
-  masteryDisabled = false,
-  statAttack = 0,
-  mainStat = 0,
-  subStat = 0,
-  weaponType,
-  showReserve1 = false,
-  showReserve2 = false,
-}: DamageTableProps) {
+export default function DamageTable() {
+  const { character, buff1Attack, buff2Attack } = useCharacter();
   const [mastery, setMastery] = useState(60);
 
-  // 무기상수 가져오기
+  const finalStats = character.getFinalStats(buff1Attack, buff2Attack);
+  const weaponType = character.getWeaponType();
+
   const weaponConstants = weaponType ? WEAPON_CONSTANTS[weaponType] : null;
 
-  // 스탯창 공격력 최소/최대 데미지 계산
-  const statDamage = useMemo(() => {
-    if (!weaponConstants || statAttack === 0) {
+  const damage = useMemo(() => {
+    if (!weaponConstants || finalStats.totalAttack === 0) {
       return { min: 0, max: 0 };
     }
 
     const masteryRate = mastery / 100;
-
-    // 최소데미지: (총 주스텟 * 최소 무기상수 * 0.9 * 숙련도 + 총 부스텟) * 공격력 / 100
-    const minDamage = Math.floor(((mainStat * weaponConstants.min * 0.9 * masteryRate + subStat) * statAttack) / 100);
-    console.log("min", mainStat, weaponConstants.min, masteryRate, subStat, statAttack);
-    // 최대데미지: (총 주스텟 * 최대 무기상수 + 총 부스텟) * 공격력 / 100
-    const maxDamage = Math.floor(((mainStat * weaponConstants.max + subStat) * statAttack) / 100);
-    console.log("max", mainStat, weaponConstants.max, subStat, statAttack);
+    const minDamage = Math.floor(
+      ((finalStats.mainStat * weaponConstants.min * 0.9 * masteryRate + finalStats.subStat) * finalStats.totalAttack) /
+        100
+    );
+    const maxDamage = Math.floor(
+      ((finalStats.mainStat * weaponConstants.max + finalStats.subStat) * finalStats.totalAttack) / 100
+    );
 
     return { min: minDamage, max: maxDamage };
-  }, [weaponConstants, statAttack, mainStat, subStat, mastery]);
+  }, [weaponConstants, finalStats, mastery]);
 
-  // 숙련도 마크: 10~60 (5단위), 65~80 (5단위), 90
   const masteryMarks = [
     { value: 10, label: "10%" },
     { value: 15 },
@@ -80,23 +62,19 @@ export default function DamageTable({
     { value: 90, label: "90%" },
   ];
 
-  const handleMasteryChange = (_event: Event, newValue: number | number[]) => {
-    setMastery(newValue as number);
-  };
-
   return (
     <Box
       sx={{
         width: 400,
-        height: "100%",
+        height: 500,
         border: "1px solid #ccc",
         borderRadius: 1,
+        bgcolor: "#f5f5f5",
         display: "flex",
         flexDirection: "column",
-        bgcolor: "#f5f5f5",
       }}
     >
-      {/* 숙련도 영역 */}
+      {/* 숙련도 */}
       <Box
         sx={{
           flex: 1,
@@ -112,19 +90,18 @@ export default function DamageTable({
         <Box sx={{ px: 2 }}>
           <Slider
             value={mastery}
-            onChange={handleMasteryChange}
+            onChange={(_, value) => setMastery(value as number)}
             marks={masteryMarks}
             step={null}
             min={10}
             max={90}
             valueLabelDisplay="auto"
             valueLabelFormat={(value) => `${value}%`}
-            disabled={masteryDisabled}
           />
         </Box>
       </Box>
 
-      {/* 스탯창 공격력 섹션 (항상 표시) */}
+      {/* 스탯창 공격력 */}
       <Box
         sx={{
           flex: 1,
@@ -137,56 +114,18 @@ export default function DamageTable({
         <Typography variant="body2" sx={{ fontWeight: "bold", mb: 1 }}>
           스탯창 공격력
         </Typography>
-        <Box
-          sx={{
-            flex: 1,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+        <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
           <Typography variant="body2" sx={{ fontSize: "1.2rem" }}>
-            {statDamage.min.toLocaleString()} ~ {statDamage.max.toLocaleString()}
+            {damage.min.toLocaleString()} ~ {damage.max.toLocaleString()}
           </Typography>
         </Box>
       </Box>
 
-      {/* 예비 공격력 섹션 1 */}
-      <Box
-        sx={{
-          flex: 1,
-          borderBottom: "1px solid #ccc",
-          p: 2,
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        {showReserve1 && (
-          <>
-            <Typography variant="body2" sx={{ fontWeight: "bold", mb: 1 }}>
-              예비 공격력 1
-            </Typography>
-          </>
-        )}
-      </Box>
+      {/* 예비 1 */}
+      <Box sx={{ flex: 1, borderBottom: "1px solid #ccc", p: 2 }} />
 
-      {/* 예비 공격력 섹션 2 */}
-      <Box
-        sx={{
-          flex: 1,
-          p: 2,
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        {showReserve2 && (
-          <>
-            <Typography variant="body2" sx={{ fontWeight: "bold", mb: 1 }}>
-              예비 공격력 2
-            </Typography>
-          </>
-        )}
-      </Box>
+      {/* 예비 2 */}
+      <Box sx={{ flex: 1, p: 2 }} />
     </Box>
   );
 }

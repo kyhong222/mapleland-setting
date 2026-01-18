@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useCallback, useMemo, ReactNode } from "react";
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
 import { Character } from "../domain/Character";
 import type { Item } from "../types/item";
 import type { Job } from "../types/job";
@@ -6,41 +7,45 @@ import type { EquipmentSlot } from "../types/equipment";
 
 interface CharacterContextValue {
   character: Character;
-  
+  version: number;
+
   // Stats
   setLevel: (level: number) => void;
   setJob: (job: Job | null) => void;
   setPureStat: (stat: "str" | "dex" | "int" | "luk", value: number) => void;
-  
+
   // Equipments
   equipItem: (item: Item) => boolean;
   unequipItem: (slot: EquipmentSlot) => void;
-  
+
   // Buffs
   setBuffEnabled: (id: string, enabled: boolean) => void;
   setBuffLevel: (id: string, level: number) => void;
-  
-  // Inventory
-  addToInventory: (item: Item) => void;
-  removeFromInventory: (index: number) => void;
-  saveItem: (item: Item) => void;
-  
-  // Force re-render
-  refresh: () => void;
+
+  // Buff specific helpers
+  setMapleWarriorLevel: (level: number) => void;
+  setBuff1Attack: (attack: number) => void;
+  setBuff2Attack: (attack: number) => void;
+  setHeroEchoEnabled: (enabled: boolean) => void;
+
+  // Buff attack values (외부 상태)
+  buff1Attack: number;
+  buff2Attack: number;
 }
 
 const CharacterContext = createContext<CharacterContextValue | null>(null);
 
 export function CharacterProvider({ children }: { children: ReactNode }) {
   const [character] = useState(() => new Character());
-  const [, setVersion] = useState(0);
+  const [version, setVersion] = useState(0);
+  const [buff1Attack, setBuff1AttackState] = useState(0);
+  const [buff2Attack, setBuff2AttackState] = useState(0);
 
-  // 강제 리렌더링 트리거
   const refresh = useCallback(() => {
     setVersion((v) => v + 1);
   }, []);
 
-  // Stats 관련
+  // Stats
   const setLevel = useCallback(
     (level: number) => {
       character.setLevel(level);
@@ -65,7 +70,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     [character, refresh]
   );
 
-  // Equipments 관련
+  // Equipments
   const equipItem = useCallback(
     (item: Item) => {
       const result = character.equip(item);
@@ -83,7 +88,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     [character, refresh]
   );
 
-  // Buffs 관련
+  // Buffs
   const setBuffEnabled = useCallback(
     (id: string, enabled: boolean) => {
       character.setBuffEnabled(id, enabled);
@@ -100,63 +105,55 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     [character, refresh]
   );
 
-  // Inventory 관련
-  const addToInventory = useCallback(
-    (item: Item) => {
-      character.addToInventory(item);
+  // Buff helpers
+  const setMapleWarriorLevel = useCallback(
+    (level: number) => {
+      character.setBuffLevel("mapleWarrior", level);
+      character.setBuffEnabled("mapleWarrior", level > 0);
       refresh();
     },
     [character, refresh]
   );
 
-  const removeFromInventory = useCallback(
-    (index: number) => {
-      character.removeFromInventory(index);
+  const setBuff1Attack = useCallback((attack: number) => {
+    setBuff1AttackState(attack);
+  }, []);
+
+  const setBuff2Attack = useCallback((attack: number) => {
+    setBuff2AttackState(attack);
+  }, []);
+
+  const setHeroEchoEnabled = useCallback(
+    (enabled: boolean) => {
+      character.setBuffEnabled("heroEcho", enabled);
       refresh();
     },
     [character, refresh]
   );
 
-  const saveItem = useCallback(
-    (item: Item) => {
-      character.saveItem(item);
-      refresh();
-    },
-    [character, refresh]
+  return (
+    <CharacterContext.Provider
+      value={{
+        character,
+        version,
+        setLevel,
+        setJob,
+        setPureStat,
+        equipItem,
+        unequipItem,
+        setBuffEnabled,
+        setBuffLevel,
+        setMapleWarriorLevel,
+        setBuff1Attack,
+        setBuff2Attack,
+        setHeroEchoEnabled,
+        buff1Attack,
+        buff2Attack,
+      }}
+    >
+      {children}
+    </CharacterContext.Provider>
   );
-
-  const value = useMemo(
-    () => ({
-      character,
-      setLevel,
-      setJob,
-      setPureStat,
-      equipItem,
-      unequipItem,
-      setBuffEnabled,
-      setBuffLevel,
-      addToInventory,
-      removeFromInventory,
-      saveItem,
-      refresh,
-    }),
-    [
-      character,
-      setLevel,
-      setJob,
-      setPureStat,
-      equipItem,
-      unequipItem,
-      setBuffEnabled,
-      setBuffLevel,
-      addToInventory,
-      removeFromInventory,
-      saveItem,
-      refresh,
-    ]
-  );
-
-  return <CharacterContext.Provider value={value}>{children}</CharacterContext.Provider>;
 }
 
 export function useCharacter() {

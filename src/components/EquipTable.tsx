@@ -1,122 +1,93 @@
 import { Box, Typography, Tooltip } from "@mui/material";
-import { EQUIPMENT_LAYOUT, type Equipment } from "../types/equipment";
+import { useCharacter } from "../contexts/CharacterContext";
+import { EQUIPMENT_LAYOUT } from "../types/equipment";
+import type { EquipmentSlot } from "../types/equipment";
 
-interface EquipTableProps {
-  equipments?: Equipment[];
-  onUnequip?: (slot: string) => void;
-  onSlotClick?: (slot: string) => void;
-}
+export default function EquipTable() {
+  const { character, unequipItem } = useCharacter();
 
-export default function EquipTable({ equipments = [], onUnequip, onSlotClick }: EquipTableProps) {
-  const getEquipment = (slot: string | null) => {
-    if (!slot) return null;
-    return equipments.find((eq) => eq.slot === slot);
+  const equipments = character.getEquipments();
+  const equipMap = new Map(equipments.map((eq) => [eq.slot, eq]));
+
+  // 하의 슬롯 빨간색 표시 여부 (상의에 전신 장착 시)
+  const hasOverall = equipMap.has("상의");
+
+  const handleDoubleClick = (slot: string) => {
+    unequipItem(slot as EquipmentSlot);
   };
 
-  // 상의에 전신이 있는지 확인
-  const hasOverall = equipments.some((eq) => eq.slot === "상의");
+  const renderSlot = (slotName: string | null) => {
+    if (!slotName) {
+      return <Box key="empty" sx={{ width: 60, height: 60 }} />;
+    }
+
+    const equipment = equipMap.get(slotName);
+    const isBottomSlotBlocked = slotName === "하의" && hasOverall;
+
+    return (
+      <Tooltip
+        key={slotName}
+        title={
+          equipment
+            ? `${equipment.name}\n공: ${equipment.attack || 0} 힘: ${equipment.str || 0} 덱: ${
+                equipment.dex || 0
+              } 인: ${equipment.int || 0} 럭: ${equipment.luk || 0}`
+            : ""
+        }
+        placement="top"
+      >
+        <Box
+          onDoubleClick={() => equipment && handleDoubleClick(slotName)}
+          sx={{
+            width: 60,
+            height: 60,
+            border: "1px solid #ccc",
+            borderRadius: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            bgcolor: isBottomSlotBlocked ? "#FFCDD2" : equipment ? "white" : "#f5f5f5",
+            cursor: equipment ? "pointer" : "default",
+            fontSize: "0.75rem",
+            textAlign: "center",
+            p: 0.5,
+            wordBreak: "keep-all",
+            "&:hover": equipment
+              ? {
+                  bgcolor: isBottomSlotBlocked ? "#FFAB91" : "#e3f2fd",
+                }
+              : {},
+          }}
+        >
+          {equipment ? equipment.name : slotName}
+        </Box>
+      </Tooltip>
+    );
+  };
 
   return (
     <Box
       sx={{
         width: 300,
-        flex: 1,
         border: "1px solid #ccc",
         borderRadius: 1,
         bgcolor: "#f5f5f5",
         display: "flex",
         flexDirection: "column",
-        p: 2,
       }}
     >
-      <Typography variant="body2" sx={{ mb: 1, fontWeight: "bold" }}>
-        장비창
+      {/* 타이틀 */}
+      <Typography variant="body2" sx={{ fontWeight: "bold", p: 1.5, borderBottom: "1px solid #ccc" }}>
+        장비
       </Typography>
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "repeat(5, 1fr)",
-          gap: 1,
-        }}
-      >
-        {EQUIPMENT_LAYOUT.flat().map((slot, index) => {
-          if (!slot) {
-            // 빈칸
-            return <Box key={`empty-${index}`} sx={{ aspectRatio: "1/1" }} />;
-          }
 
-          const equipment = getEquipment(slot);
-          const isEmpty = !equipment || !equipment.name;
-
-          // 하의 슬롯이고 상의에 전신이 있는 경우
-          const isBottomDisabled = slot === "하의" && hasOverall;
-
-          // 툴팁 내용 생성
-          const tooltipContent = !isEmpty
-            ? [
-                equipment.name,
-                equipment.attack ? `공격력: +${equipment.attack}` : null,
-                equipment.str ? `힘: +${equipment.str}` : null,
-                equipment.dex ? `민첩: +${equipment.dex}` : null,
-                equipment.int ? `지력: +${equipment.int}` : null,
-                equipment.luk ? `행운: +${equipment.luk}` : null,
-              ]
-                .filter(Boolean)
-                .join("\n")
-            : "";
-
-          return (
-            <Tooltip
-              key={`${slot}-${equipment?.name || "empty"}`}
-              title={<div style={{ whiteSpace: "pre-line" }}>{tooltipContent}</div>}
-              disableHoverListener={isEmpty}
-              arrow
-              placement="top"
-              enterDelay={300}
-              leaveDelay={0}
-              disableInteractive
-            >
-              <Box
-                key={slot}
-                onClick={() => {
-                  if (isEmpty && onSlotClick) {
-                    onSlotClick(slot);
-                  }
-                }}
-                onDoubleClick={(e) => {
-                  if (!isEmpty && onUnequip) {
-                    onUnequip(slot);
-                    // 툴팁을 강제로 닫기 위해 blur 처리
-                    (e.currentTarget as HTMLElement).blur();
-                  }
-                }}
-                sx={{
-                  aspectRatio: "1/1",
-                  border: "1px solid #ddd",
-                  borderRadius: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  bgcolor: isBottomDisabled ? "#FFCDD2" : "white",
-                  cursor: "pointer",
-                  fontSize: "0.75rem",
-                  color: isEmpty ? "#999" : "#000",
-                  "&:hover": {
-                    bgcolor: isBottomDisabled ? "#FFABAF" : "#f0f0f0",
-                    borderColor: "#999",
-                  },
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  padding: "2px",
-                  textAlign: "center",
-                  wordBreak: "break-word",
-                }}
-              >
-                {isEmpty ? slot : equipment.name}
-              </Box>
-            </Tooltip>
-          );
-        })}
+      {/* 장비 그리드 */}
+      <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
+        {EQUIPMENT_LAYOUT.map((row, rowIndex) => (
+          <Box key={rowIndex} sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
+            {row.map((slot) => renderSlot(slot))}
+          </Box>
+        ))}
       </Box>
     </Box>
   );
