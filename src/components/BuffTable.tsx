@@ -17,6 +17,10 @@ export default function BuffTable() {
     setHeroEchoEnabled,
     buff1Attack,
     buff2Attack,
+    setMastery1,
+    setMastery2,
+    mastery1,
+    mastery2,
   } = useCharacter();
 
   const [buff1Menu, setBuff1Menu] = useState<null | HTMLElement>(null);

@@ -31,6 +31,12 @@ interface CharacterContextValue {
   // Buff attack values (외부 상태)
   buff1Attack: number;
   buff2Attack: number;
+
+  // Mastery
+  setMastery1: (value: number) => void;
+  setMastery2: (value: number) => void;
+  mastery1: number;
+  mastery2: number;
 }
 
 const CharacterContext = createContext<CharacterContextValue | null>(null);
@@ -40,6 +46,8 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
   const [version, setVersion] = useState(0);
   const [buff1Attack, setBuff1AttackState] = useState(0);
   const [buff2Attack, setBuff2AttackState] = useState(0);
+  const [mastery1, setMastery1State] = useState(0);
+  const [mastery2, setMastery2State] = useState(0);
 
   const refresh = useCallback(() => {
     setVersion((v) => v + 1);
@@ -139,6 +147,22 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     [character, refresh]
   );
 
+  const setMastery1 = useCallback(
+    (value: number) => {
+      setMastery1State(value);
+      refresh();
+    },
+    [refresh]
+  );
+
+  const setMastery2 = useCallback(
+    (value: number) => {
+      setMastery2State(value);
+      refresh();
+    },
+    [refresh]
+  );
+
   return (
     <CharacterContext.Provider
       value={{
@@ -157,6 +181,10 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
         setHeroEchoEnabled,
         buff1Attack,
         buff2Attack,
+        setMastery1,
+        setMastery2,
+        mastery1,
+        mastery2,
       }}
     >
       {children}

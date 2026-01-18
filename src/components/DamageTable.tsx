@@ -1,5 +1,5 @@
 import { Box, Typography, Slider } from "@mui/material";
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { useCharacter } from "../contexts/CharacterContext";
 
 const WEAPON_CONSTANTS: Record<string, { min: number; max: number }> = {
@@ -18,11 +18,11 @@ const WEAPON_CONSTANTS: Record<string, { min: number; max: number }> = {
 };
 
 export default function DamageTable() {
-  const { character, buff1Attack, buff2Attack } = useCharacter();
-  const [mastery, setMastery] = useState(60);
+  const { character, buff1Attack, buff2Attack, mastery1, mastery2, setMastery1, setMastery2 } = useCharacter();
+  const weaponType = character.getWeaponType();
+  const mastery = weaponType === "활" || weaponType === "석궁" ? mastery2 : mastery1;
 
   const finalStats = character.getFinalStats(buff1Attack, buff2Attack);
-  const weaponType = character.getWeaponType();
 
   const weaponConstants = weaponType ? WEAPON_CONSTANTS[weaponType] : null;
 
@@ -90,7 +90,13 @@ export default function DamageTable() {
         <Box sx={{ px: 2 }}>
           <Slider
             value={mastery}
-            onChange={(_, value) => setMastery(value as number)}
+            onChange={(_, value) => {
+              if (weaponType === "활" || weaponType === "석궁") {
+                setMastery2(value as number);
+              } else {
+                setMastery1(value as number);
+              }
+            }}
             marks={masteryMarks}
             step={null}
             min={10}
