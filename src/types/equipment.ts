@@ -1,4 +1,5 @@
 export interface Equipment {
+  id?: number;
   slot: string;
   name: string | null;
   type?: string;

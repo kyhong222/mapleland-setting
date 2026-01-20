@@ -1,16 +1,38 @@
 import { Box, Typography, Tooltip } from "@mui/material";
+import { useState, useEffect } from "react";
 import { useCharacter } from "../contexts/CharacterContext";
 import { EQUIPMENT_LAYOUT } from "../types/equipment";
 import type { EquipmentSlot } from "../types/equipment";
+import { fetchItemIcon } from "../api/maplestory";
 
 export default function EquipTable() {
   const { character, unequipItem } = useCharacter();
+  const [iconCache, setIconCache] = useState<Map<number, string>>(new Map());
 
   const equipments = character.getEquipments();
   const equipMap = new Map(equipments.map((eq) => [eq.slot, eq]));
 
   // 하의 슬롯 빨간색 표시 여부 (상의에 전신 장착 시)
   const hasOverall = equipMap.has("상의");
+
+  // 아이콘 로드
+  useEffect(() => {
+    const loadIcons = async () => {
+      for (const equipment of equipments) {
+        if (equipment.id && !iconCache.has(equipment.id)) {
+          console.log("Loading icon for item:", equipment.id, equipment.name);
+          const iconUrl = await fetchItemIcon(equipment.id);
+          if (iconUrl) {
+            console.log("Icon loaded:", equipment.id, iconUrl);
+            setIconCache((prev) => new Map(prev).set(equipment.id!, iconUrl));
+          } else {
+            console.log("Failed to load icon for:", equipment.id);
+          }
+        }
+      }
+    };
+    loadIcons();
+  }, [equipments, iconCache]);
 
   const handleDoubleClick = (slot: string) => {
     unequipItem(slot as EquipmentSlot);
@@ -58,7 +80,19 @@ export default function EquipTable() {
             },
           }}
         >
-          {equipment ? equipment.name : slotName}
+          {equipment ? (
+            equipment.id && iconCache.has(equipment.id) ? (
+              <img
+                src={iconCache.get(equipment.id)}
+                alt={equipment.name}
+                style={{ maxWidth: "100%", maxHeight: "100%" }}
+              />
+            ) : (
+              equipment.name
+            )
+          ) : (
+            slotName
+          )}
         </Box>
       </Tooltip>
     );

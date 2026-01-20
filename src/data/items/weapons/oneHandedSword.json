@@ -1,0 +1,604 @@
+[
+  {
+    "id": 1302000,
+    "name": "Sword",
+    "koreanName": "검",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 1302001,
+    "name": "Saw",
+    "koreanName": "톱",
+    "reqJob": 8,
+    "reqLevel": 10
+  },
+  {
+    "id": 1302002,
+    "name": "Viking Sword",
+    "koreanName": "바이킹 소드",
+    "reqJob": 1,
+    "reqLevel": 20
+  },
+  {
+    "id": 1302004,
+    "name": "Cutlus",
+    "koreanName": "커틀러스",
+    "reqJob": 1,
+    "reqLevel": 35
+  },
+  {
+    "id": 1302005,
+    "name": "Sabre",
+    "koreanName": "사브르",
+    "reqJob": 1,
+    "reqLevel": 15
+  },
+  {
+    "id": 1302007,
+    "name": "Long Sword",
+    "koreanName": "카알 대검",
+    "reqJob": 0,
+    "reqLevel": 10
+  },
+  {
+    "id": 1302008,
+    "name": "Gladius",
+    "koreanName": "글라디우스",
+    "reqJob": 1,
+    "reqLevel": 30
+  },
+  {
+    "id": 1302009,
+    "name": "Traus",
+    "koreanName": "트라우스",
+    "reqJob": 1,
+    "reqLevel": 40
+  },
+  {
+    "id": 1302010,
+    "name": "Jeweled Katar",
+    "koreanName": "쥬얼 쿠아다라",
+    "reqJob": 1,
+    "reqLevel": 50
+  },
+  {
+    "id": 1302011,
+    "name": "Neocora",
+    "koreanName": "네오코라",
+    "reqJob": 1,
+    "reqLevel": 60
+  },
+  {
+    "id": 1302012,
+    "name": "Red Katana",
+    "koreanName": "레드 카타나",
+    "reqJob": 1,
+    "reqLevel": 70
+  },
+  {
+    "id": 1302013,
+    "name": "Red Whip",
+    "koreanName": "붉은 채찍",
+    "reqJob": 0,
+    "reqLevel": 35
+  },
+  {
+    "id": 1302014,
+    "name": "Old Gladius",
+    "koreanName": "낡은 글라디우스",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 1302015,
+    "name": "Hero's Gladius",
+    "koreanName": "영웅의 글라디우스",
+    "reqJob": 1,
+    "reqLevel": 45
+  },
+  {
+    "id": 1302016,
+    "name": "Yellow Umbrella",
+    "koreanName": "노란색 우산",
+    "reqJob": 0,
+    "reqLevel": 40
+  },
+  {
+    "id": 1302017,
+    "name": "Sky Blue Umbrella",
+    "koreanName": "하늘색 우산",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 1302018,
+    "name": "Khan",
+    "koreanName": "아츠",
+    "reqJob": 1,
+    "reqLevel": 80
+  },
+  {
+    "id": 1302019,
+    "name": "Nameless Sword",
+    "koreanName": "이름없는검(사무라이검)",
+    "reqJob": 1,
+    "reqLevel": 45
+  },
+  {
+    "id": 1302020,
+    "name": "Maple Sword",
+    "koreanName": "메이플 소드",
+    "reqJob": 0,
+    "reqLevel": 35
+  },
+  {
+    "id": 1302021,
+    "name": "Pico-Pico Hammer",
+    "koreanName": "피코피코해머",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 1302022,
+    "name": "Bamboo Sword",
+    "koreanName": "죽도",
+    "reqJob": 0,
+    "reqLevel": 25
+  },
+  {
+    "id": 1302023,
+    "name": "Fraute",
+    "koreanName": "프라우테",
+    "reqJob": 1,
+    "reqLevel": 90
+  },
+  {
+    "id": 1302024,
+    "name": "Newspaper Sword",
+    "koreanName": "신문지 칼",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 1302025,
+    "name": "Red Umbrella",
+    "koreanName": "빨강 우산",
+    "reqJob": 0,
+    "reqLevel": 55
+  },
+  {
+    "id": 1302026,
+    "name": "Black Umbrella",
+    "koreanName": "검정 우산",
+    "reqJob": 0,
+    "reqLevel": 70
+  },
+  {
+    "id": 1302027,
+    "name": "Green Umbrella",
+    "koreanName": "연두색 우산",
+    "reqJob": 0,
+    "reqLevel": 8
+  },
+  {
+    "id": 1302028,
+    "name": "Light Purple Umbrella",
+    "koreanName": "연보라 우산",
+    "reqJob": 0,
+    "reqLevel": 25
+  },
+  {
+    "id": 1302029,
+    "name": "Beige Umbrella",
+    "koreanName": "베이지 우산",
+    "reqJob": 0,
+    "reqLevel": 43
+  },
+  {
+    "id": 1302030,
+    "name": "Maple Soul Singer",
+    "koreanName": "메이플 켈트 소드",
+    "reqJob": 0,
+    "reqLevel": 43
+  },
+  {
+    "id": 1302031,
+    "name": "Diao Chan Sword",
+    "koreanName": "칠성검",
+    "reqJob": 0,
+    "reqLevel": 48
+  },
+  {
+    "id": 1302033,
+    "name": "Maple Flag",
+    "koreanName": "",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 1302034,
+    "name": "Pumpkin Basket",
+    "koreanName": "",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 1302035,
+    "name": "Maple Flag : 1000 Days",
+    "koreanName": "메이플 1000일 깃발",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 1302036,
+    "name": "Maple Flag : 1000 Days",
+    "koreanName": "메이플 1000일 깃발",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 1302037,
+    "name": "Trumpet",
+    "koreanName": "트럼펫",
+    "reqJob": 1,
+    "reqLevel": 63
+  },
+  {
+    "id": 1302038,
+    "name": "Gladius",
+    "koreanName": "글라디우스",
+    "reqJob": 1,
+    "reqLevel": 20
+  },
+  {
+    "id": 1302039,
+    "name": "Jeweled Katar",
+    "koreanName": "쥬얼 쿠아다라",
+    "reqJob": 1,
+    "reqLevel": 35
+  },
+  {
+    "id": 1302040,
+    "name": "Neocora",
+    "koreanName": "네오코라",
+    "reqJob": 1,
+    "reqLevel": 50
+  },
+  {
+    "id": 1302041,
+    "name": "Red Katana",
+    "koreanName": "레드 카타나",
+    "reqJob": 1,
+    "reqLevel": 60
+  },
+  {
+    "id": 1302042,
+    "name": "Khan",
+    "koreanName": "아츠",
+    "reqJob": 1,
+    "reqLevel": 70
+  },
+  {
+    "id": 1302043,
+    "name": "Gladius",
+    "koreanName": "글라디우스",
+    "reqJob": 1,
+    "reqLevel": 20
+  },
+  {
+    "id": 1302044,
+    "name": "Jeweled Katar",
+    "koreanName": "쥬얼 쿠아다라",
+    "reqJob": 1,
+    "reqLevel": 35
+  },
+  {
+    "id": 1302045,
+    "name": "Neocora",
+    "koreanName": "네오코라",
+    "reqJob": 1,
+    "reqLevel": 50
+  },
+  {
+    "id": 1302046,
+    "name": "Red Katana",
+    "koreanName": "레드 카타나",
+    "reqJob": 1,
+    "reqLevel": 60
+  },
+  {
+    "id": 1302047,
+    "name": "Khan",
+    "koreanName": "아츠",
+    "reqJob": 1,
+    "reqLevel": 70
+  },
+  {
+    "id": 1302049,
+    "name": "Glowing Whip",
+    "koreanName": "광선채찍",
+    "reqJob": 0,
+    "reqLevel": 40
+  },
+  {
+    "id": 1302050,
+    "name": "Gladius",
+    "koreanName": "글라디우스",
+    "reqJob": 1,
+    "reqLevel": 20
+  },
+  {
+    "id": 1302051,
+    "name": "Jeweled Katar",
+    "koreanName": "쥬얼 쿠아다라",
+    "reqJob": 1,
+    "reqLevel": 35
+  },
+  {
+    "id": 1302052,
+    "name": "Neocora",
+    "koreanName": "네오코라",
+    "reqJob": 1,
+    "reqLevel": 50
+  },
+  {
+    "id": 1302053,
+    "name": "Red Katana",
+    "koreanName": "레드 카타나",
+    "reqJob": 1,
+    "reqLevel": 60
+  },
+  {
+    "id": 1302054,
+    "name": "Khan",
+    "koreanName": "아츠",
+    "reqJob": 1,
+    "reqLevel": 70
+  },
+  {
+    "id": 1302056,
+    "name": "Sparta",
+    "koreanName": "스파타",
+    "reqJob": 1,
+    "reqLevel": 100
+  },
+  {
+    "id": 1302057,
+    "name": "The Stars and Stripes",
+    "koreanName": "",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 1302058,
+    "name": "Maple Umbrella",
+    "koreanName": "메이플 우산",
+    "reqJob": 0,
+    "reqLevel": 30
+  },
+  {
+    "id": 1302059,
+    "name": "Dragon Carabella",
+    "koreanName": "드래곤 카라벨라",
+    "reqJob": 1,
+    "reqLevel": 110
+  },
+  {
+    "id": 1302060,
+    "name": "Huckle's Lamp",
+    "koreanName": "허클의 램프",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 1302062,
+    "name": "Pumpkin Basket (2006 SE)",
+    "koreanName": "",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 1302063,
+    "name": "Flaming Katana",
+    "koreanName": "화염의 카타나",
+    "reqJob": 0,
+    "reqLevel": 38
+  },
+  {
+    "id": 1302064,
+    "name": "Maple Glory Sword",
+    "koreanName": "메이플 글로리 소드",
+    "reqJob": 0,
+    "reqLevel": 64
+  },
+  {
+    "id": 1302065,
+    "name": "Blue Maple Flag",
+    "koreanName": "",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 1302066,
+    "name": "Maple 1500 Anniv. Flag",
+    "koreanName": "메이플 1500일 깃발",
+    "reqJob": 1,
+    "reqLevel": 30
+  },
+  {
+    "id": 1302067,
+    "name": "Maple 1500 Anniv. Flag",
+    "koreanName": "메이플 1500일 깃발",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 1302068,
+    "name": "Onyx Blade",
+    "koreanName": "",
+    "reqJob": 1,
+    "reqLevel": 45
+  },
+  {
+    "id": 1302071,
+    "name": "Pink Flower Tube",
+    "koreanName": "분홍색 꽃무늬 튜브",
+    "reqJob": 0,
+    "reqLevel": 30
+  },
+  {
+    "id": 1302073,
+    "name": "Singapore Flag (Beginner)",
+    "koreanName": "",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 1302074,
+    "name": "Malaysia Flag (Beginner)",
+    "koreanName": "",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 1302075,
+    "name": "Singapore Flag (One Handed Sword)",
+    "koreanName": "",
+    "reqJob": 1,
+    "reqLevel": 30
+  },
+  {
+    "id": 1302076,
+    "name": "Malaysia Flag (One Handed Sword)",
+    "koreanName": "",
+    "reqJob": 1,
+    "reqLevel": 30
+  },
+  {
+    "id": 1302077,
+    "name": "Beginner Warrior's sword",
+    "koreanName": "초보 전사의 검",
+    "reqJob": 1,
+    "reqLevel": 10
+  },
+  {
+    "id": 1302079,
+    "name": "Astral Blade",
+    "koreanName": "",
+    "reqJob": 1,
+    "reqLevel": 70
+  },
+  {
+    "id": 1302080,
+    "name": "Maplemas Lights",
+    "koreanName": "메이플 꼬마전구",
+    "reqJob": 0,
+    "reqLevel": 25
+  },
+  {
+    "id": 1302081,
+    "name": "Timeless Carabella",
+    "koreanName": "타임리스 엑서큐서너스",
+    "reqJob": 1,
+    "reqLevel": 120
+  },
+  {
+    "id": 1302088,
+    "name": "Stirge-on-a-String",
+    "koreanName": "",
+    "reqJob": 0,
+    "reqLevel": 20
+  },
+  {
+    "id": 1302089,
+    "name": "Stirge-on-a-Rope",
+    "koreanName": "",
+    "reqJob": 0,
+    "reqLevel": 35
+  },
+  {
+    "id": 1302090,
+    "name": "Stirge-o-Whip",
+    "koreanName": "",
+    "reqJob": 0,
+    "reqLevel": 50
+  },
+  {
+    "id": 1302091,
+    "name": "Stirge Grappler",
+    "koreanName": "",
+    "reqJob": 0,
+    "reqLevel": 50
+  },
+  {
+    "id": 1302092,
+    "name": "Swooping Stirge",
+    "koreanName": "",
+    "reqJob": 0,
+    "reqLevel": 60
+  },
+  {
+    "id": 1302093,
+    "name": "Frantic Strige",
+    "koreanName": "",
+    "reqJob": 0,
+    "reqLevel": 60
+  },
+  {
+    "id": 1302094,
+    "name": "Angry Stirge",
+    "koreanName": "",
+    "reqJob": 0,
+    "reqLevel": 70
+  },
+  {
+    "id": 1302095,
+    "name": "Lifeguard Saver",
+    "koreanName": "",
+    "reqJob": 0,
+    "reqLevel": 20
+  },
+  {
+    "id": 1302098,
+    "name": "Lunch box (Lv 20)",
+    "koreanName": "",
+    "reqJob": 0,
+    "reqLevel": 20
+  },
+  {
+    "id": 1302099,
+    "name": "Lunch box (Lv 60)",
+    "koreanName": "",
+    "reqJob": 0,
+    "reqLevel": 60
+  },
+  {
+    "id": 1302100,
+    "name": "Lunch box (Lv 90)",
+    "koreanName": "",
+    "reqJob": 0,
+    "reqLevel": 90
+  },
+  {
+    "id": 1302101,
+    "name": "Lunch box (Lv 120)",
+    "koreanName": "",
+    "reqJob": 0,
+    "reqLevel": 120
+  },
+  {
+    "id": 1302106,
+    "name": "Crystal Blade",
+    "koreanName": "",
+    "reqJob": 1,
+    "reqLevel": 50
+  },
+  {
+    "id": 1302107,
+    "name": "Black Crystal Blade",
+    "koreanName": "",
+    "reqJob": 1,
+    "reqLevel": 100
+  }
+]

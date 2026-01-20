@@ -30,10 +30,21 @@ export interface ItemStats {
   luk: number;
 }
 
+// 아이템 필요 스탯 정의
+export interface RequireStats {
+  level: number;
+  str: number;
+  dex: number;
+  int: number;
+  luk: number;
+}
+
 // 아이템 정의 (아이템이름, 착용부위, 스탯)
 export interface Item {
+  id?: number;
   name: string;
   slot: EquipmentSlot;
   type: ItemType;
   stats: ItemStats;
+  requireStats: RequireStats;
 }

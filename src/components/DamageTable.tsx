@@ -110,7 +110,7 @@ export default function DamageTable() {
   // 조건 체크
   const job = character.getJob();
   const hasDifferentWeaponConstants = weaponConstants && weaponConstants.min !== weaponConstants.max;
-  const isTargueWeapon = weaponType === "아대";
+  const isClawWeapon = weaponType === "아대";
   const isThief = job?.koreanName === "도적";
   const isSpear = weaponType === "창" || weaponType === "폴암";
 
@@ -157,7 +157,7 @@ export default function DamageTable() {
       )}
 
       {/* 트스/럭세 실질 공격력 - 아대일 때만 표시 */}
-      {damages.treasure && isTargueWeapon && (
+      {damages.treasure && isClawWeapon && (
         <Box sx={{ borderBottom: "1px solid #ccc", p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
           <Typography variant="body2" sx={{ fontWeight: "bold" }}>
             트스/럭세 실질 공격력

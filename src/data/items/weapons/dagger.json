@@ -1,0 +1,429 @@
+[
+  {
+    "id": 1332000,
+    "name": "Triangular Zamadar",
+    "koreanName": "삼각 자마다르",
+    "reqJob": 8,
+    "reqLevel": 12
+  },
+  {
+    "id": 1332001,
+    "name": "Halfmoon Zamadar",
+    "koreanName": "반월 자마다르",
+    "reqJob": 8,
+    "reqLevel": 32
+  },
+  {
+    "id": 1332002,
+    "name": "Triple-Tipped Zamadar",
+    "koreanName": "삼지 자마다르",
+    "reqJob": 8,
+    "reqLevel": 17
+  },
+  {
+    "id": 1332003,
+    "name": "Shinkita",
+    "koreanName": "신기타",
+    "reqJob": 8,
+    "reqLevel": 50
+  },
+  {
+    "id": 1332004,
+    "name": "Forked Dagger",
+    "koreanName": "쌍지단도",
+    "reqJob": 8,
+    "reqLevel": 27
+  },
+  {
+    "id": 1332005,
+    "name": "Razor",
+    "koreanName": "도루코 대거",
+    "reqJob": 0,
+    "reqLevel": 5
+  },
+  {
+    "id": 1332007,
+    "name": "Fruit Knife",
+    "koreanName": "후루츠 대거",
+    "reqJob": 0,
+    "reqLevel": 8
+  },
+  {
+    "id": 1332011,
+    "name": "Bazlud",
+    "koreanName": "베즐러드",
+    "reqJob": 8,
+    "reqLevel": 40
+  },
+  {
+    "id": 1332012,
+    "name": "Reef Claw",
+    "koreanName": "리프 크로",
+    "reqJob": 8,
+    "reqLevel": 30
+  },
+  {
+    "id": 1332013,
+    "name": "Stinger",
+    "koreanName": "스팅어",
+    "reqJob": 8,
+    "reqLevel": 22
+  },
+  {
+    "id": 1332014,
+    "name": "Gephart",
+    "koreanName": "게파트",
+    "reqJob": 8,
+    "reqLevel": 35
+  },
+  {
+    "id": 1332015,
+    "name": "Deadly Fin",
+    "koreanName": "게타",
+    "reqJob": 8,
+    "reqLevel": 60
+  },
+  {
+    "id": 1332018,
+    "name": "Kandine",
+    "koreanName": "칸디네",
+    "reqJob": 8,
+    "reqLevel": 70
+  },
+  {
+    "id": 1332020,
+    "name": "Korean Fan",
+    "koreanName": "태극부채",
+    "reqJob": 0,
+    "reqLevel": 35
+  },
+  {
+    "id": 1332021,
+    "name": "Plastic Bottle",
+    "koreanName": "페트병",
+    "reqJob": 0,
+    "reqLevel": 40
+  },
+  {
+    "id": 1332023,
+    "name": "Dragon's Tail",
+    "koreanName": "용천권",
+    "reqJob": 8,
+    "reqLevel": 80
+  },
+  {
+    "id": 1332024,
+    "name": "Bushido",
+    "koreanName": "무사도",
+    "reqJob": 8,
+    "reqLevel": 55
+  },
+  {
+    "id": 1332025,
+    "name": "Maple Wagner",
+    "koreanName": "메이플 바그나",
+    "reqJob": 8,
+    "reqLevel": 43
+  },
+  {
+    "id": 1332027,
+    "name": "Varkit",
+    "koreanName": "바키트",
+    "reqJob": 8,
+    "reqLevel": 90
+  },
+  {
+    "id": 1332029,
+    "name": "Liu Bei Dagger",
+    "koreanName": "쌍고검",
+    "reqJob": 0,
+    "reqLevel": 53
+  },
+  {
+    "id": 1332030,
+    "name": "Fan",
+    "koreanName": "부채",
+    "reqJob": 0,
+    "reqLevel": 65
+  },
+  {
+    "id": 1332031,
+    "name": "Dragon Toenail",
+    "koreanName": "드래곤 토네일",
+    "reqJob": 8,
+    "reqLevel": 40
+  },
+  {
+    "id": 1332032,
+    "name": "Christmas Tree",
+    "koreanName": "크리스마스 트리",
+    "reqJob": 0,
+    "reqLevel": 10
+  },
+  {
+    "id": 1332033,
+    "name": "Reef Claw",
+    "koreanName": "리프 크로",
+    "reqJob": 8,
+    "reqLevel": 20
+  },
+  {
+    "id": 1332034,
+    "name": "Shinkita",
+    "koreanName": "신기타",
+    "reqJob": 8,
+    "reqLevel": 35
+  },
+  {
+    "id": 1332035,
+    "name": "Deadly Fin",
+    "koreanName": "게타",
+    "reqJob": 8,
+    "reqLevel": 50
+  },
+  {
+    "id": 1332036,
+    "name": "Kandine",
+    "koreanName": "칸디네",
+    "reqJob": 8,
+    "reqLevel": 60
+  },
+  {
+    "id": 1332037,
+    "name": "Dragon's Tail",
+    "koreanName": "용천권",
+    "reqJob": 8,
+    "reqLevel": 70
+  },
+  {
+    "id": 1332038,
+    "name": "Reef Claw",
+    "koreanName": "리프 크로",
+    "reqJob": 8,
+    "reqLevel": 20
+  },
+  {
+    "id": 1332039,
+    "name": "Shinkita",
+    "koreanName": "신기타",
+    "reqJob": 8,
+    "reqLevel": 35
+  },
+  {
+    "id": 1332040,
+    "name": "Deadly Fin",
+    "koreanName": "게타",
+    "reqJob": 8,
+    "reqLevel": 50
+  },
+  {
+    "id": 1332041,
+    "name": "Kandine",
+    "koreanName": "칸디네",
+    "reqJob": 8,
+    "reqLevel": 60
+  },
+  {
+    "id": 1332042,
+    "name": "Dragon's Tail",
+    "koreanName": "용천권",
+    "reqJob": 8,
+    "reqLevel": 70
+  },
+  {
+    "id": 1332043,
+    "name": "Reef Claw",
+    "koreanName": "리프 크로",
+    "reqJob": 8,
+    "reqLevel": 20
+  },
+  {
+    "id": 1332044,
+    "name": "Shinkita",
+    "koreanName": "신기타",
+    "reqJob": 8,
+    "reqLevel": 35
+  },
+  {
+    "id": 1332045,
+    "name": "Deadly Fin",
+    "koreanName": "게타",
+    "reqJob": 8,
+    "reqLevel": 50
+  },
+  {
+    "id": 1332046,
+    "name": "Kandine",
+    "koreanName": "칸디네",
+    "reqJob": 8,
+    "reqLevel": 60
+  },
+  {
+    "id": 1332047,
+    "name": "Dragon's Tail",
+    "koreanName": "용천권",
+    "reqJob": 8,
+    "reqLevel": 70
+  },
+  {
+    "id": 1332050,
+    "name": "Dragon Kreda",
+    "koreanName": "드래곤 크리스",
+    "reqJob": 8,
+    "reqLevel": 110
+  },
+  {
+    "id": 1332052,
+    "name": "Blood Dagger",
+    "koreanName": "블러드 대거",
+    "reqJob": 8,
+    "reqLevel": 100
+  },
+  {
+    "id": 1332053,
+    "name": "Kebob",
+    "koreanName": "",
+    "reqJob": 0,
+    "reqLevel": 75
+  },
+  {
+    "id": 1332054,
+    "name": "Diamond Dagger",
+    "koreanName": "",
+    "reqJob": 8,
+    "reqLevel": 50
+  },
+  {
+    "id": 1332055,
+    "name": "Maple Dark Mate",
+    "koreanName": "메이플 다크메이트",
+    "reqJob": 8,
+    "reqLevel": 64
+  },
+  {
+    "id": 1332056,
+    "name": "Maple Asura Dagger",
+    "koreanName": "메이플 아수라 대거",
+    "reqJob": 8,
+    "reqLevel": 64
+  },
+  {
+    "id": 1332057,
+    "name": "Maple 1500 Anniv. Flag",
+    "koreanName": "메이플 1500일 깃발",
+    "reqJob": 8,
+    "reqLevel": 30
+  },
+  {
+    "id": 1332059,
+    "name": "Pink Flower Tube",
+    "koreanName": "분홍색 꽃무늬 튜브",
+    "reqJob": 8,
+    "reqLevel": 30
+  },
+  {
+    "id": 1332060,
+    "name": "Singapore Flag (Dagger)",
+    "koreanName": "",
+    "reqJob": 8,
+    "reqLevel": 30
+  },
+  {
+    "id": 1332061,
+    "name": "Malaysia Flag (Dagger)",
+    "koreanName": "",
+    "reqJob": 8,
+    "reqLevel": 30
+  },
+  {
+    "id": 1332063,
+    "name": "Beginner Thief's short sword",
+    "koreanName": "초보 도적의 단검",
+    "reqJob": 8,
+    "reqLevel": 10
+  },
+  {
+    "id": 1332064,
+    "name": "Nebula Dagger 1 (LUK)",
+    "koreanName": "",
+    "reqJob": 8,
+    "reqLevel": 70
+  },
+  {
+    "id": 1332066,
+    "name": "Razor",
+    "koreanName": "도루코 대거",
+    "reqJob": 0,
+    "reqLevel": 5
+  },
+  {
+    "id": 1332067,
+    "name": "Maku(LUK)",
+    "koreanName": "",
+    "reqJob": 8,
+    "reqLevel": 10
+  },
+  {
+    "id": 1332068,
+    "name": "Makusuma(LUK)",
+    "koreanName": "",
+    "reqJob": 8,
+    "reqLevel": 40
+  },
+  {
+    "id": 1332069,
+    "name": "Makumagna(LUK)",
+    "koreanName": "",
+    "reqJob": 8,
+    "reqLevel": 80
+  },
+  {
+    "id": 1332070,
+    "name": "Maku(STR)",
+    "koreanName": "",
+    "reqJob": 8,
+    "reqLevel": 10
+  },
+  {
+    "id": 1332071,
+    "name": "Makusuma(STR)",
+    "koreanName": "",
+    "reqJob": 8,
+    "reqLevel": 40
+  },
+  {
+    "id": 1332072,
+    "name": "Makumagna(STR)",
+    "koreanName": "",
+    "reqJob": 8,
+    "reqLevel": 80
+  },
+  {
+    "id": 1332077,
+    "name": "Raven's Beak",
+    "koreanName": "",
+    "reqJob": 8,
+    "reqLevel": 80
+  },
+  {
+    "id": 1332078,
+    "name": "Night Raven's Beak",
+    "koreanName": "",
+    "reqJob": 8,
+    "reqLevel": 90
+  },
+  {
+    "id": 1332079,
+    "name": "Dawn Raven's Beak",
+    "koreanName": "",
+    "reqJob": 8,
+    "reqLevel": 90
+  },
+  {
+    "id": 1332080,
+    "name": "Dusk Raven's Beak",
+    "koreanName": "",
+    "reqJob": 8,
+    "reqLevel": 80
+  }
+]

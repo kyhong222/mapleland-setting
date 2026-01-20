@@ -120,6 +120,7 @@ export class Character {
     }
 
     const equipment: Equipment = {
+      id: item.id,
       slot: targetSlot,
       name: item.name,
       type: item.type,
