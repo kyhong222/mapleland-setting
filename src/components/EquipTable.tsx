@@ -5,7 +5,29 @@ import { EQUIPMENT_LAYOUT } from "../types/equipment";
 import type { EquipmentSlot } from "../types/equipment";
 import { fetchItemIcon } from "../api/maplestory";
 
-export default function EquipTable() {
+// 슬롯명을 카테고리 키로 매핑
+const SLOT_TO_CATEGORY: Record<string, string> = {
+  투구: "hat",
+  망토: "cape",
+  상의: "top",
+  장갑: "glove",
+  전신: "overall",
+  하의: "bottom",
+  보조무기: "shield",
+  신발: "shoes",
+  귀고리: "earrings",
+  얼굴장식: "faceAccessory",
+  훈장: "medal",
+  눈장식: "eyeDecoration",
+  목걸이: "pendant",
+  무기: "weapon",
+};
+
+interface EquipTableProps {
+  onSlotClick?: (category: string) => void;
+}
+
+export default function EquipTable({ onSlotClick }: EquipTableProps) {
   const { character, unequipItem } = useCharacter();
   const [iconCache, setIconCache] = useState<Map<number, string>>(new Map());
 
@@ -20,13 +42,9 @@ export default function EquipTable() {
     const loadIcons = async () => {
       for (const equipment of equipments) {
         if (equipment.id && !iconCache.has(equipment.id)) {
-          console.log("Loading icon for item:", equipment.id, equipment.name);
           const iconUrl = await fetchItemIcon(equipment.id);
           if (iconUrl) {
-            console.log("Icon loaded:", equipment.id, iconUrl);
             setIconCache((prev) => new Map(prev).set(equipment.id!, iconUrl));
-          } else {
-            console.log("Failed to load icon for:", equipment.id);
           }
         }
       }
@@ -38,6 +56,15 @@ export default function EquipTable() {
     unequipItem(slot as EquipmentSlot);
   };
 
+  const handleSlotClick = (slotName: string, hasEquipment: boolean) => {
+    if (!hasEquipment && onSlotClick) {
+      const categoryKey = SLOT_TO_CATEGORY[slotName];
+      if (categoryKey) {
+        onSlotClick(categoryKey);
+      }
+    }
+  };
+
   const renderSlot = (slotName: string | null) => {
     if (!slotName) {
       return <Box key="empty" sx={{ width: 60, height: 60 }} />;
@@ -46,19 +73,36 @@ export default function EquipTable() {
     const equipment = equipMap.get(slotName);
     const isBottomSlotBlocked = slotName === "하의" && hasOverall;
 
+    // 0이 아닌 스탯만 표기
+    const getTooltipText = () => {
+      if (!equipment) return "클릭하여 아이템 선택";
+
+      const lines: string[] = [equipment.name || ""];
+      if (equipment.attack) lines.push(`공격력: ${equipment.attack}`);
+      if (equipment.str) lines.push(`STR: ${equipment.str}`);
+      if (equipment.dex) lines.push(`DEX: ${equipment.dex}`);
+      if (equipment.int) lines.push(`INT: ${equipment.int}`);
+      if (equipment.luk) lines.push(`LUK: ${equipment.luk}`);
+
+      return lines.join("\n");
+    };
+
     return (
       <Tooltip
         key={slotName}
-        title={
-          equipment
-            ? `${equipment.name}\n공: ${equipment.attack || 0} | 힘: ${equipment.str || 0} | 민: ${
-                equipment.dex || 0
-              } | 지: ${equipment.int || 0} | 럭: ${equipment.luk || 0}`
-            : ""
-        }
+        title={getTooltipText()}
         placement="top"
+        slotProps={{
+          tooltip: {
+            sx: {
+              whiteSpace: "pre-wrap",
+              wordBreak: "break-word",
+            },
+          },
+        }}
       >
         <Box
+          onClick={() => handleSlotClick(slotName, !!equipment)}
           onDoubleClick={() => equipment && handleDoubleClick(slotName)}
           sx={{
             width: 60,
@@ -69,7 +113,7 @@ export default function EquipTable() {
             alignItems: "center",
             justifyContent: "center",
             bgcolor: isBottomSlotBlocked ? "#FFCDD2" : equipment ? "white" : "#f5f5f5",
-            cursor: equipment ? "pointer" : "default",
+            cursor: "pointer",
             fontSize: "0.75rem",
             textAlign: "center",
             p: 0.5,
@@ -84,7 +128,7 @@ export default function EquipTable() {
             equipment.id && iconCache.has(equipment.id) ? (
               <img
                 src={iconCache.get(equipment.id)}
-                alt={equipment.name}
+                alt={equipment.name || ""}
                 style={{ maxWidth: "100%", maxHeight: "100%" }}
               />
             ) : (

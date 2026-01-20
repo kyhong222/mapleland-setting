@@ -1,5 +1,5 @@
 import { Box, Typography, Select, MenuItem, FormControl, TextField, Button, Divider } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCharacter } from "../contexts/CharacterContext";
 import type { Item } from "../types/item";
 import type { EquipmentSlot } from "../types/equipment";
@@ -42,6 +42,37 @@ const CATEGORY_TO_SLOT: Record<string, EquipmentSlot> = {
   claw: "무기",
   staff: "무기",
   wand: "무기",
+};
+
+// 카테고리에서 아이템 타입으로 매핑 (무기 타입)
+const CATEGORY_TO_TYPE: Record<string, string> = {
+  hat: "방어구",
+  cape: "방어구",
+  top: "방어구",
+  glove: "방어구",
+  overall: "방어구",
+  bottom: "방어구",
+  shield: "방어구",
+  shoes: "방어구",
+  earrings: "방어구",
+  faceAccessory: "방어구",
+  medal: "방어구",
+  eyeDecoration: "방어구",
+  pendant: "방어구",
+  oneHandedSword: "한손검",
+  twoHandedSword: "두손검",
+  oneHandedAxe: "한손도끼",
+  twoHandedAxe: "두손도끼",
+  oneHandedBlunt: "한손둔기",
+  twoHandedBlunt: "두손둔기",
+  spear: "창",
+  polearm: "폴암",
+  bow: "활",
+  crossbow: "석궁",
+  dagger: "단검",
+  claw: "아대",
+  staff: "스태프",
+  wand: "완드",
 };
 
 // 카테고리 목록
@@ -100,6 +131,11 @@ interface ItemData {
   reqLevel: number;
 }
 
+interface ItemMakerProps {
+  selectedCategory?: string;
+  onCategoryChange?: (category: string) => void;
+}
+
 // 동적으로 JSON 파일 임포트
 async function loadItemData(categoryKey: string, isWeapon: boolean = false): Promise<ItemData[]> {
   try {
@@ -112,10 +148,19 @@ async function loadItemData(categoryKey: string, isWeapon: boolean = false): Pro
   }
 }
 
-export default function ItemMaker() {
+export default function ItemMaker({ selectedCategory: externalCategory, onCategoryChange }: ItemMakerProps = {}) {
   const { character, equipItem } = useCharacter();
 
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [internalCategory, setInternalCategory] = useState<string>("");
+  const selectedCategory = externalCategory !== undefined ? externalCategory : internalCategory;
+
+  const handleCategoryChange = (category: string) => {
+    setInternalCategory(category);
+    if (onCategoryChange) {
+      onCategoryChange(category);
+    }
+  };
+
   const [selectedWeaponSubCategory, setSelectedWeaponSubCategory] = useState<string>("");
   const [selectedItemId, setSelectedItemId] = useState<number | "">();
   const [selectedItem, setSelectedItem] = useState<ItemData | null>(null);
@@ -142,9 +187,30 @@ export default function ItemMaker() {
   const job = character.getJob();
   const jobId = job ? JOB_ID_MAP[job.engName] : null;
 
+  // 외부에서 카테고리가 변경될 때 아이템 로드
+  useEffect(() => {
+    if (!externalCategory || externalCategory === "weapon") {
+      setCategoryItems([]);
+      return;
+    }
+
+    loadItemData(externalCategory, false)
+      .then((items) => {
+        let filtered: ItemData[];
+        if (jobId) {
+          filtered = items.filter((item) => item.reqJob === 0 || item.reqJob === jobId);
+        } else {
+          filtered = items.filter((item) => item.reqJob === 0);
+        }
+        filtered.sort((a, b) => a.reqLevel - b.reqLevel);
+        setCategoryItems(filtered);
+      })
+      .catch(console.error);
+  }, [externalCategory, jobId]);
+
   // 카테고리 선택 시 아이템 로드
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategory(category);
+  const handleCategoryChangeInternal = (category: string) => {
+    handleCategoryChange(category);
     setSelectedWeaponSubCategory("");
     setSelectedItemId("");
     setSelectedItem(null);
@@ -216,11 +282,7 @@ export default function ItemMaker() {
         setItemDetails(details);
 
         // 아이콘 URL 설정
-        if (details?.icon) {
-          setItemIcon(details.icon);
-        } else {
-          setItemIcon(`https://maplestory.io/api/gms/62/item/${itemId}/icon`);
-        }
+        setItemIcon(`https://maplestory.io/api/gms/62/item/${itemId}/icon`);
 
         // 한글 이름 가져오기
         const kName = await fetchItemNameKMS(itemId);
@@ -256,11 +318,13 @@ export default function ItemMaker() {
     if (!actualCategory) return;
 
     const slotName = CATEGORY_TO_SLOT[actualCategory];
+    const itemType = CATEGORY_TO_TYPE[actualCategory] || "방어구";
+
     const itemToEquip: Item = {
       id: selectedItem.id,
       name: selectedItem.koreanName || selectedItem.name,
       slot: slotName,
-      type: "방어구",
+      type: itemType as Item["type"],
       stats: editedStats,
       requireStats: editedRequireStats,
     };
@@ -268,7 +332,7 @@ export default function ItemMaker() {
     equipItem(itemToEquip);
 
     // 초기화
-    setSelectedCategory("");
+    handleCategoryChange("");
     setSelectedWeaponSubCategory("");
     setSelectedItemId("");
     setSelectedItem(null);
@@ -313,7 +377,7 @@ export default function ItemMaker() {
                 <FormControl size="small" fullWidth>
                   <Select
                     value={selectedCategory || ""}
-                    onChange={(e) => handleCategoryChange(e.target.value as string)}
+                    onChange={(e) => handleCategoryChangeInternal(e.target.value as string)}
                     displayEmpty
                     sx={{ bgcolor: "white" }}
                   >

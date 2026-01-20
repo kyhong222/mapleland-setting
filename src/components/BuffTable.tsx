@@ -17,16 +17,26 @@ export default function BuffTable() {
     setHeroEchoEnabled,
     buff1Attack,
     buff2Attack,
+    buff1Label,
+    setBuff1Label,
+    buff1Icon,
+    setBuff1Icon,
+    buff1IsManual,
+    setBuff1IsManual,
+    buff2Label,
+    setBuff2Label,
+    buff2Icon,
+    setBuff2Icon,
+    buff2IsManual,
+    setBuff2IsManual,
+    mastery1,
+    setMastery1,
+    mastery2,
+    setMastery2,
   } = useCharacter();
 
   const [buff1Menu, setBuff1Menu] = useState<null | HTMLElement>(null);
   const [buff2Menu, setBuff2Menu] = useState<null | HTMLElement>(null);
-  const [buff1Label, setBuff1Label] = useState("버프 선택");
-  const [buff2Label, setBuff2Label] = useState("버프 선택");
-  const [buff1Icon, setBuff1Icon] = useState<string | null>(null);
-  const [buff2Icon, setBuff2Icon] = useState<string | null>(null);
-  const [buff1IsManual, setBuff1IsManual] = useState(false);
-  const [buff2IsManual, setBuff2IsManual] = useState(false);
 
   const mapleWarrior = character.getBuff("mapleWarrior");
   const heroEcho = character.getBuff("heroEcho");
@@ -39,15 +49,18 @@ export default function BuffTable() {
   const getWeaponKey = (weaponType: string | null): string | null => {
     if (!weaponType) return null;
     const keyMap: { [key: string]: string } = {
-      검: "sword",
-      도끼: "axe",
-      둔기: "mace",
+      한손검: "sword",
+      두손검: "sword",
+      한손도끼: "axe",
+      두손도끼: "axe",
+      한손둔기: "mace",
+      두손둔기: "mace",
       창: "spear",
       폴암: "polearm",
       활: "bow",
       석궁: "crossbow",
       단검: "dagger",
-      자벨린: "javelin",
+      아대: "javelin",
     };
     return keyMap[weaponType] || null;
   };
@@ -529,13 +542,32 @@ export default function BuffTable() {
                     />
                   )}
                 </Box>
-                <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 0.5 }}>
                   <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                     {skillName}
                   </Typography>
-                  <Typography variant="caption" sx={{ color: "#666", fontSize: "0.65rem" }}>
-                    {character.getWeaponType() ? "공격력 증가" : "무기 장착 필요"}
-                  </Typography>
+                  <Box sx={{ display: "flex", gap: 0.5, alignItems: "center" }}>
+                    <TextField
+                      type="number"
+                      size="small"
+                      value={mastery1}
+                      onChange={(e) => setMastery1(parseInt(e.target.value) || 0)}
+                      disabled={!character.getWeaponType()}
+                      inputProps={{ min: 0, max: 100 }}
+                      InputProps={{
+                        endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                      }}
+                      sx={{
+                        width: 60,
+                        "& .MuiInputBase-input": {
+                          bgcolor: character.getWeaponType() ? "white" : "#f0f0f0",
+                          p: "2px 4px",
+                          fontSize: "0.7rem",
+                          textAlign: "center",
+                        },
+                      }}
+                    />
+                  </Box>
                 </Box>
               </Box>
             );
@@ -597,13 +629,32 @@ export default function BuffTable() {
                     />
                   ) : null}
                 </Box>
-                <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 0.5 }}>
                   <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                     {skillName}
                   </Typography>
-                  <Typography variant="caption" sx={{ color: "#666", fontSize: "0.65rem" }}>
-                    {!weaponType ? "무기 장착 필요" : hasSkill ? "공격력 증가" : "없음"}
-                  </Typography>
+                  <Box sx={{ display: "flex", gap: 0.5, alignItems: "center" }}>
+                    <TextField
+                      type="number"
+                      size="small"
+                      value={mastery2}
+                      onChange={(e) => setMastery2(parseInt(e.target.value) || 0)}
+                      disabled={!hasSkill}
+                      inputProps={{ min: 0, max: 100 }}
+                      InputProps={{
+                        endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                      }}
+                      sx={{
+                        width: 60,
+                        "& .MuiInputBase-input": {
+                          bgcolor: hasSkill ? "white" : "#f0f0f0",
+                          p: "2px 4px",
+                          fontSize: "0.7rem",
+                          textAlign: "center",
+                        },
+                      }}
+                    />
+                  </Box>
                 </Box>
               </Box>
             );

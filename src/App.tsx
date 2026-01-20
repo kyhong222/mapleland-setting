@@ -7,10 +7,12 @@ import BuffTable from "./components/BuffTable";
 import DamageTable from "./components/DamageTable";
 import ItemMaker from "./components/ItemMaker";
 import { JOBS } from "./types/job";
+import { useState } from "react";
 import "./App.css";
 
 function AppContent() {
   const { character, setJob } = useCharacter();
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const currentJob = character.getJob();
   const selectedJob = currentJob?.engName || "";
@@ -29,7 +31,7 @@ function AppContent() {
         <Box sx={{ display: "flex", gap: 3, justifyContent: "center", mb: 3 }}>
           {/* 왼쪽: 장비 + 스탯 */}
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <EquipTable />
+            <EquipTable onSlotClick={setSelectedCategory} />
             <StatTable />
           </Box>
 
@@ -41,7 +43,7 @@ function AppContent() {
         </Box>
 
         {/* 하단: 아이템 메이커 */}
-        <ItemMaker />
+        <ItemMaker selectedCategory={selectedCategory} onCategoryChange={setSelectedCategory} />
       </Box>
     </Box>
   );

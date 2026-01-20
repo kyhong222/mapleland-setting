@@ -22,6 +22,7 @@ type DamageResult = { min: number; max: number };
 export default function DamageTable() {
   const { character, buff1Attack, buff2Attack, mastery1, mastery2 } = useCharacter();
   const weaponType = character.getWeaponType();
+  const weapon = character.getEquippedItem("무기");
   const mastery = weaponType === "활" || weaponType === "석궁" ? mastery2 : mastery1;
 
   const finalStats = character.getFinalStats(buff1Attack, buff2Attack);
@@ -76,10 +77,11 @@ export default function DamageTable() {
     // 4. 트스/럭세 실질 공격력
     const stats = character.getStats();
     const equipStats = character.getEquipmentStats();
-    const luk = stats.pureLuk + equipStats.luk;
+    const luk = finalStats.mainStat;
+
     results.treasure = {
       min: Math.floor((luk * 2.5 * finalStats.totalAttack) / 100),
-      max: Math.floor((finalStats.mainStat * 5 * finalStats.totalAttack) / 100),
+      max: Math.floor((luk * 5 * finalStats.totalAttack) / 100),
     };
 
     // 5. 베놈 실질 공격력
@@ -87,9 +89,10 @@ export default function DamageTable() {
     const dex = stats.pureDex + equipStats.dex;
     const venom = (8.0 * (str + luk) + dex * 2) / 100;
     const venomMax = (18.5 * (str + luk) + dex * 2) / 100;
+
     results.venom = {
-      min: Math.floor((venom * finalStats.totalAttack) / 100),
-      max: Math.floor((venomMax * finalStats.totalAttack) / 100),
+      min: Math.floor((venom * finalStats.totalAttack * 60) / 100),
+      max: Math.floor((venomMax * finalStats.totalAttack * 60) / 100),
     };
 
     // 6. 로어 실질 공격력 (무기상수 4.0 고정)
@@ -102,7 +105,7 @@ export default function DamageTable() {
   }, [weaponConstants, finalStats, adjSubStat, mastery, character]);
 
   const renderDamage = (damage: DamageResult) => (
-    <Typography variant="body2" sx={{ fontSize: "1rem" }}>
+    <Typography variant="body2" sx={{ fontSize: "1.1rem", textAlign: "center" }}>
       {damage.min.toLocaleString()} ~ {damage.max.toLocaleString()}
     </Typography>
   );
@@ -113,6 +116,43 @@ export default function DamageTable() {
   const isClawWeapon = weaponType === "아대";
   const isThief = job?.koreanName === "도적";
   const isSpear = weaponType === "창" || weaponType === "폴암";
+
+  // 무기별 최대/최소 공격력 라벨
+  const getMaxDamageLabel = (): string => {
+    if (
+      weaponType === "한손도끼" ||
+      weaponType === "두손도끼" ||
+      weaponType === "한손둔기" ||
+      weaponType === "두손둔기"
+    ) {
+      return "베기 공격력";
+    }
+    if (weaponType === "창") {
+      return "찌르기 공격력(스피어 버스터)";
+    }
+    if (weaponType === "폴암") {
+      return "베기 공격력(드래곤 쓰레셔: 폴암)";
+    }
+    return "최대 공격력";
+  };
+
+  const getMinDamageLabel = (): string => {
+    if (
+      weaponType === "한손도끼" ||
+      weaponType === "두손도끼" ||
+      weaponType === "한손둔기" ||
+      weaponType === "두손둔기"
+    ) {
+      return "찌르기 공격력";
+    }
+    if (weaponType === "창") {
+      return "베기 공격력(드래곤 쓰레셔: 창)";
+    }
+    if (weaponType === "폴암") {
+      return "찌르기 공격력(폴암 버스터)";
+    }
+    return "최소 공격력";
+  };
 
   return (
     <Box
@@ -126,64 +166,102 @@ export default function DamageTable() {
         overflow: "auto",
       }}
     >
-      {/* 스탯창 공격력 - 항상 표시 */}
-      {damages.stat && (
-        <Box sx={{ borderBottom: "1px solid #ccc", p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
-          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-            스탯창 공격력
+      {/* 헤더 - 무기 정보 */}
+      <Box sx={{ borderBottom: "1px solid #ccc", p: 1.5, bgcolor: "#e3f2fd" }}>
+        <Typography variant="body2" sx={{ fontWeight: "bold", mb: 0.5 }}>
+          데미지 계산
+        </Typography>
+        {weapon ? (
+          <Box>
+            <Typography variant="caption" sx={{ fontSize: "0.75rem", color: "#666" }}>
+              무기: {weapon.name} ({weaponType})
+            </Typography>
+            <Typography variant="caption" sx={{ fontSize: "0.75rem", color: "#666", display: "block" }}>
+              공격력: {finalStats.totalAttack} | 주스탯: {finalStats.mainStat} | 부스탯: {finalStats.subStat}
+            </Typography>
+            <Typography variant="caption" sx={{ fontSize: "0.75rem", color: "#666", display: "block" }}>
+              마스터리: {mastery}%
+            </Typography>
+          </Box>
+        ) : (
+          <Typography variant="caption" sx={{ fontSize: "0.75rem", color: "#999" }}>
+            무기를 장착하세요
           </Typography>
-          {renderDamage(damages.stat)}
+        )}
+      </Box>
+
+      {/* 무기가 없거나 직업이 없으면 안내 메시지 */}
+      {(!weapon || !job || !weaponConstants) && (
+        <Box sx={{ p: 3, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Typography variant="body2" sx={{ color: "#999" }}>
+            {!job ? "직업을 먼저 선택하세요" : !weapon ? "무기를 장착하세요" : "무기 타입을 인식할 수 없습니다"}
+          </Typography>
         </Box>
       )}
 
-      {/* 최대 공격력 - 최소/최대 무기상수가 다를 때만 표시 */}
-      {damages.max && hasDifferentWeaponConstants && (
-        <Box sx={{ borderBottom: "1px solid #ccc", p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
-          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-            최대 공격력
-          </Typography>
-          {renderDamage(damages.max)}
-        </Box>
-      )}
+      {/* 데미지 계산 결과 - 무기와 직업이 있을 때만 */}
+      {weapon && job && weaponConstants && (
+        <>
+          {/* 스탯창 공격력 - 항상 표시 */}
+          {damages.stat && (
+            <Box sx={{ borderBottom: "1px solid #ccc", p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
+              <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                스탯창 공격력
+              </Typography>
+              {renderDamage(damages.stat)}
+            </Box>
+          )}
 
-      {/* 최소 공격력 - 최소/최대 무기상수가 다를 때만 표시 */}
-      {damages.min && hasDifferentWeaponConstants && (
-        <Box sx={{ borderBottom: "1px solid #ccc", p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
-          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-            최소 공격력
-          </Typography>
-          {renderDamage(damages.min)}
-        </Box>
-      )}
+          {/* 최대 공격력 - 최소/최대 무기상수가 다를 때만 표시 */}
+          {damages.max && hasDifferentWeaponConstants && (
+            <Box sx={{ borderBottom: "1px solid #ccc", p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
+              <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                {getMaxDamageLabel()}
+              </Typography>
+              {renderDamage(damages.max)}
+            </Box>
+          )}
 
-      {/* 트스/럭세 실질 공격력 - 아대일 때만 표시 */}
-      {damages.treasure && isClawWeapon && (
-        <Box sx={{ borderBottom: "1px solid #ccc", p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
-          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-            트스/럭세 실질 공격력
-          </Typography>
-          {renderDamage(damages.treasure)}
-        </Box>
-      )}
+          {/* 최소 공격력 - 최소/최대 무기상수가 다를 때만 표시 */}
+          {damages.min && hasDifferentWeaponConstants && (
+            <Box sx={{ borderBottom: "1px solid #ccc", p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
+              <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                {getMinDamageLabel()}
+              </Typography>
+              {renderDamage(damages.min)}
+            </Box>
+          )}
 
-      {/* 베놈 실질 공격력 - 도적일 때만 표시 */}
-      {damages.venom && isThief && (
-        <Box sx={{ borderBottom: "1px solid #ccc", p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
-          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-            베놈 실질 공격력
-          </Typography>
-          {renderDamage(damages.venom)}
-        </Box>
-      )}
+          {/* 트스/럭세 실질 공격력 - 아대일 때만 표시 */}
+          {damages.treasure && isClawWeapon && (
+            <Box sx={{ borderBottom: "1px solid #ccc", p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
+              <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                트스/럭세 실질 공격력
+              </Typography>
+              {renderDamage(damages.treasure)}
+            </Box>
+          )}
 
-      {/* 로어 실질 공격력 - 창/폴암일 때만 표시 */}
-      {damages.lore && isSpear && (
-        <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
-          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-            로어 실질 공격력
-          </Typography>
-          {renderDamage(damages.lore)}
-        </Box>
+          {/* 베놈 실질 공격력 - 도적일 때만 표시 */}
+          {damages.venom && isThief && (
+            <Box sx={{ borderBottom: "1px solid #ccc", p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
+              <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                베놈 실질 공격력(베놈 M 기준, 공격력 60 적용)
+              </Typography>
+              {renderDamage(damages.venom)}
+            </Box>
+          )}
+
+          {/* 로어 실질 공격력 - 창/폴암일 때만 표시 */}
+          {damages.lore && isSpear && (
+            <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
+              <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                로어 실질 공격력
+              </Typography>
+              {renderDamage(damages.lore)}
+            </Box>
+          )}
+        </>
       )}
     </Box>
   );
