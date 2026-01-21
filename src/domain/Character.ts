@@ -150,6 +150,10 @@ export class Character {
       int: 0,
       luk: 0,
       mad: 0,
+      pdef: 0,
+      mdef: 0,
+      acc: 0,
+      eva: 0,
     };
 
     for (const item of this.equipments.values()) {
@@ -158,7 +162,11 @@ export class Character {
       summary.dex += item.dex || 0;
       summary.int += item.int || 0;
       summary.luk += item.luk || 0;
-      summary.mad += item.mad || 0;
+      summary.mad += item.mad ?? 0;
+      summary.pdef += item.pdef ?? 0;
+      summary.mdef += item.mdef ?? 0;
+      summary.acc += item.acc ?? 0;
+      summary.eva += item.eva ?? 0;
     }
 
     return summary;
@@ -210,6 +218,11 @@ export class Character {
       dex: 0,
       int: 0,
       luk: 0,
+      mad: 0,
+      pdef: 0,
+      mdef: 0,
+      acc: 0,
+      eva: 0,
     };
   }
 
@@ -295,8 +308,13 @@ export class Character {
     // 마력 계산: 장비 MAD + Int 스탯당 1 + 버프 MAD, 영웅의 메아리 4% 보너스 적용
     const heroEcho = this.buffs.get("heroEcho");
     const heroEchoMultiplier = heroEcho?.enabled ? 1.04 : 1;
-    const baseMad = (equipStats.mad || 0) + totalInt + (this.stats.buffMAD || 0);
-    const totalMAD = Math.floor(baseMad * heroEchoMultiplier);
+
+    // 순수 마력 (장비 + 버프만, INT 스탯 제외)
+    const pureMad = (equipStats.mad || 0) + (this.stats.buffMAD || 0);
+    const pureMadWithBonus = Math.floor(pureMad * heroEchoMultiplier);
+
+    // 총 마력 (순수 마력 + INT 스탯당 1)
+    const totalMAD = pureMadWithBonus + totalInt;
 
     let mainStat = 0;
     let subStat = 0;

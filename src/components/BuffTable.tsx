@@ -33,17 +33,26 @@ export default function BuffTable() {
     setMastery1,
     mastery2,
     setMastery2,
+    setBuffMAD,
   } = useCharacter();
 
   const [buff1Menu, setBuff1Menu] = useState<null | HTMLElement>(null);
   const [buff2Menu, setBuff2Menu] = useState<null | HTMLElement>(null);
+  const [buff1MADValue, setBuff1MADValue] = useState(0);
+  const [buff2MADValue, setBuff2MADValue] = useState(0);
 
   const mapleWarrior = character.getBuff("mapleWarrior");
   const heroEcho = character.getBuff("heroEcho");
+  const job = character.getJob();
+  const isJobMagician = job?.engName === "magician";
 
   const handleMapleWarriorChange = (value: number) => {
     setMapleWarriorLevel(value);
   };
+
+  // 직업에 따라 버프 데이터 선택
+  const buff1Skills = isJobMagician ? buff1Data.magic_buffs || [] : buff1Data.attack_buffs || [];
+  const buff2Skills = isJobMagician ? buff2Data.magic_buffs || [] : buff2Data.attack_buffs || [];
 
   // 무기 타입을 mastery1.json의 키로 변환
   const getWeaponKey = (weaponType: string | null): string | null => {
@@ -268,13 +277,24 @@ export default function BuffTable() {
               >
                 직접입력
               </MenuItem>
-              {buff1Data.skills?.map((skill) => (
+              {buff1Skills?.map((skill) => (
                 <MenuItem
                   key={skill.name}
                   onClick={() => {
                     setBuff1Menu(null);
                     setBuff1Label(skill.name);
-                    setBuff1Attack(skill.x || 0);
+
+                    // 공격력 버프와 마법력 버프 모두 x 필드 사용
+                    const value = skill.x || 0;
+                    setBuff1Attack(value);
+
+                    // 마법사인 경우 마력 업데이트
+                    if (isJobMagician) {
+                      setBuff1MADValue(value);
+                      // buff1과 buff2의 마력을 합산
+                      setBuffMAD(value + buff2MADValue);
+                    }
+
                     setBuff1Icon(skill.icon);
                     setBuff1IsManual(false);
                   }}
@@ -287,13 +307,23 @@ export default function BuffTable() {
             {/* 설명 */}
             <Box sx={{ display: "flex", gap: 0.5, alignItems: "center", height: 20 }}>
               <Typography variant="caption" sx={{ color: "#666", fontSize: "0.75rem", lineHeight: 1 }}>
-                공격력
+                {isJobMagician ? "마력" : "공격력"}
               </Typography>
               <TextField
                 type="number"
                 size="small"
                 value={buff1Attack}
-                onChange={(e) => buff1IsManual && setBuff1Attack(parseInt(e.target.value) || 0)}
+                onChange={(e) => {
+                  if (buff1IsManual) {
+                    const value = parseInt(e.target.value) || 0;
+                    setBuff1Attack(value);
+                    // 마법사인 경우 마력 업데이트
+                    if (isJobMagician) {
+                      setBuff1MADValue(value);
+                      setBuffMAD(value + buff2MADValue);
+                    }
+                  }
+                }}
                 disabled={!buff1IsManual}
                 sx={{
                   width: 50,
@@ -384,13 +414,24 @@ export default function BuffTable() {
               >
                 직접입력
               </MenuItem>
-              {buff2Data.skills?.map((skill) => (
+              {buff2Skills?.map((skill) => (
                 <MenuItem
                   key={skill.name}
                   onClick={() => {
                     setBuff2Menu(null);
                     setBuff2Label(skill.name);
-                    setBuff2Attack(skill.x || 0);
+
+                    // 공격력 버프와 마법력 버프 모두 x 필드 사용
+                    const value = skill.x || 0;
+                    setBuff2Attack(value);
+
+                    // 마법사인 경우 마력 업데이트
+                    if (isJobMagician) {
+                      setBuff2MADValue(value);
+                      // buff1과 buff2의 마력을 합산
+                      setBuffMAD(buff1MADValue + value);
+                    }
+
                     setBuff2Icon(skill.icon);
                     setBuff2IsManual(false);
                   }}
@@ -403,13 +444,23 @@ export default function BuffTable() {
             {/* 설명 */}
             <Box sx={{ display: "flex", gap: 0.5, alignItems: "center", height: 20 }}>
               <Typography variant="caption" sx={{ color: "#666", fontSize: "0.75rem", lineHeight: 1 }}>
-                공격력
+                {isJobMagician ? "마력" : "공격력"}
               </Typography>
               <TextField
                 type="number"
                 size="small"
                 value={buff2Attack}
-                onChange={(e) => buff2IsManual && setBuff2Attack(parseInt(e.target.value) || 0)}
+                onChange={(e) => {
+                  if (buff2IsManual) {
+                    const value = parseInt(e.target.value) || 0;
+                    setBuff2Attack(value);
+                    // 마법사인 경우 마력 업데이트
+                    if (isJobMagician) {
+                      setBuff2MADValue(value);
+                      setBuffMAD(buff1MADValue + value);
+                    }
+                  }
+                }}
                 disabled={!buff2IsManual}
                 sx={{
                   width: 50,

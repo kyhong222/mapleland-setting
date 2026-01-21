@@ -29,6 +29,10 @@ export interface ItemStats {
   int: number;
   luk: number;
   mad?: number; // 마력 (Magic Attack Damage)
+  pdef?: number; // 물리방어력 (Physical Defense)
+  mdef?: number; // 마법방어력 (Magical Defense)
+  acc?: number; // 명중률 (Accuracy)
+  eva?: number; // 회피율 (Evasion)
 }
 
 // 아이템 필요 스탯 정의

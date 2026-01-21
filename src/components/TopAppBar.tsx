@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material";
 import { JOBS } from "../types/job";
-import { Save as SaveIcon, Close as CloseIcon } from "@mui/icons-material";
+import { Save as SaveIcon, Close as CloseIcon, Add as AddIcon } from "@mui/icons-material";
 import { useCharacter } from "../contexts/CharacterContext";
 import { useState, useEffect } from "react";
 import { deleteSavedCharacter, type SavedCharacterData } from "../utils/characterStorage";
@@ -21,9 +21,10 @@ import { fetchItemIcon } from "../api/maplestory";
 interface TopAppBarProps {
   selectedJob: string;
   onJobChange: (jobEngName: string) => void;
+  onOpenItemMaker?: () => void;
 }
 
-export default function TopAppBar({ selectedJob, onJobChange }: TopAppBarProps) {
+export default function TopAppBar({ selectedJob, onJobChange, onOpenItemMaker }: TopAppBarProps) {
   const { saveCurrentCharacter, loadCharacter, getSavedList } = useCharacter();
   const [savedList, setSavedList] = useState<SavedCharacterData[]>([]);
   const [iconCache, setIconCache] = useState<Map<number, string>>(new Map());
@@ -91,6 +92,15 @@ export default function TopAppBar({ selectedJob, onJobChange }: TopAppBarProps) 
   return (
     <AppBar position="static">
       <Toolbar>
+        {/* 아이템 생성 버튼 */}
+        {onOpenItemMaker && (
+          <Tooltip title="아이템 생성">
+            <IconButton color="inherit" onClick={onOpenItemMaker} sx={{ mr: 1 }}>
+              <AddIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           메이플랜드 캐릭터 설정
         </Typography>

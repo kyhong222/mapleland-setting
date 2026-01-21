@@ -17,7 +17,11 @@ export interface StatsSummary {
   dex: number;
   int: number;
   luk: number;
-  mad?: number; // 마력
+  mad: number; // 마력 (필수 속성으로 변경)
+  pdef: number; // 물리방어력
+  mdef: number; // 마법방어력
+  acc: number; // 명중률
+  eva: number; // 회피율
 }
 
 /**

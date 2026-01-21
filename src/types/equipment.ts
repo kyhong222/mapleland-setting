@@ -10,6 +10,10 @@ export interface Equipment {
   int?: number;
   luk?: number;
   mad?: number; // 마력 (Magic Attack Damage)
+  pdef?: number; // 물리 방어력
+  mdef?: number; // 마법 방어력
+  acc?: number; // 정확도
+  eva?: number; // 회피
 }
 
 // 5*3 그리드 레이아웃 (null은 빈칸)

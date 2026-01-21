@@ -33,6 +33,8 @@ export default function EquipTable({ onSlotClick }: EquipTableProps) {
 
   const equipments = character.getEquipments();
   const equipMap = new Map(equipments.map((eq) => [eq.slot, eq]));
+  const job = character.getJob();
+  const isJobMagician = job?.engName === "magician";
 
   // 하의 슬롯 빨간색 표시 여부 (상의에 전신 장착 시)
   const hasOverall = equipMap.has("상의");
@@ -78,7 +80,14 @@ export default function EquipTable({ onSlotClick }: EquipTableProps) {
       if (!equipment) return "클릭하여 아이템 선택";
 
       const lines: string[] = [equipment.name || ""];
-      if (equipment.attack) lines.push(`공격력: ${equipment.attack}`);
+
+      // 마법사인 경우 공격력 대신 마력 표시
+      if (isJobMagician) {
+        if (equipment.mad) lines.push(`마력: ${equipment.mad}`);
+      } else {
+        if (equipment.attack) lines.push(`공격력: ${equipment.attack}`);
+      }
+
       if (equipment.str) lines.push(`STR: ${equipment.str}`);
       if (equipment.dex) lines.push(`DEX: ${equipment.dex}`);
       if (equipment.int) lines.push(`INT: ${equipment.int}`);

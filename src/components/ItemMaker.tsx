@@ -1,4 +1,17 @@
-import { Box, Typography, Select, MenuItem, FormControl, TextField, Button, Divider } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Select,
+  MenuItem,
+  FormControl,
+  TextField,
+  Button,
+  Divider,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 import { useState, useEffect } from "react";
 import { useCharacter } from "../contexts/CharacterContext";
 import type { Item } from "../types/item";
@@ -131,9 +144,10 @@ interface ItemData {
   reqLevel: number;
 }
 
-interface ItemMakerProps {
+interface ItemMakerModalProps {
+  open: boolean;
   selectedCategory?: string;
-  onCategoryChange?: (category: string) => void;
+  onClose: () => void;
 }
 
 // 동적으로 JSON 파일 임포트
@@ -148,476 +162,470 @@ async function loadItemData(categoryKey: string, isWeapon: boolean = false): Pro
   }
 }
 
-export default function ItemMaker({ selectedCategory: externalCategory, onCategoryChange }: ItemMakerProps = {}) {
+export default function ItemMaker({ open, selectedCategory: externalCategory, onClose }: ItemMakerModalProps) {
   const { character, equipItem } = useCharacter();
 
   const [internalCategory, setInternalCategory] = useState<string>("");
   const selectedCategory = externalCategory !== undefined ? externalCategory : internalCategory;
 
+  const handleClose = () => {
+    setInternalCategory("");
+    onClose();
+  };
+
   const handleCategoryChange = (category: string) => {
     setInternalCategory(category);
-    if (onCategoryChange) {
-      onCategoryChange(category);
-    }
-  };
 
-  const [selectedWeaponSubCategory, setSelectedWeaponSubCategory] = useState<string>("");
-  const [selectedItemId, setSelectedItemId] = useState<number | "">();
-  const [selectedItem, setSelectedItem] = useState<ItemData | null>(null);
-  const [categoryItems, setCategoryItems] = useState<ItemData[]>([]);
-  const [itemDetails, setItemDetails] = useState<MapleStoryItem | null>(null);
-  const [itemIcon, setItemIcon] = useState<string>("");
-  const [koreanName, setKoreanName] = useState<string>("");
-  const [editedStats, setEditedStats] = useState({
-    attack: 0,
-    str: 0,
-    dex: 0,
-    int: 0,
-    luk: 0,
-  });
+    const [selectedWeaponSubCategory, setSelectedWeaponSubCategory] = useState<string>("");
+    const [selectedItemId, setSelectedItemId] = useState<number | "">();
+    const [selectedItem, setSelectedItem] = useState<ItemData | null>(null);
+    const [categoryItems, setCategoryItems] = useState<ItemData[]>([]);
+    const [itemDetails, setItemDetails] = useState<MapleStoryItem | null>(null);
+    const [itemIcon, setItemIcon] = useState<string>("");
+    const [koreanName, setKoreanName] = useState<string>("");
+    const [editedStats, setEditedStats] = useState({
+      attack: 0,
+      str: 0,
+      dex: 0,
+      int: 0,
+      luk: 0,
+    });
 
-  const [editedRequireStats, setEditedRequireStats] = useState({
-    level: 0,
-    str: 0,
-    dex: 0,
-    int: 0,
-    luk: 0,
-  });
+    const [editedRequireStats, setEditedRequireStats] = useState({
+      level: 0,
+      str: 0,
+      dex: 0,
+      int: 0,
+      luk: 0,
+    });
 
-  const job = character.getJob();
-  const jobId = job ? JOB_ID_MAP[job.engName] : null;
+    const job = character.getJob();
+    const jobId = job ? JOB_ID_MAP[job.engName] : null;
 
-  // 외부에서 카테고리가 변경될 때 아이템 로드
-  useEffect(() => {
-    if (!externalCategory || externalCategory === "weapon") {
-      setCategoryItems([]);
-      return;
-    }
-
-    loadItemData(externalCategory, false)
-      .then((items) => {
-        let filtered: ItemData[];
-        if (jobId) {
-          filtered = items.filter((item) => item.reqJob === 0 || item.reqJob === jobId);
-        } else {
-          filtered = items.filter((item) => item.reqJob === 0);
-        }
-        filtered.sort((a, b) => a.reqLevel - b.reqLevel);
-        setCategoryItems(filtered);
-      })
-      .catch(console.error);
-  }, [externalCategory, jobId]);
-
-  // 카테고리 선택 시 아이템 로드
-  const handleCategoryChangeInternal = (category: string) => {
-    handleCategoryChange(category);
-    setSelectedWeaponSubCategory("");
-    setSelectedItemId("");
-    setSelectedItem(null);
-
-    if (!category || category === "weapon") {
-      setCategoryItems([]);
-      return;
-    }
-
-    // JSON 파일에서 데이터 로드
-    loadItemData(category, false)
-      .then((items) => {
-        // 현재 직업에 맞는 아이템만 필터링
-        let filtered: ItemData[];
-        if (jobId) {
-          filtered = items.filter((item) => item.reqJob === 0 || item.reqJob === jobId);
-        } else {
-          // 직업이 선택되지 않은 경우 공용 아이템만
-          filtered = items.filter((item) => item.reqJob === 0);
-        }
-        // reqLevel로 정렬
-        filtered.sort((a, b) => a.reqLevel - b.reqLevel);
-        setCategoryItems(filtered);
-      })
-      .catch(console.error);
-  };
-
-  // 무기 서브카테고리 선택 시
-  const handleWeaponSubCategoryChange = (subCategory: string) => {
-    setSelectedWeaponSubCategory(subCategory);
-    setSelectedItemId("");
-    setSelectedItem(null);
-
-    if (!subCategory) {
-      setCategoryItems([]);
-      return;
-    }
-
-    // JSON 파일에서 데이터 로드
-    loadItemData(subCategory, true)
-      .then((items) => {
-        // 현재 직업에 맞는 아이템만 필터링
-        let filtered: ItemData[];
-        if (jobId) {
-          filtered = items.filter((item) => item.reqJob === 0 || item.reqJob === jobId);
-        } else {
-          // 직업이 선택되지 않은 경우 공용 아이템만
-          filtered = items.filter((item) => item.reqJob === 0);
-        }
-        // reqLevel로 정렬
-        filtered.sort((a, b) => a.reqLevel - b.reqLevel);
-        setCategoryItems(filtered);
-      })
-      .catch(console.error);
-  };
-
-  // 아이템 선택 시
-  const handleItemSelect = async (itemId: number) => {
-    if (!itemId) return;
-    setSelectedItemId(itemId);
-
-    const item = categoryItems.find((i) => i.id === itemId);
-    if (item) {
-      setSelectedItem(item);
-
-      // API에서 상세 정보 가져오기
-      try {
-        const details = await fetchItemDetails(itemId);
-        setItemDetails(details);
-
-        // 아이콘 URL 설정
-        setItemIcon(`https://maplestory.io/api/gms/62/item/${itemId}/icon`);
-
-        // 한글 이름 가져오기
-        const kName = await fetchItemNameKMS(itemId);
-        setKoreanName(kName || item.name);
-
-        // 요구 스텟과 추가 스텟 설정
-        const meta = details?.metaInfo;
-        setEditedStats({
-          attack: meta?.incPAD || 0,
-          str: meta?.incSTR || 0,
-          dex: meta?.incDEX || 0,
-          int: meta?.incINT || 0,
-          luk: meta?.incLUK || 0,
-        });
-        setEditedRequireStats({
-          level: meta?.reqLevel || 0,
-          str: meta?.reqSTR || 0,
-          dex: meta?.reqDEX || 0,
-          int: meta?.reqINT || 0,
-          luk: meta?.reqLUK || 0,
-        });
-      } catch (error) {
-        console.error("아이템 상세 정보 로드 실패:", error);
+    // 외부에서 카테고리가 변경될 때 아이템 로드
+    useEffect(() => {
+      if (!externalCategory || externalCategory === "weapon") {
+        setCategoryItems([]);
+        return;
       }
-    }
-  };
 
-  // 장착 버튼
-  const handleEquip = () => {
-    if (!selectedItem) return;
+      loadItemData(externalCategory, false)
+        .then((items) => {
+          let filtered: ItemData[];
+          if (jobId) {
+            filtered = items.filter((item) => item.reqJob === 0 || item.reqJob === jobId);
+          } else {
+            filtered = items.filter((item) => item.reqJob === 0);
+          }
+          filtered.sort((a, b) => a.reqLevel - b.reqLevel);
+          setCategoryItems(filtered);
+        })
+        .catch(console.error);
+    }, [externalCategory, jobId]);
 
-    const actualCategory = selectedCategory === "weapon" ? selectedWeaponSubCategory : selectedCategory;
-    if (!actualCategory) return;
+    // 카테고리 선택 시 아이템 로드
+    const handleCategoryChangeInternal = (category: string) => {
+      handleCategoryChange(category);
+      setSelectedWeaponSubCategory("");
+      setSelectedItemId("");
+      setSelectedItem(null);
 
-    const slotName = CATEGORY_TO_SLOT[actualCategory];
-    const itemType = CATEGORY_TO_TYPE[actualCategory] || "방어구";
+      if (!category || category === "weapon") {
+        setCategoryItems([]);
+        return;
+      }
 
-    const itemToEquip: Item = {
-      id: selectedItem.id,
-      name: selectedItem.koreanName || selectedItem.name,
-      slot: slotName,
-      type: itemType as Item["type"],
-      stats: editedStats,
-      requireStats: editedRequireStats,
+      // JSON 파일에서 데이터 로드
+      loadItemData(category, false)
+        .then((items) => {
+          // 현재 직업에 맞는 아이템만 필터링
+          let filtered: ItemData[];
+          if (jobId) {
+            filtered = items.filter((item) => item.reqJob === 0 || item.reqJob === jobId);
+          } else {
+            // 직업이 선택되지 않은 경우 공용 아이템만
+            filtered = items.filter((item) => item.reqJob === 0);
+          }
+          // reqLevel로 정렬
+          filtered.sort((a, b) => a.reqLevel - b.reqLevel);
+          setCategoryItems(filtered);
+        })
+        .catch(console.error);
     };
 
-    equipItem(itemToEquip);
+    // 무기 서브카테고리 선택 시
+    const handleWeaponSubCategoryChange = (subCategory: string) => {
+      setSelectedWeaponSubCategory(subCategory);
+      setSelectedItemId("");
+      setSelectedItem(null);
 
-    // 초기화
-    handleCategoryChange("");
-    setSelectedWeaponSubCategory("");
-    setSelectedItemId("");
-    setSelectedItem(null);
-    setEditedStats({ attack: 0, str: 0, dex: 0, int: 0, luk: 0 });
-    setEditedRequireStats({ level: 0, str: 0, dex: 0, int: 0, luk: 0 });
-  };
+      if (!subCategory) {
+        setCategoryItems([]);
+        return;
+      }
 
-  return (
-    <Box
-      sx={{
-        width: "100%",
-        maxWidth: 1200,
-        border: "1px solid #ccc",
-        borderRadius: 1,
-        bgcolor: "#f5f5f5",
-        display: "flex",
-        flexDirection: "column",
-        margin: "0 auto",
-      }}
-    >
-      {/* 타이틀 */}
-      <Typography variant="body2" sx={{ fontWeight: "bold", p: 1.5, borderBottom: "1px solid #ccc" }}>
-        아이템 장착
-      </Typography>
+      // JSON 파일에서 데이터 로드
+      loadItemData(subCategory, true)
+        .then((items) => {
+          // 현재 직업에 맞는 아이템만 필터링
+          let filtered: ItemData[];
+          if (jobId) {
+            filtered = items.filter((item) => item.reqJob === 0 || item.reqJob === jobId);
+          } else {
+            // 직업이 선택되지 않은 경우 공용 아이템만
+            filtered = items.filter((item) => item.reqJob === 0);
+          }
+          // reqLevel로 정렬
+          filtered.sort((a, b) => a.reqLevel - b.reqLevel);
+          setCategoryItems(filtered);
+        })
+        .catch(console.error);
+    };
 
-      {/* 바디 */}
-      <Box sx={{ display: "flex", flex: 1, p: 2, gap: 2 }}>
-        {!jobId ? (
-          <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Typography variant="body2" sx={{ color: "#999" }}>
-              직업을 먼저 선택하세요
-            </Typography>
-          </Box>
-        ) : (
-          <>
-            {/* 왼쪽: 필터 */}
-            <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
-              <Box>
-                <Typography variant="body2" sx={{ fontSize: "0.875rem", fontWeight: "500", mb: 0.5 }}>
-                  카테고리
+    // 아이템 선택 시
+    const handleItemSelect = async (itemId: number) => {
+      if (!itemId) return;
+      setSelectedItemId(itemId);
+
+      const item = categoryItems.find((i) => i.id === itemId);
+      if (item) {
+        setSelectedItem(item);
+
+        // API에서 상세 정보 가져오기
+        try {
+          const details = await fetchItemDetails(itemId);
+          setItemDetails(details);
+
+          // 아이콘 URL 설정
+          setItemIcon(`https://maplestory.io/api/gms/62/item/${itemId}/icon`);
+
+          // 한글 이름 가져오기
+          const kName = await fetchItemNameKMS(itemId);
+          setKoreanName(kName || item.name);
+
+          // 요구 스텟과 추가 스텟 설정
+          const meta = details?.metaInfo;
+          setEditedStats({
+            attack: meta?.incPAD || 0,
+            str: meta?.incSTR || 0,
+            dex: meta?.incDEX || 0,
+            int: meta?.incINT || 0,
+            luk: meta?.incLUK || 0,
+          });
+          setEditedRequireStats({
+            level: meta?.reqLevel || 0,
+            str: meta?.reqSTR || 0,
+            dex: meta?.reqDEX || 0,
+            int: meta?.reqINT || 0,
+            luk: meta?.reqLUK || 0,
+          });
+        } catch (error) {
+          console.error("아이템 상세 정보 로드 실패:", error);
+        }
+      }
+    };
+
+    // 장착 버튼
+    const handleEquip = () => {
+      if (!selectedItem) return;
+
+      const actualCategory = selectedCategory === "weapon" ? selectedWeaponSubCategory : selectedCategory;
+      if (!actualCategory) return;
+
+      const slotName = CATEGORY_TO_SLOT[actualCategory];
+      const itemType = CATEGORY_TO_TYPE[actualCategory] || "방어구";
+
+      const itemToEquip: Item = {
+        id: selectedItem.id,
+        name: selectedItem.koreanName || selectedItem.name,
+        slot: slotName,
+        type: itemType as Item["type"],
+        stats: editedStats,
+        requireStats: editedRequireStats,
+      };
+
+      equipItem(itemToEquip);
+
+      // 초기화
+      handleCategoryChange("");
+      setSelectedWeaponSubCategory("");
+      setSelectedItemId("");
+      setSelectedItem(null);
+      setEditedStats({ attack: 0, str: 0, dex: 0, int: 0, luk: 0 });
+      setEditedRequireStats({ level: 0, str: 0, dex: 0, int: 0, luk: 0 });
+    };
+
+    return (
+      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+        <DialogTitle>아이템 장착</DialogTitle>
+        <DialogContent>
+          <Box sx={{ display: "flex", flex: 1, p: 2, gap: 2 }}>
+            {!jobId ? (
+              <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Typography variant="body2" sx={{ color: "#999" }}>
+                  직업을 먼저 선택하세요
                 </Typography>
-                <FormControl size="small" fullWidth>
-                  <Select
-                    value={selectedCategory || ""}
-                    onChange={(e) => handleCategoryChangeInternal(e.target.value as string)}
-                    displayEmpty
-                    sx={{ bgcolor: "white" }}
-                  >
-                    <MenuItem value="" disabled>
-                      선택하세요
-                    </MenuItem>
-                    {CATEGORY_LIST.map((category) => (
-                      <MenuItem key={category.key} value={category.key}>
-                        {category.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
               </Box>
-
-              {/* 무기 서브카테고리 */}
-              {selectedCategory === "weapon" && jobId && WEAPON_SUBCATEGORIES[jobId] && (
-                <Box>
-                  <Typography variant="body2" sx={{ fontSize: "0.875rem", fontWeight: "500", mb: 0.5 }}>
-                    무기 종류
-                  </Typography>
-                  <FormControl size="small" fullWidth>
-                    <Select
-                      value={selectedWeaponSubCategory || ""}
-                      onChange={(e) => handleWeaponSubCategoryChange(e.target.value as string)}
-                      displayEmpty
-                      sx={{ bgcolor: "white" }}
-                    >
-                      <MenuItem value="" disabled>
-                        선택하세요
-                      </MenuItem>
-                      {WEAPON_SUBCATEGORIES[jobId].map((subCat) => (
-                        <MenuItem key={subCat.key} value={subCat.key}>
-                          {subCat.name}
+            ) : (
+              <>
+                {/* 왼쪽: 필터 */}
+                <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
+                  <Box>
+                    <Typography variant="body2" sx={{ fontSize: "0.875rem", fontWeight: "500", mb: 0.5 }}>
+                      카테고리
+                    </Typography>
+                    <FormControl size="small" fullWidth>
+                      <Select
+                        value={selectedCategory || ""}
+                        onChange={(e) => handleCategoryChangeInternal(e.target.value as string)}
+                        displayEmpty
+                        sx={{ bgcolor: "white" }}
+                      >
+                        <MenuItem value="" disabled>
+                          선택하세요
                         </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                        {CATEGORY_LIST.map((category) => (
+                          <MenuItem key={category.key} value={category.key}>
+                            {category.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Box>
+
+                  {/* 무기 서브카테고리 */}
+                  {selectedCategory === "weapon" && jobId && WEAPON_SUBCATEGORIES[jobId] && (
+                    <Box>
+                      <Typography variant="body2" sx={{ fontSize: "0.875rem", fontWeight: "500", mb: 0.5 }}>
+                        무기 종류
+                      </Typography>
+                      <FormControl size="small" fullWidth>
+                        <Select
+                          value={selectedWeaponSubCategory || ""}
+                          onChange={(e) => handleWeaponSubCategoryChange(e.target.value as string)}
+                          displayEmpty
+                          sx={{ bgcolor: "white" }}
+                        >
+                          <MenuItem value="" disabled>
+                            선택하세요
+                          </MenuItem>
+                          {WEAPON_SUBCATEGORIES[jobId].map((subCat) => (
+                            <MenuItem key={subCat.key} value={subCat.key}>
+                              {subCat.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  )}
+
+                  <Box>
+                    <Typography variant="body2" sx={{ fontSize: "0.875rem", fontWeight: "500", mb: 0.5 }}>
+                      아이템
+                    </Typography>
+                    <FormControl size="small" fullWidth>
+                      <Select
+                        value={selectedItemId ? String(selectedItemId) : ""}
+                        onChange={(e) => handleItemSelect(Number(e.target.value))}
+                        displayEmpty
+                        disabled={
+                          !selectedCategory ||
+                          (selectedCategory === "weapon" && !selectedWeaponSubCategory) ||
+                          categoryItems.length === 0
+                        }
+                        sx={{ bgcolor: "white" }}
+                      >
+                        <MenuItem value="" disabled>
+                          {!selectedCategory
+                            ? "카테고리 선택"
+                            : selectedCategory === "weapon" && !selectedWeaponSubCategory
+                              ? "무기 종류 선택"
+                              : categoryItems.length === 0
+                                ? "아이템 없음"
+                                : "선택하세요"}
+                        </MenuItem>
+                        {categoryItems.map((item) => (
+                          <MenuItem key={item.id} value={String(item.id)}>
+                            Lv.{item.reqLevel} {item.koreanName || item.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Box>
                 </Box>
-              )}
 
-              <Box>
-                <Typography variant="body2" sx={{ fontSize: "0.875rem", fontWeight: "500", mb: 0.5 }}>
-                  아이템
-                </Typography>
-                <FormControl size="small" fullWidth>
-                  <Select
-                    value={selectedItemId ? String(selectedItemId) : ""}
-                    onChange={(e) => handleItemSelect(Number(e.target.value))}
-                    displayEmpty
-                    disabled={
-                      !selectedCategory ||
-                      (selectedCategory === "weapon" && !selectedWeaponSubCategory) ||
-                      categoryItems.length === 0
-                    }
-                    sx={{ bgcolor: "white" }}
-                  >
-                    <MenuItem value="" disabled>
-                      {!selectedCategory
-                        ? "카테고리 선택"
-                        : selectedCategory === "weapon" && !selectedWeaponSubCategory
-                        ? "무기 종류 선택"
-                        : categoryItems.length === 0
-                        ? "아이템 없음"
-                        : "선택하세요"}
-                    </MenuItem>
-                    {categoryItems.map((item) => (
-                      <MenuItem key={item.id} value={String(item.id)}>
-                        Lv.{item.reqLevel} {item.koreanName || item.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Box>
-            </Box>
+                <Divider orientation="vertical" flexItem />
 
-            <Divider orientation="vertical" flexItem />
+                {/* 중간: 아이템 정보 */}
+                <Box sx={{ flex: 2, display: "flex", flexDirection: "column", gap: 1 }}>
+                  <Typography variant="body2" sx={{ fontSize: "0.875rem", fontWeight: "bold" }}>
+                    아이템 정보
+                  </Typography>
+                  {selectedItem ? (
+                    <Box sx={{ display: "flex", gap: 2, height: "100%" }}>
+                      {/* 왼쪽: 아이콘과 이름 */}
+                      <Box sx={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
+                        {itemIcon && (
+                          <img
+                            src={itemIcon}
+                            alt={koreanName || selectedItem.name}
+                            style={{ maxWidth: "64px", maxHeight: "64px" }}
+                          />
+                        )}
+                        <Typography
+                          variant="body2"
+                          sx={{ fontWeight: "bold", textAlign: "center", fontSize: "0.85rem" }}
+                        >
+                          {koreanName || selectedItem.koreanName || selectedItem.name}
+                        </Typography>
+                      </Box>
 
-            {/* 중간: 아이템 정보 */}
-            <Box sx={{ flex: 2, display: "flex", flexDirection: "column", gap: 1 }}>
-              <Typography variant="body2" sx={{ fontSize: "0.875rem", fontWeight: "bold" }}>
-                아이템 정보
-              </Typography>
-              {selectedItem ? (
-                <Box sx={{ display: "flex", gap: 2, height: "100%" }}>
-                  {/* 왼쪽: 아이콘과 이름 */}
-                  <Box sx={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
-                    {itemIcon && (
-                      <img
-                        src={itemIcon}
-                        alt={koreanName || selectedItem.name}
-                        style={{ maxWidth: "64px", maxHeight: "64px" }}
+                      {/* 가운데: 착용 정보 */}
+                      <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 0.5 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{ fontSize: "0.75rem", fontWeight: "bold", mb: 0.5, color: "#1976d2" }}
+                        >
+                          착용 정보
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
+                          레벨: {itemDetails?.metaInfo?.reqLevel || 0}
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
+                          STR: {itemDetails?.metaInfo?.reqSTR || 0}
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
+                          DEX: {itemDetails?.metaInfo?.reqDEX || 0}
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
+                          INT: {itemDetails?.metaInfo?.reqINT || 0}
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
+                          LUK: {itemDetails?.metaInfo?.reqLUK || 0}
+                        </Typography>
+                      </Box>
+
+                      {/* 오른쪽: 증가 정보 */}
+                      <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 0.5 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{ fontSize: "0.75rem", fontWeight: "bold", mb: 0.5, color: "#2e7d32" }}
+                        >
+                          증가 정보
+                        </Typography>
+                        {editedStats.attack > 0 && (
+                          <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
+                            공격력: +{editedStats.attack}
+                          </Typography>
+                        )}
+                        {itemDetails?.metaInfo?.incMAD ? (
+                          <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
+                            마력: +{itemDetails.metaInfo.incMAD}
+                          </Typography>
+                        ) : null}
+                        {editedStats.str > 0 && (
+                          <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
+                            STR: +{editedStats.str}
+                          </Typography>
+                        )}
+                        {editedStats.dex > 0 && (
+                          <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
+                            DEX: +{editedStats.dex}
+                          </Typography>
+                        )}
+                        {editedStats.int > 0 && (
+                          <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
+                            INT: +{editedStats.int}
+                          </Typography>
+                        )}
+                        {editedStats.luk > 0 && (
+                          <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
+                            LUK: +{editedStats.luk}
+                          </Typography>
+                        )}
+                        {itemDetails?.metaInfo?.incPDD ? (
+                          <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
+                            물리방어: +{itemDetails.metaInfo.incPDD}
+                          </Typography>
+                        ) : null}
+                        {itemDetails?.metaInfo?.incMDD ? (
+                          <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
+                            마법방어: +{itemDetails.metaInfo.incMDD}
+                          </Typography>
+                        ) : null}
+                        {itemDetails?.metaInfo?.incACC ? (
+                          <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
+                            명중률: +{itemDetails.metaInfo.incACC}
+                          </Typography>
+                        ) : null}
+                        {itemDetails?.metaInfo?.incEVA ? (
+                          <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
+                            회피율: +{itemDetails.metaInfo.incEVA}
+                          </Typography>
+                        ) : null}
+                      </Box>
+                    </Box>
+                  ) : (
+                    <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <Typography variant="body2" sx={{ color: "#999" }}>
+                        아이템을 선택하세요
+                      </Typography>
+                    </Box>
+                  )}
+                </Box>
+
+                <Divider orientation="vertical" flexItem />
+
+                {/* 오른쪽: 스탯 수정 */}
+                <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 1 }}>
+                  <Typography variant="body2" sx={{ fontSize: "0.875rem", fontWeight: "bold" }}>
+                    스탯 수정
+                  </Typography>
+
+                  {["attack", "str", "dex", "int", "luk"].map((stat) => (
+                    <Box key={stat} sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                      <Typography variant="body2" sx={{ fontSize: "0.75rem", minWidth: "40px" }}>
+                        {stat === "attack" ? "공격력" : stat.toUpperCase()}
+                      </Typography>
+                      <TextField
+                        type="number"
+                        size="small"
+                        value={editedStats[stat as keyof typeof editedStats]}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          setEditedStats((prev) => ({
+                            ...prev,
+                            [stat]: parseInt(e.target.value) || 0,
+                          }))
+                        }
+                        sx={{ flex: 1 }}
                       />
-                    )}
-                    <Typography variant="body2" sx={{ fontWeight: "bold", textAlign: "center", fontSize: "0.85rem" }}>
-                      {koreanName || selectedItem.koreanName || selectedItem.name}
-                    </Typography>
-                  </Box>
+                    </Box>
+                  ))}
 
-                  {/* 가운데: 착용 정보 */}
-                  <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 0.5 }}>
-                    <Typography
-                      variant="body2"
-                      sx={{ fontSize: "0.75rem", fontWeight: "bold", mb: 0.5, color: "#1976d2" }}
-                    >
-                      착용 정보
-                    </Typography>
-                    <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
-                      레벨: {itemDetails?.metaInfo?.reqLevel || 0}
-                    </Typography>
-                    <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
-                      STR: {itemDetails?.metaInfo?.reqSTR || 0}
-                    </Typography>
-                    <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
-                      DEX: {itemDetails?.metaInfo?.reqDEX || 0}
-                    </Typography>
-                    <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
-                      INT: {itemDetails?.metaInfo?.reqINT || 0}
-                    </Typography>
-                    <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
-                      LUK: {itemDetails?.metaInfo?.reqLUK || 0}
-                    </Typography>
-                  </Box>
-
-                  {/* 오른쪽: 증가 정보 */}
-                  <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 0.5 }}>
-                    <Typography
-                      variant="body2"
-                      sx={{ fontSize: "0.75rem", fontWeight: "bold", mb: 0.5, color: "#2e7d32" }}
-                    >
-                      증가 정보
-                    </Typography>
-                    {editedStats.attack > 0 && (
-                      <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
-                        공격력: +{editedStats.attack}
-                      </Typography>
-                    )}
-                    {itemDetails?.metaInfo?.incMAD ? (
-                      <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
-                        마력: +{itemDetails.metaInfo.incMAD}
-                      </Typography>
-                    ) : null}
-                    {editedStats.str > 0 && (
-                      <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
-                        STR: +{editedStats.str}
-                      </Typography>
-                    )}
-                    {editedStats.dex > 0 && (
-                      <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
-                        DEX: +{editedStats.dex}
-                      </Typography>
-                    )}
-                    {editedStats.int > 0 && (
-                      <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
-                        INT: +{editedStats.int}
-                      </Typography>
-                    )}
-                    {editedStats.luk > 0 && (
-                      <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
-                        LUK: +{editedStats.luk}
-                      </Typography>
-                    )}
-                    {itemDetails?.metaInfo?.incPDD ? (
-                      <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
-                        물리방어: +{itemDetails.metaInfo.incPDD}
-                      </Typography>
-                    ) : null}
-                    {itemDetails?.metaInfo?.incMDD ? (
-                      <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
-                        마법방어: +{itemDetails.metaInfo.incMDD}
-                      </Typography>
-                    ) : null}
-                    {itemDetails?.metaInfo?.incACC ? (
-                      <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
-                        명중률: +{itemDetails.metaInfo.incACC}
-                      </Typography>
-                    ) : null}
-                    {itemDetails?.metaInfo?.incEVA ? (
-                      <Typography variant="body2" sx={{ fontSize: "0.7rem", color: "#666" }}>
-                        회피율: +{itemDetails.metaInfo.incEVA}
-                      </Typography>
-                    ) : null}
-                  </Box>
+                  <Button
+                    variant="contained"
+                    onClick={handleEquip}
+                    disabled={!selectedItem}
+                    sx={{
+                      mt: 1,
+                      bgcolor: "#1976d2",
+                      color: "white",
+                      py: 1,
+                      "&:hover": { bgcolor: "#1565c0" },
+                      "&:disabled": { bgcolor: "#ccc", color: "#666" },
+                    }}
+                  >
+                    장착
+                  </Button>
                 </Box>
-              ) : (
-                <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <Typography variant="body2" sx={{ color: "#999" }}>
-                    아이템을 선택하세요
-                  </Typography>
-                </Box>
-              )}
-            </Box>
-
-            <Divider orientation="vertical" flexItem />
-
-            {/* 오른쪽: 스탯 수정 */}
-            <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 1 }}>
-              <Typography variant="body2" sx={{ fontSize: "0.875rem", fontWeight: "bold" }}>
-                스탯 수정
-              </Typography>
-
-              {["attack", "str", "dex", "int", "luk"].map((stat) => (
-                <Box key={stat} sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                  <Typography variant="body2" sx={{ fontSize: "0.75rem", minWidth: "40px" }}>
-                    {stat === "attack" ? "공격력" : stat.toUpperCase()}
-                  </Typography>
-                  <TextField
-                    type="number"
-                    size="small"
-                    value={editedStats[stat as keyof typeof editedStats]}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setEditedStats((prev) => ({
-                        ...prev,
-                        [stat]: parseInt(e.target.value) || 0,
-                      }))
-                    }
-                    sx={{ flex: 1 }}
-                  />
-                </Box>
-              ))}
-
-              <Button
-                variant="contained"
-                onClick={handleEquip}
-                disabled={!selectedItem}
-                sx={{
-                  mt: 1,
-                  bgcolor: "#1976d2",
-                  color: "white",
-                  py: 1,
-                  "&:hover": { bgcolor: "#1565c0" },
-                  "&:disabled": { bgcolor: "#ccc", color: "#666" },
-                }}
-              >
-                장착
-              </Button>
-            </Box>
-          </>
-        )}
-      </Box>
-    </Box>
-  );
+              </>
+            )}
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>닫기</Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
 }

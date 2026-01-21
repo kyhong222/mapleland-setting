@@ -28,6 +28,7 @@ interface CharacterContextValue {
   setBuff1Attack: (attack: number) => void;
   setBuff2Attack: (attack: number) => void;
   setHeroEchoEnabled: (enabled: boolean) => void;
+  heroEchoEnabled: boolean;
 
   // Buff attack values (외부 상태)
   buff1Attack: number;
@@ -74,6 +75,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
   const [mastery1, setMastery1State] = useState(0);
   const [mastery2, setMastery2State] = useState(0);
   const [buffMAD, setBuffMADState] = useState(0);
+  const [heroEchoEnabled, setHeroEchoEnabledState] = useState(false);
 
   // Buff selection states
   const [buff1Label, setBuff1LabelState] = useState("버프 선택");
@@ -173,8 +175,9 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     [refresh],
   );
 
-  const setHeroEchoEnabled = useCallback(
+  const setHeroEchoEnabledCallback = useCallback(
     (enabled: boolean) => {
+      setHeroEchoEnabledState(enabled);
       character.setBuffEnabled("heroEcho", enabled);
       refresh();
     },
@@ -351,7 +354,8 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
         setMapleWarriorLevel,
         setBuff1Attack,
         setBuff2Attack,
-        setHeroEchoEnabled,
+        setHeroEchoEnabled: setHeroEchoEnabledCallback,
+        heroEchoEnabled,
         buff1Attack,
         buff2Attack,
         buff1Label,

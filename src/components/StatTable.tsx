@@ -3,13 +3,14 @@ import { useCharacter } from "../contexts/CharacterContext";
 import { useMemo } from "react";
 
 export default function StatTable() {
-  const { character, setLevel, setPureStat, buff1Attack, buff2Attack } = useCharacter();
+  const { character, setLevel, setPureStat, buff1Attack, buff2Attack, buffMAD, heroEchoEnabled } = useCharacter();
 
   const stats = character.getStats();
   const job = character.getJob();
   const finalStats = character.getFinalStats(buff1Attack, buff2Attack);
   const equipStats = character.getEquipmentStats();
   const buffStats = character.getBuffStats(buff1Attack, buff2Attack);
+  const isJobMagician = job?.engName === "magician";
 
   // 총 AP 계산
   const totalAP = useMemo(() => {
@@ -234,20 +235,42 @@ export default function StatTable() {
 
         <Divider sx={{ my: 1 }} />
 
-        {/* 공격력 */}
+        {/* 공격력 / 마력 */}
         <Box sx={{ display: "grid", gridTemplateColumns: "80px 60px 60px 60px", gap: 1, alignItems: "center" }}>
           <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-            공격력
+            {isJobMagician ? "순수 마력" : "공격력"}
           </Typography>
-          <Typography variant="body2" sx={{ textAlign: "center", fontSize: "0.875rem" }}>
-            {equipStats.attack}
-          </Typography>
-          <Typography variant="body2" sx={{ textAlign: "center", fontSize: "0.875rem" }}>
-            {buffStats.attack}
-          </Typography>
-          <Typography variant="body2" sx={{ textAlign: "center", fontSize: "0.875rem", fontWeight: "bold" }}>
-            {finalStats.totalAttack}
-          </Typography>
+          {isJobMagician ? (() => {
+              const pureMad = (equipStats.mad || 0) + (buffMAD || 0);
+              const heroEchoBonus = heroEchoEnabled ? Math.floor(pureMad * 0.04) : 0;
+              const buffWithBonus = (buffMAD || 0) + heroEchoBonus;
+              const totalMad = (equipStats.mad || 0) + buffWithBonus;
+              return (
+                <>
+                  <Typography variant="body2" sx={{ textAlign: "center", fontSize: "0.875rem" }}>
+                    {equipStats.mad}
+                  </Typography>
+                  <Typography variant="body2" sx={{ textAlign: "center", fontSize: "0.875rem" }}>
+                    {buffWithBonus}
+                  </Typography>
+                  <Typography variant="body2" sx={{ textAlign: "center", fontSize: "0.875rem", fontWeight: "bold" }}>
+                    {totalMad}
+                  </Typography>
+                </>
+              );
+            })() : (
+            <>
+              <Typography variant="body2" sx={{ textAlign: "center", fontSize: "0.875rem" }}>
+                {equipStats.attack}
+              </Typography>
+              <Typography variant="body2" sx={{ textAlign: "center", fontSize: "0.875rem" }}>
+                {buffStats.attack}
+              </Typography>
+              <Typography variant="body2" sx={{ textAlign: "center", fontSize: "0.875rem", fontWeight: "bold" }}>
+                {finalStats.totalAttack}
+              </Typography>
+            </>
+          )}
         </Box>
       </Box>
     </Box>
