@@ -54,6 +54,10 @@ interface CharacterContextValue {
   mastery1: number;
   mastery2: number;
 
+  // Magic Attack (마력)
+  setBuffMAD: (mad: number) => void;
+  buffMAD: number;
+
   // Save/Load
   saveCurrentCharacter: () => SavedCharacterData | null;
   loadCharacter: (data: SavedCharacterData) => void;
@@ -69,6 +73,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
   const [buff2Attack, setBuff2AttackState] = useState(0);
   const [mastery1, setMastery1State] = useState(0);
   const [mastery2, setMastery2State] = useState(0);
+  const [buffMAD, setBuffMADState] = useState(0);
 
   // Buff selection states
   const [buff1Label, setBuff1LabelState] = useState("버프 선택");
@@ -88,7 +93,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       character.setLevel(level);
       refresh();
     },
-    [character, refresh]
+    [character, refresh],
   );
 
   const setJob = useCallback(
@@ -96,7 +101,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       character.setJob(job);
       refresh();
     },
-    [character, refresh]
+    [character, refresh],
   );
 
   const setPureStat = useCallback(
@@ -104,7 +109,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       character.setPureStat(stat, value);
       refresh();
     },
-    [character, refresh]
+    [character, refresh],
   );
 
   // Equipments
@@ -114,7 +119,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       refresh();
       return result;
     },
-    [character, refresh]
+    [character, refresh],
   );
 
   const unequipItem = useCallback(
@@ -122,7 +127,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       character.unequip(slot);
       refresh();
     },
-    [character, refresh]
+    [character, refresh],
   );
 
   // Buffs
@@ -131,7 +136,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       character.setBuffEnabled(id, enabled);
       refresh();
     },
-    [character, refresh]
+    [character, refresh],
   );
 
   const setBuffLevel = useCallback(
@@ -139,7 +144,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       character.setBuffLevel(id, level);
       refresh();
     },
-    [character, refresh]
+    [character, refresh],
   );
 
   // Buff helpers
@@ -149,7 +154,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       character.setBuffEnabled("mapleWarrior", level > 0);
       refresh();
     },
-    [character, refresh]
+    [character, refresh],
   );
 
   const setBuff1Attack = useCallback(
@@ -157,7 +162,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       setBuff1AttackState(attack);
       refresh();
     },
-    [refresh]
+    [refresh],
   );
 
   const setBuff2Attack = useCallback(
@@ -165,7 +170,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       setBuff2AttackState(attack);
       refresh();
     },
-    [refresh]
+    [refresh],
   );
 
   const setHeroEchoEnabled = useCallback(
@@ -173,7 +178,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       character.setBuffEnabled("heroEcho", enabled);
       refresh();
     },
-    [character, refresh]
+    [character, refresh],
   );
 
   const setMastery1 = useCallback(
@@ -181,7 +186,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       setMastery1State(value);
       refresh();
     },
-    [refresh]
+    [refresh],
   );
 
   const setMastery2 = useCallback(
@@ -189,7 +194,17 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       setMastery2State(value);
       refresh();
     },
-    [refresh]
+    [refresh],
+  );
+
+  const setBuffMAD = useCallback(
+    (mad: number) => {
+      setBuffMADState(mad);
+      const stats = character.getStats();
+      stats.buffMAD = mad;
+      refresh();
+    },
+    [character, refresh],
   );
 
   // Save/Load
@@ -224,6 +239,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
         heroEchoEnabled: heroEcho?.enabled || false,
         mastery1,
         mastery2,
+        buffMAD,
         // buff1/buff2 선택 정보
         buff1Label,
         buff1Icon,
@@ -241,6 +257,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     buff2Attack,
     mastery1,
     mastery2,
+    buffMAD,
     buff1Label,
     buff1Icon,
     buff1IsManual,
@@ -298,6 +315,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
         character.setBuffEnabled("heroEcho", data.buffs.heroEchoEnabled);
         setMastery1State(data.buffs.mastery1);
         setMastery2State(data.buffs.mastery2);
+        if (data.buffs.buffMAD !== undefined) setBuffMADState(data.buffs.buffMAD);
         // buff 선택 정보 복원
         if (data.buffs.buff1Label) setBuff1LabelState(data.buffs.buff1Label);
         if (data.buffs.buff1Icon !== undefined) setBuff1IconState(data.buffs.buff1Icon);
@@ -309,7 +327,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
 
       refresh();
     },
-    [character, refresh]
+    [character, refresh],
   );
 
   const getSavedList = useCallback(() => {
@@ -352,6 +370,8 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
         setMastery2,
         mastery1,
         mastery2,
+        setBuffMAD,
+        buffMAD,
         saveCurrentCharacter,
         loadCharacter,
         getSavedList,

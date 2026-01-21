@@ -31,11 +31,13 @@ export class Character {
       equipInt: 0,
       equipLuk: 0,
       equipAttack: 0,
+      equipMAD: 0,
       buffStr: 0,
       buffDex: 0,
       buffInt: 0,
       buffLuk: 0,
       buffAttack: 0,
+      buffMAD: 0,
     };
 
     this.job = null;
@@ -129,6 +131,7 @@ export class Character {
       dex: item.stats.dex,
       int: item.stats.int,
       luk: item.stats.luk,
+      mad: item.stats.mad,
     };
 
     this.equipments.set(targetSlot, equipment);
@@ -146,6 +149,7 @@ export class Character {
       dex: 0,
       int: 0,
       luk: 0,
+      mad: 0,
     };
 
     for (const item of this.equipments.values()) {
@@ -154,6 +158,7 @@ export class Character {
       summary.dex += item.dex || 0;
       summary.int += item.int || 0;
       summary.luk += item.luk || 0;
+      summary.mad += item.mad || 0;
     }
 
     return summary;
@@ -287,6 +292,12 @@ export class Character {
     const totalLuk = pureLuk + equipStats.luk + buffStats.luk + mapleWarriorLuk;
     const totalAttack = equipStats.attack + buffStats.attack;
 
+    // 마력 계산: 장비 MAD + Int 스탯당 1 + 버프 MAD, 영웅의 메아리 4% 보너스 적용
+    const heroEcho = this.buffs.get("heroEcho");
+    const heroEchoMultiplier = heroEcho?.enabled ? 1.04 : 1;
+    const baseMad = (equipStats.mad || 0) + totalInt + (this.stats.buffMAD || 0);
+    const totalMAD = Math.floor(baseMad * heroEchoMultiplier);
+
     let mainStat = 0;
     let subStat = 0;
 
@@ -302,6 +313,7 @@ export class Character {
       totalInt,
       totalLuk,
       totalAttack,
+      totalMAD,
       mainStat,
       subStat,
     };

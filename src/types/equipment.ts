@@ -9,6 +9,7 @@ export interface Equipment {
   dex?: number;
   int?: number;
   luk?: number;
+  mad?: number; // 마력 (Magic Attack Damage)
 }
 
 // 5*3 그리드 레이아웃 (null은 빈칸)

@@ -42,8 +42,29 @@ export default function DamageTable() {
 
   // 모든 데미지 계산식
   const damages = useMemo(() => {
-    const results: Record<string, DamageResult> = {};
+    const results: Record<string, DamageResult | number> = {};
+    const job = character.getJob();
+    const isMagician = job?.koreanName === "마법사";
 
+    // 마법사의 경우 다른 계산식 사용
+    if (isMagician) {
+      const MAD = finalStats.totalMAD;
+      const INT = finalStats.totalInt;
+      const masteryRate = mastery / 100;
+
+      // 마법사: 실질 마법 데미지
+      const magicMax = Math.floor((Math.pow(MAD, 2) / 1000 + MAD) / 30 + INT / 200);
+      const magicMin = Math.floor((Math.pow(MAD, 2) / 1000 + MAD * 0.9 * masteryRate) / 30 + INT / 200);
+
+      results.magicDamage = {
+        min: magicMin,
+        max: magicMax,
+      };
+      results.totalMAD = MAD; // 총 마력 (숫자로 저장)
+      return results;
+    }
+
+    // 비마법사: 기존 계산식
     if (!weaponConstants || finalStats.totalAttack === 0) {
       return results;
     }
@@ -53,7 +74,7 @@ export default function DamageTable() {
     // 1. 스탯창 공격력
     results.stat = {
       min: Math.floor(
-        ((finalStats.mainStat * weaponConstants.min * 0.9 * masteryRate + adjSubStat) * finalStats.totalAttack) / 100
+        ((finalStats.mainStat * weaponConstants.min * 0.9 * masteryRate + adjSubStat) * finalStats.totalAttack) / 100,
       ),
       max: Math.floor(((finalStats.mainStat * weaponConstants.max + adjSubStat) * finalStats.totalAttack) / 100),
     };
@@ -61,7 +82,7 @@ export default function DamageTable() {
     // 2. 최대 공격력
     results.max = {
       min: Math.floor(
-        ((finalStats.mainStat * weaponConstants.max * 0.9 * masteryRate + adjSubStat) * finalStats.totalAttack) / 100
+        ((finalStats.mainStat * weaponConstants.max * 0.9 * masteryRate + adjSubStat) * finalStats.totalAttack) / 100,
       ),
       max: Math.floor(((finalStats.mainStat * weaponConstants.max + adjSubStat) * finalStats.totalAttack) / 100),
     };
@@ -69,7 +90,7 @@ export default function DamageTable() {
     // 3. 최소 공격력
     results.min = {
       min: Math.floor(
-        ((finalStats.mainStat * weaponConstants.min * 0.9 * masteryRate + adjSubStat) * finalStats.totalAttack) / 100
+        ((finalStats.mainStat * weaponConstants.min * 0.9 * masteryRate + adjSubStat) * finalStats.totalAttack) / 100,
       ),
       max: Math.floor(((finalStats.mainStat * weaponConstants.min + adjSubStat) * finalStats.totalAttack) / 100),
     };
@@ -169,19 +190,34 @@ export default function DamageTable() {
       {/* 헤더 - 무기 정보 */}
       <Box sx={{ borderBottom: "1px solid #ccc", p: 1.5, bgcolor: "#e3f2fd" }}>
         <Typography variant="body2" sx={{ fontWeight: "bold", mb: 0.5 }}>
-          데미지 계산
+          {job?.koreanName === "마법사" ? "마법 계산" : "데미지 계산"}
         </Typography>
-        {weapon ? (
+        {weapon || job?.koreanName === "마법사" ? (
           <Box>
-            <Typography variant="caption" sx={{ fontSize: "0.75rem", color: "#666" }}>
-              무기: {weapon.name} ({weaponType})
-            </Typography>
-            <Typography variant="caption" sx={{ fontSize: "0.75rem", color: "#666", display: "block" }}>
-              공격력: {finalStats.totalAttack} | 주스탯: {finalStats.mainStat} | 부스탯: {finalStats.subStat}
-            </Typography>
-            <Typography variant="caption" sx={{ fontSize: "0.75rem", color: "#666", display: "block" }}>
-              마스터리: {mastery}%
-            </Typography>
+            {weapon && (
+              <Typography variant="caption" sx={{ fontSize: "0.75rem", color: "#666" }}>
+                무기: {weapon.name} ({weaponType})
+              </Typography>
+            )}
+            {job?.koreanName === "마법사" ? (
+              <>
+                <Typography variant="caption" sx={{ fontSize: "0.75rem", color: "#666", display: "block" }}>
+                  INT: {finalStats.totalInt} | 마력: {finalStats.totalMAD}
+                </Typography>
+                <Typography variant="caption" sx={{ fontSize: "0.75rem", color: "#666", display: "block" }}>
+                  숙련도: {mastery}%
+                </Typography>
+              </>
+            ) : (
+              <>
+                <Typography variant="caption" sx={{ fontSize: "0.75rem", color: "#666", display: "block" }}>
+                  공격력: {finalStats.totalAttack} | 주스탯: {finalStats.mainStat} | 부스탯: {finalStats.subStat}
+                </Typography>
+                <Typography variant="caption" sx={{ fontSize: "0.75rem", color: "#666", display: "block" }}>
+                  마스터리: {mastery}% | 마력: {finalStats.totalMAD}
+                </Typography>
+              </>
+            )}
           </Box>
         ) : (
           <Typography variant="caption" sx={{ fontSize: "0.75rem", color: "#999" }}>
@@ -191,7 +227,7 @@ export default function DamageTable() {
       </Box>
 
       {/* 무기가 없거나 직업이 없으면 안내 메시지 */}
-      {(!weapon || !job || !weaponConstants) && (
+      {(!weapon || !job) && job?.koreanName !== "마법사" && (
         <Box sx={{ p: 3, display: "flex", alignItems: "center", justifyContent: "center" }}>
           <Typography variant="body2" sx={{ color: "#999" }}>
             {!job ? "직업을 먼저 선택하세요" : !weapon ? "무기를 장착하세요" : "무기 타입을 인식할 수 없습니다"}
@@ -199,8 +235,33 @@ export default function DamageTable() {
         </Box>
       )}
 
-      {/* 데미지 계산 결과 - 무기와 직업이 있을 때만 */}
-      {weapon && job && weaponConstants && (
+      {/* 데미지 계산 결과 - 마법사 */}
+      {job?.koreanName === "마법사" && (
+        <>
+          {/* 총 마력 */}
+          <Box sx={{ borderBottom: "1px solid #ccc", p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
+            <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+              총 마력
+            </Typography>
+            <Typography variant="body2" sx={{ fontSize: "1.1rem", textAlign: "center" }}>
+              {(damages.totalMAD as number).toLocaleString()}
+            </Typography>
+          </Box>
+
+          {/* 실질 마법 데미지 */}
+          {damages.magicDamage && (
+            <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
+              <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                실질 마법 데미지
+              </Typography>
+              {renderDamage(damages.magicDamage as DamageResult)}
+            </Box>
+          )}
+        </>
+      )}
+
+      {/* 데미지 계산 결과 - 비마법사 */}
+      {job && job.koreanName !== "마법사" && weapon && weaponConstants && (
         <>
           {/* 스탯창 공격력 - 항상 표시 */}
           {damages.stat && (
@@ -208,7 +269,7 @@ export default function DamageTable() {
               <Typography variant="body2" sx={{ fontWeight: "bold" }}>
                 스탯창 공격력
               </Typography>
-              {renderDamage(damages.stat)}
+              {renderDamage(damages.stat as DamageResult)}
             </Box>
           )}
 
@@ -218,7 +279,7 @@ export default function DamageTable() {
               <Typography variant="body2" sx={{ fontWeight: "bold" }}>
                 {getMaxDamageLabel()}
               </Typography>
-              {renderDamage(damages.max)}
+              {renderDamage(damages.max as DamageResult)}
             </Box>
           )}
 
@@ -228,7 +289,7 @@ export default function DamageTable() {
               <Typography variant="body2" sx={{ fontWeight: "bold" }}>
                 {getMinDamageLabel()}
               </Typography>
-              {renderDamage(damages.min)}
+              {renderDamage(damages.min as DamageResult)}
             </Box>
           )}
 
@@ -238,7 +299,7 @@ export default function DamageTable() {
               <Typography variant="body2" sx={{ fontWeight: "bold" }}>
                 트스/럭세 실질 공격력
               </Typography>
-              {renderDamage(damages.treasure)}
+              {renderDamage(damages.treasure as DamageResult)}
             </Box>
           )}
 
@@ -248,7 +309,7 @@ export default function DamageTable() {
               <Typography variant="body2" sx={{ fontWeight: "bold" }}>
                 베놈 실질 공격력(베놈 M 기준, 공격력 60 적용)
               </Typography>
-              {renderDamage(damages.venom)}
+              {renderDamage(damages.venom as DamageResult)}
             </Box>
           )}
 
@@ -258,7 +319,7 @@ export default function DamageTable() {
               <Typography variant="body2" sx={{ fontWeight: "bold" }}>
                 로어 실질 공격력
               </Typography>
-              {renderDamage(damages.lore)}
+              {renderDamage(damages.lore as DamageResult)}
             </Box>
           )}
         </>

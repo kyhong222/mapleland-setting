@@ -11,6 +11,7 @@ export interface Stats {
   equipInt: number;
   equipLuk: number;
   equipAttack: number;
+  equipMAD: number; // 장비로부터의 마력
 
   // 버프로 얻은 스탯
   buffStr: number;
@@ -18,6 +19,7 @@ export interface Stats {
   buffInt: number;
   buffLuk: number;
   buffAttack: number;
+  buffMAD: number; // 버프로부터의 마력
 
   // 캐릭터 레벨
   level: number;
@@ -33,10 +35,12 @@ export const DEFAULT_STATS: Stats = {
   equipInt: 0,
   equipLuk: 0,
   equipAttack: 0,
+  equipMAD: 0,
   buffStr: 0,
   buffDex: 0,
   buffInt: 0,
   buffLuk: 0,
   buffAttack: 0,
+  buffMAD: 0,
   level: 1,
 };

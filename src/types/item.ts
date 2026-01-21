@@ -28,6 +28,7 @@ export interface ItemStats {
   dex: number;
   int: number;
   luk: number;
+  mad?: number; // 마력 (Magic Attack Damage)
 }
 
 // 아이템 필요 스탯 정의

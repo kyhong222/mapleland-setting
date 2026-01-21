@@ -17,6 +17,7 @@ export interface StatsSummary {
   dex: number;
   int: number;
   luk: number;
+  mad?: number; // 마력
 }
 
 /**
@@ -29,6 +30,7 @@ export interface FinalStats {
   totalInt: number;
   totalLuk: number;
   totalAttack: number;
+  totalMAD: number; // 총 마력 (장비 MAD + Int스탯 기반 마력 + 버프 마력)
 
   // 주스탯 / 부스탯
   mainStat: number;

@@ -19,6 +19,7 @@ export interface SavedCharacterData {
     heroEchoEnabled: boolean;
     mastery1: number;
     mastery2: number;
+    buffMAD?: number; // 버프로부터의 마력
     // buff1 선택 정보
     buff1Label?: string;
     buff1Icon?: string | null;
