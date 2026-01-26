@@ -37,7 +37,19 @@ export default function EquipTable({ onSlotClick }: EquipTableProps) {
   const isJobMagician = job?.engName === "magician";
 
   // 하의 슬롯 빨간색 표시 여부 (상의에 전신 장착 시)
-  const hasOverall = equipMap.has("상의");
+  const overallEquipment = equipMap.get("상의");
+  const hasOverall = overallEquipment?.type === "전신";
+
+  // 보조무기 활성화 여부 및 카테고리 결정
+  const weapon = equipMap.get("무기");
+  const oneHandedWeapons = ["한손검", "한손도끼", "한손둔기", "단검", "스태프", "완드"];
+  const isOneHanded = weapon && oneHandedWeapons.includes(weapon.type);
+  const isBow = weapon?.type === "활";
+  const isCrossbow = weapon?.type === "석궁";
+  const isDagger = weapon?.type === "아대";
+
+  const canEquipSecondaryWeapon = isOneHanded || isBow || isCrossbow || isDagger;
+  const isSecondaryWeaponBlocked = !canEquipSecondaryWeapon;
 
   // 아이콘 로드
   useEffect(() => {
@@ -74,10 +86,19 @@ export default function EquipTable({ onSlotClick }: EquipTableProps) {
 
     const equipment = equipMap.get(slotName);
     const isBottomSlotBlocked = slotName === "하의" && hasOverall;
+    const slotIsSecondaryWeaponBlocked = slotName === "보조무기" && isSecondaryWeaponBlocked;
 
     // 0이 아닌 스탯만 표기
     const getTooltipText = () => {
-      if (!equipment) return "클릭하여 아이템 선택";
+      if (!equipment) {
+        if (slotIsSecondaryWeaponBlocked) {
+          return "해당 무기 타입에는 보조무기를 장착할 수 없습니다";
+        }
+        if (isBottomSlotBlocked) {
+          return "전신갑옷과 동시에 착용할 수 없습니다";
+        }
+        return "클릭하여 아이템 선택";
+      }
 
       const lines: string[] = [equipment.name || ""];
 
@@ -111,8 +132,12 @@ export default function EquipTable({ onSlotClick }: EquipTableProps) {
         }}
       >
         <Box
-          onClick={() => handleSlotClick(slotName, !!equipment)}
-          onDoubleClick={() => equipment && handleDoubleClick(slotName)}
+          onClick={() =>
+            !slotIsSecondaryWeaponBlocked && !isBottomSlotBlocked && handleSlotClick(slotName, !!equipment)
+          }
+          onDoubleClick={() =>
+            !slotIsSecondaryWeaponBlocked && !isBottomSlotBlocked && equipment && handleDoubleClick(slotName)
+          }
           sx={{
             width: 60,
             height: 60,
@@ -121,15 +146,16 @@ export default function EquipTable({ onSlotClick }: EquipTableProps) {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            bgcolor: isBottomSlotBlocked ? "#FFCDD2" : equipment ? "white" : "#f5f5f5",
-            cursor: "pointer",
+            bgcolor: slotIsSecondaryWeaponBlocked || isBottomSlotBlocked ? "#FFCDD2" : equipment ? "white" : "#f5f5f5",
+            cursor: slotIsSecondaryWeaponBlocked || isBottomSlotBlocked ? "not-allowed" : "pointer",
             fontSize: "0.75rem",
             textAlign: "center",
             p: 0.5,
             wordBreak: "keep-all",
             userSelect: "none",
             "&:hover": {
-              bgcolor: isBottomSlotBlocked ? "#FFAB91" : equipment ? "#e3f2fd" : "#eeeeee",
+              bgcolor:
+                slotIsSecondaryWeaponBlocked || isBottomSlotBlocked ? "#FFAB91" : equipment ? "#e3f2fd" : "#eeeeee",
             },
           }}
         >

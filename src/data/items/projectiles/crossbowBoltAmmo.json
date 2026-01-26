@@ -1,0 +1,37 @@
+[
+  {
+    "id": 2061000,
+    "name": "Arrow for Crossbow",
+    "koreanName": "석궁전용 화살",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 2061001,
+    "name": "Bronze Arrow for Crossbow",
+    "koreanName": "석궁전용 청동화살",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 2061002,
+    "name": "Steel Arrow for Crossbow",
+    "koreanName": "석궁전용 강철화살",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 2061003,
+    "name": "Arrow for Crossbow",
+    "koreanName": "석궁전용 화살",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 2061004,
+    "name": "Diamond Arrow for Crossbow",
+    "koreanName": "",
+    "reqJob": 0,
+    "reqLevel": 0
+  }
+]

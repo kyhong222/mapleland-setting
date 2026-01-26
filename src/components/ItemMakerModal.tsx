@@ -58,6 +58,9 @@ const CATEGORY_TO_SLOT: Record<string, EquipmentSlot> = {
   claw: "무기",
   staff: "무기",
   wand: "무기",
+  thrownAmmo: "보조무기",
+  arrowAmmo: "보조무기",
+  crossbowBoltAmmo: "보조무기",
 };
 
 // 카테고리에서 아이템 타입으로 매핑
@@ -66,7 +69,7 @@ const CATEGORY_TO_TYPE: Record<string, string> = {
   cape: "방어구",
   top: "방어구",
   glove: "방어구",
-  overall: "방어구",
+  overall: "전신",
   bottom: "방어구",
   shield: "방어구",
   shoes: "방어구",
@@ -89,6 +92,9 @@ const CATEGORY_TO_TYPE: Record<string, string> = {
   claw: "아대",
   staff: "스태프",
   wand: "완드",
+  thrownAmmo: "표창",
+  arrowAmmo: "화살",
+  crossbowBoltAmmo: "석궁화살",
 };
 
 // 카테고리 목록
@@ -135,6 +141,39 @@ const WEAPON_SUBCATEGORIES: Record<number, Array<{ key: string; name: string }>>
   ],
 };
 
+// 투사체 서브카테고리
+const PROJECTILE_SUBCATEGORIES: Array<{ key: string; name: string }> = [
+  { key: "thrownAmmo", name: "표창" },
+  { key: "arrowAmmo", name: "화살" },
+  { key: "crossbowBoltAmmo", name: "석궁화살" },
+];
+
+// 무기 타입에 따른 보조무기 매핑
+const WEAPON_TO_SECONDARY: Record<string, string> = {
+  oneHandedSword: "shield",
+  twoHandedSword: "shield", // 개선 가능 - 양손 무기일 때 보조무기 불가
+  oneHandedAxe: "shield",
+  twoHandedAxe: "shield",
+  oneHandedBlunt: "shield",
+  twoHandedBlunt: "shield",
+  spear: "shield",
+  polearm: "shield",
+  bow: "arrowAmmo",
+  crossbow: "crossbowBoltAmmo",
+  dagger: "shield",
+  claw: "thrownAmmo",
+  staff: "shield",
+  wand: "shield",
+};
+
+// 카테고리별 서브카테고리 매핑
+const SECONDARY_CATEGORY_TO_SUBCATEGORY: Record<string, string> = {
+  shield: "shield",
+  arrowAmmo: "arrowAmmo",
+  crossbowBoltAmmo: "crossbowBoltAmmo",
+  thrownAmmo: "thrownAmmo",
+};
+
 interface ItemData {
   id: number;
   name: string;
@@ -149,9 +188,20 @@ interface ItemMakerModalProps {
   onClose: () => void;
 }
 
-async function loadItemData(categoryKey: string, isWeapon: boolean = false): Promise<ItemData[]> {
+async function loadItemData(
+  categoryKey: string,
+  isWeapon: boolean = false,
+  isProjectile: boolean = false,
+): Promise<ItemData[]> {
   try {
-    const path = isWeapon ? `../data/items/weapons/${categoryKey}.json` : `../data/items/${categoryKey}.json`;
+    let path: string;
+    if (isProjectile) {
+      path = `../data/items/projectiles/${categoryKey}.json`;
+    } else if (isWeapon) {
+      path = `../data/items/weapons/${categoryKey}.json`;
+    } else {
+      path = `../data/items/${categoryKey}.json`;
+    }
     const module = await import(path);
     return module.default;
   } catch (error) {
@@ -166,6 +216,7 @@ export default function ItemMakerModal({ open, selectedCategory: externalCategor
   // 상태 선언 (모두 컴포넌트 최상위에)
   const [internalCategory, setInternalCategory] = useState<string>("");
   const [selectedWeaponSubCategory, setSelectedWeaponSubCategory] = useState<string>("");
+  const [selectedProjectileSubCategory, setSelectedProjectileSubCategory] = useState<string>("");
   const [selectedItemId, setSelectedItemId] = useState<number | "">("");
   const [selectedItem, setSelectedItem] = useState<ItemData | null>(null);
   const [categoryItems, setCategoryItems] = useState<ItemData[]>([]);
@@ -199,10 +250,42 @@ export default function ItemMakerModal({ open, selectedCategory: externalCategor
 
   const selectedCategory = internalCategory;
 
+  // 현재 장착된 무기 타입 확인
+  const equipments = character.getEquipments();
+  const weapon = equipments.find((e) => e.slot === "무기");
+  const weaponType = weapon?.type;
+
+  // 보조무기 부 카테고리 목록 필터링
+  const getSecondaryWeaponOptions = () => {
+    const allOptions = [
+      { key: "shield", name: "방패" },
+      { key: "arrowAmmo", name: "화살" },
+      { key: "crossbowBoltAmmo", name: "석궁화살" },
+      { key: "thrownAmmo", name: "표창" },
+    ];
+
+    if (!weaponType) return allOptions;
+
+    const oneHandedWeapons = ["한손검", "한손도끼", "한손둔기", "단검", "스태프", "완드"];
+    
+    if (oneHandedWeapons.includes(weaponType)) {
+      return allOptions.filter((opt) => opt.key === "shield");
+    } else if (weaponType === "활") {
+      return allOptions.filter((opt) => opt.key === "arrowAmmo");
+    } else if (weaponType === "석궁") {
+      return allOptions.filter((opt) => opt.key === "crossbowBoltAmmo");
+    } else if (weaponType === "아대") {
+      return allOptions.filter((opt) => opt.key === "thrownAmmo");
+    }
+
+    return allOptions;
+  };
+
   // 모달 닫기
   const handleClose = () => {
     setInternalCategory("");
     setSelectedWeaponSubCategory("");
+    setSelectedProjectileSubCategory("");
     setSelectedItemId("");
     setSelectedItem(null);
     setCategoryItems([]);
@@ -214,16 +297,47 @@ export default function ItemMakerModal({ open, selectedCategory: externalCategor
   useEffect(() => {
     if (externalCategory && externalCategory !== "") {
       setInternalCategory(externalCategory);
-
-      setSelectedWeaponSubCategory("");
-
       setSelectedItemId("");
-
       setSelectedItem(null);
-
       setCategoryItems([]);
     }
   }, [externalCategory, open]);
+
+  // 보조무기 카테고리가 선택되면 무기에 따라 부 카테고리 자동 설정
+  useEffect(() => {
+    if (internalCategory === "shield") {
+      const equipments = character.getEquipments();
+      const equipMap = new Map(equipments.map((eq) => [eq.slot, eq]));
+      const weapon = equipMap.get("무기");
+
+      if (weapon) {
+        // 무기 타입에 따른 보조무기 부 카테고리 결정
+        const weaponTypeMap: Record<string, string> = {
+          "한손검": "shield",
+          "한손도끼": "shield",
+          "한손둔기": "shield",
+          "단검": "shield",
+          "스태프": "shield",
+          "완드": "shield",
+          "활": "arrowAmmo",
+          "석궁": "crossbowBoltAmmo",
+          "아대": "thrownAmmo",
+        };
+
+        const subCategory = weaponTypeMap[weapon.type];
+        if (subCategory) {
+          setSelectedProjectileSubCategory(subCategory);
+        } else {
+          setSelectedProjectileSubCategory("shield");
+        }
+      } else {
+        setSelectedProjectileSubCategory("shield");
+      }
+    } else {
+      setSelectedWeaponSubCategory("");
+      setSelectedProjectileSubCategory("");
+    }
+  }, [internalCategory, character]);
 
   // 무기 카테고리 선택 시 초기화
   useEffect(() => {
@@ -235,6 +349,14 @@ export default function ItemMakerModal({ open, selectedCategory: externalCategor
       setSelectedItem(null);
 
       setSelectedWeaponSubCategory("");
+    } else if (internalCategory === "projectiles") {
+      setCategoryItems([]);
+
+      setSelectedItemId("");
+
+      setSelectedItem(null);
+
+      setSelectedProjectileSubCategory("");
     }
   }, [internalCategory]);
 
@@ -268,7 +390,7 @@ export default function ItemMakerModal({ open, selectedCategory: externalCategor
     }
 
     const loadItems = async () => {
-      const items = await loadItemData(selectedWeaponSubCategory, true);
+      const items = await loadItemData(selectedWeaponSubCategory, true, false);
       let filtered: ItemData[];
       if (jobId) {
         filtered = items.filter((item) => item.reqJob === 0 || item.reqJob === jobId);
@@ -283,6 +405,86 @@ export default function ItemMakerModal({ open, selectedCategory: externalCategor
 
     loadItems();
   }, [selectedWeaponSubCategory, jobId]);
+
+  // 투사체 서브카테고리 선택 시 아이템 로드
+  useEffect(() => {
+    // internalCategory가 "shield"(보조무기)이고 selectedProjectileSubCategory가 설정되었을 때
+    if (internalCategory === "shield" && selectedProjectileSubCategory) {
+      const loadItems = async () => {
+        // shield는 일반 방어구, 나머지는 투사체
+        const isProjectile = selectedProjectileSubCategory !== "shield";
+        const items = await loadItemData(selectedProjectileSubCategory, false, isProjectile);
+        let filtered: ItemData[];
+        if (jobId) {
+          filtered = items.filter((item) => item.reqJob === 0 || item.reqJob === jobId);
+        } else {
+          filtered = items.filter((item) => item.reqJob === 0);
+        }
+        filtered = filtered.sort((a, b) => a.reqLevel - b.reqLevel);
+        setCategoryItems(filtered);
+        setSelectedItemId("");
+        setSelectedItem(null);
+      };
+
+      loadItems();
+    } else if (internalCategory !== "shield" && selectedProjectileSubCategory) {
+      // 일반 투사체 카테고리일 때
+      const loadItems = async () => {
+        const items = await loadItemData(selectedProjectileSubCategory, false, true);
+        let filtered: ItemData[];
+        filtered = items.sort((a, b) => a.reqLevel - b.reqLevel);
+        setCategoryItems(filtered);
+        setSelectedItemId("");
+        setSelectedItem(null);
+      };
+
+      loadItems();
+    }
+  }, [selectedProjectileSubCategory, internalCategory, jobId]);
+
+  // 보조무기 카테고리 선택 시 무기에 따라 자동 설정
+  useEffect(() => {
+    if (internalCategory !== "shield") {
+      return;
+    }
+
+    // 현재 장착된 무기 확인
+    const equipments = character.getEquipments();
+    const weapon = equipments.find((e) => e.slot === "무기");
+
+    if (!weapon || !weapon.type) {
+      // 무기가 없으면 보조무기 로드 불가
+      setCategoryItems([]);
+      setSelectedProjectileSubCategory("");
+      return;
+    }
+
+    // 무기 타입에 따른 보조무기 결정
+    const weaponType = weapon.type;
+    const secondaryCategory = WEAPON_TO_SECONDARY[weaponType];
+
+    if (!secondaryCategory) {
+      setCategoryItems([]);
+      setSelectedProjectileSubCategory("");
+      return;
+    }
+
+    // 보조무기 서브카테고리 자동 설정
+    const subCategory = SECONDARY_CATEGORY_TO_SUBCATEGORY[secondaryCategory];
+    setSelectedProjectileSubCategory(subCategory);
+
+    // 아이템 로드
+    const loadItems = async () => {
+      const isProjectile = secondaryCategory !== "shield";
+      const items = await loadItemData(secondaryCategory, secondaryCategory === "shield", isProjectile);
+      const filtered = items.sort((a, b) => a.reqLevel - b.reqLevel);
+      setCategoryItems(filtered);
+      setSelectedItemId("");
+      setSelectedItem(null);
+    };
+
+    loadItems();
+  }, [internalCategory, character]);
 
   // 아이템 선택 시 상세 정보 로드
   useEffect(() => {
@@ -487,36 +689,104 @@ export default function ItemMakerModal({ open, selectedCategory: externalCategor
               <Select
                 value={selectedCategory}
                 onChange={(e) => {
-                  setInternalCategory(e.target.value);
-                  setSelectedWeaponSubCategory("");
+                  const newCategory = e.target.value;
+                  // 무기 없이 보조무기 선택 시도 방지
+                  if (newCategory === "shield") {
+                    const equipments = character.getEquipments();
+                    const weapon = equipments.find((e) => e.slot === "무기");
+                    if (!weapon) {
+                      return;
+                    }
+                  }
+                  setInternalCategory(newCategory);
+                  if (newCategory === "weapon") {
+                    setSelectedWeaponSubCategory("");
+                  } else {
+                    setSelectedProjectileSubCategory("");
+                  }
                 }}
               >
-                {CATEGORY_LIST.map((cat) => (
-                  <MenuItem key={cat.key} value={cat.key}>
-                    {cat.name}
-                  </MenuItem>
-                ))}
+                {CATEGORY_LIST.map((cat) => {
+                  // 보조무기 활성화 여부 결정
+                  let isDisabled = false;
+                  let displayName = cat.name;
+
+                  if (cat.key === "shield") {
+                    const equipments = character.getEquipments();
+                    const weapon = equipments.find((e) => e.slot === "무기");
+                    if (!weapon) {
+                      isDisabled = true;
+                      displayName = "보조무기(무기 장착 필요)";
+                    }
+                  }
+
+                  return (
+                    <MenuItem key={cat.key} value={cat.key} disabled={isDisabled}>
+                      {displayName}
+                    </MenuItem>
+                  );
+                })}
               </Select>
             </FormControl>
 
-            {/* 무기 서브카테고리 선택 */}
-            <FormControl sx={{ flex: 1 }} disabled={selectedCategory !== "weapon" || !jobId}>
+            {/* 부 카테고리 선택 */}
+            <FormControl sx={{ flex: 1 }}>
               <Typography
                 variant="body2"
                 sx={{
                   fontWeight: "bold",
                   mb: 1,
-                  color: selectedCategory === "weapon" && jobId ? "inherit" : "text.disabled",
+                  color:
+                    selectedCategory === "weapon" && jobId
+                      ? "inherit"
+                      : selectedCategory === "shield" && selectedProjectileSubCategory
+                        ? "inherit"
+                        : selectedCategory === "projectiles"
+                          ? "inherit"
+                          : "text.disabled",
                 }}
               >
                 부 카테고리
               </Typography>
-              <Select value={selectedWeaponSubCategory} onChange={(e) => setSelectedWeaponSubCategory(e.target.value)}>
-                <MenuItem value="">선택하세요</MenuItem>
+              <Select
+                value={selectedCategory === "shield" ? selectedProjectileSubCategory : selectedWeaponSubCategory}
+                onChange={(e) => {
+                  if (selectedCategory === "weapon") {
+                    setSelectedWeaponSubCategory(e.target.value);
+                  } else if (selectedCategory === "shield") {
+                    setSelectedProjectileSubCategory(e.target.value);
+                  } else if (selectedCategory === "projectiles") {
+                    setSelectedProjectileSubCategory(e.target.value);
+                  }
+                }}
+              >
+                {(selectedCategory === "weapon" || selectedCategory === "projectiles") && (
+                  <MenuItem value="">선택하세요</MenuItem>
+                )}
+
+                {/* 무기용 부 카테고리 */}
                 {selectedCategory === "weapon" && jobId
                   ? (WEAPON_SUBCATEGORIES[jobId] || []).map((weapon) => (
                       <MenuItem key={weapon.key} value={weapon.key}>
                         {weapon.name}
+                      </MenuItem>
+                    ))
+                  : null}
+
+                {/* 보조무기 옵션 */}
+                {selectedCategory === "shield"
+                  ? getSecondaryWeaponOptions().map((item) => (
+                      <MenuItem key={item.key} value={item.key}>
+                        {item.name}
+                      </MenuItem>
+                    ))
+                  : null}
+
+                {/* 투사체용 부 카테고리 */}
+                {selectedCategory === "projectiles"
+                  ? PROJECTILE_SUBCATEGORIES.map((projectile) => (
+                      <MenuItem key={projectile.key} value={projectile.key}>
+                        {projectile.name}
                       </MenuItem>
                     ))
                   : null}

@@ -240,7 +240,8 @@ export default function StatTable() {
           <Typography variant="body2" sx={{ fontWeight: "bold" }}>
             {isJobMagician ? "순수 마력" : "공격력"}
           </Typography>
-          {isJobMagician ? (() => {
+          {isJobMagician ? (
+            (() => {
               const pureMad = (equipStats.mad || 0) + (buffMAD || 0);
               const heroEchoBonus = heroEchoEnabled ? Math.floor(pureMad * 0.04) : 0;
               const buffWithBonus = (buffMAD || 0) + heroEchoBonus;
@@ -258,7 +259,8 @@ export default function StatTable() {
                   </Typography>
                 </>
               );
-            })() : (
+            })()
+          ) : (
             <>
               <Typography variant="body2" sx={{ textAlign: "center", fontSize: "0.875rem" }}>
                 {equipStats.attack}

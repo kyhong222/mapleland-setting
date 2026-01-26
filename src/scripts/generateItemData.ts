@@ -144,6 +144,32 @@ const CATEGORY_LIST: Array<{
     maxLevel: 120,
     outputDir: "weapons",
   },
+
+  // 소비 아이템 - 투사체
+  {
+    key: "thrownAmmo",
+    overallCategory: "Use",
+    category: "Projectile",
+    subCategory: "Thrown",
+    maxLevel: 120,
+    outputDir: "projectiles",
+  },
+  {
+    key: "arrowAmmo",
+    overallCategory: "Use",
+    category: "Projectile",
+    subCategory: "Arrow",
+    maxLevel: 120,
+    outputDir: "projectiles",
+  },
+  {
+    key: "crossbowBoltAmmo",
+    overallCategory: "Use",
+    category: "Projectile",
+    subCategory: "Crossbow bolt",
+    maxLevel: 120,
+    outputDir: "projectiles",
+  },
 ];
 
 const JOB_IDS = [0, 1, 2, 4, 8]; // 0: 공용, 1: 전사, 2: 마법사, 4: 궁수, 8: 도적
@@ -168,12 +194,65 @@ async function fetchItemNameKMS(itemId: number): Promise<string | null> {
     return null;
   }
 }
+
+async function fetchProjectilesFromAPI(
+  overallCategory: string,
+  category: string,
+  subCategory: string,
+): Promise<ItemData[]> {
+  try {
+    const params = new URLSearchParams({
+      startPosition: "0",
+      count: "10000",
+      overallCategoryFilter: overallCategory,
+      categoryFilter: category,
+      subCategoryFilter: subCategory,
+    });
+    const url = `${API_BASE_URL}?${params.toString()}`;
+    console.log(`Fetching: ${url}`); // 디버깅용
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      console.error(`Failed to fetch ${subCategory}`);
+      return [];
+    }
+
+    const data = (await response.json()) as Array<{
+      id: number;
+      name: string;
+      requiredLevel?: number;
+      metaInfo?: {
+        reqJob?: number;
+      };
+    }>;
+
+    // KMS에서 한글 이름 조회
+    const itemsWithKoreanNames = await Promise.all(
+      data.map(async (item) => {
+        const koreanName = await fetchItemNameKMS(item.id);
+        return {
+          id: item.id,
+          name: item.name,
+          koreanName: koreanName || "",
+          reqJob: 0, // 투사체는 공용
+          reqLevel: item.requiredLevel || 0,
+        };
+      }),
+    );
+
+    return itemsWithKoreanNames;
+  } catch (error) {
+    console.error(`Error fetching ${subCategory}:`, error);
+    return [];
+  }
+}
+
 async function fetchItemsFromAPI(
   overallCategory: string,
   category: string,
   subCategory: string,
   jobId: number,
-  maxLevel: number = 100
+  maxLevel: number = 100,
 ): Promise<ItemData[]> {
   try {
     const params = new URLSearchParams({
@@ -220,7 +299,7 @@ async function fetchItemsFromAPI(
           reqJob: item.metaInfo?.reqJob || jobId, // 0 = 공용, 1 = 전사, 2 = 마법사, 4 = 궁수, 8 = 도적
           reqLevel: item.requiredLevel || 0,
         };
-      })
+      }),
     );
 
     return itemsWithKoreanNames;
@@ -250,25 +329,31 @@ async function generateItemData() {
     const itemMap = new Map<number, ItemData>();
     const maxLevel = category.maxLevel ?? 100;
 
-    // 공용과 직업별 데이터 모두 조회
-    for (const jobId of JOB_IDS) {
-      const items = await fetchItemsFromAPI(
-        category.overallCategory,
-        category.category,
-        category.subCategory,
-        jobId,
-        maxLevel
-      );
-      items.forEach((item) => {
-        const existing = itemMap.get(item.id);
-        // 기존 아이템이 없거나, 기존이 reqJob=0인데 새로운 것이 reqJob!=0이면 덮어쓰기
-        if (!existing || (existing.reqJob === 0 && item.reqJob !== 0)) {
-          itemMap.set(item.id, item);
-        }
-      });
-    }
+    // 투사체(Projectile) 카테고리인 경우 별도 처리
+    if (category.category === "Projectile") {
+      const items = await fetchProjectilesFromAPI(category.overallCategory, category.category, category.subCategory);
+      allItems.push(...items);
+    } else {
+      // 공용과 직업별 데이터 모두 조회
+      for (const jobId of JOB_IDS) {
+        const items = await fetchItemsFromAPI(
+          category.overallCategory,
+          category.category,
+          category.subCategory,
+          jobId,
+          maxLevel,
+        );
+        items.forEach((item) => {
+          const existing = itemMap.get(item.id);
+          // 기존 아이템이 없거나, 기존이 reqJob=0인데 새로운 것이 reqJob!=0이면 덮어쓰기
+          if (!existing || (existing.reqJob === 0 && item.reqJob !== 0)) {
+            itemMap.set(item.id, item);
+          }
+        });
+      }
 
-    allItems.push(...itemMap.values());
+      allItems.push(...itemMap.values());
+    }
     allItems.sort((a, b) => a.id - b.id);
 
     // JSON 파일로 저장
