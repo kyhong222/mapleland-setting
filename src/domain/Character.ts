@@ -132,6 +132,15 @@ export class Character {
       int: item.stats.int,
       luk: item.stats.luk,
       mad: item.stats.mad,
+      pdef: item.stats.pdef,
+      mdef: item.stats.mdef,
+      acc: item.stats.acc,
+      eva: item.stats.eva,
+      macc: item.stats.macc,
+      speed: item.stats.speed,
+      jump: item.stats.jump,
+      hp: item.stats.hp,
+      mp: item.stats.mp,
     };
 
     this.equipments.set(targetSlot, equipment);
@@ -154,6 +163,11 @@ export class Character {
       mdef: 0,
       acc: 0,
       eva: 0,
+      macc: 0,
+      speed: 0,
+      jump: 0,
+      hp: 0,
+      mp: 0,
     };
 
     for (const item of this.equipments.values()) {
@@ -167,6 +181,11 @@ export class Character {
       summary.mdef += item.mdef ?? 0;
       summary.acc += item.acc ?? 0;
       summary.eva += item.eva ?? 0;
+      summary.macc += item.macc ?? 0;
+      summary.speed += item.speed ?? 0;
+      summary.jump += item.jump ?? 0;
+      summary.hp += item.hp ?? 0;
+      summary.mp += item.mp ?? 0;
     }
 
     return summary;
@@ -223,6 +242,11 @@ export class Character {
       mdef: 0,
       acc: 0,
       eva: 0,
+      macc: 0,
+      speed: 0,
+      jump: 0,
+      hp: 0,
+      mp: 0,
     };
   }
 
@@ -263,10 +287,18 @@ export class Character {
     return (bonusTable[mapleWarrior.level] || 0) / 100;
   }
 
-  getFinalStats(buff1Attack: number, buff2Attack: number): FinalStats {
+  /**
+   * 마법사 여부 확인
+   */
+  isMagician(): boolean {
+    return this.job?.engName === "magician";
+  }
+
+  getFinalStats(buff1Value: number, buff2Value: number): FinalStats {
     const equipStats = this.getEquipmentStats();
-    const buffStats = this.getBuffStats(buff1Attack, buff2Attack);
     const mapleWarriorBonus = this.getMapleWarriorBonus();
+    const heroEcho = this.buffs.get("heroEcho");
+    const heroEchoMultiplier = heroEcho?.enabled ? 1.04 : 1;
 
     // 주스탯 자동 계산 (StatTable과 동일한 로직)
     let pureStr = this.stats.pureStr;
@@ -276,7 +308,13 @@ export class Character {
 
     if (this.job) {
       const totalAP = 20 + this.stats.level * 5 + (this.stats.level >= 70 ? 5 : 0) + (this.stats.level >= 120 ? 5 : 0);
-      const mainStatKey = this.job.mainStat;
+
+      // 해적은 무기에 따라 주스탯이 다름
+      let mainStatKey = this.job.mainStat;
+      if (this.job.engName === "pirate") {
+        const weaponType = this.getWeaponType();
+        mainStatKey = weaponType === "건" ? "dex" : "str";
+      }
 
       // 주스탯이 아닌 스탯들의 합계
       const otherStatsSum =
@@ -294,36 +332,54 @@ export class Character {
       else if (mainStatKey === "luk") pureLuk = mainStatValue;
     }
 
+    // 메이플 용사 버프 스탯 (순스탯의 n%)
     const mapleWarriorStr = Math.floor(pureStr * mapleWarriorBonus);
     const mapleWarriorDex = Math.floor(pureDex * mapleWarriorBonus);
     const mapleWarriorInt = Math.floor(pureInt * mapleWarriorBonus);
     const mapleWarriorLuk = Math.floor(pureLuk * mapleWarriorBonus);
 
-    const totalStr = pureStr + equipStats.str + buffStats.str + mapleWarriorStr;
-    const totalDex = pureDex + equipStats.dex + buffStats.dex + mapleWarriorDex;
-    const totalInt = pureInt + equipStats.int + buffStats.int + mapleWarriorInt;
-    const totalLuk = pureLuk + equipStats.luk + buffStats.luk + mapleWarriorLuk;
-    const totalAttack = equipStats.attack + buffStats.attack;
+    // 총 어빌리티 = 순수 + 장비 + 메이플용사
+    const totalStr = pureStr + equipStats.str + mapleWarriorStr;
+    const totalDex = pureDex + equipStats.dex + mapleWarriorDex;
+    const totalInt = pureInt + equipStats.int + mapleWarriorInt;
+    const totalLuk = pureLuk + equipStats.luk + mapleWarriorLuk;
 
-    // 마력 계산: 장비 MAD + Int 스탯당 1 + 버프 MAD, 영웅의 메아리 4% 보너스 적용
-    const heroEcho = this.buffs.get("heroEcho");
-    const heroEchoMultiplier = heroEcho?.enabled ? 1.04 : 1;
+    // 버프1, 버프2는 마법사면 마력으로, 그 외엔 공격력으로
+    const isMage = this.isMagician();
+    const buffAttack = isMage ? 0 : buff1Value + buff2Value;
+    const buffMAD = isMage ? buff1Value + buff2Value : 0;
 
-    // 순수 마력 (장비 + 버프만, INT 스탯 제외)
-    const pureMad = (equipStats.mad || 0) + (this.stats.buffMAD || 0);
-    const pureMadWithBonus = Math.floor(pureMad * heroEchoMultiplier);
+    // 총 공격력 = int((장비공격력 + 버프1 + 버프2) * 영메배율)
+    const totalAttack = Math.floor((equipStats.attack + buffAttack) * heroEchoMultiplier);
 
-    // 총 마력 (순수 마력 + INT 스탯당 1)
-    const totalMAD = pureMadWithBonus + totalInt;
+    // 총 마력 = int((장비마력 + 버프1 + 버프2 + 인트마력) * 영메배율)
+    // 인트마력 = 총INT (1:1)
+    const totalMAD = Math.floor((equipStats.mad + buffMAD + totalInt) * heroEchoMultiplier);
 
+    // 주스탯 / 부스탯 결정
     let mainStat = 0;
     let subStat = 0;
 
     if (this.job) {
       const statMap = { str: totalStr, dex: totalDex, int: totalInt, luk: totalLuk };
-      mainStat = statMap[this.job.mainStat];
-      subStat = statMap[this.job.subStat];
+
+      if (this.job.engName === "pirate") {
+        const weaponType = this.getWeaponType();
+        if (weaponType === "건") {
+          mainStat = statMap["dex"];
+          subStat = statMap["str"];
+        } else {
+          mainStat = statMap["str"];
+          subStat = statMap["dex"];
+        }
+      } else {
+        mainStat = statMap[this.job.mainStat];
+        subStat = statMap[this.job.subStat];
+      }
     }
+
+    // 마법명중률 = int(총INT/10 + 총LUK/10) (마법사 전용)
+    const magicAccuracy = isMage ? Math.floor(totalInt / 10) + Math.floor(totalLuk / 10) : 0;
 
     return {
       totalStr,
@@ -334,6 +390,17 @@ export class Character {
       totalMAD,
       mainStat,
       subStat,
+      // 장비 스탯 (합산만)
+      acc: equipStats.acc,
+      eva: equipStats.eva,
+      pdef: equipStats.pdef,
+      mdef: equipStats.mdef,
+      speed: equipStats.speed,
+      jump: equipStats.jump,
+      hp: equipStats.hp,
+      mp: equipStats.mp,
+      // 마법명중률
+      magicAccuracy,
     };
   }
 }

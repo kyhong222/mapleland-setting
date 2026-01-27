@@ -43,7 +43,7 @@ export default function EquipTable({ onSlotClick }: EquipTableProps) {
   // 보조무기 활성화 여부 및 카테고리 결정
   const weapon = equipMap.get("무기");
   const oneHandedWeapons = ["한손검", "한손도끼", "한손둔기", "단검", "스태프", "완드"];
-  const isOneHanded = weapon && oneHandedWeapons.includes(weapon.type);
+  const isOneHanded = weapon?.type && oneHandedWeapons.includes(weapon.type);
   const isBow = weapon?.type === "활";
   const isCrossbow = weapon?.type === "석궁";
   const isDagger = weapon?.type === "아대";

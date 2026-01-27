@@ -145,3 +145,21 @@ export async function fetchAllArmorByJob(jobId: number): Promise<Record<ArmorFil
 
   return results as Record<ArmorFilterKey, MapleStoryItem[]>;
 }
+
+/**
+ * 아이템 ID로 단일 아이템 조회
+ * @param itemId - 아이템 ID
+ * @returns MapleStoryItem 또는 null
+ */
+export async function fetchItemById(itemId: number): Promise<MapleStoryItem | null> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/${itemId}`);
+    if (!response.ok) {
+      return null;
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("아이템 조회 오류:", error);
+    return null;
+  }
+}

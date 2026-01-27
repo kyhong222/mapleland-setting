@@ -12,15 +12,20 @@ export interface Equipment {
   mad?: number; // 마력 (Magic Attack Damage)
   pdef?: number; // 물리 방어력
   mdef?: number; // 마법 방어력
-  acc?: number; // 정확도
-  eva?: number; // 회피
+  acc?: number; // 명중률
+  eva?: number; // 회피율
+  macc?: number; // 마법명중률
+  speed?: number; // 이동속도
+  jump?: number; // 점프력
+  hp?: number; // 추가 HP
+  mp?: number; // 추가 MP
 }
 
 // 5*3 그리드 레이아웃 (null은 빈칸)
 export const EQUIPMENT_LAYOUT = [
   ["투구", "상의", "망토", "귀고리", "무기"],
   ["목걸이", "하의", "신발", "장갑", "보조무기"],
-  [null, "얼굴장식", "눈장식", "훈장", null],
+  ["벨트", "얼굴장식", "눈장식", "훈장", null],
 ] as const;
 
 export const EQUIPMENT_SLOTS = [
@@ -38,6 +43,7 @@ export const EQUIPMENT_SLOTS = [
   "얼굴장식",
   "눈장식",
   "훈장",
+  "벨트",
 ] as const;
 
 export type EquipmentSlot = (typeof EQUIPMENT_SLOTS)[number];

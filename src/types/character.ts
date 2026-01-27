@@ -22,6 +22,11 @@ export interface StatsSummary {
   mdef: number; // 마법방어력
   acc: number; // 명중률
   eva: number; // 회피율
+  macc: number; // 마법명중률
+  speed: number; // 이동속도
+  jump: number; // 점프력
+  hp: number; // 추가 HP
+  mp: number; // 추가 MP
 }
 
 /**
@@ -39,4 +44,17 @@ export interface FinalStats {
   // 주스탯 / 부스탯
   mainStat: number;
   subStat: number;
+
+  // 장비 스탯 (합산만)
+  acc: number; // 명중률
+  eva: number; // 회피율
+  pdef: number; // 물리방어력
+  mdef: number; // 마법방어력
+  speed: number; // 이동속도
+  jump: number; // 점프력
+  hp: number; // 추가 HP
+  mp: number; // 추가 MP
+
+  // 마법명중률 (마법사 전용, 계산식: int(총INT/10 + 총LUK/10))
+  magicAccuracy: number;
 }

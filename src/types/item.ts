@@ -21,7 +21,9 @@ export type ItemType =
   | "표창"
   | "화살"
   | "석궁화살"
-  | "방패";
+  | "방패"
+  | "너클"
+  | "건";
 
 // 아이템 스탯 정의
 export interface ItemStats {
@@ -35,6 +37,11 @@ export interface ItemStats {
   mdef?: number; // 마법방어력 (Magical Defense)
   acc?: number; // 명중률 (Accuracy)
   eva?: number; // 회피율 (Evasion)
+  macc?: number; // 마법명중률 (Magic Accuracy)
+  speed?: number; // 이동속도 (Speed)
+  jump?: number; // 점프력 (Jump)
+  hp?: number; // 추가 HP
+  mp?: number; // 추가 MP
 }
 
 // 아이템 필요 스탯 정의
@@ -55,3 +62,15 @@ export interface Item {
   stats: ItemStats;
   requireStats: RequireStats;
 }
+
+// PreItem: API 호출 전 사전 정의된 아이템 (data/items/*.json)
+export interface PreItem {
+  id: number;
+  name: string;
+  koreanName: string;
+  reqJob: number;
+  reqLevel: number;
+}
+
+// PostItem: 패치된/API 미지원 아이템 (Item과 동일한 구조)
+export type PostItem = Item;

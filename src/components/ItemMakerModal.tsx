@@ -11,11 +11,9 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  IconButton,
+  CircularProgress,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import CheckIcon from "@mui/icons-material/Check";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useCharacter } from "../contexts/CharacterContext";
 import type { Item, ItemType } from "../types/item";
 import type { EquipmentSlot } from "../types/equipment";
@@ -243,7 +241,8 @@ export default function ItemMakerModal({ open, selectedCategory: externalCategor
   });
 
   const [itemIcon, setItemIcon] = useState<string>("");
-  const [editingStatKey, setEditingStatKey] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const prevOpenRef = useRef<boolean>(false);
 
   const job = character.getJob();
   const jobId = job ? JOB_ID_MAP[job.engName] : null;
@@ -293,9 +292,45 @@ export default function ItemMakerModal({ open, selectedCategory: externalCategor
     onClose();
   };
 
+  // 모달이 열릴 때 초기화
+  useEffect(() => {
+    if (open && !prevOpenRef.current) {
+      // 모달이 새로 열릴 때 모든 상태 초기화
+      setInternalCategory(externalCategory || "");
+      setSelectedWeaponSubCategory("");
+      setSelectedProjectileSubCategory("");
+      setSelectedItemId("");
+      setSelectedItem(null);
+      setCategoryItems([]);
+      setKoreanName("");
+      setEditedStats({
+        attack: 0,
+        str: 0,
+        dex: 0,
+        int: 0,
+        luk: 0,
+        mad: 0,
+        pdef: 0,
+        mdef: 0,
+        acc: 0,
+        eva: 0,
+      });
+      setEditedRequireStats({
+        level: 0,
+        str: 0,
+        dex: 0,
+        int: 0,
+        luk: 0,
+      });
+      setItemIcon("");
+      setIsLoading(false);
+    }
+    prevOpenRef.current = open;
+  }, [open, externalCategory]);
+
   // externalCategory가 변경되면 internalCategory 업데이트
   useEffect(() => {
-    if (externalCategory && externalCategory !== "") {
+    if (externalCategory && externalCategory !== "" && open) {
       setInternalCategory(externalCategory);
       setSelectedItemId("");
       setSelectedItem(null);
@@ -324,7 +359,7 @@ export default function ItemMakerModal({ open, selectedCategory: externalCategor
           "아대": "thrownAmmo",
         };
 
-        const subCategory = weaponTypeMap[weapon.type];
+        const subCategory = weapon.type ? weaponTypeMap[weapon.type] : undefined;
         if (subCategory) {
           setSelectedProjectileSubCategory(subCategory);
         } else {
@@ -496,6 +531,9 @@ export default function ItemMakerModal({ open, selectedCategory: externalCategor
     console.log("Loading details for item:", selectedItem);
 
     const loadDetails = async () => {
+      setIsLoading(true);
+      setItemIcon(""); // 아이콘 초기화
+
       try {
         const details = await fetchItemDetails(selectedItem.id);
         console.log("Fetched details:", details);
@@ -596,6 +634,8 @@ export default function ItemMakerModal({ open, selectedCategory: externalCategor
         }
       } catch (error) {
         console.error("Failed to fetch item details:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -835,21 +875,38 @@ export default function ItemMakerModal({ open, selectedCategory: externalCategor
               {/* 왼쪽: 아이템 정보 */}
               <Box sx={{ flex: 1 }}>
                 {/* 아이콘 */}
-                {itemIcon && (
-                  <Box sx={{ mb: 2, textAlign: "center" }}>
-                    <img
-                      src={itemIcon}
-                      alt={koreanName}
-                      style={{
-                        width: 200,
-                        height: 200,
-                        objectFit: "contain",
-                        border: "2px solid #999",
-                        padding: "4px",
-                      }}
-                    />
+                <Box sx={{ mb: 2, textAlign: "center" }}>
+                  <Box
+                    sx={{
+                      width: 200,
+                      height: 200,
+                      border: "2px solid #999",
+                      padding: "4px",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      bgcolor: "#fafafa",
+                    }}
+                  >
+                    {isLoading ? (
+                      <CircularProgress size={60} />
+                    ) : itemIcon ? (
+                      <img
+                        src={itemIcon}
+                        alt={koreanName}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "contain",
+                        }}
+                      />
+                    ) : (
+                      <Typography variant="body2" color="text.secondary">
+                        아이템을 선택하세요
+                      </Typography>
+                    )}
                   </Box>
-                )}
+                </Box>
 
                 <Typography variant="body1" sx={{ fontWeight: "bold", mb: 2 }}>
                   {koreanName} (ID: {selectedItem.id})
@@ -904,59 +961,31 @@ export default function ItemMakerModal({ open, selectedCategory: externalCategor
                             key={stat.key}
                             sx={{
                               display: "flex",
-                              gap: 0,
-                              mb: 1,
+                              gap: 1,
+                              mb: 0.5,
                               alignItems: "center",
-                              borderBottom: "1px solid #ccc",
-                              pb: 0.5,
                             }}
                           >
-                            <Typography sx={{ width: 70, fontSize: "0.85rem" }}>{stat.label}</Typography>
-                            {editingStatKey === stat.key ? (
-                              <>
-                                <TextField
-                                  type="number"
-                                  size="small"
-                                  autoFocus
-                                  value={editedStats[stat.key as keyof typeof editedStats] ?? 0}
-                                  onChange={(e) =>
-                                    setEditedStats({
-                                      ...editedStats,
-                                      [stat.key]: parseInt(e.target.value) || 0,
-                                    })
-                                  }
-                                  onBlur={() => setEditingStatKey(null)}
-                                  onKeyDown={(e) => {
-                                    if (e.key === "Enter") {
-                                      setEditingStatKey(null);
-                                    }
-                                  }}
-                                  variant="standard"
-                                  sx={{ flex: 1, textAlign: "right" }}
-                                  inputProps={{ style: { textAlign: "right" } }}
-                                />
-                                <IconButton
-                                  size="small"
-                                  onClick={() => setEditingStatKey(null)}
-                                  sx={{ padding: "0px", minWidth: "auto", ml: 1.5 }}
-                                >
-                                  <CheckIcon sx={{ fontSize: "1rem" }} />
-                                </IconButton>
-                              </>
-                            ) : (
-                              <>
-                                <Typography sx={{ flex: 1, fontSize: "0.85rem", textAlign: "right" }}>
-                                  {editedStats[stat.key as keyof typeof editedStats] ?? 0}
-                                </Typography>
-                                <IconButton
-                                  size="small"
-                                  onClick={() => setEditingStatKey(stat.key)}
-                                  sx={{ padding: "0px", minWidth: "auto", ml: 1.5 }}
-                                >
-                                  <EditIcon sx={{ fontSize: "1rem" }} />
-                                </IconButton>
-                              </>
-                            )}
+                            <Typography sx={{ width: 50, fontSize: "0.85rem" }}>{stat.label}</Typography>
+                            <TextField
+                              type="number"
+                              size="small"
+                              value={editedStats[stat.key as keyof typeof editedStats] ?? 0}
+                              onChange={(e) =>
+                                setEditedStats({
+                                  ...editedStats,
+                                  [stat.key]: parseInt(e.target.value) || 0,
+                                })
+                              }
+                              sx={{
+                                flex: 1,
+                                "& .MuiInputBase-input": {
+                                  textAlign: "right",
+                                  padding: "4px 8px",
+                                  fontSize: "0.85rem",
+                                },
+                              }}
+                            />
                           </Box>
                         ))}
                       </Box>
@@ -964,68 +993,40 @@ export default function ItemMakerModal({ open, selectedCategory: externalCategor
                       {/* 오른쪽: 물리방어력, 마법방어력, 명중률, 회피율 */}
                       <Box sx={{ flex: 1 }}>
                         {[
-                          { key: "pdef", label: "물리방어력" },
-                          { key: "mdef", label: "마법방어력" },
-                          { key: "acc", label: "명중률" },
-                          { key: "eva", label: "회피율" },
+                          { key: "pdef", label: "물방" },
+                          { key: "mdef", label: "마방" },
+                          { key: "acc", label: "명중" },
+                          { key: "eva", label: "회피" },
                         ].map((stat) => (
                           <Box
                             key={stat.key}
                             sx={{
                               display: "flex",
-                              gap: 0,
-                              mb: 1,
+                              gap: 1,
+                              mb: 0.5,
                               alignItems: "center",
-                              borderBottom: "1px solid #ccc",
-                              pb: 0.5,
                             }}
                           >
-                            <Typography sx={{ width: 70, fontSize: "0.85rem" }}>{stat.label}</Typography>
-                            {editingStatKey === stat.key ? (
-                              <>
-                                <TextField
-                                  type="number"
-                                  size="small"
-                                  autoFocus
-                                  value={editedStats[stat.key as keyof typeof editedStats] ?? 0}
-                                  onChange={(e) =>
-                                    setEditedStats({
-                                      ...editedStats,
-                                      [stat.key]: parseInt(e.target.value) || 0,
-                                    })
-                                  }
-                                  onBlur={() => setEditingStatKey(null)}
-                                  onKeyDown={(e) => {
-                                    if (e.key === "Enter") {
-                                      setEditingStatKey(null);
-                                    }
-                                  }}
-                                  variant="standard"
-                                  sx={{ flex: 1, textAlign: "right" }}
-                                  inputProps={{ style: { textAlign: "right" } }}
-                                />
-                                <IconButton
-                                  size="small"
-                                  onClick={() => setEditingStatKey(null)}
-                                  sx={{ padding: "0px", minWidth: "auto", ml: 1.5 }}
-                                >
-                                  <CheckIcon sx={{ fontSize: "1rem" }} />
-                                </IconButton>
-                              </>
-                            ) : (
-                              <>
-                                <Typography sx={{ flex: 1, fontSize: "0.85rem", textAlign: "right" }}>
-                                  {editedStats[stat.key as keyof typeof editedStats] ?? 0}
-                                </Typography>
-                                <IconButton
-                                  size="small"
-                                  onClick={() => setEditingStatKey(stat.key)}
-                                  sx={{ padding: "0px", minWidth: "auto", ml: 1.5 }}
-                                >
-                                  <EditIcon sx={{ fontSize: "1rem" }} />
-                                </IconButton>
-                              </>
-                            )}
+                            <Typography sx={{ width: 50, fontSize: "0.85rem" }}>{stat.label}</Typography>
+                            <TextField
+                              type="number"
+                              size="small"
+                              value={editedStats[stat.key as keyof typeof editedStats] ?? 0}
+                              onChange={(e) =>
+                                setEditedStats({
+                                  ...editedStats,
+                                  [stat.key]: parseInt(e.target.value) || 0,
+                                })
+                              }
+                              sx={{
+                                flex: 1,
+                                "& .MuiInputBase-input": {
+                                  textAlign: "right",
+                                  padding: "4px 8px",
+                                  fontSize: "0.85rem",
+                                },
+                              }}
+                            />
                           </Box>
                         ))}
                       </Box>
