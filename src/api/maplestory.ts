@@ -161,7 +161,7 @@ export async function fetchAllArmorByJob(jobId: number): Promise<Record<ArmorFil
  */
 export async function fetchItemIcon(itemId: number): Promise<string | null> {
   try {
-    const response = await fetch(`${API_BASE_URL}/${itemId}/icon`);
+    const response = await fetch(`${API_BASE_URL}/${itemId}/icon?resize=5`);
     if (!response.ok) {
       throw new Error(`아이콘 조회 실패: ${response.statusText}`);
     }

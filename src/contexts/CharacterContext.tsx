@@ -4,7 +4,16 @@ import { Character } from "../domain/Character";
 import type { Item } from "../types/item";
 import type { Job } from "../types/job";
 import type { EquipmentSlot } from "../types/equipment";
-import { saveCharacter, getSavedCharacters, type SavedCharacterData } from "../utils/characterStorage";
+import mastery2Data from "../data/buff/mastery/mastery2.json";
+import type { MasterySkill } from "../types/mastery";
+import {
+  saveSlotData,
+  getSlotData,
+  deleteSlotData,
+  getSlotSummaries as getSlotSummariesFromStorage,
+  setLastActive,
+  type SavedCharacterData,
+} from "../utils/characterStorage";
 
 interface CharacterContextValue {
   character: Character;
@@ -33,6 +42,7 @@ interface CharacterContextValue {
   // Buff attack values (외부 상태)
   buff1Attack: number;
   buff2Attack: number;
+  masteryAttack: number;
 
   // Buff selection info
   buff1Label: string;
@@ -52,6 +62,7 @@ interface CharacterContextValue {
   // Mastery
   setMastery1: (value: number) => void;
   setMastery2: (value: number) => void;
+  setMasteryAttack: (value: number) => void;
   mastery1: number;
   mastery2: number;
 
@@ -59,23 +70,50 @@ interface CharacterContextValue {
   setBuffMAD: (mad: number) => void;
   buffMAD: number;
 
-  // Save/Load
+  // Slot system
+  currentSlotIdx: number;
+  setCurrentSlotIdx: (idx: number) => void;
   saveCurrentCharacter: () => SavedCharacterData | null;
   loadCharacter: (data: SavedCharacterData) => void;
-  getSavedList: () => SavedCharacterData[];
+  loadSlot: (slotIdx: number) => void;
+  deleteSlot: (slotIdx: number) => void;
+  getSlotSummaries: () => (SavedCharacterData | null)[];
 }
 
 const CharacterContext = createContext<CharacterContextValue | null>(null);
+
+const mastery2Skills = mastery2Data as MasterySkill[];
+
+const getMastery2SkillByWeaponType = (weaponType: string | null): MasterySkill | null => {
+  if (weaponType === "활") {
+    return mastery2Skills.find((m) => m.koreanName === "보우 엑스퍼트") || null;
+  }
+  if (weaponType === "석궁") {
+    return mastery2Skills.find((m) => m.koreanName === "크로스보우 엑스퍼트") || null;
+  }
+  if (weaponType === "창" || weaponType === "폴암") {
+    return mastery2Skills.find((m) => m.koreanName === "비홀더") || null;
+  }
+  return null;
+};
+
+const getMastery2AttackByLevel = (weaponType: string | null, level: number): number => {
+  const skill = getMastery2SkillByWeaponType(weaponType);
+  const prop = skill?.properties[level];
+  return prop?.att ?? 0;
+};
 
 export function CharacterProvider({ children }: { children: ReactNode }) {
   const [character] = useState(() => new Character());
   const [version, setVersion] = useState(0);
   const [buff1Attack, setBuff1AttackState] = useState(0);
   const [buff2Attack, setBuff2AttackState] = useState(0);
-  const [mastery1, setMastery1State] = useState(0);
-  const [mastery2, setMastery2State] = useState(0);
+  const [masteryAttack, setMasteryAttack] = useState(0);
+  const [mastery1, setMastery1State] = useState(20); // mastery level (0-20)
+  const [mastery2, setMastery2State] = useState(10); // mastery level (varies: bow/crossbow=30, spear/polearm=10)
   const [buffMAD, setBuffMADState] = useState(0);
   const [heroEchoEnabled, setHeroEchoEnabledState] = useState(false);
+  const [currentSlotIdx, setCurrentSlotIdxState] = useState(0);
 
   // Buff selection states
   const [buff1Label, setBuff1LabelState] = useState("버프 선택");
@@ -100,6 +138,33 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
 
   const setJob = useCallback(
     (job: Job | null) => {
+      // 장비 전체 해제
+      const currentEquipments = character.getEquipments();
+      currentEquipments.forEach((eq) => {
+        character.unequip(eq.slot as EquipmentSlot);
+      });
+
+      // 버프 초기화
+      character.setBuffLevel("mapleWarrior", 0);
+      character.setBuffEnabled("mapleWarrior", false);
+      character.setBuffEnabled("heroEcho", false);
+      setBuff1AttackState(0);
+      setBuff2AttackState(0);
+      setMastery1State(20); // mastery1 maxLevel
+      setMastery2State(10); // mastery2 default (lowest maxLevel)
+      setMasteryAttack(0);
+      setBuffMADState(0);
+      setHeroEchoEnabledState(false);
+      setBuff1LabelState("버프 선택");
+      setBuff1IconState(null);
+      setBuff1IsManualState(false);
+      setBuff2LabelState("버프 선택");
+      setBuff2IconState(null);
+      setBuff2IsManualState(false);
+
+      // 슬롯 초기화
+      setCurrentSlotIdxState(0);
+
       character.setJob(job);
       refresh();
     },
@@ -118,6 +183,21 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
   const equipItem = useCallback(
     (item: Item) => {
       const result = character.equip(item);
+      
+      // 무기 장착 시 mastery2를 해당 무기의 maxLevel로 설정
+      if (item.slot === "무기") {
+        const weaponType = item.type;
+        const skill = getMastery2SkillByWeaponType(weaponType);
+        if (skill) {
+          const nextLevel = skill.properties.length - 1;
+          setMastery2State(nextLevel);
+          setMasteryAttack(getMastery2AttackByLevel(weaponType, nextLevel));
+        } else {
+          setMastery2State(0);
+          setMasteryAttack(0);
+        }
+      }
+      
       refresh();
       return result;
     },
@@ -127,6 +207,10 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
   const unequipItem = useCallback(
     (slot: EquipmentSlot) => {
       character.unequip(slot);
+      if (slot === "무기") {
+        setMastery2State(0);
+        setMasteryAttack(0);
+      }
       refresh();
     },
     [character, refresh],
@@ -187,6 +271,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
   const setMastery1 = useCallback(
     (value: number) => {
       setMastery1State(value);
+      // mastery1은 att 필드가 없으므로 공격력 추가 없음
       refresh();
     },
     [refresh],
@@ -195,9 +280,14 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
   const setMastery2 = useCallback(
     (value: number) => {
       setMastery2State(value);
+      
+      // mastery2 attack 계산
+      const weaponType = character.getWeaponType();
+      setMasteryAttack(getMastery2AttackByLevel(weaponType, value));
+      
       refresh();
     },
-    [refresh],
+    [character, refresh],
   );
 
   const setBuffMAD = useCallback(
@@ -210,7 +300,84 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     [character, refresh],
   );
 
+  const setCurrentSlotIdx = useCallback(
+    (idx: number) => {
+      setCurrentSlotIdxState(idx);
+    },
+    [],
+  );
+
   // Save/Load
+  const loadCharacter = useCallback(
+    (data: SavedCharacterData) => {
+      // 레벨과 순스텟 복원
+      character.setLevel(data.level);
+      character.setPureStat("str", data.pureStr);
+      character.setPureStat("dex", data.pureDex);
+      character.setPureStat("int", data.pureInt);
+      character.setPureStat("luk", data.pureLuk);
+
+      // 모든 장비 해제 후 재장착
+      const currentEquipments = character.getEquipments();
+      currentEquipments.forEach((eq) => {
+        character.unequip(eq.slot as EquipmentSlot);
+      });
+
+      // 저장된 장비 장착
+      data.equipments.forEach((eq) => {
+        const item: Item = {
+          id: eq.id,
+          name: eq.name || "",
+          icon: eq.icon,
+          slot: eq.slot as EquipmentSlot,
+          type: (eq.type || "방어구") as Item["type"],
+          stats: {
+            attack: eq.attack || 0,
+            str: eq.str || 0,
+            dex: eq.dex || 0,
+            int: eq.int || 0,
+            luk: eq.luk || 0,
+          },
+          requireStats: {
+            level: 0,
+            str: 0,
+            dex: 0,
+            int: 0,
+            luk: 0,
+          },
+        };
+        character.equip(item);
+      });
+
+      // 버프 정보 복원
+      if (data.buffs) {
+        character.setBuffLevel("mapleWarrior", data.buffs.mapleWarriorLevel);
+        character.setBuffEnabled("mapleWarrior", data.buffs.mapleWarriorLevel > 0);
+        setBuff1AttackState(data.buffs.buff1Attack);
+        setBuff2AttackState(data.buffs.buff2Attack);
+        character.setBuffEnabled("heroEcho", data.buffs.heroEchoEnabled);
+        setHeroEchoEnabledState(data.buffs.heroEchoEnabled);
+        setMastery1State(data.buffs.mastery1);
+        setMastery2State(data.buffs.mastery2);
+        if (data.buffs.buffMAD !== undefined) setBuffMADState(data.buffs.buffMAD);
+        // buff 선택 정보 복원
+        if (data.buffs.buff1Label) setBuff1LabelState(data.buffs.buff1Label);
+        if (data.buffs.buff1Icon !== undefined) setBuff1IconState(data.buffs.buff1Icon);
+        if (data.buffs.buff1IsManual !== undefined) setBuff1IsManualState(data.buffs.buff1IsManual);
+        if (data.buffs.buff2Label) setBuff2LabelState(data.buffs.buff2Label);
+        if (data.buffs.buff2Icon !== undefined) setBuff2IconState(data.buffs.buff2Icon);
+        if (data.buffs.buff2IsManual !== undefined) setBuff2IsManualState(data.buffs.buff2IsManual);
+      }
+
+      const weaponType = character.getWeaponType();
+      const mastery2Level = data.buffs?.mastery2 ?? 0;
+      setMasteryAttack(getMastery2AttackByLevel(weaponType, mastery2Level));
+
+      refresh();
+    },
+    [character, refresh],
+  );
+
   const saveCurrentCharacter = useCallback(() => {
     const job = character.getJob();
     if (!job) {
@@ -226,7 +393,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     const mapleWarrior = character.getBuff("mapleWarrior");
     const heroEcho = character.getBuff("heroEcho");
 
-    const saved = saveCharacter({
+    const saved = saveSlotData(currentSlotIdx, {
       jobEngName: job.engName,
       level: stats.level,
       pureStr: stats.pureStr,
@@ -256,6 +423,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     return saved;
   }, [
     character,
+    currentSlotIdx,
     buff1Attack,
     buff2Attack,
     mastery1,
@@ -269,74 +437,58 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     buff2IsManual,
   ]);
 
-  const loadCharacter = useCallback(
-    (data: SavedCharacterData) => {
-      // 레벨과 순스텟 복원
-      character.setLevel(data.level);
-      character.setPureStat("str", data.pureStr);
-      character.setPureStat("dex", data.pureDex);
-      character.setPureStat("int", data.pureInt);
-      character.setPureStat("luk", data.pureLuk);
+  const loadSlot = useCallback(
+    (slotIdx: number) => {
+      setCurrentSlotIdxState(slotIdx);
+      const job = character.getJob();
+      if (!job) return;
 
-      // 모든 장비 해제 후 재장착
-      const currentEquipments = character.getEquipments();
-      currentEquipments.forEach((eq) => {
-        character.unequip(eq.slot as EquipmentSlot);
-      });
+      setLastActive(job.engName, slotIdx);
 
-      // 저장된 장비 장착
-      data.equipments.forEach((eq) => {
-        const item: Item = {
-          id: eq.id,
-          name: eq.name || "",
-          slot: eq.slot as EquipmentSlot,
-          type: (eq.type || "방어구") as Item["type"],
-          stats: {
-            attack: eq.attack || 0,
-            str: eq.str || 0,
-            dex: eq.dex || 0,
-            int: eq.int || 0,
-            luk: eq.luk || 0,
-          },
-          requireStats: {
-            level: 0,
-            str: 0,
-            dex: 0,
-            int: 0,
-            luk: 0,
-          },
-        };
-        character.equip(item);
-      });
-
-      // 버프 정보 복원
-      if (data.buffs) {
-        character.setBuffLevel("mapleWarrior", data.buffs.mapleWarriorLevel);
-        character.setBuffEnabled("mapleWarrior", data.buffs.mapleWarriorLevel > 0);
-        setBuff1AttackState(data.buffs.buff1Attack);
-        setBuff2AttackState(data.buffs.buff2Attack);
-        character.setBuffEnabled("heroEcho", data.buffs.heroEchoEnabled);
-        setMastery1State(data.buffs.mastery1);
-        setMastery2State(data.buffs.mastery2);
-        if (data.buffs.buffMAD !== undefined) setBuffMADState(data.buffs.buffMAD);
-        // buff 선택 정보 복원
-        if (data.buffs.buff1Label) setBuff1LabelState(data.buffs.buff1Label);
-        if (data.buffs.buff1Icon !== undefined) setBuff1IconState(data.buffs.buff1Icon);
-        if (data.buffs.buff1IsManual !== undefined) setBuff1IsManualState(data.buffs.buff1IsManual);
-        if (data.buffs.buff2Label) setBuff2LabelState(data.buffs.buff2Label);
-        if (data.buffs.buff2Icon !== undefined) setBuff2IconState(data.buffs.buff2Icon);
-        if (data.buffs.buff2IsManual !== undefined) setBuff2IsManualState(data.buffs.buff2IsManual);
+      const data = getSlotData(job.engName, slotIdx);
+      if (data) {
+        loadCharacter(data);
+      } else {
+        // 빈 슬롯: 장비 전체 해제 + 버프 초기화
+        const currentEquipments = character.getEquipments();
+        currentEquipments.forEach((eq) => {
+          character.unequip(eq.slot as EquipmentSlot);
+        });
+        character.setBuffLevel("mapleWarrior", 0);
+        character.setBuffEnabled("mapleWarrior", false);
+        character.setBuffEnabled("heroEcho", false);
+        setBuff1AttackState(0);
+        setBuff2AttackState(0);
+        setMastery1State(60);
+        setMastery2State(0);
+        setBuffMADState(0);
+        setHeroEchoEnabledState(false);
+        setBuff1LabelState("버프 선택");
+        setBuff1IconState(null);
+        setBuff1IsManualState(false);
+        setBuff2LabelState("버프 선택");
+        setBuff2IconState(null);
+        setBuff2IsManualState(false);
+        refresh();
       }
+    },
+    [character, loadCharacter, refresh],
+  );
 
+  const deleteSlot = useCallback(
+    (slotIdx: number) => {
+      const job = character.getJob();
+      if (!job) return;
+      deleteSlotData(job.engName, slotIdx);
       refresh();
     },
     [character, refresh],
   );
 
-  const getSavedList = useCallback(() => {
+  const getSlotSummaries = useCallback(() => {
     const job = character.getJob();
-    if (!job) return [];
-    return getSavedCharacters(job.engName);
+    if (!job) return [null, null, null, null, null] as (SavedCharacterData | null)[];
+    return getSlotSummariesFromStorage(job.engName);
   }, [character]);
 
   return (
@@ -358,6 +510,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
         heroEchoEnabled,
         buff1Attack,
         buff2Attack,
+        masteryAttack,
         buff1Label,
         setBuff1Label: setBuff1LabelState,
         buff1Icon,
@@ -372,13 +525,18 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
         setBuff2IsManual: setBuff2IsManualState,
         setMastery1,
         setMastery2,
+        setMasteryAttack,
         mastery1,
         mastery2,
         setBuffMAD,
         buffMAD,
+        currentSlotIdx,
+        setCurrentSlotIdx,
         saveCurrentCharacter,
         loadCharacter,
-        getSavedList,
+        loadSlot,
+        deleteSlot,
+        getSlotSummaries,
       }}
     >
       {children}

@@ -31,70 +31,123 @@ export interface SavedCharacterData {
   };
 }
 
-const STORAGE_KEY_PREFIX = "mapleland_character_";
+export interface LastActive {
+  jobEngName: string;
+  slotIdx: number; // 0-4
+}
+
+const SLOT_KEY_PREFIX = "mapleland_slot_";
+const LAST_ACTIVE_KEY = "mapleland_last_active";
+const MIGRATION_KEY = "mapleland_storage_migrated";
+const LEGACY_KEY_PREFIX = "mapleland_character_";
+export const MAX_SLOTS = 5;
 
 /**
- * 직업별 저장된 캐릭터 목록 조회
+ * 특정 슬롯의 저장 데이터 조회
  */
-export function getSavedCharacters(jobEngName: string): SavedCharacterData[] {
-  const key = STORAGE_KEY_PREFIX + jobEngName;
+export function getSlotData(jobEngName: string, slotIdx: number): SavedCharacterData | null {
+  const key = `${SLOT_KEY_PREFIX}${jobEngName}_${slotIdx}`;
   const data = localStorage.getItem(key);
-  if (!data) return [];
-
+  if (!data) return null;
   try {
     return JSON.parse(data);
   } catch {
-    return [];
+    return null;
   }
 }
 
 /**
- * 캐릭터 세팅 저장
+ * 특정 슬롯에 캐릭터 데이터 저장
  */
-export function saveCharacter(data: Omit<SavedCharacterData, "id" | "timestamp">): SavedCharacterData {
-  const key = STORAGE_KEY_PREFIX + data.jobEngName;
-  const existing = getSavedCharacters(data.jobEngName);
+export function saveSlotData(
+  slotIdx: number,
+  data: Omit<SavedCharacterData, "id" | "timestamp">
+): SavedCharacterData {
+  const key = `${SLOT_KEY_PREFIX}${data.jobEngName}_${slotIdx}`;
 
   const newSave: SavedCharacterData = {
     ...data,
-    id: `${data.jobEngName}_${Date.now()}`,
+    id: `${data.jobEngName}_slot${slotIdx}_${Date.now()}`,
     timestamp: Date.now(),
   };
 
-  const updated = [...existing, newSave];
-  localStorage.setItem(key, JSON.stringify(updated));
+  localStorage.setItem(key, JSON.stringify(newSave));
+  setLastActive(data.jobEngName, slotIdx);
 
   return newSave;
 }
 
 /**
- * 저장된 캐릭터 삭제
+ * 특정 슬롯 데이터 삭제
  */
-export function deleteSavedCharacter(jobEngName: string, id: string): void {
-  const key = STORAGE_KEY_PREFIX + jobEngName;
-  const existing = getSavedCharacters(jobEngName);
-  const filtered = existing.filter((save) => save.id !== id);
+export function deleteSlotData(jobEngName: string, slotIdx: number): void {
+  const key = `${SLOT_KEY_PREFIX}${jobEngName}_${slotIdx}`;
+  localStorage.removeItem(key);
+}
 
-  if (filtered.length > 0) {
-    localStorage.setItem(key, JSON.stringify(filtered));
-  } else {
-    localStorage.removeItem(key);
+/**
+ * 직업별 5개 슬롯 요약 조회
+ */
+export function getSlotSummaries(jobEngName: string): (SavedCharacterData | null)[] {
+  const summaries: (SavedCharacterData | null)[] = [];
+  for (let i = 0; i < MAX_SLOTS; i++) {
+    summaries.push(getSlotData(jobEngName, i));
+  }
+  return summaries;
+}
+
+/**
+ * 마지막 활성 직업-슬롯 쌍 조회
+ */
+export function getLastActive(): LastActive | null {
+  const data = localStorage.getItem(LAST_ACTIVE_KEY);
+  if (!data) return null;
+  try {
+    return JSON.parse(data);
+  } catch {
+    return null;
   }
 }
 
 /**
- * 전체 저장 목록 조회 (모든 직업)
+ * 마지막 활성 직업-슬롯 쌍 저장
  */
-export function getAllSavedCharacters(): Record<string, SavedCharacterData[]> {
-  const result: Record<string, SavedCharacterData[]> = {};
+export function setLastActive(jobEngName: string, slotIdx: number): void {
+  localStorage.setItem(LAST_ACTIVE_KEY, JSON.stringify({ jobEngName, slotIdx }));
+}
+
+/**
+ * 기존 append 기반 저장 데이터를 슬롯 기반으로 마이그레이션
+ */
+export function migrateFromLegacyStorage(): void {
+  if (localStorage.getItem(MIGRATION_KEY)) return;
+
+  let firstJob: string | null = null;
 
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
-    if (key && key.startsWith(STORAGE_KEY_PREFIX)) {
-      const jobEngName = key.replace(STORAGE_KEY_PREFIX, "");
-      result[jobEngName] = getSavedCharacters(jobEngName);
+    if (key && key.startsWith(LEGACY_KEY_PREFIX)) {
+      const jobEngName = key.replace(LEGACY_KEY_PREFIX, "");
+      if (!firstJob) firstJob = jobEngName;
+
+      try {
+        const arr: SavedCharacterData[] = JSON.parse(localStorage.getItem(key) || "[]");
+        const toMigrate = arr.slice(0, MAX_SLOTS);
+        toMigrate.forEach((save, idx) => {
+          const slotKey = `${SLOT_KEY_PREFIX}${jobEngName}_${idx}`;
+          localStorage.setItem(slotKey, JSON.stringify(save));
+        });
+      } catch {
+        // 파싱 실패 시 무시
+      }
+
+      localStorage.removeItem(key);
     }
   }
 
-  return result;
+  if (firstJob) {
+    setLastActive(firstJob, 0);
+  }
+
+  localStorage.setItem(MIGRATION_KEY, "true");
 }

@@ -1,4 +1,5 @@
 import { Box, Button, Typography } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { CharacterProvider, useCharacter } from "./contexts/CharacterContext";
 import TopAppBar from "./components/TopAppBar";
 import StatTable from "./components/StatTable";
@@ -6,21 +7,47 @@ import EquipTable from "./components/EquipTable";
 import BuffTable from "./components/BuffTable";
 import DamageTable from "./components/DamageTable";
 import ItemMakerModal from "./components/ItemMakerModal";
-import { JOBS } from "./types/job";
-import { useState } from "react";
+import { JOBS, JOB_COLORS } from "./types/job";
+import { useState, useEffect, useRef, useMemo } from "react";
+import { migrateFromLegacyStorage, getLastActive, getSlotData } from "./utils/characterStorage";
 import "./App.css";
 
 function AppContent() {
-  const { character, setJob } = useCharacter();
+  const { character, setJob, loadCharacter, setCurrentSlotIdx, loadSlot } = useCharacter();
   const [selectedCategory, setSelectedCategory] = useState("");
   const [itemMakerOpen, setItemMakerOpen] = useState(false);
+  const initializedRef = useRef(false);
 
   const currentJob = character.getJob();
   const selectedJob = currentJob?.engName || "";
 
+  // 페이지 로드 시 마이그레이션 + 자동 로드
+  useEffect(() => {
+    if (initializedRef.current) return;
+    initializedRef.current = true;
+
+    migrateFromLegacyStorage();
+
+    const lastActive = getLastActive();
+    if (lastActive) {
+      const job = JOBS.find((j) => j.engName === lastActive.jobEngName);
+      if (job) {
+        setJob(job);
+        setCurrentSlotIdx(lastActive.slotIdx);
+
+        const savedData = getSlotData(lastActive.jobEngName, lastActive.slotIdx);
+        if (savedData) {
+          loadCharacter(savedData);
+        }
+      }
+    }
+  }, [setJob, setCurrentSlotIdx, loadCharacter]);
+
   const handleJobChange = (jobEngName: string) => {
     const job = JOBS.find((j) => j.engName === jobEngName) || null;
     setJob(job);
+    // 직업 변경 시 해당 직업의 첫 번째 슬롯 로드
+    loadSlot(0);
   };
 
   const handleOpenItemMaker = (category?: string) => {
@@ -37,7 +64,7 @@ function AppContent() {
 
   return (
     <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
-      <TopAppBar selectedJob={selectedJob} onJobChange={handleJobChange} onOpenItemMaker={handleOpenItemMaker} />
+      <TopAppBar selectedJob={selectedJob} onJobChange={handleJobChange} />
 
       <Box sx={{ p: 3, flex: 1, display: "flex", flexDirection: "column" }}>
         {/* 직업이 선택되지 않았을 경우: 직업 선택 화면 */}
@@ -57,73 +84,26 @@ function AppContent() {
             </Typography>
             <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", justifyContent: "center" }}>
               {JOBS.map((job) => {
-                if (job.engName === "warrior") {
-                  return (
-                    <Button
-                      key={job.engName}
-                      variant="outlined"
-                      size="large"
-                      color="error"
-                      onClick={() => handleJobChange(job.engName)}
-                      sx={{ minWidth: 120 }}
-                    >
-                      {job.koreanName}
-                    </Button>
-                  );
-                } else if (job.engName === "archer") {
-                  return (
-                    <Button
-                      key={job.engName}
-                      variant="outlined"
-                      size="large"
-                      color="success"
-                      onClick={() => handleJobChange(job.engName)}
-                      sx={{ minWidth: 120 }}
-                    >
-                      {job.koreanName}
-                    </Button>
-                  );
-                } else if (job.engName === "magician") {
-                  return (
-                    <Button
-                      key={job.engName}
-                      variant="outlined"
-                      size="large"
-                      onClick={() => handleJobChange(job.engName)}
-                      sx={{
-                        minWidth: 120,
-                        color: "#9c27b0",
-                        borderColor: "#9c27b0",
-                        "&:hover": {
-                          borderColor: "#9c27b0",
-                          backgroundColor: "rgba(156, 39, 176, 0.04)",
-                        },
-                      }}
-                    >
-                      {job.koreanName}
-                    </Button>
-                  );
-                } else if (job.engName === "thief") {
-                  return (
-                    <Button
-                      key={job.engName}
-                      variant="outlined"
-                      size="large"
-                      onClick={() => handleJobChange(job.engName)}
-                      sx={{
-                        minWidth: 120,
-                        color: "#D81B60",
-                        borderColor: "#D81B60",
-                        "&:hover": {
-                          borderColor: "#D81B60",
-                          backgroundColor: "rgba(216, 27, 96, 0.04)",
-                        },
-                      }}
-                    >
-                      {job.koreanName}
-                    </Button>
-                  );
-                }
+                const color = JOB_COLORS[job.engName] || "#1976d2";
+                return (
+                  <Button
+                    key={job.engName}
+                    variant="outlined"
+                    size="large"
+                    onClick={() => handleJobChange(job.engName)}
+                    sx={{
+                      minWidth: 120,
+                      color,
+                      borderColor: color,
+                      "&:hover": {
+                        borderColor: color,
+                        backgroundColor: `${color}0A`,
+                      },
+                    }}
+                  >
+                    {job.koreanName}
+                  </Button>
+                );
               })}
             </Box>
           </Box>
@@ -133,7 +113,7 @@ function AppContent() {
             <Box sx={{ display: "flex", gap: 3, justifyContent: "center", mb: 3 }}>
               {/* 왼쪽: 장비 + 스탯 */}
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                <EquipTable onSlotClick={handleOpenItemMaker} />
+                <EquipTable onSlotClick={handleOpenItemMaker} onOpenItemMaker={handleOpenItemMaker} />
                 <StatTable />
               </Box>
 
@@ -153,10 +133,30 @@ function AppContent() {
   );
 }
 
+function DynamicThemeProvider({ children }: { children: React.ReactNode }) {
+  const { character } = useCharacter();
+  const currentJob = character.getJob();
+  const primaryColor = currentJob ? JOB_COLORS[currentJob.engName] || "#1976d2" : "#1976d2";
+
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          primary: { main: primaryColor },
+        },
+      }),
+    [primaryColor],
+  );
+
+  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+}
+
 function App() {
   return (
     <CharacterProvider>
-      <AppContent />
+      <DynamicThemeProvider>
+        <AppContent />
+      </DynamicThemeProvider>
     </CharacterProvider>
   );
 }

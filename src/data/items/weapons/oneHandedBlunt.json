@@ -1,19 +1,5 @@
 [
   {
-    "id": 1322001,
-    "name": "Hammer",
-    "koreanName": "망치",
-    "reqJob": 0,
-    "reqLevel": 15
-  },
-  {
-    "id": 1322003,
-    "name": "Lollipop",
-    "koreanName": "막대 사탕",
-    "reqJob": 0,
-    "reqLevel": 30
-  },
-  {
     "id": 1322005,
     "name": "Wooden Club",
     "koreanName": "몽둥이",
@@ -21,16 +7,23 @@
     "reqLevel": 0
   },
   {
-    "id": 1322006,
-    "name": "Steel Pipe",
-    "koreanName": "쇠파이프",
+    "id": 1322023,
+    "name": "Blue Flowery Tube",
+    "koreanName": "파란색 꽃무늬 튜브",
     "reqJob": 0,
-    "reqLevel": 10
+    "reqLevel": 0
   },
   {
     "id": 1322007,
     "name": "Leather Purse",
     "koreanName": "가죽 핸드백",
+    "reqJob": 0,
+    "reqLevel": 15
+  },
+  {
+    "id": 1322012,
+    "name": "Red Brick",
+    "koreanName": "빨간 벽돌",
     "reqJob": 0,
     "reqLevel": 15
   },
@@ -49,23 +42,44 @@
     "reqLevel": 25
   },
   {
-    "id": 1322012,
-    "name": "Red Brick",
-    "koreanName": "빨간 벽돌",
+    "id": 1322022,
+    "name": "Red Flowery Tube",
+    "koreanName": "빨간색 꽃무늬 튜브",
     "reqJob": 0,
-    "reqLevel": 15
+    "reqLevel": 25
   },
   {
-    "id": 1322013,
-    "name": "Wizet Secret Agent Suitcase",
-    "koreanName": "위젯 비밀요원 가방",
+    "id": 1322031,
+    "name": "Pig Illustrated",
+    "koreanName": "세계의 돼지도감",
     "reqJob": 0,
-    "reqLevel": 0
+    "reqLevel": 25
+  },
+  {
+    "id": 1322003,
+    "name": "Lollipop",
+    "koreanName": "막대 사탕",
+    "reqJob": 0,
+    "reqLevel": 30
   },
   {
     "id": 1322014,
     "name": "War Hammer",
     "koreanName": "워해머",
+    "reqJob": 1,
+    "reqLevel": 30
+  },
+  {
+    "id": 1322027,
+    "name": "Frying Pan",
+    "koreanName": "프라이팬",
+    "reqJob": 0,
+    "reqLevel": 30
+  },
+  {
+    "id": 1322056,
+    "name": "Pink Flower Tube",
+    "koreanName": "분홍색 꽃무늬 튜브",
     "reqJob": 1,
     "reqLevel": 30
   },
@@ -84,10 +98,24 @@
     "reqLevel": 40
   },
   {
+    "id": 1322024,
+    "name": "Purple Tube",
+    "koreanName": "보라색 튜브",
+    "reqJob": 0,
+    "reqLevel": 40
+  },
+  {
     "id": 1322017,
     "name": "Knuckle Mace",
     "koreanName": "너클메이스",
     "reqJob": 1,
+    "reqLevel": 50
+  },
+  {
+    "id": 1322021,
+    "name": "Black Tube",
+    "koreanName": "검은색 튜브",
+    "reqJob": 0,
     "reqLevel": 50
   },
   {
@@ -98,53 +126,32 @@
     "reqLevel": 60
   },
   {
-    "id": 1322019,
-    "name": "The Judgement",
-    "koreanName": "스튬",
-    "reqJob": 1,
-    "reqLevel": 70
-  },
-  {
-    "id": 1322020,
-    "name": "Bent Judgement",
-    "koreanName": "모던스튬",
-    "reqJob": 1,
-    "reqLevel": 75
-  },
-  {
-    "id": 1322021,
-    "name": "Black Tube",
-    "koreanName": "검은색 튜브",
-    "reqJob": 0,
-    "reqLevel": 50
-  },
-  {
-    "id": 1322022,
-    "name": "Red Flowery Tube",
-    "koreanName": "빨간색 꽃무늬 튜브",
-    "reqJob": 0,
-    "reqLevel": 25
-  },
-  {
-    "id": 1322023,
-    "name": "Blue Flowery Tube",
-    "koreanName": "파란색 꽃무늬 튜브",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1322024,
-    "name": "Purple Tube",
-    "koreanName": "보라색 튜브",
-    "reqJob": 0,
-    "reqLevel": 40
-  },
-  {
     "id": 1322025,
     "name": "Emergency Rescue Tube",
     "koreanName": "구명 튜브",
     "reqJob": 0,
     "reqLevel": 60
+  },
+  {
+    "id": 1322054,
+    "name": "Maple Havoc Hammer",
+    "koreanName": "메이플 해버크 해머",
+    "reqJob": 1,
+    "reqLevel": 64
+  },
+  {
+    "id": 1322033,
+    "name": "Goblin Bat",
+    "koreanName": "도깨비 방망이",
+    "reqJob": 0,
+    "reqLevel": 65
+  },
+  {
+    "id": 1322019,
+    "name": "The Judgement",
+    "koreanName": "스튬",
+    "reqJob": 1,
+    "reqLevel": 70
   },
   {
     "id": 1322026,
@@ -154,11 +161,11 @@
     "reqLevel": 70
   },
   {
-    "id": 1322027,
-    "name": "Frying Pan",
-    "koreanName": "프라이팬",
-    "reqJob": 0,
-    "reqLevel": 30
+    "id": 1322020,
+    "name": "Bent Judgement",
+    "koreanName": "모던스튬",
+    "reqJob": 1,
+    "reqLevel": 75
   },
   {
     "id": 1322028,
@@ -175,137 +182,11 @@
     "reqLevel": 90
   },
   {
-    "id": 1322031,
-    "name": "Pig Illustrated",
-    "koreanName": "세계의 돼지도감",
-    "reqJob": 0,
-    "reqLevel": 25
-  },
-  {
-    "id": 1322033,
-    "name": "Goblin Bat",
-    "koreanName": "도깨비 방망이",
-    "reqJob": 0,
-    "reqLevel": 65
-  },
-  {
-    "id": 1322035,
-    "name": "War Hammer",
-    "koreanName": "워해머",
-    "reqJob": 1,
-    "reqLevel": 20
-  },
-  {
-    "id": 1322036,
-    "name": "Knuckle Mace",
-    "koreanName": "너클메이스",
-    "reqJob": 1,
-    "reqLevel": 35
-  },
-  {
-    "id": 1322037,
-    "name": "Tamus",
-    "koreanName": "타무스",
-    "reqJob": 1,
-    "reqLevel": 50
-  },
-  {
-    "id": 1322038,
-    "name": "The Judgement",
-    "koreanName": "스튬",
-    "reqJob": 1,
-    "reqLevel": 60
-  },
-  {
-    "id": 1322039,
-    "name": "Heaven's Justice",
-    "koreanName": "골든해머",
-    "reqJob": 1,
-    "reqLevel": 70
-  },
-  {
-    "id": 1322040,
-    "name": "War Hammer",
-    "koreanName": "워해머",
-    "reqJob": 1,
-    "reqLevel": 20
-  },
-  {
-    "id": 1322041,
-    "name": "Knuckle Mace",
-    "koreanName": "너클메이스",
-    "reqJob": 1,
-    "reqLevel": 35
-  },
-  {
-    "id": 1322042,
-    "name": "Tamus",
-    "koreanName": "타무스",
-    "reqJob": 1,
-    "reqLevel": 50
-  },
-  {
-    "id": 1322043,
-    "name": "The Judgement",
-    "koreanName": "스튬",
-    "reqJob": 1,
-    "reqLevel": 60
-  },
-  {
-    "id": 1322044,
-    "name": "Heaven's Justice",
-    "koreanName": "골든해머",
-    "reqJob": 1,
-    "reqLevel": 70
-  },
-  {
     "id": 1322045,
     "name": "Battle Hammer",
     "koreanName": "배틀해머",
     "reqJob": 1,
     "reqLevel": 100
-  },
-  {
-    "id": 1322046,
-    "name": "War Hammer",
-    "koreanName": "워해머",
-    "reqJob": 1,
-    "reqLevel": 20
-  },
-  {
-    "id": 1322047,
-    "name": "Knuckle Mace",
-    "koreanName": "너클메이스",
-    "reqJob": 1,
-    "reqLevel": 35
-  },
-  {
-    "id": 1322048,
-    "name": "Tamus",
-    "koreanName": "타무스",
-    "reqJob": 1,
-    "reqLevel": 50
-  },
-  {
-    "id": 1322049,
-    "name": "The Judgement",
-    "koreanName": "스튬",
-    "reqJob": 1,
-    "reqLevel": 60
-  },
-  {
-    "id": 1322050,
-    "name": "Heaven's Justice",
-    "koreanName": "골든해머",
-    "reqJob": 1,
-    "reqLevel": 70
-  },
-  {
-    "id": 1322051,
-    "name": "Fruity Bamboo",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 22
   },
   {
     "id": 1322052,
@@ -315,53 +196,11 @@
     "reqLevel": 110
   },
   {
-    "id": 1322053,
-    "name": "Golden Mace",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1322054,
-    "name": "Maple Havoc Hammer",
-    "koreanName": "메이플 해버크 해머",
+    "id": 1322062,
+    "name": "Crushed Skull",
+    "koreanName": "해골분쇄자",
     "reqJob": 1,
-    "reqLevel": 64
-  },
-  {
-    "id": 1322055,
-    "name": "Maple 1500 Anniv. Flag",
-    "koreanName": "메이플 1500일 깃발",
-    "reqJob": 1,
-    "reqLevel": 30
-  },
-  {
-    "id": 1322056,
-    "name": "Pink Flower Tube",
-    "koreanName": "분홍색 꽃무늬 튜브",
-    "reqJob": 1,
-    "reqLevel": 30
-  },
-  {
-    "id": 1322057,
-    "name": "Singapore Flag (One Handed Mace)",
-    "koreanName": "",
-    "reqJob": 1,
-    "reqLevel": 30
-  },
-  {
-    "id": 1322058,
-    "name": "Malaysia Flag (One Handed Mace)",
-    "koreanName": "",
-    "reqJob": 1,
-    "reqLevel": 30
-  },
-  {
-    "id": 1322059,
-    "name": "Cosmic Scepter",
-    "koreanName": "",
-    "reqJob": 1,
-    "reqLevel": 70
+    "reqLevel": 115
   },
   {
     "id": 1322060,
@@ -369,26 +208,5 @@
     "koreanName": "타임리스 알라르간도",
     "reqJob": 1,
     "reqLevel": 120
-  },
-  {
-    "id": 1322062,
-    "name": "Crushed Skull",
-    "koreanName": "",
-    "reqJob": 1,
-    "reqLevel": 120
-  },
-  {
-    "id": 1322063,
-    "name": "Duck tube",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 50
-  },
-  {
-    "id": 1322064,
-    "name": "Duck tube",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 100
   }
 ]

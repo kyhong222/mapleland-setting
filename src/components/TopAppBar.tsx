@@ -12,55 +12,71 @@ import {
 } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material";
 import { JOBS } from "../types/job";
-import { Save as SaveIcon, Close as CloseIcon, Add as AddIcon } from "@mui/icons-material";
+import { Save as SaveIcon, Close as CloseIcon } from "@mui/icons-material";
 import { useCharacter } from "../contexts/CharacterContext";
-import { useState, useEffect } from "react";
-import { deleteSavedCharacter, type SavedCharacterData } from "../utils/characterStorage";
+import { useState, useEffect, useCallback } from "react";
+import { MAX_SLOTS, type SavedCharacterData } from "../utils/characterStorage";
 import { fetchItemIcon } from "../api/maplestory";
 
 interface TopAppBarProps {
   selectedJob: string;
   onJobChange: (jobEngName: string) => void;
-  onOpenItemMaker?: () => void;
 }
 
-export default function TopAppBar({ selectedJob, onJobChange, onOpenItemMaker }: TopAppBarProps) {
-  const { saveCurrentCharacter, loadCharacter, getSavedList } = useCharacter();
-  const [savedList, setSavedList] = useState<SavedCharacterData[]>([]);
+export default function TopAppBar({
+  selectedJob,
+  onJobChange,
+}: TopAppBarProps) {
+  const {
+    saveCurrentCharacter,
+    loadSlot,
+    deleteSlot,
+    getSlotSummaries,
+    currentSlotIdx,
+  } = useCharacter();
+  const [slotSummaries, setSlotSummaries] = useState<
+    (SavedCharacterData | null)[]
+  >(Array(MAX_SLOTS).fill(null));
   const [iconCache, setIconCache] = useState<Map<number, string>>(new Map());
 
-  // 저장 목록 새로고침
-  const refreshSavedList = () => {
-    const list = getSavedList();
-    setSavedList(list);
-  };
+  // 슬롯 요약 새로고침
+  const refreshSlots = useCallback(() => {
+    setSlotSummaries(getSlotSummaries());
+  }, [getSlotSummaries]);
 
-  // 직업 변경 시 저장 목록 갱신
+  // 직업 변경 시 슬롯 목록 갱신
   useEffect(() => {
-    refreshSavedList();
-  }, [selectedJob, getSavedList]);
+    setSlotSummaries(getSlotSummaries());
+    setIconCache(new Map()); // 직업 변경 시 아이콘 캐시 초기화
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedJob]);
 
   // 무기 아이콘 로드
   useEffect(() => {
     const loadIcons = async () => {
       const newCache = new Map(iconCache);
-      for (const save of savedList) {
-        if (save.weaponId && !newCache.has(save.weaponId)) {
+      let changed = false;
+      for (const slot of slotSummaries) {
+        if (slot?.weaponId && !newCache.has(slot.weaponId)) {
           try {
-            const iconUrl = await fetchItemIcon(save.weaponId);
+            const iconUrl = await fetchItemIcon(slot.weaponId);
             if (iconUrl) {
-              newCache.set(save.weaponId, iconUrl);
+              newCache.set(slot.weaponId, iconUrl);
+              changed = true;
             }
           } catch (error) {
-            console.error(`Failed to load icon for weapon ${save.weaponId}:`, error);
+            console.error(
+              `Failed to load icon for weapon ${slot.weaponId}:`,
+              error,
+            );
           }
         }
       }
-      setIconCache(newCache);
+      if (changed) setIconCache(newCache);
     };
 
     loadIcons();
-  }, [savedList]);
+  }, [slotSummaries, iconCache]);
 
   const handleChange = (event: SelectChangeEvent) => {
     onJobChange(event.target.value);
@@ -69,59 +85,74 @@ export default function TopAppBar({ selectedJob, onJobChange, onOpenItemMaker }:
   const handleSave = () => {
     const saved = saveCurrentCharacter();
     if (saved) {
-      refreshSavedList();
-      alert("현재 세팅이 저장되었습니다!");
+      refreshSlots();
     } else {
       alert("저장 실패: 직업을 선택해주세요.");
     }
   };
 
-  const handleLoad = (save: SavedCharacterData) => {
-    loadCharacter(save);
-    alert("세팅이 로드되었습니다!");
+  const handleSlotClick = (slotIdx: number) => {
+    loadSlot(slotIdx);
+    refreshSlots();
   };
 
-  const handleDelete = (save: SavedCharacterData, event: React.MouseEvent) => {
+  const handleDelete = (slotIdx: number, event: React.MouseEvent) => {
     event.stopPropagation();
-    if (confirm("이 세팅을 삭제하시겠습니까?")) {
-      deleteSavedCharacter(save.jobEngName, save.id);
-      refreshSavedList();
+    if (confirm("이 슬롯의 세팅을 삭제하시겠습니까?")) {
+      deleteSlot(slotIdx);
+      refreshSlots();
     }
   };
 
   return (
     <AppBar position="static">
       <Toolbar>
-        {/* 아이템 생성 버튼 */}
-        {onOpenItemMaker && (
-          <Tooltip title="아이템 생성">
-            <IconButton color="inherit" onClick={onOpenItemMaker} sx={{ mr: 1 }}>
-              <AddIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          메이플랜드 캐릭터 설정
+          메이플랜드 캐릭터 설정 - {currentSlotIdx + 1}번 슬롯
         </Typography>
 
-        {/* 저장된 세팅 버튼들 */}
+        {/* 5칸 슬롯 버튼 */}
         <Box sx={{ display: "flex", gap: 1, mr: 2 }}>
-          {savedList.map((save, index) => {
-            const iconUrl = save.weaponId ? iconCache.get(save.weaponId) : null;
+          {slotSummaries.map((slotData, idx) => {
+            const isActive = idx === currentSlotIdx;
+            const hasData = slotData !== null;
+            const iconUrl = slotData?.weaponId
+              ? iconCache.get(slotData.weaponId)
+              : null;
+
             const displayContent = iconUrl ? (
-              <img src={iconUrl} alt={`Save ${index + 1}`} style={{ width: 24, height: 24, display: "block" }} />
+              <img
+                src={iconUrl}
+                alt={`Slot ${idx + 1}`}
+                style={{ width: 24, height: 24, display: "block" }}
+              />
             ) : (
-              <Typography variant="body2">{index + 1}</Typography>
+              <Typography
+                variant="body2"
+                sx={{ color: hasData ? "white" : "rgba(255,255,255,0.4)" }}
+              >
+                {idx + 1}
+              </Typography>
             );
 
+            const tooltipTitle = hasData
+              ? `슬롯 ${idx + 1}: Lv.${slotData.level} (${new Date(slotData.timestamp).toLocaleString()})`
+              : `슬롯 ${idx + 1}: 비어있음`;
+
             return (
-              <Tooltip key={save.id} title={`Lv.${save.level} (저장: ${new Date(save.timestamp).toLocaleString()})`}>
+              <Tooltip key={idx} title={tooltipTitle}>
                 <Box sx={{ position: "relative" }}>
                   <IconButton
-                    onClick={() => handleLoad(save)}
+                    onClick={() => handleSlotClick(idx)}
                     sx={{
-                      bgcolor: "rgba(255, 255, 255, 0.1)",
+                      bgcolor: isActive
+                        ? "rgba(255, 255, 255, 0.3)"
+                        : hasData
+                          ? "rgba(255, 255, 255, 0.1)"
+                          : "rgba(255, 255, 255, 0.03)",
+                      border: isActive
+                        ? "2px solid white"
+                        : "2px solid transparent",
                       "&:hover": {
                         bgcolor: "rgba(255, 255, 255, 0.2)",
                       },
@@ -131,24 +162,27 @@ export default function TopAppBar({ selectedJob, onJobChange, onOpenItemMaker }:
                   >
                     {displayContent}
                   </IconButton>
-                  <IconButton
-                    size="small"
-                    onClick={(e) => handleDelete(save, e)}
-                    sx={{
-                      position: "absolute",
-                      top: -8,
-                      right: -8,
-                      bgcolor: "error.main",
-                      "&:hover": {
-                        bgcolor: "error.dark",
-                      },
-                      width: 20,
-                      height: 20,
-                      padding: 0,
-                    }}
-                  >
-                    <CloseIcon sx={{ fontSize: 14 }} />
-                  </IconButton>
+                  {hasData && (
+                    <IconButton
+                      size="small"
+                      onClick={(e) => handleDelete(idx, e)}
+                      sx={{
+                        position: "absolute",
+                        top: -8,
+                        right: -8,
+                        bgcolor: "error.main",
+                        border: "2px solid white",
+                        "&:hover": {
+                          bgcolor: "error.dark",
+                        },
+                        width: 20,
+                        height: 20,
+                        padding: 0,
+                      }}
+                    >
+                      <CloseIcon sx={{ fontSize: 14 }} />
+                    </IconButton>
+                  )}
                 </Box>
               </Tooltip>
             );
@@ -157,11 +191,16 @@ export default function TopAppBar({ selectedJob, onJobChange, onOpenItemMaker }:
 
         {/* 저장 버튼 */}
         <Button
-          variant="contained"
-          color="secondary"
+          variant="outlined"
           startIcon={<SaveIcon />}
           onClick={handleSave}
-          sx={{ mr: 2 }}
+          sx={{
+            mr: 2,
+            color: "success.light",
+            borderColor: "success.light",
+            bgcolor: "white",
+            "&:hover": { borderColor: "success.main", bgcolor: "white" },
+          }}
           disabled={!selectedJob}
         >
           저장
@@ -191,7 +230,7 @@ export default function TopAppBar({ selectedJob, onJobChange, onOpenItemMaker }:
             <MenuItem value="">
               <em>직업 선택</em>
             </MenuItem>
-            {JOBS.map((job) => (
+            {JOBS.filter((job) => job.engName !== "pirate").map((job) => (
               <MenuItem key={job.engName} value={job.engName}>
                 {job.koreanName}
               </MenuItem>

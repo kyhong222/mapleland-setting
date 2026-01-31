@@ -4,9 +4,10 @@ import type { ItemType } from "./item";
  * 마스터리 레벨별 속성
  */
 export interface MasteryProperty {
-  level: number;
-  att?: number; // 추가 공격력 (일부 마스터리만)
-  mastery: number; // 숙련도 %
+  level: number | null;
+  mastery: number | null; // 숙련도 %
+  att?: number | null; // 추가 공격력 (null이면 0으로 처리)
+  acc?: number | null; // 명중 (null이면 0으로 처리)
 }
 
 /**

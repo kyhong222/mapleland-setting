@@ -42,6 +42,7 @@ export interface ItemStats {
   jump?: number; // 점프력 (Jump)
   hp?: number; // 추가 HP
   mp?: number; // 추가 MP
+  attackSpeed?: number; // 공격속도 (Attack Speed)
 }
 
 // 아이템 필요 스탯 정의
@@ -57,6 +58,7 @@ export interface RequireStats {
 export interface Item {
   id?: number;
   name: string;
+  icon?: string;
   slot: EquipmentSlot;
   type: ItemType;
   stats: ItemStats;
@@ -72,5 +74,28 @@ export interface PreItem {
   reqLevel: number;
 }
 
-// PostItem: 패치된/API 미지원 아이템 (Item과 동일한 구조)
+// PostItem: 레거시 호환 (Item과 동일한 구조)
 export type PostItem = Item;
+
+// PostItemData: 패치된/API 미지원 아이템 데이터 (data/postItems/*.json)
+// ID를 키로 하는 맵 형태로 저장
+export interface PostItemData {
+  koreanName?: string;
+  icon?: string; // 커스텀 아이콘 URL (API 아이콘이 없거나 다른 버전일 때)
+  stats: {
+    attack: number;
+    str: number;
+    dex: number;
+    int: number;
+    luk: number;
+    mad: number;
+    pdef: number;
+    mdef: number;
+    acc: number;
+    eva: number;
+    attackSpeed?: number; // 공격속도 (무기 전용)
+  };
+  requireStats: RequireStats;
+}
+
+export type PostItemMap = Record<string, PostItemData>;

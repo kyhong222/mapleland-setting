@@ -24,6 +24,16 @@
     { "level": 17, "x": 9, "time": 510 },
     { "level": 18, "x": 9, "time": 540 },
     { "level": 19, "x": 10, "time": 570 },
-    { "level": 20, "x": 10, "time": 600 }
+    { "level": 20, "x": 10, "time": 600 },
+    { "level": 21, "x": 11, "time": 630 },
+    { "level": 22, "x": 11, "time": 660 },
+    { "level": 23, "x": 12, "time": 690 },
+    { "level": 24, "x": 12, "time": 720 },
+    { "level": 25, "x": 13, "time": 750 },
+    { "level": 26, "x": 13, "time": 780 },
+    { "level": 27, "x": 14, "time": 810 },
+    { "level": 28, "x": 14, "time": 840 },
+    { "level": 29, "x": 15, "time": 870 },
+    { "level": 30, "x": 15, "time": 900 }
   ]
 }

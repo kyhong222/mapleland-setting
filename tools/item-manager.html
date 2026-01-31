@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PreItem JSON Manager</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .controls {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .controls label {
+      font-weight: bold;
+      color: #555;
+    }
+
+    .controls select {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      min-width: 150px;
+    }
+
+    .controls input[type="text"],
+    .controls input[type="number"] {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    .btn-primary {
+      background: #1976d2;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #1565c0;
+    }
+
+    .btn-danger {
+      background: #d32f2f;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #c62828;
+    }
+
+    .btn-success {
+      background: #388e3c;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #2e7d32;
+    }
+
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .stats {
+      background: white;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .stats span {
+      color: #666;
+    }
+
+    .stats strong {
+      color: #333;
+    }
+
+    .category-tabs {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .category-tabs h3 {
+      margin-bottom: 10px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .tab-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .tab-group-label {
+      width: 100%;
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 4px;
+    }
+
+    .tab-btn {
+      padding: 6px 14px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: white;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+
+    .tab-btn:hover {
+      background: #e3f2fd;
+      border-color: #1976d2;
+    }
+
+    .tab-btn.active {
+      background: #1976d2;
+      color: white;
+      border-color: #1976d2;
+    }
+
+    .tab-btn.loading {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .item-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .level-group {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .level-group-header {
+      font-weight: bold;
+      color: #1976d2;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e3f2fd;
+    }
+
+    .level-group-content {
+      display: flex;
+      gap: 15px;
+    }
+
+    .item-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .item-section-divider {
+      width: 2px;
+      background: #ddd;
+      margin: 0 5px;
+    }
+
+    .item-card {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      gap: 15px;
+      align-items: flex-start;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+
+    .item-card:hover {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .item-card.selected {
+      border-color: #d32f2f;
+      background: #ffebee;
+    }
+
+    .item-card.no-korean {
+      background: #fff3e0;
+    }
+
+    .item-card.selected.no-korean {
+      background: #ffcdd2;
+    }
+
+    .item-icon {
+      width: 50px;
+      height: 50px;
+      background: #f5f5f5;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .item-icon img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .item-icon .loading {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #ddd;
+      border-top-color: #1976d2;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .item-name {
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 2px;
+      word-break: break-word;
+      font-size: 14px;
+    }
+
+    .item-name-en {
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 4px;
+      word-break: break-word;
+    }
+
+    .item-meta {
+      font-size: 11px;
+      color: #666;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .item-meta span {
+      background: #e3f2fd;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #666;
+      grid-column: 1 / -1;
+    }
+
+    .job-badge {
+      display: inline-block;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 10px;
+      font-weight: bold;
+    }
+
+    .job-0 { background: #e0e0e0; color: #333; }
+    .job-1 { background: #ffcdd2; color: #c62828; }
+    .job-2 { background: #e1bee7; color: #7b1fa2; }
+    .job-4 { background: #c8e6c9; color: #2e7d32; }
+    .job-8 { background: #ffe0b2; color: #e65100; }
+
+    .filter-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .action-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: 15px 20px;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .action-bar.hidden {
+      display: none;
+    }
+
+    body.has-selection {
+      padding-bottom: 80px;
+    }
+
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255,255,255,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .loading-overlay.hidden {
+      display: none;
+    }
+
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #ddd;
+      border-top-color: #1976d2;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="loading-overlay hidden" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <div class="container">
+    <h1>PreItem JSON Manager</h1>
+
+    <!-- 카테고리 탭 -->
+    <div class="category-tabs">
+      <div class="tab-group">
+        <div class="tab-group-label">방어구</div>
+        <button class="tab-btn" data-category="hat">투구</button>
+        <button class="tab-btn" data-category="top">상의</button>
+        <button class="tab-btn" data-category="bottom">하의</button>
+        <button class="tab-btn" data-category="overall">전신</button>
+        <button class="tab-btn" data-category="glove">장갑</button>
+        <button class="tab-btn" data-category="shoes">신발</button>
+        <button class="tab-btn" data-category="cape">망토</button>
+        <button class="tab-btn" data-category="shield">방패</button>
+      </div>
+      <div class="tab-group">
+        <div class="tab-group-label">장신구</div>
+        <button class="tab-btn" data-category="earrings">귀고리</button>
+        <button class="tab-btn" data-category="pendant">목걸이</button>
+        <button class="tab-btn" data-category="faceAccessory">얼굴장식</button>
+        <button class="tab-btn" data-category="eyeDecoration">눈장식</button>
+        <button class="tab-btn" data-category="medal">훈장</button>
+        <button class="tab-btn" data-category="belt">벨트</button>
+      </div>
+      <div class="tab-group">
+        <div class="tab-group-label">무기</div>
+        <button class="tab-btn" data-category="weapons/oneHandedSword">한손검</button>
+        <button class="tab-btn" data-category="weapons/twoHandedSword">두손검</button>
+        <button class="tab-btn" data-category="weapons/oneHandedAxe">한손도끼</button>
+        <button class="tab-btn" data-category="weapons/twoHandedAxe">두손도끼</button>
+        <button class="tab-btn" data-category="weapons/oneHandedBlunt">한손둔기</button>
+        <button class="tab-btn" data-category="weapons/twoHandedBlunt">두손둔기</button>
+        <button class="tab-btn" data-category="weapons/spear">창</button>
+        <button class="tab-btn" data-category="weapons/polearm">폴암</button>
+        <button class="tab-btn" data-category="weapons/bow">활</button>
+        <button class="tab-btn" data-category="weapons/crossbow">석궁</button>
+        <button class="tab-btn" data-category="weapons/staff">스태프</button>
+        <button class="tab-btn" data-category="weapons/wand">완드</button>
+        <button class="tab-btn" data-category="weapons/dagger">단검</button>
+        <button class="tab-btn" data-category="weapons/claw">아대</button>
+      </div>
+      <div class="tab-group">
+        <div class="tab-group-label">투사체</div>
+        <button class="tab-btn" data-category="projectiles/arrowAmmo">화살</button>
+        <button class="tab-btn" data-category="projectiles/crossbowBoltAmmo">석궁화살</button>
+        <button class="tab-btn" data-category="projectiles/thrownAmmo">표창</button>
+      </div>
+      <div class="tab-group" style="border-top: 1px solid #eee; padding-top: 10px; margin-top: 5px;">
+        <div class="tab-group-label">직업 필터</div>
+        <button class="tab-btn job-tab active" data-job="all">전체</button>
+        <button class="tab-btn job-tab" data-job="0">공용</button>
+        <button class="tab-btn job-tab" data-job="1">전사</button>
+        <button class="tab-btn job-tab" data-job="2">마법사</button>
+        <button class="tab-btn job-tab" data-job="4">궁수</button>
+        <button class="tab-btn job-tab" data-job="8">도적</button>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="filter-group">
+        <label>직업:</label>
+        <select id="jobFilter">
+          <option value="all">전체</option>
+          <option value="0">공용</option>
+          <option value="1">전사</option>
+          <option value="2">마법사</option>
+          <option value="4">궁수</option>
+          <option value="8">도적</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>검색:</label>
+        <input type="text" id="searchInput" placeholder="이름/ID 검색..." style="width: 150px;">
+      </div>
+
+      <div class="filter-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="showNoKorean">
+          한글명 없음
+        </label>
+      </div>
+
+      <div class="filter-group">
+        <label>레벨:</label>
+        <input type="number" id="minLevel" placeholder="최소" style="width: 60px;">
+        <span>~</span>
+        <input type="number" id="maxLevel" placeholder="최대" style="width: 60px;">
+      </div>
+
+      <div class="filter-group" style="margin-left: auto;">
+        <input type="file" id="fileInput" accept=".json" style="display: none;">
+        <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">파일 불러오기</button>
+      </div>
+    </div>
+
+    <div class="stats">
+      <span>카테고리: <strong id="categoryName">-</strong></span>
+      <span>전체: <strong id="totalCount">0</strong>개</span>
+      <span>표시: <strong id="filteredCount">0</strong>개</span>
+      <span>선택: <strong id="selectedCount">0</strong>개</span>
+    </div>
+
+    <div class="item-grid" id="itemGrid">
+      <div class="empty-state">
+        카테고리를 선택하세요
+      </div>
+    </div>
+  </div>
+
+  <div class="action-bar hidden" id="actionBar">
+    <div>
+      <button class="btn btn-primary" id="selectAllBtn">전체 선택</button>
+      <button class="btn btn-primary" id="deselectAllBtn">선택 해제</button>
+      <button class="btn btn-primary" id="invertSelectionBtn">선택 반전</button>
+    </div>
+    <div>
+      <button class="btn btn-danger" id="deleteSelectedBtn">선택 항목 삭제</button>
+      <button class="btn btn-success" id="downloadBtn">JSON 다운로드</button>
+    </div>
+  </div>
+
+  <script>
+    const JOB_NAMES = {
+      0: '공용',
+      1: '전사',
+      2: '마법사',
+      4: '궁수',
+      8: '도적'
+    };
+
+    const CATEGORY_NAMES = {
+      'hat': '투구',
+      'top': '상의',
+      'bottom': '하의',
+      'overall': '전신',
+      'glove': '장갑',
+      'shoes': '신발',
+      'cape': '망토',
+      'shield': '방패',
+      'earrings': '귀고리',
+      'pendant': '목걸이',
+      'faceAccessory': '얼굴장식',
+      'eyeDecoration': '눈장식',
+      'medal': '훈장',
+      'belt': '벨트',
+      'weapons/oneHandedSword': '한손검',
+      'weapons/twoHandedSword': '두손검',
+      'weapons/oneHandedAxe': '한손도끼',
+      'weapons/twoHandedAxe': '두손도끼',
+      'weapons/oneHandedBlunt': '한손둔기',
+      'weapons/twoHandedBlunt': '두손둔기',
+      'weapons/spear': '창',
+      'weapons/polearm': '폴암',
+      'weapons/bow': '활',
+      'weapons/crossbow': '석궁',
+      'weapons/staff': '스태프',
+      'weapons/wand': '완드',
+      'weapons/dagger': '단검',
+      'weapons/claw': '아대',
+      'projectiles/arrowAmmo': '화살',
+      'projectiles/crossbowBoltAmmo': '석궁화살',
+      'projectiles/thrownAmmo': '표창',
+    };
+
+    let allItems = [];
+    let selectedIds = new Set();
+    let currentCategory = '';
+    let dataCache = new Map();
+
+    // DOM Elements
+    const jobFilter = document.getElementById('jobFilter');
+    const searchInput = document.getElementById('searchInput');
+    const showNoKorean = document.getElementById('showNoKorean');
+    const minLevelInput = document.getElementById('minLevel');
+    const maxLevelInput = document.getElementById('maxLevel');
+    const itemGrid = document.getElementById('itemGrid');
+    const actionBar = document.getElementById('actionBar');
+    const categoryNameEl = document.getElementById('categoryName');
+    const totalCountEl = document.getElementById('totalCount');
+    const filteredCountEl = document.getElementById('filteredCount');
+    const selectedCountEl = document.getElementById('selectedCount');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const fileInput = document.getElementById('fileInput');
+
+    // Category tab click handlers
+    document.querySelectorAll('.tab-btn[data-category]').forEach(btn => {
+      btn.addEventListener('click', () => loadCategory(btn.dataset.category));
+    });
+
+    // Job tab click handlers
+    document.querySelectorAll('.tab-btn.job-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn.job-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        jobFilter.value = btn.dataset.job;
+        renderItems();
+      });
+    });
+
+    // Load category data
+    async function loadCategory(category) {
+      // Update active tab
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.category === category);
+      });
+
+      currentCategory = category;
+      categoryNameEl.textContent = CATEGORY_NAMES[category] || category;
+      selectedIds.clear();
+
+      // Check cache
+      if (dataCache.has(category)) {
+        allItems = [...dataCache.get(category)];
+        totalCountEl.textContent = allItems.length;
+        renderItems();
+        updateActionBar();
+        return;
+      }
+
+      // Load from file
+      loadingOverlay.classList.remove('hidden');
+
+      try {
+        const response = await fetch(`../src/data/items/${category}.json`);
+        if (!response.ok) throw new Error('File not found');
+        const data = await response.json();
+
+        dataCache.set(category, data);
+        allItems = [...data];
+        totalCountEl.textContent = allItems.length;
+        renderItems();
+        updateActionBar();
+      } catch (err) {
+        console.error('Failed to load category:', err);
+        allItems = [];
+        totalCountEl.textContent = 0;
+        itemGrid.innerHTML = `<div class="empty-state">파일을 불러올 수 없습니다: ${category}.json</div>`;
+      } finally {
+        loadingOverlay.classList.add('hidden');
+      }
+    }
+
+    // File input handler (manual load)
+    fileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      loadingOverlay.classList.remove('hidden');
+
+      try {
+        const text = await file.text();
+        const items = JSON.parse(text);
+
+        allItems = items;
+        currentCategory = file.name.replace('.json', '');
+        categoryNameEl.textContent = file.name;
+        totalCountEl.textContent = allItems.length;
+        selectedIds.clear();
+
+        // Clear active tabs
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+        renderItems();
+        updateActionBar();
+      } catch (err) {
+        alert(`파일 로드 오류: ${err.message}`);
+      } finally {
+        loadingOverlay.classList.add('hidden');
+        fileInput.value = '';
+      }
+    });
+
+    // Filter Handlers
+    jobFilter.addEventListener('change', () => {
+      // Sync job tabs with dropdown
+      document.querySelectorAll('.tab-btn.job-tab').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.job === jobFilter.value);
+      });
+      renderItems();
+    });
+    searchInput.addEventListener('input', renderItems);
+    showNoKorean.addEventListener('change', renderItems);
+    minLevelInput.addEventListener('input', renderItems);
+    maxLevelInput.addEventListener('input', renderItems);
+
+    // Get filtered items
+    function getFilteredItems() {
+      const job = jobFilter.value;
+      const search = searchInput.value.toLowerCase();
+      const noKoreanOnly = showNoKorean.checked;
+      const minLevel = parseInt(minLevelInput.value) || 0;
+      const maxLevel = parseInt(maxLevelInput.value) || 999;
+
+      return allItems.filter(item => {
+        if (job !== 'all' && item.reqJob !== parseInt(job)) return false;
+        if (noKoreanOnly && item.koreanName) return false;
+        if (item.reqLevel < minLevel || item.reqLevel > maxLevel) return false;
+        if (search) {
+          const matchName = item.name.toLowerCase().includes(search);
+          const matchKorean = item.koreanName && item.koreanName.toLowerCase().includes(search);
+          const matchId = item.id.toString().includes(search);
+          if (!matchName && !matchKorean && !matchId) return false;
+        }
+        return true;
+      });
+    }
+
+    // Group items by level range (10 levels each)
+    function groupItemsByLevel(items) {
+      const groups = {};
+      items.forEach(item => {
+        const levelRange = Math.floor(item.reqLevel / 10) * 10;
+        const key = `${levelRange}-${levelRange + 9}`;
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(item);
+      });
+      return groups;
+    }
+
+    // Render single item card
+    function renderItemCard(item) {
+      const isSelected = selectedIds.has(item.id);
+      const hasKorean = !!item.koreanName;
+      const displayName = item.koreanName || item.name;
+
+      return `
+        <div class="item-card ${isSelected ? 'selected' : ''} ${!hasKorean ? 'no-korean' : ''}"
+             data-id="${item.id}"
+             onclick="toggleSelection(${item.id})">
+          <div class="item-icon" id="icon-${item.id}">
+            <img src="https://maplestory.io/api/gms/62/item/${item.id}/icon"
+                 alt=""
+                 onerror="this.parentElement.innerHTML='?'">
+          </div>
+          <div class="item-info">
+            <div class="item-name">${displayName}</div>
+            ${hasKorean ? `<div class="item-name-en">${item.name}</div>` : ''}
+            <div class="item-meta">
+              <span>ID: ${item.id}</span>
+              <span>Lv.${item.reqLevel}</span>
+              <span class="job-badge job-${item.reqJob}">${JOB_NAMES[item.reqJob] || '?'}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Render items
+    function renderItems() {
+      const filtered = getFilteredItems();
+      filteredCountEl.textContent = filtered.length;
+
+      if (filtered.length === 0) {
+        itemGrid.innerHTML = '<div class="empty-state">표시할 항목이 없습니다</div>';
+        return;
+      }
+
+      // Sort by reqLevel, then by name
+      filtered.sort((a, b) => {
+        if (a.reqLevel !== b.reqLevel) return a.reqLevel - b.reqLevel;
+        return (a.koreanName || a.name).localeCompare(b.koreanName || b.name);
+      });
+
+      // Group by level
+      const groups = groupItemsByLevel(filtered);
+      const sortedKeys = Object.keys(groups).sort((a, b) => parseInt(a) - parseInt(b));
+
+      itemGrid.innerHTML = sortedKeys.map(levelRange => {
+        const items = groups[levelRange];
+        const commonItems = items.filter(item => item.reqJob === 0);
+        const jobItems = items.filter(item => item.reqJob !== 0);
+
+        let content = '';
+
+        // Common items (left)
+        if (commonItems.length > 0) {
+          content += `<div class="item-section">${commonItems.map(renderItemCard).join('')}</div>`;
+        }
+
+        // Divider
+        if (commonItems.length > 0 && jobItems.length > 0) {
+          content += '<div class="item-section-divider"></div>';
+        }
+
+        // Job items (right)
+        if (jobItems.length > 0) {
+          content += `<div class="item-section">${jobItems.map(renderItemCard).join('')}</div>`;
+        }
+
+        return `
+          <div class="level-group">
+            <div class="level-group-header">Lv.${levelRange}</div>
+            <div class="level-group-content">${content}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Toggle selection
+    function toggleSelection(id) {
+      if (selectedIds.has(id)) {
+        selectedIds.delete(id);
+      } else {
+        selectedIds.add(id);
+      }
+
+      const card = document.querySelector(`.item-card[data-id="${id}"]`);
+      if (card) {
+        card.classList.toggle('selected', selectedIds.has(id));
+      }
+
+      updateActionBar();
+    }
+
+    // Update action bar
+    function updateActionBar() {
+      selectedCountEl.textContent = selectedIds.size;
+
+      if (allItems.length > 0) {
+        actionBar.classList.remove('hidden');
+        document.body.classList.add('has-selection');
+      } else {
+        actionBar.classList.add('hidden');
+        document.body.classList.remove('has-selection');
+      }
+    }
+
+    // Action buttons
+    document.getElementById('selectAllBtn').addEventListener('click', () => {
+      const filtered = getFilteredItems();
+      filtered.forEach(item => selectedIds.add(item.id));
+      renderItems();
+      updateActionBar();
+    });
+
+    document.getElementById('deselectAllBtn').addEventListener('click', () => {
+      selectedIds.clear();
+      renderItems();
+      updateActionBar();
+    });
+
+    document.getElementById('invertSelectionBtn').addEventListener('click', () => {
+      const filtered = getFilteredItems();
+      filtered.forEach(item => {
+        if (selectedIds.has(item.id)) {
+          selectedIds.delete(item.id);
+        } else {
+          selectedIds.add(item.id);
+        }
+      });
+      renderItems();
+      updateActionBar();
+    });
+
+    document.getElementById('deleteSelectedBtn').addEventListener('click', () => {
+      if (selectedIds.size === 0) {
+        alert('선택된 항목이 없습니다');
+        return;
+      }
+
+      if (!confirm(`${selectedIds.size}개 항목을 삭제하시겠습니까?`)) {
+        return;
+      }
+
+      allItems = allItems.filter(item => !selectedIds.has(item.id));
+
+      // Update cache
+      if (currentCategory && dataCache.has(currentCategory)) {
+        dataCache.set(currentCategory, [...allItems]);
+      }
+
+      selectedIds.clear();
+      totalCountEl.textContent = allItems.length;
+      renderItems();
+      updateActionBar();
+    });
+
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+      if (allItems.length === 0) {
+        alert('다운로드할 데이터가 없습니다');
+        return;
+      }
+
+      // Sort before download
+      const sorted = [...allItems].sort((a, b) => {
+        if (a.reqLevel !== b.reqLevel) return a.reqLevel - b.reqLevel;
+        return a.id - b.id;
+      });
+
+      const json = JSON.stringify(sorted, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      const fileName = currentCategory ? currentCategory.split('/').pop() + '.json' : 'items.json';
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "1422009": {
+    "koreanName": "플루튬",
+    "icon": "https://maplestory.io/api/GMS/212/item/1422024/icon",
+    "stats": {
+      "attack": 82,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 7
+    },
+    "requireStats": {
+      "level": 60,
+      "str": 190,
+      "dex": 0,
+      "int": 0,
+      "luk": 0
+    }
+  }
+}

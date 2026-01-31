@@ -1,9 +1,10 @@
-import { Box, Typography, Tooltip } from "@mui/material";
+import { Box, Typography, Tooltip, IconButton } from "@mui/material";
+import { Add as AddIcon } from "@mui/icons-material";
 import { useState, useEffect } from "react";
 import { useCharacter } from "../contexts/CharacterContext";
 import { EQUIPMENT_LAYOUT } from "../types/equipment";
 import type { EquipmentSlot } from "../types/equipment";
-import { fetchItemIcon } from "../api/maplestory";
+import { getPostItemCategoryKey, getPostItemIcon } from "../utils/postItemLoader";
 
 // 슬롯명을 카테고리 키로 매핑
 const SLOT_TO_CATEGORY: Record<string, string> = {
@@ -25,11 +26,12 @@ const SLOT_TO_CATEGORY: Record<string, string> = {
 
 interface EquipTableProps {
   onSlotClick?: (category: string) => void;
+  onOpenItemMaker?: () => void;
 }
 
-export default function EquipTable({ onSlotClick }: EquipTableProps) {
-  const { character, unequipItem } = useCharacter();
-  const [iconCache, setIconCache] = useState<Map<number, string>>(new Map());
+export default function EquipTable({ onSlotClick, onOpenItemMaker }: EquipTableProps) {
+  const { character, unequipItem, version } = useCharacter();
+  const [postItemIcons, setPostItemIcons] = useState<Map<number, string>>(new Map());
 
   const equipments = character.getEquipments();
   const equipMap = new Map(equipments.map((eq) => [eq.slot, eq]));
@@ -51,20 +53,23 @@ export default function EquipTable({ onSlotClick }: EquipTableProps) {
   const canEquipSecondaryWeapon = isOneHanded || isBow || isCrossbow || isDagger;
   const isSecondaryWeaponBlocked = !canEquipSecondaryWeapon;
 
-  // 아이콘 로드
+  // postItem 아이콘 로드
   useEffect(() => {
     const loadIcons = async () => {
-      for (const equipment of equipments) {
-        if (equipment.id && !iconCache.has(equipment.id)) {
-          const iconUrl = await fetchItemIcon(equipment.id);
-          if (iconUrl) {
-            setIconCache((prev) => new Map(prev).set(equipment.id!, iconUrl));
-          }
+      const newIcons = new Map<number, string>();
+      for (const eq of equipments) {
+        if (!eq.id) continue;
+        const catKey = getPostItemCategoryKey(eq.slot, eq.type);
+        if (!catKey) continue;
+        const icon = await getPostItemIcon(catKey, eq.id);
+        if (icon) {
+          newIcons.set(eq.id, icon);
         }
       }
+      setPostItemIcons(newIcons);
     };
     loadIcons();
-  }, [equipments, iconCache]);
+  }, [version]);
 
   const handleDoubleClick = (slot: string) => {
     unequipItem(slot as EquipmentSlot);
@@ -77,6 +82,22 @@ export default function EquipTable({ onSlotClick }: EquipTableProps) {
         onSlotClick(categoryKey);
       }
     }
+  };
+
+  const getIconSrc = (equipment: { id?: number; icon?: string }) => {
+    // 1순위: postItem 커스텀 아이콘
+    if (equipment.id && postItemIcons.has(equipment.id)) {
+      return postItemIcons.get(equipment.id)!;
+    }
+    // 2순위: equipment에 저장된 유효한 아이콘 (blob URL 제외)
+    if (equipment.icon && !equipment.icon.startsWith("blob:")) {
+      return equipment.icon;
+    }
+    // 3순위: API URL 폴백
+    if (equipment.id) {
+      return `https://maplestory.io/api/gms/62/item/${equipment.id}/icon?resize=5`;
+    }
+    return null;
   };
 
   const renderSlot = (slotName: string | null) => {
@@ -160,15 +181,21 @@ export default function EquipTable({ onSlotClick }: EquipTableProps) {
           }}
         >
           {equipment ? (
-            equipment.id && iconCache.has(equipment.id) ? (
-              <img
-                src={iconCache.get(equipment.id)}
-                alt={equipment.name || ""}
-                style={{ maxWidth: "100%", maxHeight: "100%" }}
-              />
-            ) : (
-              equipment.name
-            )
+            (() => {
+              const iconSrc = getIconSrc(equipment);
+              return iconSrc ? (
+                <img
+                  src={iconSrc}
+                  alt={equipment.name || ""}
+                  style={{ maxWidth: "100%", maxHeight: "100%" }}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = "none";
+                  }}
+                />
+              ) : (
+                equipment.name
+              );
+            })()
           ) : (
             slotName
           )}
@@ -189,9 +216,18 @@ export default function EquipTable({ onSlotClick }: EquipTableProps) {
       }}
     >
       {/* 타이틀 */}
-      <Typography variant="body2" sx={{ fontWeight: "bold", p: 1.5, borderBottom: "1px solid #ccc" }}>
-        장비
-      </Typography>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", p: 1.5, borderBottom: "1px solid #ccc" }}>
+        <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+          장비
+        </Typography>
+        {onOpenItemMaker && (
+          <Tooltip title="아이템 생성">
+            <IconButton onClick={onOpenItemMaker} size="small" sx={{ p: 0.5 }}>
+              <AddIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        )}
+      </Box>
 
       {/* 장비 그리드 */}
       <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 1 }}>

@@ -1,101 +1,17 @@
 [
   {
-    "id": 1012011,
-    "name": "Rudolph's Red Nose",
-    "koreanName": "루돌프의 빨간코",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1012012,
-    "name": "Rudolph's Red Nose",
-    "koreanName": "루돌프의 빨간코",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1012013,
-    "name": "Rudolph's Red Nose",
-    "koreanName": "루돌프의 빨간코",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1012014,
-    "name": "Rudolph's Red Nose",
-    "koreanName": "루돌프의 빨간코",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
     "id": 1012015,
     "name": "Rudolph's Red Nose",
-    "koreanName": "루돌프의 빨간코",
+    "koreanName": "루돌프의 빨간코(공격력)",
     "reqJob": 0,
     "reqLevel": 0
   },
   {
-    "id": 1012016,
-    "name": "Rudolph's Red Nose",
-    "koreanName": "루돌프의 빨간코",
+    "id": 1012102,
+    "name": "Maple Leaf",
+    "koreanName": "메이플 리프",
     "reqJob": 0,
     "reqLevel": 0
-  },
-  {
-    "id": 1012017,
-    "name": "Rudolph's Red Nose",
-    "koreanName": "루돌프의 빨간코",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1012018,
-    "name": "Rudolph's Red Nose",
-    "koreanName": "루돌프의 빨간코",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1012019,
-    "name": "Rudolph's Red Nose",
-    "koreanName": "루돌프의 빨간코",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1012020,
-    "name": "Rudolph's Red Nose",
-    "koreanName": "루돌프의 빨간코",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1012058,
-    "name": "피노키오 코",
-    "koreanName": "힘센 피노키오 코",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1012059,
-    "name": "피노키오 코",
-    "koreanName": "민첩한 피노키오 코",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1012060,
-    "name": "피노키오 코",
-    "koreanName": "현명한 피노키오 코",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1012061,
-    "name": "피노키오 코",
-    "koreanName": "행운의 피노키오 코",
-    "reqJob": 0,
-    "reqLevel": 10
   },
   {
     "id": 1012070,
@@ -159,96 +75,5 @@
     "koreanName": "화이트 마우스 분장",
     "reqJob": 0,
     "reqLevel": 10
-  },
-  {
-    "id": 1012086,
-    "name": "White Mouse Kit",
-    "koreanName": "화이트 마우스 분장",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1012087,
-    "name": "White Mouse Kit",
-    "koreanName": "화이트 마우스 분장",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1012088,
-    "name": "White Mouse Kit",
-    "koreanName": "화이트 마우스 분장",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1012098,
-    "name": "Maple Leaf",
-    "koreanName": "메이플 리프",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1012101,
-    "name": "Maple Leaf",
-    "koreanName": "메이플 리프",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1012102,
-    "name": "Maple Leaf",
-    "koreanName": "메이플 리프",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1012103,
-    "name": "Maple Leaf",
-    "koreanName": "메이플 리프",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1012106,
-    "name": "Rat Mouth",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 25
-  },
-  {
-    "id": 1012107,
-    "name": "Branch Nose",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 40
-  },
-  {
-    "id": 1012108,
-    "name": "Smiling Mask",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 25
-  },
-  {
-    "id": 1012109,
-    "name": "Crying Mask",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 25
-  },
-  {
-    "id": 1012110,
-    "name": "Angry Mask",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 25
-  },
-  {
-    "id": 1012111,
-    "name": "Sad Mask",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 25
   }
 ]

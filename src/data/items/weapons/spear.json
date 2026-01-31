@@ -1,47 +1,5 @@
 [
   {
-    "id": 1432002,
-    "name": "Forked Spear",
-    "koreanName": "삼지창",
-    "reqJob": 1,
-    "reqLevel": 30
-  },
-  {
-    "id": 1432003,
-    "name": "Nakamaki",
-    "koreanName": "나카마키",
-    "reqJob": 1,
-    "reqLevel": 35
-  },
-  {
-    "id": 1432004,
-    "name": "Serpent's Tongue",
-    "koreanName": "장팔사모",
-    "reqJob": 1,
-    "reqLevel": 50
-  },
-  {
-    "id": 1432005,
-    "name": "Zeco",
-    "koreanName": "제코",
-    "reqJob": 1,
-    "reqLevel": 40
-  },
-  {
-    "id": 1432006,
-    "name": "Holy Spear",
-    "koreanName": "십자창",
-    "reqJob": 1,
-    "reqLevel": 60
-  },
-  {
-    "id": 1432007,
-    "name": "Redemption",
-    "koreanName": "스페판",
-    "reqJob": 1,
-    "reqLevel": 70
-  },
-  {
     "id": 1432008,
     "name": "Fish Spear",
     "koreanName": "물고기 작살",
@@ -54,6 +12,83 @@
     "koreanName": "죽창",
     "reqJob": 0,
     "reqLevel": 20
+  },
+  {
+    "id": 1432014,
+    "name": "Fish Spear",
+    "koreanName": "켄타의 물고기 작살",
+    "reqJob": 0,
+    "reqLevel": 20
+  },
+  {
+    "id": 1432013,
+    "name": "Pumpkin Spear",
+    "koreanName": "펌프킨 스피어",
+    "reqJob": 0,
+    "reqLevel": 25
+  },
+  {
+    "id": 1432002,
+    "name": "Forked Spear",
+    "koreanName": "삼지창",
+    "reqJob": 1,
+    "reqLevel": 30
+  },
+  {
+    "id": 1432042,
+    "name": "Pink Flower Tube",
+    "koreanName": "분홍색 꽃무늬 튜브",
+    "reqJob": 1,
+    "reqLevel": 30
+  },
+  {
+    "id": 1432003,
+    "name": "Nakamaki",
+    "koreanName": "나카마키",
+    "reqJob": 1,
+    "reqLevel": 35
+  },
+  {
+    "id": 1432005,
+    "name": "Zeco",
+    "koreanName": "제코",
+    "reqJob": 1,
+    "reqLevel": 40
+  },
+  {
+    "id": 1432012,
+    "name": "Maple Impaler",
+    "koreanName": "메이플 스피어",
+    "reqJob": 1,
+    "reqLevel": 43
+  },
+  {
+    "id": 1432004,
+    "name": "Serpent's Tongue",
+    "koreanName": "장팔사모",
+    "reqJob": 1,
+    "reqLevel": 50
+  },
+  {
+    "id": 1432006,
+    "name": "Holy Spear",
+    "koreanName": "십자창",
+    "reqJob": 1,
+    "reqLevel": 60
+  },
+  {
+    "id": 1432040,
+    "name": "Maple Soul Spear",
+    "koreanName": "메이플 베리트 스피어",
+    "reqJob": 1,
+    "reqLevel": 64
+  },
+  {
+    "id": 1432007,
+    "name": "Redemption",
+    "koreanName": "스페판",
+    "reqJob": 1,
+    "reqLevel": 70
   },
   {
     "id": 1432010,
@@ -70,125 +105,6 @@
     "reqLevel": 90
   },
   {
-    "id": 1432012,
-    "name": "Maple Impaler",
-    "koreanName": "메이플 스피어",
-    "reqJob": 1,
-    "reqLevel": 43
-  },
-  {
-    "id": 1432013,
-    "name": "Pumpkin Spear",
-    "koreanName": "펌프킨 스피어",
-    "reqJob": 0,
-    "reqLevel": 25
-  },
-  {
-    "id": 1432014,
-    "name": "Fish Spear",
-    "koreanName": "켄타의 물고기 작살",
-    "reqJob": 0,
-    "reqLevel": 20
-  },
-  {
-    "id": 1432015,
-    "name": "Red Ski",
-    "koreanName": "스키_레드",
-    "reqJob": 0,
-    "reqLevel": 13
-  },
-  {
-    "id": 1432016,
-    "name": "Orange Ski",
-    "koreanName": "스키_오렌지",
-    "reqJob": 0,
-    "reqLevel": 33
-  },
-  {
-    "id": 1432017,
-    "name": "Green Ski",
-    "koreanName": "스키_그린",
-    "reqJob": 0,
-    "reqLevel": 55
-  },
-  {
-    "id": 1432018,
-    "name": "Sky Ski",
-    "koreanName": "스키_스카이",
-    "reqJob": 0,
-    "reqLevel": 85
-  },
-  {
-    "id": 1432019,
-    "name": "Forked Spear",
-    "koreanName": "삼지창",
-    "reqJob": 1,
-    "reqLevel": 20
-  },
-  {
-    "id": 1432020,
-    "name": "Serpent's Tongue",
-    "koreanName": "장팔사모",
-    "reqJob": 1,
-    "reqLevel": 35
-  },
-  {
-    "id": 1432021,
-    "name": "Holy Spear",
-    "koreanName": "십자창",
-    "reqJob": 1,
-    "reqLevel": 50
-  },
-  {
-    "id": 1432022,
-    "name": "Redemption",
-    "koreanName": "스페판",
-    "reqJob": 1,
-    "reqLevel": 60
-  },
-  {
-    "id": 1432023,
-    "name": "Omega Spear",
-    "koreanName": "호진공창",
-    "reqJob": 1,
-    "reqLevel": 70
-  },
-  {
-    "id": 1432024,
-    "name": "Forked Spear",
-    "koreanName": "삼지창",
-    "reqJob": 1,
-    "reqLevel": 20
-  },
-  {
-    "id": 1432025,
-    "name": "Serpent's Tongue",
-    "koreanName": "장팔사모",
-    "reqJob": 1,
-    "reqLevel": 35
-  },
-  {
-    "id": 1432026,
-    "name": "Holy Spear",
-    "koreanName": "십자창",
-    "reqJob": 1,
-    "reqLevel": 50
-  },
-  {
-    "id": 1432027,
-    "name": "Redemption",
-    "koreanName": "스페판",
-    "reqJob": 1,
-    "reqLevel": 60
-  },
-  {
-    "id": 1432028,
-    "name": "Omega Spear",
-    "koreanName": "호진공창",
-    "reqJob": 1,
-    "reqLevel": 70
-  },
-  {
     "id": 1432030,
     "name": "Pinaka",
     "koreanName": "피나카",
@@ -196,108 +112,10 @@
     "reqLevel": 100
   },
   {
-    "id": 1432031,
-    "name": "Forked Spear",
-    "koreanName": "삼지창",
-    "reqJob": 1,
-    "reqLevel": 20
-  },
-  {
-    "id": 1432032,
-    "name": "Serpent's Tongue",
-    "koreanName": "장팔사모",
-    "reqJob": 1,
-    "reqLevel": 35
-  },
-  {
-    "id": 1432033,
-    "name": "Holy Spear",
-    "koreanName": "십자창",
-    "reqJob": 1,
-    "reqLevel": 50
-  },
-  {
-    "id": 1432034,
-    "name": "Redemption",
-    "koreanName": "스페판",
-    "reqJob": 1,
-    "reqLevel": 60
-  },
-  {
-    "id": 1432035,
-    "name": "Omega Spear",
-    "koreanName": "호진공창",
-    "reqJob": 1,
-    "reqLevel": 70
-  },
-  {
     "id": 1432038,
     "name": "Dragon Faltizan",
     "koreanName": "드래곤 팔티잔",
     "reqJob": 1,
     "reqLevel": 110
-  },
-  {
-    "id": 1432039,
-    "name": "Fishing Pole",
-    "koreanName": "낚싯대",
-    "reqJob": 0,
-    "reqLevel": 45
-  },
-  {
-    "id": 1432040,
-    "name": "Maple Soul Spear",
-    "koreanName": "메이플 베리트 스피어",
-    "reqJob": 1,
-    "reqLevel": 64
-  },
-  {
-    "id": 1432041,
-    "name": "Maple 1500 Anniv. Flag",
-    "koreanName": "메이플 1500일 깃발",
-    "reqJob": 1,
-    "reqLevel": 30
-  },
-  {
-    "id": 1432042,
-    "name": "Pink Flower Tube",
-    "koreanName": "분홍색 꽃무늬 튜브",
-    "reqJob": 1,
-    "reqLevel": 30
-  },
-  {
-    "id": 1432043,
-    "name": "Singapore Flag (Spear)",
-    "koreanName": "",
-    "reqJob": 1,
-    "reqLevel": 30
-  },
-  {
-    "id": 1432044,
-    "name": "Malaysia Flag (Spear)",
-    "koreanName": "",
-    "reqJob": 1,
-    "reqLevel": 30
-  },
-  {
-    "id": 1432045,
-    "name": "Sunspear",
-    "koreanName": "",
-    "reqJob": 1,
-    "reqLevel": 70
-  },
-  {
-    "id": 1432046,
-    "name": "Maplemas Tree",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 30
-  },
-  {
-    "id": 1432048,
-    "name": "Pooh Pooh Shovel",
-    "koreanName": "",
-    "reqJob": 1,
-    "reqLevel": 105
   }
 ]

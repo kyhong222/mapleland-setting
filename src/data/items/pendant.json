@@ -1,54 +1,5 @@
 [
   {
-    "id": 1122000,
-    "name": "Horntail Necklace",
-    "koreanName": "혼테일의 목걸이",
-    "reqJob": 0,
-    "reqLevel": 120
-  },
-  {
-    "id": 1122001,
-    "name": "Bow-tie(Green)",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 30
-  },
-  {
-    "id": 1122002,
-    "name": "Bow-tie (Red)",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 70
-  },
-  {
-    "id": 1122003,
-    "name": "Bow-tie (Yellow)",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 30
-  },
-  {
-    "id": 1122004,
-    "name": "Bow-tie (Pink)",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 50
-  },
-  {
-    "id": 1122005,
-    "name": "Bow-tie (Black)",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 70
-  },
-  {
-    "id": 1122006,
-    "name": "Bow-tie (Blue)",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 50
-  },
-  {
     "id": 1122007,
     "name": "Spiegelmann Necklace",
     "koreanName": "슈피겔만의 목걸이",
@@ -56,17 +7,31 @@
     "reqLevel": 30
   },
   {
-    "id": 1122010,
-    "name": "Horus's Eye",
-    "koreanName": "호루스의 눈",
-    "reqJob": 0,
-    "reqLevel": 70
-  },
-  {
     "id": 1122014,
     "name": "Silver Deputy Star",
-    "koreanName": "",
+    "koreanName": "부보안관 은뱃지",
     "reqJob": 0,
     "reqLevel": 50
+  },
+   {
+    "id": 1122059,
+    "name": "Horntail Necklace",
+    "koreanName": "나리케인의 징표",
+    "reqJob": 0,
+    "reqLevel": 110
+  },
+  {
+    "id": 1122000,
+    "name": "Horntail Necklace",
+    "koreanName": "혼테일의 목걸이",
+    "reqJob": 0,
+    "reqLevel": 120
+  },
+  {
+    "id": 4001094,
+    "name": "Horntail Necklace",
+    "koreanName": "혼테일의 목걸이(알)",
+    "reqJob": 0,
+    "reqLevel": 120
   }
 ]

@@ -3,6 +3,7 @@ import type { Item, ItemType } from "../types/item";
 import type { Job } from "../types/job";
 import type { Stats } from "../types/stats";
 import type { Buff, StatsSummary, FinalStats } from "../types/character";
+import mapleWarriorData from "../data/buff/MapleWarrior/MapleWarrior.json";
 
 /**
  * Character 도메인 객체
@@ -126,6 +127,7 @@ export class Character {
       slot: targetSlot,
       name: item.name,
       type: item.type,
+      icon: item.icon,
       attack: item.stats.attack,
       str: item.stats.str,
       dex: item.stats.dex,
@@ -222,12 +224,12 @@ export class Character {
     }
   }
 
-  getBuffStats(buff1Attack: number, buff2Attack: number): StatsSummary {
+  getBuffStats(buff1Attack: number, buff2Attack: number, masteryAttack: number): StatsSummary {
     const heroEcho = this.buffs.get("heroEcho");
     const heroEchoMultiplier = heroEcho?.enabled ? 1.04 : 1;
 
     const equipStats = this.getEquipmentStats();
-    const totalBuffAttack = buff1Attack + buff2Attack;
+    const totalBuffAttack = buff1Attack + buff2Attack + masteryAttack;
     const totalAttackBeforeEcho = equipStats.attack + totalBuffAttack;
     const finalAttack = Math.floor(totalAttackBeforeEcho * heroEchoMultiplier);
 
@@ -260,31 +262,12 @@ export class Character {
       return 0;
     }
 
-    // 메이플용사 데이터 로드 (동적 import 대신 하드코딩)
-    const bonusTable: Record<number, number> = {
-      1: 1,
-      2: 1,
-      3: 2,
-      4: 2,
-      5: 3,
-      6: 3,
-      7: 4,
-      8: 4,
-      9: 5,
-      10: 5,
-      11: 6,
-      12: 6,
-      13: 7,
-      14: 7,
-      15: 8,
-      16: 8,
-      17: 9,
-      18: 9,
-      19: 10,
-      20: 10,
-    };
+    // 메이플용사 JSON 데이터에서 x 값 가져오기
+    const mapleWarriorTable = (mapleWarriorData as any).table;
+    const entry = mapleWarriorTable.find((e: any) => e.level === mapleWarrior.level);
+    const xValue = entry?.x ?? 0;
 
-    return (bonusTable[mapleWarrior.level] || 0) / 100;
+    return xValue / 100;
   }
 
   /**
@@ -294,7 +277,7 @@ export class Character {
     return this.job?.engName === "magician";
   }
 
-  getFinalStats(buff1Value: number, buff2Value: number): FinalStats {
+  getFinalStats(buff1Value: number, buff2Value: number, masteryAttack: number): FinalStats {
     const equipStats = this.getEquipmentStats();
     const mapleWarriorBonus = this.getMapleWarriorBonus();
     const heroEcho = this.buffs.get("heroEcho");
@@ -346,7 +329,7 @@ export class Character {
 
     // 버프1, 버프2는 마법사면 마력으로, 그 외엔 공격력으로
     const isMage = this.isMagician();
-    const buffAttack = isMage ? 0 : buff1Value + buff2Value;
+    const buffAttack = isMage ? 0 : buff1Value + buff2Value + masteryAttack;
     const buffMAD = isMage ? buff1Value + buff2Value : 0;
 
     // 총 공격력 = int((장비공격력 + 버프1 + 버프2) * 영메배율)

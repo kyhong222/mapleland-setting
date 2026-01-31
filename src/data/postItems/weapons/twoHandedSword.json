@@ -1,0 +1,117 @@
+{
+  "1402006": {
+    "koreanName": "하이랜더",
+    "stats": {
+      "attack": 55,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 35,
+      "str": 115,
+      "dex": 0,
+      "int": 0,
+      "luk": 0
+    }
+  },
+  "1402007": {
+    "koreanName": "쟈드",
+    "stats": {
+      "attack": 60,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 6
+    },
+    "requireStats": {
+      "level": 40,
+      "str": 130,
+      "dex": 0,
+      "int": 0,
+      "luk": 0
+    }
+  },
+  "1402008": {
+    "koreanName": "클러디",
+    "stats": {
+      "attack": 45,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 6
+    },
+    "requireStats": {
+      "level": 25,
+      "str": 85,
+      "dex": 0,
+      "int": 0,
+      "luk": 0
+    }
+  },
+  "1402009": {
+    "koreanName": "나무 야구 방망이",
+    "stats": {
+      "attack": 20,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 5
+    },
+    "requireStats": {
+      "level": 0,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0
+    }
+  },
+  "1402010": {
+    "koreanName": "알루미늄 야구 방망이",
+    "stats": {
+      "attack": 48,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 5
+    },
+    "requireStats": {
+      "level": 30,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0
+    }
+  }
+}

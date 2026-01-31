@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc:*)",
+      "Bash(timeout /t 5)",
+      "Bash(npm install:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: 캐릭터 시스템 확장 및 아이템 모달 개선\n\n- 해적 직업 추가 \\(무기에 따라 주스탯 동적 결정\\)\n- 벨트 장비 슬롯 추가\n- 새로운 스탯 필드 추가 \\(speed, jump, hp, mp, macc\\)\n- PreItem/PostItem 타입 및 변환 헬퍼 함수 추가\n- 너클/건 무기 타입 추가\n- 아이템 모달: 열릴 때 초기화, API 로딩 중 스피너 표시, 스탯 항상 편집 가능\n- @emotion/react, @emotion/styled 의존성 추가\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(dir:*)",
+      "Bash(npx vite build)"
+    ]
+  }
+}

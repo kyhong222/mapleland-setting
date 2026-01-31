@@ -49,6 +49,27 @@
     "reqLevel": 20
   },
   {
+    "id": 1472034,
+    "name": "Adamantium Guards",
+    "koreanName": "아다만티움 가즈",
+    "reqJob": 8,
+    "reqLevel": 20
+  },
+  {
+    "id": 1472039,
+    "name": "Adamantium Guards",
+    "koreanName": "아다만티움 가즈",
+    "reqJob": 8,
+    "reqLevel": 20
+  },
+  {
+    "id": 1472045,
+    "name": "Adamantium Guards",
+    "koreanName": "아다만티움 가즈",
+    "reqJob": 8,
+    "reqLevel": 20
+  },
+  {
     "id": 1472007,
     "name": "Meba",
     "koreanName": "메바",
@@ -73,6 +94,13 @@
     "id": 1472010,
     "name": "Adamantium Guards",
     "koreanName": "아다만티움 가즈",
+    "reqJob": 8,
+    "reqLevel": 30
+  },
+  {
+    "id": 1472056,
+    "name": "Maple 1500 Anniv. Flag",
+    "koreanName": "메이플 1500일 깃발",
     "reqJob": 8,
     "reqLevel": 30
   },
@@ -112,6 +140,27 @@
     "reqLevel": 35
   },
   {
+    "id": 1472035,
+    "name": "Dark Slain",
+    "koreanName": "다크 슬레인",
+    "reqJob": 8,
+    "reqLevel": 35
+  },
+  {
+    "id": 1472040,
+    "name": "Dark Slain",
+    "koreanName": "다크 슬레인",
+    "reqJob": 8,
+    "reqLevel": 35
+  },
+  {
+    "id": 1472046,
+    "name": "Dark Slain",
+    "koreanName": "다크 슬레인",
+    "reqJob": 8,
+    "reqLevel": 35
+  },
+  {
     "id": 1472014,
     "name": "Steel Avarice",
     "koreanName": "스틸 보닌",
@@ -136,6 +185,13 @@
     "id": 1472017,
     "name": "Dark Avarice",
     "koreanName": "다크 보닌",
+    "reqJob": 8,
+    "reqLevel": 40
+  },
+  {
+    "id": 1472069,
+    "name": "Steel Avarice for Transformation",
+    "koreanName": "클립토",
     "reqJob": 8,
     "reqLevel": 40
   },
@@ -175,6 +231,27 @@
     "reqLevel": 50
   },
   {
+    "id": 1472036,
+    "name": "Dark Gigantic",
+    "koreanName": "다크 기간틱",
+    "reqJob": 8,
+    "reqLevel": 50
+  },
+  {
+    "id": 1472041,
+    "name": "Dark Gigantic",
+    "koreanName": "다크 기간틱",
+    "reqJob": 8,
+    "reqLevel": 50
+  },
+  {
+    "id": 1472047,
+    "name": "Dark Gigantic",
+    "koreanName": "다크 기간틱",
+    "reqJob": 8,
+    "reqLevel": 50
+  },
+  {
     "id": 1472022,
     "name": "Bronze Gigantic",
     "koreanName": "브론즈 기간틱",
@@ -199,6 +276,27 @@
     "id": 1472025,
     "name": "Dark Gigantic",
     "koreanName": "다크 기간틱",
+    "reqJob": 8,
+    "reqLevel": 60
+  },
+  {
+    "id": 1472037,
+    "name": "Black Scarab",
+    "koreanName": "흑갑충",
+    "reqJob": 8,
+    "reqLevel": 60
+  },
+  {
+    "id": 1472042,
+    "name": "Black Scarab",
+    "koreanName": "흑갑충",
+    "reqJob": 8,
+    "reqLevel": 60
+  },
+  {
+    "id": 1472048,
+    "name": "Black Scarab",
+    "koreanName": "흑갑충",
     "reqJob": 8,
     "reqLevel": 60
   },
@@ -238,6 +336,27 @@
     "reqLevel": 70
   },
   {
+    "id": 1472038,
+    "name": "Black Mamba",
+    "koreanName": "코브라스티어",
+    "reqJob": 8,
+    "reqLevel": 70
+  },
+  {
+    "id": 1472043,
+    "name": "Black Mamba",
+    "koreanName": "코브라스티어",
+    "reqJob": 8,
+    "reqLevel": 70
+  },
+  {
+    "id": 1472049,
+    "name": "Black Mamba",
+    "koreanName": "코브라스티어",
+    "reqJob": 8,
+    "reqLevel": 70
+  },
+  {
     "id": 1472031,
     "name": "Black Mamba",
     "koreanName": "코브라스티어",
@@ -247,16 +366,16 @@
   {
     "id": 1472072,
     "name": "Raven's Claw",
-    "koreanName": "레이븐즈 클로",
+    "koreanName": "",
     "reqJob": 8,
     "reqLevel": 80
   },
   {
     "id": 1472075,
     "name": "Dusk Raven's Claw",
-    "koreanName": "여명의 레이븐즈 클로",
+    "koreanName": "",
     "reqJob": 8,
-    "reqLevel": 90
+    "reqLevel": 80
   },
   {
     "id": 1472033,
@@ -268,14 +387,14 @@
   {
     "id": 1472073,
     "name": "Night Raven's Claw",
-    "koreanName": "밤의 레이븐즈 클로",
+    "koreanName": "",
     "reqJob": 8,
     "reqLevel": 90
   },
   {
     "id": 1472074,
     "name": "Dawn Raven's Claw",
-    "koreanName": "황혼의 레이븐즈 클로",
+    "koreanName": "",
     "reqJob": 8,
     "reqLevel": 90
   },

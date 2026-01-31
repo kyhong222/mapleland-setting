@@ -1,12 +1,5 @@
 [
   {
-    "id": 1072000,
-    "name": "Brown Jangoon Shoes",
-    "koreanName": "황 진월장화",
-    "reqJob": 1,
-    "reqLevel": 40
-  },
-  {
     "id": 1072001,
     "name": "Red Rubber Boots",
     "koreanName": "빨간색 고무 장화",
@@ -14,30 +7,23 @@
     "reqLevel": 0
   },
   {
-    "id": 1072002,
-    "name": "Steel Trigger",
-    "koreanName": "스틸 티거",
-    "reqJob": 1,
-    "reqLevel": 35
-  },
-  {
-    "id": 1072003,
-    "name": "Emerald Battle Grieves",
-    "koreanName": "에메랄드 배틀 그리브",
-    "reqJob": 1,
-    "reqLevel": 30
-  },
-  {
-    "id": 1072004,
-    "name": "White Gomushin",
-    "koreanName": "흰색 고무신",
-    "reqJob": 0,
-    "reqLevel": 11
-  },
-  {
     "id": 1072005,
     "name": "Leather Sandals",
     "koreanName": "가죽 샌들",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 1072037,
+    "name": "Yellow Rubber Boots",
+    "koreanName": "노란색 고무 장화",
+    "reqJob": 0,
+    "reqLevel": 0
+  },
+  {
+    "id": 1072038,
+    "name": "Blue Rubber Boots",
+    "koreanName": "파란색 고무 장화",
     "reqJob": 0,
     "reqLevel": 0
   },
@@ -49,18 +35,67 @@
     "reqLevel": 10
   },
   {
-    "id": 1072007,
-    "name": "Brown High Boots",
-    "koreanName": "브라운 미들 래더",
-    "reqJob": 1,
-    "reqLevel": 20
+    "id": 1072015,
+    "name": "Brown Hard Leather Boots",
+    "koreanName": "브라운 하드래더 부츠",
+    "reqJob": 4,
+    "reqLevel": 10
   },
   {
-    "id": 1072008,
-    "name": "Bronze Aroa Boots",
-    "koreanName": "고동색 아로아 슈즈",
+    "id": 1072044,
+    "name": "Yellow Basic Boots",
+    "koreanName": "노란색 코우치",
+    "reqJob": 2,
+    "reqLevel": 10
+  },
+  {
+    "id": 1072045,
+    "name": "Blue Basic Boots",
+    "koreanName": "파란색 코우치",
+    "reqJob": 2,
+    "reqLevel": 10
+  },
+  {
+    "id": 1072059,
+    "name": "Green Hard Leather Boots",
+    "koreanName": "그린 하드래더 부츠",
+    "reqJob": 4,
+    "reqLevel": 10
+  },
+  {
+    "id": 1072070,
+    "name": "Blue Gidder Shoes",
+    "koreanName": "블루 기더슈즈",
+    "reqJob": 8,
+    "reqLevel": 10
+  },
+  {
+    "id": 1072071,
+    "name": "Brown Gidder Shoes",
+    "koreanName": "브라운 기더슈즈",
+    "reqJob": 8,
+    "reqLevel": 10
+  },
+  {
+    "id": 1072004,
+    "name": "White Gomushin",
+    "koreanName": "흰색 고무신",
     "reqJob": 0,
-    "reqLevel": 16
+    "reqLevel": 11
+  },
+  {
+    "id": 1072042,
+    "name": "Black Gomushin",
+    "koreanName": "검정색 고무신",
+    "reqJob": 0,
+    "reqLevel": 11
+  },
+  {
+    "id": 1072043,
+    "name": "Smelly Gomushin",
+    "koreanName": "꼬질꼬질한 고무신",
+    "reqJob": 0,
+    "reqLevel": 11
   },
   {
     "id": 1072009,
@@ -70,27 +105,6 @@
     "reqLevel": 15
   },
   {
-    "id": 1072011,
-    "name": "Mithril War Boots",
-    "koreanName": "미스릴 워 부츠",
-    "reqJob": 1,
-    "reqLevel": 25
-  },
-  {
-    "id": 1072012,
-    "name": "Red Whitebottom Boots",
-    "koreanName": "빨간색 가죽 구두",
-    "reqJob": 0,
-    "reqLevel": 26
-  },
-  {
-    "id": 1072015,
-    "name": "Brown Hard Leather Boots",
-    "koreanName": "브라운 하드래더 부츠",
-    "reqJob": 4,
-    "reqLevel": 10
-  },
-  {
     "id": 1072016,
     "name": "Green Woodsman Boots",
     "koreanName": "그린 우드탑",
@@ -98,18 +112,88 @@
     "reqLevel": 15
   },
   {
-    "id": 1072017,
-    "name": "Blue Ankle-strap Sandals",
-    "koreanName": "파란색 도로시 구두",
-    "reqJob": 0,
-    "reqLevel": 21
+    "id": 1072023,
+    "name": "Beige Nitty",
+    "koreanName": "베이지 니티",
+    "reqJob": 2,
+    "reqLevel": 15
   },
   {
-    "id": 1072018,
-    "name": "Blue Sneakers",
-    "koreanName": "파란색 캔버스화",
+    "id": 1072024,
+    "name": "Black Nitty",
+    "koreanName": "블랙 니티",
+    "reqJob": 2,
+    "reqLevel": 15
+  },
+  {
+    "id": 1072028,
+    "name": "White Ninja Sandals",
+    "koreanName": "흰색 닌자 샌들",
+    "reqJob": 8,
+    "reqLevel": 15
+  },
+  {
+    "id": 1072030,
+    "name": "Blue Ninja Sandals",
+    "koreanName": "파란색 닌자 샌들",
+    "reqJob": 8,
+    "reqLevel": 15
+  },
+  {
+    "id": 1072031,
+    "name": "Red Ninja Sandals",
+    "koreanName": "빨간색 닌자 샌들",
+    "reqJob": 8,
+    "reqLevel": 15
+  },
+  {
+    "id": 1072050,
+    "name": "Bronze Grieves",
+    "koreanName": "브론즈 그리브",
+    "reqJob": 1,
+    "reqLevel": 15
+  },
+  {
+    "id": 1072060,
+    "name": "Brown Woodsman Boots",
+    "koreanName": "브라운 우드탑",
+    "reqJob": 4,
+    "reqLevel": 15
+  },
+  {
+    "id": 1072061,
+    "name": "Blue Woodsman Boots",
+    "koreanName": "블루 우드탑",
+    "reqJob": 4,
+    "reqLevel": 15
+  },
+  {
+    "id": 1072008,
+    "name": "Bronze Aroa Boots",
+    "koreanName": "고동색 아로아 슈즈",
     "reqJob": 0,
-    "reqLevel": 31
+    "reqLevel": 16
+  },
+  {
+    "id": 1072048,
+    "name": "Brown Aroa Boots",
+    "koreanName": "갈색 아로아 슈즈",
+    "reqJob": 0,
+    "reqLevel": 16
+  },
+  {
+    "id": 1072049,
+    "name": "Green Aroa Boots",
+    "koreanName": "초록색 아로아 슈즈",
+    "reqJob": 0,
+    "reqLevel": 16
+  },
+  {
+    "id": 1072007,
+    "name": "Brown High Boots",
+    "koreanName": "브라운 미들 래더",
+    "reqJob": 1,
+    "reqLevel": 20
   },
   {
     "id": 1072019,
@@ -140,20 +224,6 @@
     "reqLevel": 20
   },
   {
-    "id": 1072023,
-    "name": "Beige Nitty",
-    "koreanName": "베이지 니티",
-    "reqJob": 2,
-    "reqLevel": 15
-  },
-  {
-    "id": 1072024,
-    "name": "Black Nitty",
-    "koreanName": "블랙 니티",
-    "reqJob": 2,
-    "reqLevel": 15
-  },
-  {
     "id": 1072025,
     "name": "Deer Huntertop",
     "koreanName": "디어 헌터탑",
@@ -168,139 +238,6 @@
     "reqLevel": 20
   },
   {
-    "id": 1072027,
-    "name": "Brown Jack Boots",
-    "koreanName": "브라운 잭부츠",
-    "reqJob": 4,
-    "reqLevel": 25
-  },
-  {
-    "id": 1072028,
-    "name": "White Ninja Sandals",
-    "koreanName": "흰색 닌자 샌들",
-    "reqJob": 8,
-    "reqLevel": 15
-  },
-  {
-    "id": 1072029,
-    "name": "Yellow Ninja Sandals",
-    "koreanName": "노란색 닌자 샌들",
-    "reqJob": 8,
-    "reqLevel": 15
-  },
-  {
-    "id": 1072030,
-    "name": "Blue Ninja Sandals",
-    "koreanName": "파란색 닌자 샌들",
-    "reqJob": 8,
-    "reqLevel": 15
-  },
-  {
-    "id": 1072031,
-    "name": "Red Ninja Sandals",
-    "koreanName": "빨간색 닌자 샌들",
-    "reqJob": 8,
-    "reqLevel": 15
-  },
-  {
-    "id": 1072032,
-    "name": "Bronze Chain Boots",
-    "koreanName": "브론즈 체인슈즈",
-    "reqJob": 8,
-    "reqLevel": 30
-  },
-  {
-    "id": 1072033,
-    "name": "Iron Chain Boots",
-    "koreanName": "아이언 체인슈즈",
-    "reqJob": 8,
-    "reqLevel": 30
-  },
-  {
-    "id": 1072034,
-    "name": "Green Jack Boots",
-    "koreanName": "그린 잭부츠",
-    "reqJob": 4,
-    "reqLevel": 25
-  },
-  {
-    "id": 1072035,
-    "name": "Silver Chain Boots",
-    "koreanName": "실버 체인슈즈",
-    "reqJob": 8,
-    "reqLevel": 30
-  },
-  {
-    "id": 1072036,
-    "name": "Gold Chain Boots",
-    "koreanName": "골드 체인슈즈",
-    "reqJob": 8,
-    "reqLevel": 30
-  },
-  {
-    "id": 1072037,
-    "name": "Yellow Rubber Boots",
-    "koreanName": "노란색 고무 장화",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1072038,
-    "name": "Blue Rubber Boots",
-    "koreanName": "파란색 고무 장화",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1072039,
-    "name": "Mithril Battle Grieves",
-    "koreanName": "미스릴 배틀 그리브",
-    "reqJob": 1,
-    "reqLevel": 30
-  },
-  {
-    "id": 1072040,
-    "name": "Silver Battle Grieves",
-    "koreanName": "실버 배틀 그리브",
-    "reqJob": 1,
-    "reqLevel": 30
-  },
-  {
-    "id": 1072041,
-    "name": "Blood Battle Grieves",
-    "koreanName": "블러드 배틀 그리브",
-    "reqJob": 1,
-    "reqLevel": 30
-  },
-  {
-    "id": 1072042,
-    "name": "Black Gomushin",
-    "koreanName": "검정색 고무신",
-    "reqJob": 0,
-    "reqLevel": 11
-  },
-  {
-    "id": 1072043,
-    "name": "Smelly Gomushin",
-    "koreanName": "꼬질꼬질한 고무신",
-    "reqJob": 0,
-    "reqLevel": 11
-  },
-  {
-    "id": 1072044,
-    "name": "Yellow Basic Boots",
-    "koreanName": "노란색 코우치",
-    "reqJob": 2,
-    "reqLevel": 10
-  },
-  {
-    "id": 1072045,
-    "name": "Blue Basic Boots",
-    "koreanName": "파란색 코우치",
-    "reqJob": 2,
-    "reqLevel": 10
-  },
-  {
     "id": 1072046,
     "name": "Orange High Boots",
     "koreanName": "오렌지 미들 래더",
@@ -313,111 +250,6 @@
     "koreanName": "블루 미들 래더",
     "reqJob": 1,
     "reqLevel": 20
-  },
-  {
-    "id": 1072048,
-    "name": "Brown Aroa Boots",
-    "koreanName": "갈색 아로아 슈즈",
-    "reqJob": 0,
-    "reqLevel": 16
-  },
-  {
-    "id": 1072049,
-    "name": "Green Aroa Boots",
-    "koreanName": "초록색 아로아 슈즈",
-    "reqJob": 0,
-    "reqLevel": 16
-  },
-  {
-    "id": 1072050,
-    "name": "Bronze Grieves",
-    "koreanName": "브론즈 그리브",
-    "reqJob": 1,
-    "reqLevel": 15
-  },
-  {
-    "id": 1072051,
-    "name": "Silver War Boots",
-    "koreanName": "실버 워 부츠",
-    "reqJob": 1,
-    "reqLevel": 25
-  },
-  {
-    "id": 1072052,
-    "name": "Dark War Boots",
-    "koreanName": "다크 워 부츠",
-    "reqJob": 1,
-    "reqLevel": 25
-  },
-  {
-    "id": 1072053,
-    "name": "Gold War Boots",
-    "koreanName": "골드 워 부츠",
-    "reqJob": 1,
-    "reqLevel": 25
-  },
-  {
-    "id": 1072054,
-    "name": "Orange Whitebottom Boots",
-    "koreanName": "주황색 가죽 구두",
-    "reqJob": 0,
-    "reqLevel": 26
-  },
-  {
-    "id": 1072055,
-    "name": "Pink Whitebottom Boots",
-    "koreanName": "분홍색 가죽 구두",
-    "reqJob": 0,
-    "reqLevel": 26
-  },
-  {
-    "id": 1072056,
-    "name": "Blue Whitebottom Boots",
-    "koreanName": "파란색 가죽 구두",
-    "reqJob": 0,
-    "reqLevel": 26
-  },
-  {
-    "id": 1072059,
-    "name": "Green Hard Leather Boots",
-    "koreanName": "그린 하드래더 부츠",
-    "reqJob": 4,
-    "reqLevel": 10
-  },
-  {
-    "id": 1072060,
-    "name": "Brown Woodsman Boots",
-    "koreanName": "브라운 우드탑",
-    "reqJob": 4,
-    "reqLevel": 15
-  },
-  {
-    "id": 1072061,
-    "name": "Blue Woodsman Boots",
-    "koreanName": "블루 우드탑",
-    "reqJob": 4,
-    "reqLevel": 15
-  },
-  {
-    "id": 1072062,
-    "name": "Red Ankle-strap Sandals",
-    "koreanName": "빨간색 도로시 구두",
-    "reqJob": 0,
-    "reqLevel": 21
-  },
-  {
-    "id": 1072063,
-    "name": "Brown Ankle-strap Sandals",
-    "koreanName": "갈색 도로시 구두",
-    "reqJob": 0,
-    "reqLevel": 21
-  },
-  {
-    "id": 1072064,
-    "name": "Red Sneakers",
-    "koreanName": "빨간색 캔버스화",
-    "reqJob": 0,
-    "reqLevel": 31
   },
   {
     "id": 1072065,
@@ -448,25 +280,74 @@
     "reqLevel": 20
   },
   {
+    "id": 1072017,
+    "name": "Blue Ankle-strap Sandals",
+    "koreanName": "파란색 도로시 구두",
+    "reqJob": 0,
+    "reqLevel": 21
+  },
+  {
+    "id": 1072062,
+    "name": "Red Ankle-strap Sandals",
+    "koreanName": "빨간색 도로시 구두",
+    "reqJob": 0,
+    "reqLevel": 21
+  },
+  {
+    "id": 1072063,
+    "name": "Brown Ankle-strap Sandals",
+    "koreanName": "갈색 도로시 구두",
+    "reqJob": 0,
+    "reqLevel": 21
+  },
+  {
+    "id": 1072011,
+    "name": "Mithril War Boots",
+    "koreanName": "미스릴 워 부츠",
+    "reqJob": 1,
+    "reqLevel": 25
+  },
+  {
+    "id": 1072027,
+    "name": "Brown Jack Boots",
+    "koreanName": "브라운 잭부츠",
+    "reqJob": 4,
+    "reqLevel": 25
+  },
+  {
+    "id": 1072034,
+    "name": "Green Jack Boots",
+    "koreanName": "그린 잭부츠",
+    "reqJob": 4,
+    "reqLevel": 25
+  },
+  {
+    "id": 1072051,
+    "name": "Silver War Boots",
+    "koreanName": "실버 워 부츠",
+    "reqJob": 1,
+    "reqLevel": 25
+  },
+  {
+    "id": 1072052,
+    "name": "Dark War Boots",
+    "koreanName": "다크 워 부츠",
+    "reqJob": 1,
+    "reqLevel": 25
+  },
+  {
+    "id": 1072053,
+    "name": "Gold War Boots",
+    "koreanName": "골드 워 부츠",
+    "reqJob": 1,
+    "reqLevel": 25
+  },
+  {
     "id": 1072069,
     "name": "Red Jack Boots",
     "koreanName": "레드 잭부츠",
     "reqJob": 4,
     "reqLevel": 25
-  },
-  {
-    "id": 1072070,
-    "name": "Blue Gidder Shoes",
-    "koreanName": "블루 기더슈즈",
-    "reqJob": 8,
-    "reqLevel": 10
-  },
-  {
-    "id": 1072071,
-    "name": "Brown Gidder Shoes",
-    "koreanName": "브라운 기더슈즈",
-    "reqJob": 8,
-    "reqLevel": 10
   },
   {
     "id": 1072072,
@@ -488,6 +369,118 @@
     "koreanName": "블랙 윈드슈즈",
     "reqJob": 2,
     "reqLevel": 25
+  },
+  {
+    "id": 1072084,
+    "name": "Blue Lappy Boots",
+    "koreanName": "블루 래피 부츠",
+    "reqJob": 8,
+    "reqLevel": 25
+  },
+  {
+    "id": 1072085,
+    "name": "Red Lappy Boots",
+    "koreanName": "레드 래피 부츠",
+    "reqJob": 8,
+    "reqLevel": 25
+  },
+  {
+    "id": 1072086,
+    "name": "Green Lappy Boots",
+    "koreanName": "그린 래피 부츠",
+    "reqJob": 8,
+    "reqLevel": 25
+  },
+  {
+    "id": 1072087,
+    "name": "Black Lappy Boots",
+    "koreanName": "블랙 래피 부츠",
+    "reqJob": 8,
+    "reqLevel": 25
+  },
+  {
+    "id": 1072012,
+    "name": "Red Whitebottom Boots",
+    "koreanName": "빨간색 가죽 구두",
+    "reqJob": 0,
+    "reqLevel": 26
+  },
+  {
+    "id": 1072054,
+    "name": "Orange Whitebottom Boots",
+    "koreanName": "주황색 가죽 구두",
+    "reqJob": 0,
+    "reqLevel": 26
+  },
+  {
+    "id": 1072055,
+    "name": "Pink Whitebottom Boots",
+    "koreanName": "분홍색 가죽 구두",
+    "reqJob": 0,
+    "reqLevel": 26
+  },
+  {
+    "id": 1072056,
+    "name": "Blue Whitebottom Boots",
+    "koreanName": "파란색 가죽 구두",
+    "reqJob": 0,
+    "reqLevel": 26
+  },
+  {
+    "id": 1072003,
+    "name": "Emerald Battle Grieves",
+    "koreanName": "에메랄드 배틀 그리브",
+    "reqJob": 1,
+    "reqLevel": 30
+  },
+  {
+    "id": 1072032,
+    "name": "Bronze Chain Boots",
+    "koreanName": "브론즈 체인슈즈",
+    "reqJob": 8,
+    "reqLevel": 30
+  },
+  {
+    "id": 1072033,
+    "name": "Iron Chain Boots",
+    "koreanName": "아이언 체인슈즈",
+    "reqJob": 8,
+    "reqLevel": 30
+  },
+  {
+    "id": 1072035,
+    "name": "Silver Chain Boots",
+    "koreanName": "실버 체인슈즈",
+    "reqJob": 8,
+    "reqLevel": 30
+  },
+  {
+    "id": 1072036,
+    "name": "Gold Chain Boots",
+    "koreanName": "골드 체인슈즈",
+    "reqJob": 8,
+    "reqLevel": 30
+  },
+  {
+    "id": 1072039,
+    "name": "Mithril Battle Grieves",
+    "koreanName": "미스릴 배틀 그리브",
+    "reqJob": 1,
+    "reqLevel": 30
+  },
+  {
+    "id": 1072040,
+    "name": "Silver Battle Grieves",
+    "koreanName": "실버 배틀 그리브",
+    "reqJob": 1,
+    "reqLevel": 30
+  },
+  {
+    "id": 1072041,
+    "name": "Blood Battle Grieves",
+    "koreanName": "블러드 배틀 그리브",
+    "reqJob": 1,
+    "reqLevel": 30
   },
   {
     "id": 1072075,
@@ -553,32 +546,60 @@
     "reqLevel": 30
   },
   {
-    "id": 1072084,
-    "name": "Blue Lappy Boots",
-    "koreanName": "블루 래피 부츠",
-    "reqJob": 8,
-    "reqLevel": 25
+    "id": 1072168,
+    "name": "Red Snowshoes",
+    "koreanName": "레드 아이젠",
+    "reqJob": 1,
+    "reqLevel": 30
   },
   {
-    "id": 1072085,
-    "name": "Red Lappy Boots",
-    "koreanName": "레드 래피 부츠",
-    "reqJob": 8,
-    "reqLevel": 25
+    "id": 1072169,
+    "name": "Blue Snowshoes",
+    "koreanName": "블루 아이젠",
+    "reqJob": 2,
+    "reqLevel": 30
   },
   {
-    "id": 1072086,
-    "name": "Green Lappy Boots",
-    "koreanName": "그린 래피 부츠",
-    "reqJob": 8,
-    "reqLevel": 25
+    "id": 1072170,
+    "name": "Green Snowshoes",
+    "koreanName": "그린 아이젠",
+    "reqJob": 4,
+    "reqLevel": 30
   },
   {
-    "id": 1072087,
-    "name": "Black Lappy Boots",
-    "koreanName": "블랙 래피 부츠",
+    "id": 1072171,
+    "name": "Black Snowshoes",
+    "koreanName": "블랙 아이젠",
     "reqJob": 8,
-    "reqLevel": 25
+    "reqLevel": 30
+  },
+  {
+    "id": 1072275,
+    "name": "Fonla's Slippers",
+    "koreanName": "폰라의 슬리퍼",
+    "reqJob": 0,
+    "reqLevel": 30
+  },
+  {
+    "id": 1072018,
+    "name": "Blue Sneakers",
+    "koreanName": "파란색 캔버스화",
+    "reqJob": 0,
+    "reqLevel": 31
+  },
+  {
+    "id": 1072064,
+    "name": "Red Sneakers",
+    "koreanName": "빨간색 캔버스화",
+    "reqJob": 0,
+    "reqLevel": 31
+  },
+  {
+    "id": 1072002,
+    "name": "Steel Trigger",
+    "koreanName": "스틸 티거",
+    "reqJob": 1,
+    "reqLevel": 35
   },
   {
     "id": 1072089,
@@ -644,6 +665,27 @@
     "reqLevel": 35
   },
   {
+    "id": 1072112,
+    "name": "Mithril Trigger",
+    "koreanName": "미스릴 티거",
+    "reqJob": 1,
+    "reqLevel": 35
+  },
+  {
+    "id": 1072113,
+    "name": "Dark Trigger",
+    "koreanName": "다크 티거",
+    "reqJob": 1,
+    "reqLevel": 35
+  },
+  {
+    "id": 1072000,
+    "name": "Brown Jangoon Shoes",
+    "koreanName": "황 진월장화",
+    "reqJob": 1,
+    "reqLevel": 40
+  },
+  {
     "id": 1072107,
     "name": "Black Red-Lined Shoes",
     "koreanName": "레드 하프슈즈",
@@ -670,20 +712,6 @@
     "koreanName": "블루 하프슈즈",
     "reqJob": 8,
     "reqLevel": 40
-  },
-  {
-    "id": 1072112,
-    "name": "Mithril Trigger",
-    "koreanName": "미스릴 티거",
-    "reqJob": 1,
-    "reqLevel": 35
-  },
-  {
-    "id": 1072113,
-    "name": "Dark Trigger",
-    "koreanName": "다크 티거",
-    "reqJob": 1,
-    "reqLevel": 35
   },
   {
     "id": 1072114,
@@ -742,6 +770,20 @@
     "reqLevel": 40
   },
   {
+    "id": 1072126,
+    "name": "Maroon Jangoon Shoes",
+    "koreanName": "자 진월장화",
+    "reqJob": 1,
+    "reqLevel": 40
+  },
+  {
+    "id": 1072127,
+    "name": "Blue Jangoon Shoes",
+    "koreanName": "청 진월장화",
+    "reqJob": 1,
+    "reqLevel": 40
+  },
+  {
     "id": 1072122,
     "name": "Brown Steel-Tip Boots",
     "koreanName": "브라운 네일슈즈",
@@ -768,20 +810,6 @@
     "koreanName": "퍼플 네일슈즈",
     "reqJob": 4,
     "reqLevel": 50
-  },
-  {
-    "id": 1072126,
-    "name": "Maroon Jangoon Shoes",
-    "koreanName": "자 진월장화",
-    "reqJob": 1,
-    "reqLevel": 40
-  },
-  {
-    "id": 1072127,
-    "name": "Blue Jangoon Shoes",
-    "koreanName": "청 진월장화",
-    "reqJob": 1,
-    "reqLevel": 40
   },
   {
     "id": 1072128,
@@ -840,34 +868,6 @@
     "reqLevel": 50
   },
   {
-    "id": 1072136,
-    "name": "Pink Goldrunners",
-    "koreanName": "핑크 앵클부츠",
-    "reqJob": 2,
-    "reqLevel": 60
-  },
-  {
-    "id": 1072137,
-    "name": "Green Goldrunners",
-    "koreanName": "그린 앵클부츠",
-    "reqJob": 2,
-    "reqLevel": 60
-  },
-  {
-    "id": 1072138,
-    "name": "Orange Goldrunners",
-    "koreanName": "오렌지 앵클부츠",
-    "reqJob": 2,
-    "reqLevel": 60
-  },
-  {
-    "id": 1072139,
-    "name": "Blue Goldrunners",
-    "koreanName": "블루 앵클부츠",
-    "reqJob": 2,
-    "reqLevel": 60
-  },
-  {
     "id": 1072140,
     "name": "Pink Goldwind Shoes",
     "koreanName": "핑크 골든윈드슈즈",
@@ -894,6 +894,41 @@
     "koreanName": "그린 골든윈드슈즈",
     "reqJob": 2,
     "reqLevel": 50
+  },
+  {
+    "id": 1072345,
+    "name": "Bosshunter Greaves",
+    "koreanName": "2012 운동회 우승팀 신발",
+    "reqJob": 4,
+    "reqLevel": 50
+  },
+  {
+    "id": 1072136,
+    "name": "Pink Goldrunners",
+    "koreanName": "핑크 앵클부츠",
+    "reqJob": 2,
+    "reqLevel": 60
+  },
+  {
+    "id": 1072137,
+    "name": "Green Goldrunners",
+    "koreanName": "그린 앵클부츠",
+    "reqJob": 2,
+    "reqLevel": 60
+  },
+  {
+    "id": 1072138,
+    "name": "Orange Goldrunners",
+    "koreanName": "오렌지 앵클부츠",
+    "reqJob": 2,
+    "reqLevel": 60
+  },
+  {
+    "id": 1072139,
+    "name": "Blue Goldrunners",
+    "koreanName": "블루 앵클부츠",
+    "reqJob": 2,
+    "reqLevel": 60
   },
   {
     "id": 1072144,
@@ -1057,34 +1092,6 @@
     "reqLevel": 70
   },
   {
-    "id": 1072168,
-    "name": "Red Snowshoes",
-    "koreanName": "레드 아이젠",
-    "reqJob": 1,
-    "reqLevel": 30
-  },
-  {
-    "id": 1072169,
-    "name": "Blue Snowshoes",
-    "koreanName": "블루 아이젠",
-    "reqJob": 2,
-    "reqLevel": 30
-  },
-  {
-    "id": 1072170,
-    "name": "Green Snowshoes",
-    "koreanName": "그린 아이젠",
-    "reqJob": 4,
-    "reqLevel": 30
-  },
-  {
-    "id": 1072171,
-    "name": "Black Snowshoes",
-    "koreanName": "블랙 아이젠",
-    "reqJob": 8,
-    "reqLevel": 30
-  },
-  {
     "id": 1072172,
     "name": "Green Pirate Boots",
     "koreanName": "그린 피레타부츠",
@@ -1152,6 +1159,27 @@
     "name": "Dark Wing Boots",
     "koreanName": "다크 윙부츠",
     "reqJob": 4,
+    "reqLevel": 80
+  },
+  {
+    "id": 1072210,
+    "name": "Red Rivers Boots",
+    "koreanName": "레드 리버스부츠",
+    "reqJob": 1,
+    "reqLevel": 80
+  },
+  {
+    "id": 1072211,
+    "name": "Blue Rivers Boots",
+    "koreanName": "블루 리버스부츠",
+    "reqJob": 1,
+    "reqLevel": 80
+  },
+  {
+    "id": 1072212,
+    "name": "Dark Rivers Boots",
+    "koreanName": "다크 리버스부츠",
+    "reqJob": 1,
     "reqLevel": 80
   },
   {
@@ -1253,27 +1281,6 @@
     "reqLevel": 90
   },
   {
-    "id": 1072210,
-    "name": "Red Rivers Boots",
-    "koreanName": "레드 리버스부츠",
-    "reqJob": 1,
-    "reqLevel": 80
-  },
-  {
-    "id": 1072211,
-    "name": "Blue Rivers Boots",
-    "koreanName": "블루 리버스부츠",
-    "reqJob": 1,
-    "reqLevel": 80
-  },
-  {
-    "id": 1072212,
-    "name": "Dark Rivers Boots",
-    "koreanName": "다크 리버스부츠",
-    "reqJob": 1,
-    "reqLevel": 80
-  },
-  {
     "id": 1072213,
     "name": "Green Katina Boots",
     "koreanName": "그린 가티나부츠",
@@ -1370,75 +1377,5 @@
     "koreanName": "그린 아르나슈즈",
     "reqJob": 4,
     "reqLevel": 100
-  },
-  {
-    "id": 1072238,
-    "name": "Violet Snowshoes",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 80
-  },
-  {
-    "id": 1072239,
-    "name": "Yellow Snowshoes",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 50
-  },
-  {
-    "id": 1072261,
-    "name": "Yellow Strap Shoes",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 21
-  },
-  {
-    "id": 1072262,
-    "name": "Black Strap Shoes",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 21
-  },
-  {
-    "id": 1072263,
-    "name": "Green Strap Shoes",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 21
-  },
-  {
-    "id": 1072264,
-    "name": "Silver Strap Shoes",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 21
-  },
-  {
-    "id": 1072275,
-    "name": "Fonla's Slippers",
-    "koreanName": "폰라의 슬리퍼",
-    "reqJob": 0,
-    "reqLevel": 30
-  },
-  {
-    "id": 1072344,
-    "name": "Facestompers",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 50
-  },
-  {
-    "id": 1072345,
-    "name": "Bosshunter Greaves",
-    "koreanName": "2012 운동회 우승팀 신발",
-    "reqJob": 4,
-    "reqLevel": 50
-  },
-  {
-    "id": 1072346,
-    "name": "Bosshunter Boots",
-    "koreanName": "",
-    "reqJob": 8,
-    "reqLevel": 50
   }
 ]

@@ -12,6 +12,7 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import { useState, useEffect } from "react";
 import { useCharacter } from "../contexts/CharacterContext";
 import type { Item } from "../types/item";
@@ -164,6 +165,7 @@ async function loadItemData(categoryKey: string, isWeapon: boolean = false): Pro
 
 export default function ItemMaker({ open, selectedCategory: externalCategory, onClose }: ItemMakerModalProps) {
   const { character, equipItem } = useCharacter();
+  const theme = useTheme();
 
   const [internalCategory, setInternalCategory] = useState<string>("");
   const selectedCategory = externalCategory !== undefined ? externalCategory : internalCategory;
@@ -297,7 +299,7 @@ export default function ItemMaker({ open, selectedCategory: externalCategory, on
           setItemDetails(details);
 
           // 아이콘 URL 설정
-          setItemIcon(`https://maplestory.io/api/gms/62/item/${itemId}/icon`);
+          setItemIcon(`https://maplestory.io/api/gms/62/item/${itemId}/icon?resize=5`);
 
           // 한글 이름 가져오기
           const kName = await fetchItemNameKMS(itemId);
@@ -484,7 +486,7 @@ export default function ItemMaker({ open, selectedCategory: externalCategory, on
                       <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 0.5 }}>
                         <Typography
                           variant="body2"
-                          sx={{ fontSize: "0.75rem", fontWeight: "bold", mb: 0.5, color: "#1976d2" }}
+                          sx={{ fontSize: "0.75rem", fontWeight: "bold", mb: 0.5, color: theme.palette.primary.main }}
                         >
                           착용 정보
                         </Typography>
@@ -608,10 +610,10 @@ export default function ItemMaker({ open, selectedCategory: externalCategory, on
                     disabled={!selectedItem}
                     sx={{
                       mt: 1,
-                      bgcolor: "#1976d2",
+                      bgcolor: theme.palette.primary.main,
                       color: "white",
                       py: 1,
-                      "&:hover": { bgcolor: "#1565c0" },
+                      "&:hover": { bgcolor: theme.palette.primary.dark },
                       "&:disabled": { bgcolor: "#ccc", color: "#666" },
                     }}
                   >

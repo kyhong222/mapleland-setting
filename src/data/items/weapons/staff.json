@@ -7,23 +7,16 @@
     "reqLevel": 10
   },
   {
-    "id": 1382001,
-    "name": "Arc Staff",
-    "koreanName": "아크 스태프",
-    "reqJob": 2,
-    "reqLevel": 45
-  },
-  {
-    "id": 1382002,
-    "name": "Wizard Staff",
-    "koreanName": "위저드 스태프",
-    "reqJob": 2,
-    "reqLevel": 25
-  },
-  {
     "id": 1382003,
     "name": "Sapphire Staff",
     "koreanName": "사파이어 스태프",
+    "reqJob": 2,
+    "reqLevel": 15
+  },
+  {
+    "id": 1382005,
+    "name": "Emerald Staff",
+    "koreanName": "에메랄드 스태프",
     "reqJob": 2,
     "reqLevel": 15
   },
@@ -35,81 +28,11 @@
     "reqLevel": 20
   },
   {
-    "id": 1382005,
-    "name": "Emerald Staff",
-    "koreanName": "에메랄드 스태프",
+    "id": 1382002,
+    "name": "Wizard Staff",
+    "koreanName": "위저드 스태프",
     "reqJob": 2,
-    "reqLevel": 15
-  },
-  {
-    "id": 1382006,
-    "name": "Thorns",
-    "koreanName": "쏜즈",
-    "reqJob": 2,
-    "reqLevel": 55
-  },
-  {
-    "id": 1382007,
-    "name": "Evil Wings",
-    "koreanName": "이블윙즈",
-    "reqJob": 2,
-    "reqLevel": 65
-  },
-  {
-    "id": 1382008,
-    "name": "Kage",
-    "koreanName": "케이그",
-    "reqJob": 2,
-    "reqLevel": 85
-  },
-  {
-    "id": 1382009,
-    "name": "Maple Staff",
-    "koreanName": "메이플 스태프",
-    "reqJob": 2,
-    "reqLevel": 35
-  },
-  {
-    "id": 1382010,
-    "name": "Dark Ritual",
-    "koreanName": "레이든 스태프",
-    "reqJob": 2,
-    "reqLevel": 75
-  },
-  {
-    "id": 1382011,
-    "name": "Mystic Cane",
-    "koreanName": "황금 링 지팡이",
-    "reqJob": 2,
-    "reqLevel": 51
-  },
-  {
-    "id": 1382012,
-    "name": "Maple Lama Staff",
-    "koreanName": "메이플 라마 스태프",
-    "reqJob": 2,
-    "reqLevel": 43
-  },
-  {
-    "id": 1382014,
-    "name": "Sun Quan Staff",
-    "koreanName": "손가지장",
-    "reqJob": 2,
-    "reqLevel": 52
-  },
-  {
-    "id": 1382015,
-    "name": "Poison Mushroom",
-    "koreanName": "독버섯",
-    "reqJob": 2,
-    "reqLevel": 30
-  },
-  {
-    "id": 1382016,
-    "name": "Pyogo Mushroom",
-    "koreanName": "표고버섯",
-    "reqJob": 2,
-    "reqLevel": 92
+    "reqLevel": 25
   },
   {
     "id": 1382017,
@@ -117,6 +40,20 @@
     "koreanName": "써클윈드 스태프",
     "reqJob": 2,
     "reqLevel": 30
+  },
+  {
+    "id": 1382042,
+    "name": "Pink Flower Tube",
+    "koreanName": "분홍색 꽃무늬 튜브",
+    "reqJob": 2,
+    "reqLevel": 30
+  },
+  {
+    "id": 1382009,
+    "name": "Maple Staff",
+    "koreanName": "메이플 스태프",
+    "reqJob": 2,
+    "reqLevel": 35
   },
   {
     "id": 1382018,
@@ -133,130 +70,32 @@
     "reqLevel": 40
   },
   {
-    "id": 1382020,
-    "name": "Arc Staff",
-    "koreanName": "아크 스태프",
+    "id": 1382012,
+    "name": "Maple Lama Staff",
+    "koreanName": "메이플 라마 스태프",
     "reqJob": 2,
-    "reqLevel": 35
+    "reqLevel": 43
   },
   {
-    "id": 1382021,
-    "name": "Thorns",
-    "koreanName": "쏜즈",
+    "id": 1382001,
+    "name": "Arc Staff",
+    "koreanName": "아크 스태프",
     "reqJob": 2,
     "reqLevel": 45
   },
   {
-    "id": 1382022,
-    "name": "Evil Wings",
-    "koreanName": "이블윙즈",
+    "id": 1382011,
+    "name": "Mystic Cane",
+    "koreanName": "황금 링 지팡이",
     "reqJob": 2,
-    "reqLevel": 55
+    "reqLevel": 51
   },
   {
-    "id": 1382023,
-    "name": "Dark Ritual",
-    "koreanName": "레이든 스태프",
-    "reqJob": 2,
-    "reqLevel": 65
-  },
-  {
-    "id": 1382024,
-    "name": "Kage",
-    "koreanName": "케이그",
-    "reqJob": 2,
-    "reqLevel": 75
-  },
-  {
-    "id": 1382025,
-    "name": "Arc Staff",
-    "koreanName": "아크 스태프",
-    "reqJob": 2,
-    "reqLevel": 35
-  },
-  {
-    "id": 1382026,
+    "id": 1382006,
     "name": "Thorns",
     "koreanName": "쏜즈",
     "reqJob": 2,
-    "reqLevel": 45
-  },
-  {
-    "id": 1382027,
-    "name": "Evil Wings",
-    "koreanName": "이블윙즈",
-    "reqJob": 2,
     "reqLevel": 55
-  },
-  {
-    "id": 1382028,
-    "name": "Dark Ritual",
-    "koreanName": "레이든 스태프",
-    "reqJob": 2,
-    "reqLevel": 65
-  },
-  {
-    "id": 1382029,
-    "name": "Kage",
-    "koreanName": "케이그",
-    "reqJob": 2,
-    "reqLevel": 75
-  },
-  {
-    "id": 1382030,
-    "name": "Arc Staff",
-    "koreanName": "아크 스태프",
-    "reqJob": 2,
-    "reqLevel": 35
-  },
-  {
-    "id": 1382031,
-    "name": "Thorns",
-    "koreanName": "쏜즈",
-    "reqJob": 2,
-    "reqLevel": 45
-  },
-  {
-    "id": 1382032,
-    "name": "Evil Wings",
-    "koreanName": "이블윙즈",
-    "reqJob": 2,
-    "reqLevel": 55
-  },
-  {
-    "id": 1382033,
-    "name": "Dark Ritual",
-    "koreanName": "레이든 스태프",
-    "reqJob": 2,
-    "reqLevel": 65
-  },
-  {
-    "id": 1382034,
-    "name": "Kage",
-    "koreanName": "케이그",
-    "reqJob": 2,
-    "reqLevel": 75
-  },
-  {
-    "id": 1382035,
-    "name": "Blue Marine",
-    "koreanName": "블루마린",
-    "reqJob": 2,
-    "reqLevel": 95
-  },
-  {
-    "id": 1382036,
-    "name": "Dragon Staff",
-    "koreanName": "드래곤 스태프",
-    "reqJob": 2,
-    "reqLevel": 110
-  },
-  {
-    "id": 1382037,
-    "name": "Doomsday Staff",
-    "koreanName": "",
-    "reqJob": 2,
-    "reqLevel": 102
   },
   {
     "id": 1382039,
@@ -266,101 +105,45 @@
     "reqLevel": 64
   },
   {
-    "id": 1382040,
-    "name": "Maple 1500 Anniv. Flag",
-    "koreanName": "메이플 1500일 깃발",
+    "id": 1382007,
+    "name": "Evil Wings",
+    "koreanName": "이블윙즈",
     "reqJob": 2,
-    "reqLevel": 30
+    "reqLevel": 65
   },
   {
-    "id": 1382041,
-    "name": "Nocturnal Staff",
-    "koreanName": "",
+    "id": 1382010,
+    "name": "Dark Ritual",
+    "koreanName": "레이든 스태프",
     "reqJob": 2,
-    "reqLevel": 43
+    "reqLevel": 75
   },
   {
-    "id": 1382042,
-    "name": "Pink Flower Tube",
-    "koreanName": "분홍색 꽃무늬 튜브",
+    "id": 1382008,
+    "name": "Kage",
+    "koreanName": "케이그",
     "reqJob": 2,
-    "reqLevel": 30
+    "reqLevel": 85
   },
   {
-    "id": 1382043,
-    "name": "Singapore Flag (Staff)",
-    "koreanName": "",
+    "id": 1382035,
+    "name": "Blue Marine",
+    "koreanName": "블루마린",
     "reqJob": 2,
-    "reqLevel": 30
-  },
-  {
-    "id": 1382044,
-    "name": "Malaysia Flag (Staff)",
-    "koreanName": "",
-    "reqJob": 2,
-    "reqLevel": 30
-  },
-  {
-    "id": 1382045,
-    "name": "Elemental Staff 1",
-    "koreanName": "",
-    "reqJob": 2,
-    "reqLevel": 103
-  },
-  {
-    "id": 1382046,
-    "name": "Elemental Staff 2",
-    "koreanName": "",
-    "reqJob": 2,
-    "reqLevel": 103
-  },
-  {
-    "id": 1382047,
-    "name": "Elemental Staff 3",
-    "koreanName": "",
-    "reqJob": 2,
-    "reqLevel": 103
-  },
-  {
-    "id": 1382048,
-    "name": "Elemental Staff 4",
-    "koreanName": "",
-    "reqJob": 2,
-    "reqLevel": 103
-  },
-  {
-    "id": 1382053,
-    "name": "Celestial Staff",
-    "koreanName": "",
-    "reqJob": 2,
-    "reqLevel": 70
-  },
-  {
-    "id": 1382054,
-    "name": "Umaru",
-    "koreanName": "",
-    "reqJob": 2,
-    "reqLevel": 10
-  },
-  {
-    "id": 1382055,
-    "name": "Umarusuma",
-    "koreanName": "",
-    "reqJob": 2,
-    "reqLevel": 40
-  },
-  {
-    "id": 1382056,
-    "name": "Umarumagna",
-    "koreanName": "",
-    "reqJob": 2,
-    "reqLevel": 80
+    "reqLevel": 95
   },
   {
     "id": 1382060,
     "name": "Crimson Arcanon",
-    "koreanName": "",
+    "koreanName": "크림슨 아르카논",
     "reqJob": 2,
     "reqLevel": 100
+  },
+  {
+    "id": 1382036,
+    "name": "Dragon Staff",
+    "koreanName": "드래곤 스태프",
+    "reqJob": 2,
+    "reqLevel": 110
   }
 ]

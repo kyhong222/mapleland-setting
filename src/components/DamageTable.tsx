@@ -1,6 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import { useMemo } from "react";
 import { useCharacter } from "../contexts/CharacterContext";
+import mastery1Data from "../data/buff/mastery/mastery1.json";
+import mastery2Data from "../data/buff/mastery/mastery2.json";
+import type { MasteryProperty, MasterySkill } from "../types/mastery";
 
 const WEAPON_CONSTANTS: Record<string, { min: number; max: number }> = {
   한손검: { min: 4.0, max: 4.0 },
@@ -19,13 +22,38 @@ const WEAPON_CONSTANTS: Record<string, { min: number; max: number }> = {
 
 type DamageResult = { min: number; max: number };
 
+const getMastery2SkillByWeaponType = (weaponType: string | null): MasterySkill | null => {
+  const mastery2Skills = mastery2Data as MasterySkill[];
+  if (weaponType === "활") {
+    return mastery2Skills.find((m) => m.koreanName === "보우 엑스퍼트") || null;
+  }
+  if (weaponType === "석궁") {
+    return mastery2Skills.find((m) => m.koreanName === "크로스보우 엑스퍼트") || null;
+  }
+  if (weaponType === "창" || weaponType === "폴암") {
+    return mastery2Skills.find((m) => m.koreanName === "비홀더") || null;
+  }
+  return null;
+};
+
+const getMasteryPercent = (weaponType: string | null, mastery1Level: number, mastery2Level: number): number => {
+  const mastery1Prop: MasteryProperty | undefined = mastery1Data.properties?.[mastery1Level];
+  const mastery1Value = (mastery1Prop?.mastery ?? 0) + 10;
+
+  const skill = getMastery2SkillByWeaponType(weaponType);
+  const prop: MasteryProperty | undefined = skill?.properties[mastery2Level];
+  const mastery2Value = prop?.mastery ?? 0;
+  
+  return mastery1Value + mastery2Value;
+};
+
 export default function DamageTable() {
-  const { character, buff1Attack, buff2Attack, mastery1, mastery2 } = useCharacter();
+  const { character, buff1Attack, buff2Attack, mastery1, mastery2, masteryAttack } = useCharacter();
   const weaponType = character.getWeaponType();
   const weapon = character.getEquippedItem("무기");
-  const mastery = weaponType === "활" || weaponType === "석궁" ? mastery2 : mastery1;
+  const masteryPercent = getMasteryPercent(weaponType, mastery1, mastery2);
 
-  const finalStats = character.getFinalStats(buff1Attack, buff2Attack);
+  const finalStats = character.getFinalStats(buff1Attack, buff2Attack, masteryAttack);
   const weaponConstants = weaponType ? WEAPON_CONSTANTS[weaponType] : null;
 
   // 도적의 경우 STR과 DEX 모두 부스탯으로 처리
@@ -50,7 +78,7 @@ export default function DamageTable() {
     if (isMagician) {
       const MAD = finalStats.totalMAD;
       const INT = finalStats.totalInt;
-      const masteryRate = mastery / 100;
+      const masteryRate = masteryPercent / 100;
 
       // 마법사: 실질 마법 데미지
       const magicMax = Math.floor((Math.pow(MAD, 2) / 1000 + MAD) / 30 + INT / 200);
@@ -69,7 +97,7 @@ export default function DamageTable() {
       return results;
     }
 
-    const masteryRate = mastery / 100;
+    const masteryRate = masteryPercent / 100;
 
     // 1. 스탯창 공격력
     results.stat = {
@@ -123,7 +151,7 @@ export default function DamageTable() {
     };
 
     return results;
-  }, [weaponConstants, finalStats, adjSubStat, mastery, character]);
+  }, [weaponConstants, finalStats, adjSubStat, masteryPercent, character]);
 
   const renderDamage = (damage: DamageResult) => (
     <Typography variant="body2" sx={{ fontSize: "1.1rem", textAlign: "center" }}>
@@ -205,7 +233,7 @@ export default function DamageTable() {
                   INT: {finalStats.totalInt} | 마력: {finalStats.totalMAD}
                 </Typography>
                 <Typography variant="caption" sx={{ fontSize: "0.75rem", color: "#666", display: "block" }}>
-                  숙련도: {mastery}%
+                  숙련도: {masteryPercent}%
                 </Typography>
               </>
             ) : (
@@ -214,7 +242,7 @@ export default function DamageTable() {
                   공격력: {finalStats.totalAttack} | 주스탯: {finalStats.mainStat} | 부스탯: {finalStats.subStat}
                 </Typography>
                 <Typography variant="caption" sx={{ fontSize: "0.75rem", color: "#666", display: "block" }}>
-                  마스터리: {mastery}% | 마력: {finalStats.totalMAD}
+                  마스터리: {masteryPercent}% | 마력: {finalStats.totalMAD}
                 </Typography>
               </>
             )}

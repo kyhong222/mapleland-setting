@@ -1,66 +1,17 @@
 [
   {
-    "id": 1000025,
-    "name": "Pilgrim Hat",
-    "koreanName": "",
+    "id": 1002418,
+    "name": "Newspaper Hat",
+    "koreanName": "신문지 투구",
     "reqJob": 0,
     "reqLevel": 0
   },
   {
-    "id": 1001035,
-    "name": "Maplehontas",
-    "koreanName": "",
+    "id": 1002508,
+    "name": "Maple Hat",
+    "koreanName": "메이플 모자 (기본)",
     "reqJob": 0,
     "reqLevel": 0
-  },
-  {
-    "id": 1002001,
-    "name": "Metal Gear",
-    "koreanName": "메탈 기어",
-    "reqJob": 0,
-    "reqLevel": 15
-  },
-  {
-    "id": 1002002,
-    "name": "Metal Koif",
-    "koreanName": "메탈 코이프",
-    "reqJob": 1,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002003,
-    "name": "Steel Helmet",
-    "koreanName": "스틸 캡",
-    "reqJob": 1,
-    "reqLevel": 12
-  },
-  {
-    "id": 1002004,
-    "name": "Great Brown Helmet",
-    "koreanName": "브라운 그레이트 헬멧",
-    "reqJob": 1,
-    "reqLevel": 35
-  },
-  {
-    "id": 1002005,
-    "name": "Iron Burgernet Helm",
-    "koreanName": "아이언 버거넷 헬름",
-    "reqJob": 1,
-    "reqLevel": 25
-  },
-  {
-    "id": 1002006,
-    "name": "Bone Helm",
-    "koreanName": "본 헬름",
-    "reqJob": 0,
-    "reqLevel": 42
-  },
-  {
-    "id": 1002007,
-    "name": "Steel Full Helm",
-    "koreanName": "스틸 풀 헬름",
-    "reqJob": 1,
-    "reqLevel": 15
   },
   {
     "id": 1002008,
@@ -70,284 +21,11 @@
     "reqLevel": 5
   },
   {
-    "id": 1002009,
-    "name": "Steel Football Helmet",
-    "koreanName": "스틸 디펜더 헬멧",
-    "reqJob": 1,
-    "reqLevel": 20
-  },
-  {
-    "id": 1002010,
-    "name": "Brown Winter Hat",
-    "koreanName": "갈색 고급 가죽 모자",
-    "reqJob": 4,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002011,
-    "name": "Iron Viking Helm",
-    "koreanName": "아이언 바이킹 헬름",
-    "reqJob": 1,
-    "reqLevel": 20
-  },
-  {
-    "id": 1002012,
-    "name": "Red Baseball Cap",
-    "koreanName": "빨간색 야구 모자",
-    "reqJob": 0,
-    "reqLevel": 20
-  },
-  {
-    "id": 1002013,
-    "name": "Golden Pride",
-    "koreanName": "손오공 금 머리띠",
-    "reqJob": 2,
-    "reqLevel": 30
-  },
-  {
     "id": 1002014,
     "name": "Red Headband",
     "koreanName": "빨간색 머리띠",
     "reqJob": 0,
     "reqLevel": 5
-  },
-  {
-    "id": 1002016,
-    "name": "Green Wizardry Hat",
-    "koreanName": "초록색 사제의 모자",
-    "reqJob": 2,
-    "reqLevel": 20
-  },
-  {
-    "id": 1002017,
-    "name": "Brown Apprentice Hat",
-    "koreanName": "갈색 낡은 고깔 모자",
-    "reqJob": 2,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002019,
-    "name": "White Bandana",
-    "koreanName": "흰색 두건",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002020,
-    "name": "Red Starry Bandana",
-    "koreanName": "빨간색 별 두건",
-    "reqJob": 0,
-    "reqLevel": 25
-  },
-  {
-    "id": 1002021,
-    "name": "Steel Nordic Helm",
-    "koreanName": "스틸 노르만 헬름",
-    "reqJob": 1,
-    "reqLevel": 40
-  },
-  {
-    "id": 1002022,
-    "name": "Old Steel Nordic Helm",
-    "koreanName": "낡은 스틸 노르만 헬름",
-    "reqJob": 1,
-    "reqLevel": 55
-  },
-  {
-    "id": 1002023,
-    "name": "Jousting Helmet",
-    "koreanName": "주스팅",
-    "reqJob": 1,
-    "reqLevel": 30
-  },
-  {
-    "id": 1002024,
-    "name": "Emerald Dome",
-    "koreanName": "에메랄드 돔",
-    "reqJob": 1,
-    "reqLevel": 47
-  },
-  {
-    "id": 1002025,
-    "name": "Red Duke",
-    "koreanName": "레드 듀크",
-    "reqJob": 1,
-    "reqLevel": 40
-  },
-  {
-    "id": 1002026,
-    "name": "Brown Bamboo Hat",
-    "koreanName": "갈색 삿갓",
-    "reqJob": 0,
-    "reqLevel": 25
-  },
-  {
-    "id": 1002027,
-    "name": "Steel Sharp Helm",
-    "koreanName": "스틸 샤프 헬름",
-    "reqJob": 1,
-    "reqLevel": 22
-  },
-  {
-    "id": 1002028,
-    "name": "Silver Crusader Helm",
-    "koreanName": "실버 크루세이더 헬름",
-    "reqJob": 1,
-    "reqLevel": 50
-  },
-  {
-    "id": 1002029,
-    "name": "Red Oriental Helmet",
-    "koreanName": "레드 오리엔트 헬멧",
-    "reqJob": 1,
-    "reqLevel": 60
-  },
-  {
-    "id": 1002030,
-    "name": "Silver Planet",
-    "koreanName": "실버 플레닛",
-    "reqJob": 1,
-    "reqLevel": 70
-  },
-  {
-    "id": 1002033,
-    "name": "Old Wisconsin",
-    "koreanName": "군밤장수 모자",
-    "reqJob": 0,
-    "reqLevel": 15
-  },
-  {
-    "id": 1002034,
-    "name": "Blue Jester",
-    "koreanName": "블루 핀터",
-    "reqJob": 2,
-    "reqLevel": 30
-  },
-  {
-    "id": 1002035,
-    "name": "Pink Jester",
-    "koreanName": "핑크 핀터",
-    "reqJob": 2,
-    "reqLevel": 30
-  },
-  {
-    "id": 1002036,
-    "name": "Green Jester",
-    "koreanName": "그린 핀터",
-    "reqJob": 2,
-    "reqLevel": 30
-  },
-  {
-    "id": 1002037,
-    "name": "Black Jester",
-    "koreanName": "블랙 핀터",
-    "reqJob": 2,
-    "reqLevel": 30
-  },
-  {
-    "id": 1002038,
-    "name": "Brown Jester",
-    "koreanName": "브라운 핀터",
-    "reqJob": 2,
-    "reqLevel": 30
-  },
-  {
-    "id": 1002039,
-    "name": "Bronze Helmet",
-    "koreanName": "브론즈 캡",
-    "reqJob": 1,
-    "reqLevel": 12
-  },
-  {
-    "id": 1002040,
-    "name": "Mithril Helmet",
-    "koreanName": "미스릴 캡",
-    "reqJob": 1,
-    "reqLevel": 12
-  },
-  {
-    "id": 1002041,
-    "name": "Yellow Metal Gear",
-    "koreanName": "옐로우 메탈 기어",
-    "reqJob": 0,
-    "reqLevel": 15
-  },
-  {
-    "id": 1002042,
-    "name": "Blue Metal Gear",
-    "koreanName": "블루 메탈 기어",
-    "reqJob": 0,
-    "reqLevel": 15
-  },
-  {
-    "id": 1002043,
-    "name": "Bronze Koif",
-    "koreanName": "브론즈 코이프",
-    "reqJob": 1,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002044,
-    "name": "Mithril Koif",
-    "koreanName": "미스릴 코이프",
-    "reqJob": 1,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002045,
-    "name": "Blue Bone Helm",
-    "koreanName": "블루 본 헬름",
-    "reqJob": 1,
-    "reqLevel": 42
-  },
-  {
-    "id": 1002046,
-    "name": "Red Bone Helm",
-    "koreanName": "레드 본 헬름",
-    "reqJob": 1,
-    "reqLevel": 42
-  },
-  {
-    "id": 1002047,
-    "name": "Great Red Helmet",
-    "koreanName": "레드 그레이트 헬멧",
-    "reqJob": 1,
-    "reqLevel": 35
-  },
-  {
-    "id": 1002048,
-    "name": "Great Blue Helmet",
-    "koreanName": "블루 그레이트 헬멧",
-    "reqJob": 1,
-    "reqLevel": 35
-  },
-  {
-    "id": 1002049,
-    "name": "Gold Burgernet Helm",
-    "koreanName": "골드 버거넷 헬름",
-    "reqJob": 1,
-    "reqLevel": 25
-  },
-  {
-    "id": 1002050,
-    "name": "Orihalcon Burgernet Helm",
-    "koreanName": "오리할콘 버거넷 헬름",
-    "reqJob": 1,
-    "reqLevel": 25
-  },
-  {
-    "id": 1002051,
-    "name": "Bronze Full Helm",
-    "koreanName": "브론즈 풀 헬름",
-    "reqJob": 1,
-    "reqLevel": 15
-  },
-  {
-    "id": 1002052,
-    "name": "Mithril Full Helm",
-    "koreanName": "미스릴 풀 헬름",
-    "reqJob": 1,
-    "reqLevel": 15
   },
   {
     "id": 1002053,
@@ -362,83 +40,6 @@
     "koreanName": "붉은색 가죽 모자",
     "reqJob": 0,
     "reqLevel": 5
-  },
-  {
-    "id": 1002055,
-    "name": "Bronze Football Helmet",
-    "koreanName": "브론즈 디펜더 헬멧",
-    "reqJob": 1,
-    "reqLevel": 20
-  },
-  {
-    "id": 1002056,
-    "name": "Mithril Football Helmet",
-    "koreanName": "미스릴 디펜더 헬멧",
-    "reqJob": 1,
-    "reqLevel": 20
-  },
-  {
-    "id": 1002057,
-    "name": "Green Winter Hat",
-    "koreanName": "초록색 고급 가죽 모자",
-    "reqJob": 4,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002058,
-    "name": "Mithril Viking Helm",
-    "koreanName": "미스릴 바이킹 헬름",
-    "reqJob": 1,
-    "reqLevel": 20
-  },
-  {
-    "id": 1002059,
-    "name": "Bronze Viking Helm",
-    "koreanName": "브론즈 바이킹 헬름",
-    "reqJob": 1,
-    "reqLevel": 20
-  },
-  {
-    "id": 1002060,
-    "name": "Black Baseball Cap",
-    "koreanName": "검은색 야구 모자",
-    "reqJob": 0,
-    "reqLevel": 20
-  },
-  {
-    "id": 1002061,
-    "name": "Yellow Baseball Cap",
-    "koreanName": "노란색 야구 모자",
-    "reqJob": 0,
-    "reqLevel": 20
-  },
-  {
-    "id": 1002062,
-    "name": "Brown Baseball Cap",
-    "koreanName": "갈색 야구 모자",
-    "reqJob": 0,
-    "reqLevel": 20
-  },
-  {
-    "id": 1002063,
-    "name": "Blue Baseball Cap",
-    "koreanName": "파란색 야구 모자",
-    "reqJob": 0,
-    "reqLevel": 20
-  },
-  {
-    "id": 1002064,
-    "name": "Bronze Pride",
-    "koreanName": "손오공 청동 머리띠",
-    "reqJob": 2,
-    "reqLevel": 30
-  },
-  {
-    "id": 1002065,
-    "name": "Steel Pride",
-    "koreanName": "손오공 강철 머리띠",
-    "reqJob": 2,
-    "reqLevel": 30
   },
   {
     "id": 1002066,
@@ -469,18 +70,81 @@
     "reqLevel": 5
   },
   {
-    "id": 1002072,
-    "name": "Blue Wizardry Hat",
-    "koreanName": "파란색 사제의 모자",
-    "reqJob": 2,
-    "reqLevel": 20
+    "id": 1002132,
+    "name": "Black Swimming Cap",
+    "koreanName": "검정색 물개모자",
+    "reqJob": 0,
+    "reqLevel": 8
   },
   {
-    "id": 1002073,
-    "name": "Red Wizardry Hat",
-    "koreanName": "빨간색 사제의 모자",
+    "id": 1002133,
+    "name": "Blue Swimming Cap",
+    "koreanName": "파란색 물개모자",
+    "reqJob": 0,
+    "reqLevel": 8
+  },
+  {
+    "id": 1002134,
+    "name": "Red Swimming Cap",
+    "koreanName": "빨간색 물개모자",
+    "reqJob": 0,
+    "reqLevel": 8
+  },
+  {
+    "id": 1002509,
+    "name": "Maple Hat",
+    "koreanName": "메이플 모자 (1단계)",
+    "reqJob": 0,
+    "reqLevel": 8
+  },
+  {
+    "id": 1002002,
+    "name": "Metal Koif",
+    "koreanName": "메탈 코이프",
+    "reqJob": 1,
+    "reqLevel": 10
+  },
+  {
+    "id": 1002010,
+    "name": "Brown Winter Hat",
+    "koreanName": "갈색 고급 가죽 모자",
+    "reqJob": 4,
+    "reqLevel": 10
+  },
+  {
+    "id": 1002017,
+    "name": "Brown Apprentice Hat",
+    "koreanName": "갈색 낡은 고깔 모자",
     "reqJob": 2,
-    "reqLevel": 20
+    "reqLevel": 10
+  },
+  {
+    "id": 1002019,
+    "name": "White Bandana",
+    "koreanName": "흰색 두건",
+    "reqJob": 0,
+    "reqLevel": 10
+  },
+  {
+    "id": 1002043,
+    "name": "Bronze Koif",
+    "koreanName": "브론즈 코이프",
+    "reqJob": 1,
+    "reqLevel": 10
+  },
+  {
+    "id": 1002044,
+    "name": "Mithril Koif",
+    "koreanName": "미스릴 코이프",
+    "reqJob": 1,
+    "reqLevel": 10
+  },
+  {
+    "id": 1002057,
+    "name": "Green Winter Hat",
+    "koreanName": "초록색 고급 가죽 모자",
+    "reqJob": 4,
+    "reqLevel": 10
   },
   {
     "id": 1002074,
@@ -525,130 +189,172 @@
     "reqLevel": 10
   },
   {
-    "id": 1002084,
-    "name": "Blue Oriental Helmet",
-    "koreanName": "블루 오리엔트 헬멧",
-    "reqJob": 1,
-    "reqLevel": 60
+    "id": 1002122,
+    "name": "Red Ghetto Beanie",
+    "koreanName": "빨간색 좀도둑 털모자",
+    "reqJob": 8,
+    "reqLevel": 10
   },
   {
-    "id": 1002085,
-    "name": "Mithril Crusader Helm",
-    "koreanName": "미스릴 크루세이더 헬름",
-    "reqJob": 1,
-    "reqLevel": 50
+    "id": 1002123,
+    "name": "Blue Ghetto Beanie",
+    "koreanName": "파란색 좀도둑 털모자",
+    "reqJob": 8,
+    "reqLevel": 10
   },
   {
-    "id": 1002086,
-    "name": "Bronze Crusader Helm",
-    "koreanName": "브론즈 크루세이더 헬름",
-    "reqJob": 1,
-    "reqLevel": 50
+    "id": 1002124,
+    "name": "Brown Ghetto Beanie",
+    "koreanName": "갈색 좀도둑 털모자",
+    "reqJob": 8,
+    "reqLevel": 10
   },
   {
-    "id": 1002087,
-    "name": "Mithril Sharp Helm",
-    "koreanName": "미스릴 샤프 헬름",
-    "reqJob": 1,
-    "reqLevel": 22
+    "id": 1002125,
+    "name": "Black Ghetto Beanie",
+    "koreanName": "검정색 좀도둑 털모자",
+    "reqJob": 8,
+    "reqLevel": 10
   },
   {
-    "id": 1002088,
-    "name": "Gold Sharp Helm",
-    "koreanName": "골드 샤프 헬름",
-    "reqJob": 1,
-    "reqLevel": 22
+    "id": 1002126,
+    "name": "Green Ghetto Beanie",
+    "koreanName": "초록색 좀도둑 털모자",
+    "reqJob": 8,
+    "reqLevel": 10
   },
   {
-    "id": 1002089,
-    "name": "Green Bamboo Hat",
-    "koreanName": "초록색 삿갓",
+    "id": 1002391,
+    "name": "Green Bandana",
+    "koreanName": "초록 두건",
     "reqJob": 0,
-    "reqLevel": 25
+    "reqLevel": 10
   },
   {
-    "id": 1002090,
-    "name": "Blue Bamboo Hat",
-    "koreanName": "파란색 삿갓",
+    "id": 1002392,
+    "name": "Brown Bandana",
+    "koreanName": "갈색 두건",
     "reqJob": 0,
-    "reqLevel": 25
+    "reqLevel": 10
   },
   {
-    "id": 1002091,
-    "name": "Dark Dome",
-    "koreanName": "다크 돔",
-    "reqJob": 1,
-    "reqLevel": 47
-  },
-  {
-    "id": 1002092,
-    "name": "Yellow Duke",
-    "koreanName": "옐로우 듀크",
-    "reqJob": 1,
-    "reqLevel": 40
-  },
-  {
-    "id": 1002093,
-    "name": "Blue Duke",
-    "koreanName": "블루 듀크",
-    "reqJob": 1,
-    "reqLevel": 40
-  },
-  {
-    "id": 1002094,
-    "name": "Bronze Planet",
-    "koreanName": "브론즈 플레닛",
-    "reqJob": 1,
-    "reqLevel": 70
-  },
-  {
-    "id": 1002095,
-    "name": "Mithril Planet",
-    "koreanName": "미스릴 플레닛",
-    "reqJob": 1,
-    "reqLevel": 70
-  },
-  {
-    "id": 1002096,
-    "name": "Sky Blue Starry Bandana",
-    "koreanName": "하늘색 별 두건",
+    "id": 1002393,
+    "name": "Pink Bandana",
+    "koreanName": "분홍 두건",
     "reqJob": 0,
-    "reqLevel": 25
+    "reqLevel": 10
   },
   {
-    "id": 1002097,
-    "name": "Yellow Starry Bandana",
-    "koreanName": "노란색 별 두건",
+    "id": 1002394,
+    "name": "Grey Bandana",
+    "koreanName": "회색 두건",
     "reqJob": 0,
-    "reqLevel": 25
+    "reqLevel": 10
   },
   {
-    "id": 1002098,
-    "name": "Gold Nordic Helm",
-    "koreanName": "골드 노르만 헬름",
-    "reqJob": 1,
-    "reqLevel": 40
+    "id": 1002395,
+    "name": "Purple Bandana",
+    "koreanName": "보라 두건",
+    "reqJob": 0,
+    "reqLevel": 10
   },
   {
-    "id": 1002099,
-    "name": "Mithril Nordic Helm",
-    "koreanName": "미스릴 노르만 헬름",
-    "reqJob": 1,
-    "reqLevel": 40
+    "id": 1002699,
+    "name": "Halloween Pumpkin Hat",
+    "koreanName": "할로윈 호박 모자",
+    "reqJob": 0,
+    "reqLevel": 10
   },
   {
-    "id": 1002100,
-    "name": "Old Bronze Nordic Helm",
-    "koreanName": "낡은 브론즈 노르만 헬름",
-    "reqJob": 1,
-    "reqLevel": 55
+    "id": 1002707,
+    "name": "Hat of a Masked Man",
+    "koreanName": "가면신사의 모자",
+    "reqJob": 0,
+    "reqLevel": 10
   },
   {
-    "id": 1002101,
-    "name": "Old Mithril Nordic Helm",
-    "koreanName": "낡은 미스릴 노르만 헬름",
+    "id": 1002728,
+    "name": "Rudolph's Horn",
+    "koreanName": "루돌프의 뿔",
+    "reqJob": 0,
+    "reqLevel": 10
+  },
+  {
+    "id": 1002737,
+    "name": "White Mouse Headband",
+    "koreanName": "화이트 마우스 머리띠",
+    "reqJob": 0,
+    "reqLevel": 10
+  },
+  {
+    "id": 1002003,
+    "name": "Steel Helmet",
+    "koreanName": "스틸 캡",
     "reqJob": 1,
-    "reqLevel": 55
+    "reqLevel": 12
+  },
+  {
+    "id": 1002039,
+    "name": "Bronze Helmet",
+    "koreanName": "브론즈 캡",
+    "reqJob": 1,
+    "reqLevel": 12
+  },
+  {
+    "id": 1002040,
+    "name": "Mithril Helmet",
+    "koreanName": "미스릴 캡",
+    "reqJob": 1,
+    "reqLevel": 12
+  },
+  {
+    "id": 1002001,
+    "name": "Metal Gear",
+    "koreanName": "메탈 기어",
+    "reqJob": 0,
+    "reqLevel": 15
+  },
+  {
+    "id": 1002007,
+    "name": "Steel Full Helm",
+    "koreanName": "스틸 풀 헬름",
+    "reqJob": 1,
+    "reqLevel": 15
+  },
+  {
+    "id": 1002033,
+    "name": "Old Wisconsin",
+    "koreanName": "군밤장수 모자",
+    "reqJob": 0,
+    "reqLevel": 15
+  },
+  {
+    "id": 1002041,
+    "name": "Yellow Metal Gear",
+    "koreanName": "옐로우 메탈 기어",
+    "reqJob": 0,
+    "reqLevel": 15
+  },
+  {
+    "id": 1002042,
+    "name": "Blue Metal Gear",
+    "koreanName": "블루 메탈 기어",
+    "reqJob": 0,
+    "reqLevel": 15
+  },
+  {
+    "id": 1002051,
+    "name": "Bronze Full Helm",
+    "koreanName": "브론즈 풀 헬름",
+    "reqJob": 1,
+    "reqLevel": 15
+  },
+  {
+    "id": 1002052,
+    "name": "Mithril Full Helm",
+    "koreanName": "미스릴 풀 헬름",
+    "reqJob": 1,
+    "reqLevel": 15
   },
   {
     "id": 1002102,
@@ -756,6 +462,104 @@
     "reqLevel": 15
   },
   {
+    "id": 1002009,
+    "name": "Steel Football Helmet",
+    "koreanName": "스틸 디펜더 헬멧",
+    "reqJob": 1,
+    "reqLevel": 20
+  },
+  {
+    "id": 1002011,
+    "name": "Iron Viking Helm",
+    "koreanName": "아이언 바이킹 헬름",
+    "reqJob": 1,
+    "reqLevel": 20
+  },
+  {
+    "id": 1002012,
+    "name": "Red Baseball Cap",
+    "koreanName": "빨간색 야구 모자",
+    "reqJob": 0,
+    "reqLevel": 20
+  },
+  {
+    "id": 1002016,
+    "name": "Green Wizardry Hat",
+    "koreanName": "초록색 사제의 모자",
+    "reqJob": 2,
+    "reqLevel": 20
+  },
+  {
+    "id": 1002055,
+    "name": "Bronze Football Helmet",
+    "koreanName": "브론즈 디펜더 헬멧",
+    "reqJob": 1,
+    "reqLevel": 20
+  },
+  {
+    "id": 1002056,
+    "name": "Mithril Football Helmet",
+    "koreanName": "미스릴 디펜더 헬멧",
+    "reqJob": 1,
+    "reqLevel": 20
+  },
+  {
+    "id": 1002058,
+    "name": "Mithril Viking Helm",
+    "koreanName": "미스릴 바이킹 헬름",
+    "reqJob": 1,
+    "reqLevel": 20
+  },
+  {
+    "id": 1002059,
+    "name": "Bronze Viking Helm",
+    "koreanName": "브론즈 바이킹 헬름",
+    "reqJob": 1,
+    "reqLevel": 20
+  },
+  {
+    "id": 1002060,
+    "name": "Black Baseball Cap",
+    "koreanName": "검은색 야구 모자",
+    "reqJob": 0,
+    "reqLevel": 20
+  },
+  {
+    "id": 1002061,
+    "name": "Yellow Baseball Cap",
+    "koreanName": "노란색 야구 모자",
+    "reqJob": 0,
+    "reqLevel": 20
+  },
+  {
+    "id": 1002062,
+    "name": "Brown Baseball Cap",
+    "koreanName": "갈색 야구 모자",
+    "reqJob": 0,
+    "reqLevel": 20
+  },
+  {
+    "id": 1002063,
+    "name": "Blue Baseball Cap",
+    "koreanName": "파란색 야구 모자",
+    "reqJob": 0,
+    "reqLevel": 20
+  },
+  {
+    "id": 1002072,
+    "name": "Blue Wizardry Hat",
+    "koreanName": "파란색 사제의 모자",
+    "reqJob": 2,
+    "reqLevel": 20
+  },
+  {
+    "id": 1002073,
+    "name": "Red Wizardry Hat",
+    "koreanName": "빨간색 사제의 모자",
+    "reqJob": 2,
+    "reqLevel": 20
+  },
+  {
     "id": 1002117,
     "name": "Red Robin Hat",
     "koreanName": "레드 페더윙햇",
@@ -789,41 +593,6 @@
     "koreanName": "브라운 페더윙햇",
     "reqJob": 4,
     "reqLevel": 20
-  },
-  {
-    "id": 1002122,
-    "name": "Red Ghetto Beanie",
-    "koreanName": "빨간색 좀도둑 털모자",
-    "reqJob": 8,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002123,
-    "name": "Blue Ghetto Beanie",
-    "koreanName": "파란색 좀도둑 털모자",
-    "reqJob": 8,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002124,
-    "name": "Brown Ghetto Beanie",
-    "koreanName": "갈색 좀도둑 털모자",
-    "reqJob": 8,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002125,
-    "name": "Black Ghetto Beanie",
-    "koreanName": "검정색 좀도둑 털모자",
-    "reqJob": 8,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002126,
-    "name": "Green Ghetto Beanie",
-    "koreanName": "초록색 좀도둑 털모자",
-    "reqJob": 8,
-    "reqLevel": 10
   },
   {
     "id": 1002127,
@@ -861,102 +630,109 @@
     "reqLevel": 20
   },
   {
-    "id": 1002132,
-    "name": "Black Swimming Cap",
-    "koreanName": "검정색 물개모자",
+    "id": 1002452,
+    "name": "Black Starry Bandana",
+    "koreanName": "검은 별 흰 두건",
     "reqJob": 0,
-    "reqLevel": 8
+    "reqLevel": 20
   },
   {
-    "id": 1002133,
-    "name": "Blue Swimming Cap",
-    "koreanName": "파란색 물개모자",
+    "id": 1002453,
+    "name": "White Starry Bandana",
+    "koreanName": "흰 별 검은 두건",
     "reqJob": 0,
-    "reqLevel": 8
+    "reqLevel": 20
   },
   {
-    "id": 1002134,
-    "name": "Red Swimming Cap",
-    "koreanName": "빨간색 물개모자",
+    "id": 1002492,
+    "name": "White Baseball Cap",
+    "koreanName": "흰색 야구모자",
     "reqJob": 0,
-    "reqLevel": 8
+    "reqLevel": 20
   },
   {
-    "id": 1002135,
-    "name": "Brown Pole-Feather Hat",
-    "koreanName": "브라운 폴레패더햇",
-    "reqJob": 4,
-    "reqLevel": 35
+    "id": 1002027,
+    "name": "Steel Sharp Helm",
+    "koreanName": "스틸 샤프 헬름",
+    "reqJob": 1,
+    "reqLevel": 22
   },
   {
-    "id": 1002136,
-    "name": "Dark Pole-Feather Hat",
-    "koreanName": "다크 폴레패더햇",
-    "reqJob": 4,
-    "reqLevel": 35
+    "id": 1002087,
+    "name": "Mithril Sharp Helm",
+    "koreanName": "미스릴 샤프 헬름",
+    "reqJob": 1,
+    "reqLevel": 22
   },
   {
-    "id": 1002137,
-    "name": "Green Pole-Feather Hat",
-    "koreanName": "그린 폴레패더햇",
-    "reqJob": 4,
-    "reqLevel": 35
+    "id": 1002088,
+    "name": "Gold Sharp Helm",
+    "koreanName": "골드 샤프 헬름",
+    "reqJob": 1,
+    "reqLevel": 22
   },
   {
-    "id": 1002138,
-    "name": "Blue Pole-Feather Hat",
-    "koreanName": "블루 폴레패더햇",
-    "reqJob": 4,
-    "reqLevel": 35
+    "id": 1002005,
+    "name": "Iron Burgernet Helm",
+    "koreanName": "아이언 버거넷 헬름",
+    "reqJob": 1,
+    "reqLevel": 25
   },
   {
-    "id": 1002139,
-    "name": "Red Pole-Feather Hat",
-    "koreanName": "레드 폴레패더햇",
-    "reqJob": 4,
-    "reqLevel": 35
-  },
-  {
-    "id": 1002140,
-    "name": "Wizet Invincible Hat",
-    "koreanName": "위젯 무적 모자",
+    "id": 1002020,
+    "name": "Red Starry Bandana",
+    "koreanName": "빨간색 별 두건",
     "reqJob": 0,
-    "reqLevel": 0
+    "reqLevel": 25
   },
   {
-    "id": 1002141,
-    "name": "Red Matty",
-    "koreanName": "레드 매티",
-    "reqJob": 2,
-    "reqLevel": 35
+    "id": 1002026,
+    "name": "Brown Bamboo Hat",
+    "koreanName": "갈색 삿갓",
+    "reqJob": 0,
+    "reqLevel": 25
   },
   {
-    "id": 1002142,
-    "name": "Blue Matty",
-    "koreanName": "블루 매티",
-    "reqJob": 2,
-    "reqLevel": 35
+    "id": 1002049,
+    "name": "Gold Burgernet Helm",
+    "koreanName": "골드 버거넷 헬름",
+    "reqJob": 1,
+    "reqLevel": 25
   },
   {
-    "id": 1002143,
-    "name": "Green Matty",
-    "koreanName": "그린 매티",
-    "reqJob": 2,
-    "reqLevel": 35
+    "id": 1002050,
+    "name": "Orihalcon Burgernet Helm",
+    "koreanName": "오리할콘 버거넷 헬름",
+    "reqJob": 1,
+    "reqLevel": 25
   },
   {
-    "id": 1002144,
-    "name": "Brown Matty",
-    "koreanName": "브라운 매티",
-    "reqJob": 2,
-    "reqLevel": 35
+    "id": 1002089,
+    "name": "Green Bamboo Hat",
+    "koreanName": "초록색 삿갓",
+    "reqJob": 0,
+    "reqLevel": 25
   },
   {
-    "id": 1002145,
-    "name": "Dark Matty",
-    "koreanName": "다크 매티",
-    "reqJob": 2,
-    "reqLevel": 35
+    "id": 1002090,
+    "name": "Blue Bamboo Hat",
+    "koreanName": "파란색 삿갓",
+    "reqJob": 0,
+    "reqLevel": 25
+  },
+  {
+    "id": 1002096,
+    "name": "Sky Blue Starry Bandana",
+    "koreanName": "하늘색 별 두건",
+    "reqJob": 0,
+    "reqLevel": 25
+  },
+  {
+    "id": 1002097,
+    "name": "Yellow Starry Bandana",
+    "koreanName": "노란색 별 두건",
+    "reqJob": 0,
+    "reqLevel": 25
   },
   {
     "id": 1002146,
@@ -994,41 +770,6 @@
     "reqLevel": 25
   },
   {
-    "id": 1002151,
-    "name": "Brown Guiltian",
-    "koreanName": "브라운 길티언",
-    "reqJob": 2,
-    "reqLevel": 40
-  },
-  {
-    "id": 1002152,
-    "name": "Blue Guiltian",
-    "koreanName": "블루 길티언",
-    "reqJob": 2,
-    "reqLevel": 40
-  },
-  {
-    "id": 1002153,
-    "name": "Red Guiltian",
-    "koreanName": "레드 길티언",
-    "reqJob": 2,
-    "reqLevel": 40
-  },
-  {
-    "id": 1002154,
-    "name": "Dark Guiltian",
-    "koreanName": "다크 길티언",
-    "reqJob": 2,
-    "reqLevel": 40
-  },
-  {
-    "id": 1002155,
-    "name": "White Guiltian",
-    "koreanName": "화이트 길티언",
-    "reqJob": 2,
-    "reqLevel": 40
-  },
-  {
     "id": 1002156,
     "name": "Red Hunter",
     "koreanName": "레드 헌트",
@@ -1062,6 +803,76 @@
     "koreanName": "브라운 헌트",
     "reqJob": 4,
     "reqLevel": 25
+  },
+  {
+    "id": 1002441,
+    "name": "Ribboned Pig Headband",
+    "koreanName": "리본돼지 머리띠",
+    "reqJob": 0,
+    "reqLevel": 25
+  },
+  {
+    "id": 1002013,
+    "name": "Golden Pride",
+    "koreanName": "손오공 금 머리띠",
+    "reqJob": 2,
+    "reqLevel": 30
+  },
+  {
+    "id": 1002023,
+    "name": "Jousting Helmet",
+    "koreanName": "주스팅",
+    "reqJob": 1,
+    "reqLevel": 30
+  },
+  {
+    "id": 1002034,
+    "name": "Blue Jester",
+    "koreanName": "블루 핀터",
+    "reqJob": 2,
+    "reqLevel": 30
+  },
+  {
+    "id": 1002035,
+    "name": "Pink Jester",
+    "koreanName": "핑크 핀터",
+    "reqJob": 2,
+    "reqLevel": 30
+  },
+  {
+    "id": 1002036,
+    "name": "Green Jester",
+    "koreanName": "그린 핀터",
+    "reqJob": 2,
+    "reqLevel": 30
+  },
+  {
+    "id": 1002037,
+    "name": "Black Jester",
+    "koreanName": "블랙 핀터",
+    "reqJob": 2,
+    "reqLevel": 30
+  },
+  {
+    "id": 1002038,
+    "name": "Brown Jester",
+    "koreanName": "브라운 핀터",
+    "reqJob": 2,
+    "reqLevel": 30
+  },
+  {
+    "id": 1002064,
+    "name": "Bronze Pride",
+    "koreanName": "손오공 청동 머리띠",
+    "reqJob": 2,
+    "reqLevel": 30
+  },
+  {
+    "id": 1002065,
+    "name": "Steel Pride",
+    "koreanName": "손오공 강철 머리띠",
+    "reqJob": 2,
+    "reqLevel": 30
   },
   {
     "id": 1002161,
@@ -1099,41 +910,6 @@
     "reqLevel": 30
   },
   {
-    "id": 1002166,
-    "name": "Red Distinction",
-    "koreanName": "레드 크라페",
-    "reqJob": 4,
-    "reqLevel": 40
-  },
-  {
-    "id": 1002167,
-    "name": "Blue Distinction",
-    "koreanName": "블루 크라페",
-    "reqJob": 4,
-    "reqLevel": 40
-  },
-  {
-    "id": 1002168,
-    "name": "Green Distinction",
-    "koreanName": "그린 크라페",
-    "reqJob": 4,
-    "reqLevel": 40
-  },
-  {
-    "id": 1002169,
-    "name": "Brown Distinction",
-    "koreanName": "브라운 크라페",
-    "reqJob": 4,
-    "reqLevel": 40
-  },
-  {
-    "id": 1002170,
-    "name": "Dark Distinction",
-    "koreanName": "다크 크라페",
-    "reqJob": 4,
-    "reqLevel": 40
-  },
-  {
     "id": 1002171,
     "name": "Red Guise",
     "koreanName": "레드 가이즈",
@@ -1167,6 +943,118 @@
     "koreanName": "다크 가이즈",
     "reqJob": 8,
     "reqLevel": 30
+  },
+  {
+    "id": 1002454,
+    "name": "Red Starry Bandana",
+    "koreanName": "빨간별 검은 두건",
+    "reqJob": 0,
+    "reqLevel": 30
+  },
+  {
+    "id": 1002455,
+    "name": "Black Starry Bandana",
+    "koreanName": "검은별 빨간 두건",
+    "reqJob": 0,
+    "reqLevel": 30
+  },
+  {
+    "id": 1002510,
+    "name": "Maple Hat",
+    "koreanName": "메이플 모자 (2단계)",
+    "reqJob": 0,
+    "reqLevel": 30
+  },
+  {
+    "id": 1002004,
+    "name": "Great Brown Helmet",
+    "koreanName": "브라운 그레이트 헬멧",
+    "reqJob": 1,
+    "reqLevel": 35
+  },
+  {
+    "id": 1002047,
+    "name": "Great Red Helmet",
+    "koreanName": "레드 그레이트 헬멧",
+    "reqJob": 1,
+    "reqLevel": 35
+  },
+  {
+    "id": 1002048,
+    "name": "Great Blue Helmet",
+    "koreanName": "블루 그레이트 헬멧",
+    "reqJob": 1,
+    "reqLevel": 35
+  },
+  {
+    "id": 1002135,
+    "name": "Brown Pole-Feather Hat",
+    "koreanName": "브라운 폴레패더햇",
+    "reqJob": 4,
+    "reqLevel": 35
+  },
+  {
+    "id": 1002136,
+    "name": "Dark Pole-Feather Hat",
+    "koreanName": "다크 폴레패더햇",
+    "reqJob": 4,
+    "reqLevel": 35
+  },
+  {
+    "id": 1002137,
+    "name": "Green Pole-Feather Hat",
+    "koreanName": "그린 폴레패더햇",
+    "reqJob": 4,
+    "reqLevel": 35
+  },
+  {
+    "id": 1002138,
+    "name": "Blue Pole-Feather Hat",
+    "koreanName": "블루 폴레패더햇",
+    "reqJob": 4,
+    "reqLevel": 35
+  },
+  {
+    "id": 1002139,
+    "name": "Red Pole-Feather Hat",
+    "koreanName": "레드 폴레패더햇",
+    "reqJob": 4,
+    "reqLevel": 35
+  },
+  {
+    "id": 1002141,
+    "name": "Red Matty",
+    "koreanName": "레드 매티",
+    "reqJob": 2,
+    "reqLevel": 35
+  },
+  {
+    "id": 1002142,
+    "name": "Blue Matty",
+    "koreanName": "블루 매티",
+    "reqJob": 2,
+    "reqLevel": 35
+  },
+  {
+    "id": 1002143,
+    "name": "Green Matty",
+    "koreanName": "그린 매티",
+    "reqJob": 2,
+    "reqLevel": 35
+  },
+  {
+    "id": 1002144,
+    "name": "Brown Matty",
+    "koreanName": "브라운 매티",
+    "reqJob": 2,
+    "reqLevel": 35
+  },
+  {
+    "id": 1002145,
+    "name": "Dark Matty",
+    "koreanName": "다크 매티",
+    "reqJob": 2,
+    "reqLevel": 35
   },
   {
     "id": 1002176,
@@ -1204,6 +1092,125 @@
     "reqLevel": 35
   },
   {
+    "id": 1002436,
+    "name": "Chief Stan Hat",
+    "koreanName": "장로스탄의 모자",
+    "reqJob": 0,
+    "reqLevel": 35
+  },
+  {
+    "id": 1002021,
+    "name": "Steel Nordic Helm",
+    "koreanName": "스틸 노르만 헬름",
+    "reqJob": 1,
+    "reqLevel": 40
+  },
+  {
+    "id": 1002025,
+    "name": "Red Duke",
+    "koreanName": "레드 듀크",
+    "reqJob": 1,
+    "reqLevel": 40
+  },
+  {
+    "id": 1002092,
+    "name": "Yellow Duke",
+    "koreanName": "옐로우 듀크",
+    "reqJob": 1,
+    "reqLevel": 40
+  },
+  {
+    "id": 1002093,
+    "name": "Blue Duke",
+    "koreanName": "블루 듀크",
+    "reqJob": 1,
+    "reqLevel": 40
+  },
+  {
+    "id": 1002098,
+    "name": "Gold Nordic Helm",
+    "koreanName": "골드 노르만 헬름",
+    "reqJob": 1,
+    "reqLevel": 40
+  },
+  {
+    "id": 1002099,
+    "name": "Mithril Nordic Helm",
+    "koreanName": "미스릴 노르만 헬름",
+    "reqJob": 1,
+    "reqLevel": 40
+  },
+  {
+    "id": 1002151,
+    "name": "Brown Guiltian",
+    "koreanName": "브라운 길티언",
+    "reqJob": 2,
+    "reqLevel": 40
+  },
+  {
+    "id": 1002152,
+    "name": "Blue Guiltian",
+    "koreanName": "블루 길티언",
+    "reqJob": 2,
+    "reqLevel": 40
+  },
+  {
+    "id": 1002153,
+    "name": "Red Guiltian",
+    "koreanName": "레드 길티언",
+    "reqJob": 2,
+    "reqLevel": 40
+  },
+  {
+    "id": 1002154,
+    "name": "Dark Guiltian",
+    "koreanName": "다크 길티언",
+    "reqJob": 2,
+    "reqLevel": 40
+  },
+  {
+    "id": 1002155,
+    "name": "White Guiltian",
+    "koreanName": "화이트 길티언",
+    "reqJob": 2,
+    "reqLevel": 40
+  },
+  {
+    "id": 1002166,
+    "name": "Red Distinction",
+    "koreanName": "레드 크라페",
+    "reqJob": 4,
+    "reqLevel": 40
+  },
+  {
+    "id": 1002167,
+    "name": "Blue Distinction",
+    "koreanName": "블루 크라페",
+    "reqJob": 4,
+    "reqLevel": 40
+  },
+  {
+    "id": 1002168,
+    "name": "Green Distinction",
+    "koreanName": "그린 크라페",
+    "reqJob": 4,
+    "reqLevel": 40
+  },
+  {
+    "id": 1002169,
+    "name": "Brown Distinction",
+    "koreanName": "브라운 크라페",
+    "reqJob": 4,
+    "reqLevel": 40
+  },
+  {
+    "id": 1002170,
+    "name": "Dark Distinction",
+    "koreanName": "다크 크라페",
+    "reqJob": 4,
+    "reqLevel": 40
+  },
+  {
     "id": 1002181,
     "name": "Red Pilfer",
     "koreanName": "레드 필퍼",
@@ -1237,6 +1244,62 @@
     "koreanName": "다크 필퍼",
     "reqJob": 8,
     "reqLevel": 40
+  },
+  {
+    "id": 1002006,
+    "name": "Bone Helm",
+    "koreanName": "본 헬름",
+    "reqJob": 0,
+    "reqLevel": 42
+  },
+  {
+    "id": 1002045,
+    "name": "Blue Bone Helm",
+    "koreanName": "블루 본 헬름",
+    "reqJob": 1,
+    "reqLevel": 42
+  },
+  {
+    "id": 1002046,
+    "name": "Red Bone Helm",
+    "koreanName": "레드 본 헬름",
+    "reqJob": 1,
+    "reqLevel": 42
+  },
+  {
+    "id": 1002024,
+    "name": "Emerald Dome",
+    "koreanName": "에메랄드 돔",
+    "reqJob": 1,
+    "reqLevel": 47
+  },
+  {
+    "id": 1002091,
+    "name": "Dark Dome",
+    "koreanName": "다크 돔",
+    "reqJob": 1,
+    "reqLevel": 47
+  },
+  {
+    "id": 1002028,
+    "name": "Silver Crusader Helm",
+    "koreanName": "실버 크루세이더 헬름",
+    "reqJob": 1,
+    "reqLevel": 50
+  },
+  {
+    "id": 1002085,
+    "name": "Mithril Crusader Helm",
+    "koreanName": "미스릴 크루세이더 헬름",
+    "reqJob": 1,
+    "reqLevel": 50
+  },
+  {
+    "id": 1002086,
+    "name": "Bronze Crusader Helm",
+    "koreanName": "브론즈 크루세이더 헬름",
+    "reqJob": 1,
+    "reqLevel": 50
   },
   {
     "id": 1002207,
@@ -1323,6 +1386,55 @@
     "reqLevel": 50
   },
   {
+    "id": 1002357,
+    "name": "Zakum Helmet (1)",
+    "koreanName": "자쿰의 투구",
+    "reqJob": 0,
+    "reqLevel": 50
+  },
+  {
+    "id": 1002749,
+    "name": "Bosshunter Helm",
+    "koreanName": "엘프 두건",
+    "reqJob": 4,
+    "reqLevel": 50
+  },
+  {
+    "id": 1002022,
+    "name": "Old Steel Nordic Helm",
+    "koreanName": "낡은 스틸 노르만 헬름",
+    "reqJob": 1,
+    "reqLevel": 55
+  },
+  {
+    "id": 1002100,
+    "name": "Old Bronze Nordic Helm",
+    "koreanName": "낡은 브론즈 노르만 헬름",
+    "reqJob": 1,
+    "reqLevel": 55
+  },
+  {
+    "id": 1002101,
+    "name": "Old Mithril Nordic Helm",
+    "koreanName": "낡은 미스릴 노르만 헬름",
+    "reqJob": 1,
+    "reqLevel": 55
+  },
+  {
+    "id": 1002029,
+    "name": "Red Oriental Helmet",
+    "koreanName": "레드 오리엔트 헬멧",
+    "reqJob": 1,
+    "reqLevel": 60
+  },
+  {
+    "id": 1002084,
+    "name": "Blue Oriental Helmet",
+    "koreanName": "블루 오리엔트 헬멧",
+    "reqJob": 1,
+    "reqLevel": 60
+  },
+  {
     "id": 1002242,
     "name": "Red Seraphis",
     "koreanName": "레드 세라피스",
@@ -1379,27 +1491,6 @@
     "reqLevel": 60
   },
   {
-    "id": 1002252,
-    "name": "Red Infinium Circlet",
-    "koreanName": "레드 키튼서클렛",
-    "reqJob": 2,
-    "reqLevel": 70
-  },
-  {
-    "id": 1002253,
-    "name": "Blue Infinium Circlet",
-    "koreanName": "블루 키튼서클렛",
-    "reqJob": 2,
-    "reqLevel": 70
-  },
-  {
-    "id": 1002254,
-    "name": "Dark Infinium Circlet",
-    "koreanName": "다크 키튼서클렛",
-    "reqJob": 2,
-    "reqLevel": 70
-  },
-  {
     "id": 1002267,
     "name": "Red Polyfeather Hat",
     "koreanName": "적궁우",
@@ -1428,60 +1519,67 @@
     "reqLevel": 60
   },
   {
-    "id": 1002271,
-    "name": "Green Galaxy",
-    "koreanName": "그린 크로스햇",
+    "id": 1002554,
+    "name": "Muey Thai String",
+    "koreanName": "무예타이 끈",
+    "reqJob": 0,
+    "reqLevel": 60
+  },
+  {
+    "id": 1002571,
+    "name": "Lord Pirate's Hat",
+    "koreanName": "데비존의 모자",
+    "reqJob": 0,
+    "reqLevel": 60
+  },
+  {
+    "id": 1002483,
+    "name": "Goblin Cap",
+    "koreanName": "도깨비 감투",
+    "reqJob": 0,
+    "reqLevel": 65
+  },
+  {
+    "id": 1002030,
+    "name": "Silver Planet",
+    "koreanName": "실버 플레닛",
+    "reqJob": 1,
+    "reqLevel": 70
+  },
+  {
+    "id": 1002094,
+    "name": "Bronze Planet",
+    "koreanName": "브론즈 플레닛",
+    "reqJob": 1,
+    "reqLevel": 70
+  },
+  {
+    "id": 1002095,
+    "name": "Mithril Planet",
+    "koreanName": "미스릴 플레닛",
+    "reqJob": 1,
+    "reqLevel": 70
+  },
+  {
+    "id": 1002252,
+    "name": "Red Infinium Circlet",
+    "koreanName": "레드 키튼서클렛",
     "reqJob": 2,
-    "reqLevel": 80
+    "reqLevel": 70
   },
   {
-    "id": 1002272,
-    "name": "Blue Galaxy",
-    "koreanName": "블루 크로스햇",
+    "id": 1002253,
+    "name": "Blue Infinium Circlet",
+    "koreanName": "블루 키튼서클렛",
     "reqJob": 2,
-    "reqLevel": 80
+    "reqLevel": 70
   },
   {
-    "id": 1002273,
-    "name": "Purple Galaxy",
-    "koreanName": "퍼플 크로스햇",
+    "id": 1002254,
+    "name": "Dark Infinium Circlet",
+    "koreanName": "다크 키튼서클렛",
     "reqJob": 2,
-    "reqLevel": 80
-  },
-  {
-    "id": 1002274,
-    "name": "Dark Galaxy",
-    "koreanName": "다크 크로스햇",
-    "reqJob": 2,
-    "reqLevel": 80
-  },
-  {
-    "id": 1002275,
-    "name": "Blue Falcon",
-    "koreanName": "블루 골드윙캡",
-    "reqJob": 4,
-    "reqLevel": 80
-  },
-  {
-    "id": 1002276,
-    "name": "Red Falcon",
-    "koreanName": "레드 골드윙캡",
-    "reqJob": 4,
-    "reqLevel": 80
-  },
-  {
-    "id": 1002277,
-    "name": "Green Falcon",
-    "koreanName": "그린 골드윙캡",
-    "reqJob": 4,
-    "reqLevel": 80
-  },
-  {
-    "id": 1002278,
-    "name": "Dark Falcon",
-    "koreanName": "다크 골드윙캡",
-    "reqJob": 4,
-    "reqLevel": 80
+    "reqLevel": 70
   },
   {
     "id": 1002281,
@@ -1547,32 +1645,74 @@
     "reqLevel": 70
   },
   {
-    "id": 1002323,
-    "name": "Green Osfa Hat",
-    "koreanName": "그린 쉐이드햇",
-    "reqJob": 8,
-    "reqLevel": 90
+    "id": 1002511,
+    "name": "Maple Hat",
+    "koreanName": "메이플 모자 (3단계)",
+    "reqJob": 0,
+    "reqLevel": 70
   },
   {
-    "id": 1002324,
-    "name": "Brown Osfa Hat",
-    "koreanName": "브라운 쉐이드햇",
-    "reqJob": 8,
-    "reqLevel": 90
+    "id": 1002572,
+    "name": "Lord Pirate's Hat",
+    "koreanName": "데비존의 모자",
+    "reqJob": 0,
+    "reqLevel": 70
   },
   {
-    "id": 1002325,
-    "name": "Purple Osfa Hat",
-    "koreanName": "퍼플 쉐이드햇",
-    "reqJob": 8,
-    "reqLevel": 90
+    "id": 1002271,
+    "name": "Green Galaxy",
+    "koreanName": "그린 크로스햇",
+    "reqJob": 2,
+    "reqLevel": 80
   },
   {
-    "id": 1002326,
-    "name": "Red Osfa Hat",
-    "koreanName": "레드 쉐이드햇",
-    "reqJob": 8,
-    "reqLevel": 90
+    "id": 1002272,
+    "name": "Blue Galaxy",
+    "koreanName": "블루 크로스햇",
+    "reqJob": 2,
+    "reqLevel": 80
+  },
+  {
+    "id": 1002273,
+    "name": "Purple Galaxy",
+    "koreanName": "퍼플 크로스햇",
+    "reqJob": 2,
+    "reqLevel": 80
+  },
+  {
+    "id": 1002274,
+    "name": "Dark Galaxy",
+    "koreanName": "다크 크로스햇",
+    "reqJob": 2,
+    "reqLevel": 80
+  },
+  {
+    "id": 1002275,
+    "name": "Blue Falcon",
+    "koreanName": "블루 골드윙캡",
+    "reqJob": 4,
+    "reqLevel": 80
+  },
+  {
+    "id": 1002276,
+    "name": "Red Falcon",
+    "koreanName": "레드 골드윙캡",
+    "reqJob": 4,
+    "reqLevel": 80
+  },
+  {
+    "id": 1002277,
+    "name": "Green Falcon",
+    "koreanName": "그린 골드윙캡",
+    "reqJob": 4,
+    "reqLevel": 80
+  },
+  {
+    "id": 1002278,
+    "name": "Dark Falcon",
+    "koreanName": "다크 골드윙캡",
+    "reqJob": 4,
+    "reqLevel": 80
   },
   {
     "id": 1002327,
@@ -1624,11 +1764,39 @@
     "reqLevel": 80
   },
   {
-    "id": 1002357,
-    "name": "Zakum Helmet (1)",
-    "koreanName": "자쿰의 투구",
+    "id": 1002573,
+    "name": "Lord Pirate's Hat",
+    "koreanName": "평범한 데비존의 모자",
     "reqJob": 0,
-    "reqLevel": 50
+    "reqLevel": 80
+  },
+  {
+    "id": 1002323,
+    "name": "Green Osfa Hat",
+    "koreanName": "그린 쉐이드햇",
+    "reqJob": 8,
+    "reqLevel": 90
+  },
+  {
+    "id": 1002324,
+    "name": "Brown Osfa Hat",
+    "koreanName": "브라운 쉐이드햇",
+    "reqJob": 8,
+    "reqLevel": 90
+  },
+  {
+    "id": 1002325,
+    "name": "Purple Osfa Hat",
+    "koreanName": "퍼플 쉐이드햇",
+    "reqJob": 8,
+    "reqLevel": 90
+  },
+  {
+    "id": 1002326,
+    "name": "Red Osfa Hat",
+    "koreanName": "레드 쉐이드햇",
+    "reqJob": 8,
+    "reqLevel": 90
   },
   {
     "id": 1002363,
@@ -1656,6 +1824,83 @@
     "name": "Black Oriental Fury Hat",
     "koreanName": "흑견랑건",
     "reqJob": 2,
+    "reqLevel": 90
+  },
+  {
+    "id": 1002402,
+    "name": "Red Arlic Helmet",
+    "koreanName": "레드 아데스햇",
+    "reqJob": 4,
+    "reqLevel": 90
+  },
+  {
+    "id": 1002403,
+    "name": "Blue Arlic Helmet",
+    "koreanName": "블루 아데스햇",
+    "reqJob": 4,
+    "reqLevel": 90
+  },
+  {
+    "id": 1002404,
+    "name": "Green Arlic Helmet",
+    "koreanName": "그린 아데스햇",
+    "reqJob": 4,
+    "reqLevel": 90
+  },
+  {
+    "id": 1002405,
+    "name": "Dark Arlic Helmet",
+    "koreanName": "다크 아데스햇",
+    "reqJob": 4,
+    "reqLevel": 90
+  },
+  {
+    "id": 1002528,
+    "name": "Green Grace Helmet",
+    "koreanName": "그린 그레이스 헬멧",
+    "reqJob": 1,
+    "reqLevel": 90
+  },
+  {
+    "id": 1002529,
+    "name": "Blue Grace Helmet",
+    "koreanName": "블루 그레이스 헬멧",
+    "reqJob": 1,
+    "reqLevel": 90
+  },
+  {
+    "id": 1002530,
+    "name": "Red Grace Helmet",
+    "koreanName": "레드 그레이스 헬멧",
+    "reqJob": 1,
+    "reqLevel": 90
+  },
+  {
+    "id": 1002531,
+    "name": "Silver Grace Helmet",
+    "koreanName": "실버 그레이스 헬멧",
+    "reqJob": 1,
+    "reqLevel": 90
+  },
+  {
+    "id": 1002532,
+    "name": "Dark Grace Helmet",
+    "koreanName": "다크 그레이스 헬멧",
+    "reqJob": 1,
+    "reqLevel": 90
+  },
+  {
+    "id": 1002574,
+    "name": "Lord Pirate's Hat",
+    "koreanName": "무난한 데비존의 모자",
+    "reqJob": 0,
+    "reqLevel": 90
+  },
+  {
+    "id": 1002758,
+    "name": "Maple Hat (level 4)",
+    "koreanName": "메이플 모자 (4단계)",
+    "reqJob": 0,
     "reqLevel": 90
   },
   {
@@ -1708,48 +1953,6 @@
     "reqLevel": 100
   },
   {
-    "id": 1002390,
-    "name": "Zakum Helmet (2)",
-    "koreanName": "자쿰의 모자2",
-    "reqJob": 0,
-    "reqLevel": 50
-  },
-  {
-    "id": 1002391,
-    "name": "Green Bandana",
-    "koreanName": "초록 두건",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002392,
-    "name": "Brown Bandana",
-    "koreanName": "갈색 두건",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002393,
-    "name": "Pink Bandana",
-    "koreanName": "분홍 두건",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002394,
-    "name": "Grey Bandana",
-    "koreanName": "회색 두건",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002395,
-    "name": "Purple Bandana",
-    "koreanName": "보라 두건",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
     "id": 1002398,
     "name": "Green Varr Hat",
     "koreanName": "그린 바르햇",
@@ -1778,34 +1981,6 @@
     "reqLevel": 100
   },
   {
-    "id": 1002402,
-    "name": "Red Arlic Helmet",
-    "koreanName": "레드 아데스햇",
-    "reqJob": 4,
-    "reqLevel": 90
-  },
-  {
-    "id": 1002403,
-    "name": "Blue Arlic Helmet",
-    "koreanName": "블루 아데스햇",
-    "reqJob": 4,
-    "reqLevel": 90
-  },
-  {
-    "id": 1002404,
-    "name": "Green Arlic Helmet",
-    "koreanName": "그린 아데스햇",
-    "reqJob": 4,
-    "reqLevel": 90
-  },
-  {
-    "id": 1002405,
-    "name": "Dark Arlic Helmet",
-    "koreanName": "다크 아데스햇",
-    "reqJob": 4,
-    "reqLevel": 90
-  },
-  {
     "id": 1002406,
     "name": "Red Arnah Cap",
     "koreanName": "레드 아르나햇",
@@ -1825,523 +2000,5 @@
     "koreanName": "그린 아르나햇",
     "reqJob": 4,
     "reqLevel": 100
-  },
-  {
-    "id": 1002418,
-    "name": "Newspaper Hat",
-    "koreanName": "신문지 투구",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002419,
-    "name": "Mark of the Beta",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002424,
-    "name": "Red Sporty Cap",
-    "koreanName": "빨간색 운동 모자",
-    "reqJob": 0,
-    "reqLevel": 5
-  },
-  {
-    "id": 1002425,
-    "name": "Blue Sporty Cap",
-    "koreanName": "파란색 운동 모자",
-    "reqJob": 0,
-    "reqLevel": 5
-  },
-  {
-    "id": 1002430,
-    "name": "Zakum Helmet (3)",
-    "koreanName": "자쿰의 투구3",
-    "reqJob": 0,
-    "reqLevel": 60
-  },
-  {
-    "id": 1002436,
-    "name": "Chief Stan Hat",
-    "koreanName": "장로스탄의 모자",
-    "reqJob": 0,
-    "reqLevel": 35
-  },
-  {
-    "id": 1002441,
-    "name": "Ribboned Pig Headband",
-    "koreanName": "리본돼지 머리띠",
-    "reqJob": 0,
-    "reqLevel": 25
-  },
-  {
-    "id": 1002448,
-    "name": "Purple Bandana",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002452,
-    "name": "Black Starry Bandana",
-    "koreanName": "검은 별 흰 두건",
-    "reqJob": 0,
-    "reqLevel": 20
-  },
-  {
-    "id": 1002453,
-    "name": "White Starry Bandana",
-    "koreanName": "흰 별 검은 두건",
-    "reqJob": 0,
-    "reqLevel": 20
-  },
-  {
-    "id": 1002454,
-    "name": "Red Starry Bandana",
-    "koreanName": "빨간별 검은 두건",
-    "reqJob": 0,
-    "reqLevel": 30
-  },
-  {
-    "id": 1002455,
-    "name": "Black Starry Bandana",
-    "koreanName": "검은별 빨간 두건",
-    "reqJob": 0,
-    "reqLevel": 30
-  },
-  {
-    "id": 1002471,
-    "name": "Shapka for Hunters",
-    "koreanName": "사냥꾼의 샤프카",
-    "reqJob": 0,
-    "reqLevel": 60
-  },
-  {
-    "id": 1002483,
-    "name": "Goblin Cap",
-    "koreanName": "도깨비 감투",
-    "reqJob": 0,
-    "reqLevel": 65
-  },
-  {
-    "id": 1002492,
-    "name": "White Baseball Cap",
-    "koreanName": "흰색 야구모자",
-    "reqJob": 0,
-    "reqLevel": 20
-  },
-  {
-    "id": 1002508,
-    "name": "Maple Hat",
-    "koreanName": "메이플 모자 (기본)",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002509,
-    "name": "Maple Hat",
-    "koreanName": "메이플 모자 (1단계)",
-    "reqJob": 0,
-    "reqLevel": 8
-  },
-  {
-    "id": 1002510,
-    "name": "Maple Hat",
-    "koreanName": "메이플 모자 (2단계)",
-    "reqJob": 0,
-    "reqLevel": 30
-  },
-  {
-    "id": 1002511,
-    "name": "Maple Hat",
-    "koreanName": "메이플 모자 (3단계)",
-    "reqJob": 0,
-    "reqLevel": 70
-  },
-  {
-    "id": 1002515,
-    "name": "Maple Bandana White",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002516,
-    "name": "Maple Bandana Yellow",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002517,
-    "name": "Maple Bandana Red",
-    "koreanName": "메이플 2000일 두건",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002518,
-    "name": "Maple Bandana Blue",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002527,
-    "name": "Independence Day Hat",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002528,
-    "name": "Green Grace Helmet",
-    "koreanName": "그린 그레이스 헬멧",
-    "reqJob": 1,
-    "reqLevel": 90
-  },
-  {
-    "id": 1002529,
-    "name": "Blue Grace Helmet",
-    "koreanName": "블루 그레이스 헬멧",
-    "reqJob": 1,
-    "reqLevel": 90
-  },
-  {
-    "id": 1002530,
-    "name": "Red Grace Helmet",
-    "koreanName": "레드 그레이스 헬멧",
-    "reqJob": 1,
-    "reqLevel": 90
-  },
-  {
-    "id": 1002531,
-    "name": "Silver Grace Helmet",
-    "koreanName": "실버 그레이스 헬멧",
-    "reqJob": 1,
-    "reqLevel": 90
-  },
-  {
-    "id": 1002532,
-    "name": "Dark Grace Helmet",
-    "koreanName": "다크 그레이스 헬멧",
-    "reqJob": 1,
-    "reqLevel": 90
-  },
-  {
-    "id": 1002553,
-    "name": "Genesis Bandana",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002554,
-    "name": "Muey Thai String",
-    "koreanName": "무예타이 끈",
-    "reqJob": 0,
-    "reqLevel": 60
-  },
-  {
-    "id": 1002562,
-    "name": "Training Headgear for Beginners",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002571,
-    "name": "Lord Pirate's Hat",
-    "koreanName": "데비존의 모자",
-    "reqJob": 0,
-    "reqLevel": 60
-  },
-  {
-    "id": 1002572,
-    "name": "Lord Pirate's Hat",
-    "koreanName": "데비존의 모자",
-    "reqJob": 0,
-    "reqLevel": 70
-  },
-  {
-    "id": 1002573,
-    "name": "Lord Pirate's Hat",
-    "koreanName": "평범한 데비존의 모자",
-    "reqJob": 0,
-    "reqLevel": 80
-  },
-  {
-    "id": 1002574,
-    "name": "Lord Pirate's Hat",
-    "koreanName": "무난한 데비존의 모자",
-    "reqJob": 0,
-    "reqLevel": 90
-  },
-  {
-    "id": 1002577,
-    "name": "Pickpocket Pilfer",
-    "koreanName": "",
-    "reqJob": 8,
-    "reqLevel": 40
-  },
-  {
-    "id": 1002578,
-    "name": "Herculean Helmet",
-    "koreanName": "",
-    "reqJob": 1,
-    "reqLevel": 35
-  },
-  {
-    "id": 1002579,
-    "name": "LeFay Jester",
-    "koreanName": "",
-    "reqJob": 2,
-    "reqLevel": 30
-  },
-  {
-    "id": 1002580,
-    "name": "Lockewood Hat",
-    "koreanName": "",
-    "reqJob": 4,
-    "reqLevel": 35
-  },
-  {
-    "id": 1002584,
-    "name": "Red Old Wisconsin",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 20
-  },
-  {
-    "id": 1002585,
-    "name": "Blue Old Wisconsin",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 20
-  },
-  {
-    "id": 1002586,
-    "name": "Purple Old Wisconsin",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 20
-  },
-  {
-    "id": 1002587,
-    "name": "Black Old Wisconsin",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 20
-  },
-  {
-    "id": 1002600,
-    "name": "Red Maple Bandana ",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002601,
-    "name": "Yellow Maple Bandana",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002602,
-    "name": "Blue Maple Bandana ",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002603,
-    "name": "White Maple Bandana",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002656,
-    "name": "White Identity",
-    "koreanName": "",
-    "reqJob": 8,
-    "reqLevel": 60
-  },
-  {
-    "id": 1002662,
-    "name": "Flower decoration celebrating wedding anniversary",
-    "koreanName": "결혼기념 꽃 장식",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002663,
-    "name": "Cork hat",
-    "koreanName": "코-크 모자",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002675,
-    "name": "Antellion Miter",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 35
-  },
-  {
-    "id": 1002676,
-    "name": "Infinity Circlet",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 50
-  },
-  {
-    "id": 1002677,
-    "name": "Toymaker Cap",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 40
-  },
-  {
-    "id": 1002699,
-    "name": "Halloween Pumpkin Hat",
-    "koreanName": "할로윈 호박 모자",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002707,
-    "name": "Hat of a Masked Man",
-    "koreanName": "가면신사의 모자",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002716,
-    "name": "Versalmas Hat",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002717,
-    "name": "Maplemas Hat",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002723,
-    "name": "Rice Cake Hat",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 30
-  },
-  {
-    "id": 1002728,
-    "name": "Rudolph's Horn",
-    "koreanName": "루돌프의 뿔",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002737,
-    "name": "White Mouse Headband",
-    "koreanName": "화이트 마우스 머리띠",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002749,
-    "name": "Bosshunter Helm",
-    "koreanName": "엘프 두건",
-    "reqJob": 4,
-    "reqLevel": 50
-  },
-  {
-    "id": 1002750,
-    "name": " Bosshunter Faceguard",
-    "koreanName": "",
-    "reqJob": 8,
-    "reqLevel": 50
-  },
-  {
-    "id": 1002757,
-    "name": "football steel helmet",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1002758,
-    "name": "Maple Hat (level 4)",
-    "koreanName": "메이플 모자 (4단계)",
-    "reqJob": 0,
-    "reqLevel": 90
-  },
-  {
-    "id": 1002762,
-    "name": "Transform to Kanderun",
-    "koreanName": "칸데룬 변신",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002763,
-    "name": "Transform to Pergen",
-    "koreanName": "페르젠 변신",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002764,
-    "name": "Transform to Helena",
-    "koreanName": "헬레나 변신",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002765,
-    "name": "Transform to Dark Lord",
-    "koreanName": "다크로드 변신",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002766,
-    "name": "Transform to Euryth",
-    "koreanName": "유리스 변신",
-    "reqJob": 0,
-    "reqLevel": 0
-  },
-  {
-    "id": 1002788,
-    "name": "Necomimi",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 30
-  },
-  {
-    "id": 1002801,
-    "name": "Raven Ninja Bandana",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 60
-  },
-  {
-    "id": 1002856,
-    "name": "Miner's Hat",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 30
-  },
-  {
-    "id": 1002857,
-    "name": "Hard Hat",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 60
   }
 ]

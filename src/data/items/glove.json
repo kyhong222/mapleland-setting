@@ -1,19 +1,5 @@
 [
   {
-    "id": 1082000,
-    "name": "Steel Fingerless Gloves",
-    "koreanName": "강철 반장갑",
-    "reqJob": 1,
-    "reqLevel": 15
-  },
-  {
-    "id": 1082001,
-    "name": "White Fingerless Gloves",
-    "koreanName": "흰 무늬 반장갑",
-    "reqJob": 1,
-    "reqLevel": 25
-  },
-  {
     "id": 1082002,
     "name": "Work Gloves",
     "koreanName": "노가다 목장갑",
@@ -28,60 +14,53 @@
     "reqLevel": 10
   },
   {
-    "id": 1082004,
-    "name": "Venon",
-    "koreanName": "베논",
-    "reqJob": 1,
-    "reqLevel": 20
+    "id": 1082145,
+    "name": "Yellow Work Gloves",
+    "koreanName": "노란색 노가다 목장갑",
+    "reqJob": 0,
+    "reqLevel": 10
   },
   {
-    "id": 1082005,
-    "name": "Steel Missel",
-    "koreanName": "스틸 미셀",
-    "reqJob": 1,
-    "reqLevel": 30
+    "id": 1082146,
+    "name": "Red Work Gloves",
+    "koreanName": "빨간색 노가다 목장갑",
+    "reqJob": 0,
+    "reqLevel": 10
   },
   {
-    "id": 1082006,
-    "name": "Orihalcon Missel",
-    "koreanName": "오리할콘 미셀",
-    "reqJob": 1,
-    "reqLevel": 30
+    "id": 1082147,
+    "name": "Blue Work Gloves",
+    "koreanName": "파랑색 노가다 목장갑",
+    "reqJob": 0,
+    "reqLevel": 10
   },
   {
-    "id": 1082007,
-    "name": "Bronze Missel",
-    "koreanName": "브론즈 미셀",
-    "reqJob": 1,
-    "reqLevel": 30
+    "id": 1082148,
+    "name": "Purple Work Gloves",
+    "koreanName": "보라색 노가다 목장갑",
+    "reqJob": 0,
+    "reqLevel": 10
   },
   {
-    "id": 1082008,
-    "name": "Steel Briggon",
-    "koreanName": "",
-    "reqJob": 1,
-    "reqLevel": 35
+    "id": 1082149,
+    "name": "Brown Work Gloves",
+    "koreanName": "갈색 노가다 목장갑",
+    "reqJob": 0,
+    "reqLevel": 10
   },
   {
-    "id": 1082009,
-    "name": "Steel Brist",
-    "koreanName": "스틸 브리스트",
-    "reqJob": 1,
-    "reqLevel": 50
+    "id": 1082150,
+    "name": "Grey Work Gloves",
+    "koreanName": "회색 노가다 목장갑",
+    "reqJob": 0,
+    "reqLevel": 10
   },
   {
-    "id": 1082010,
-    "name": "Mithril Brist",
-    "koreanName": "미스릴 브리스트",
+    "id": 1082000,
+    "name": "Steel Fingerless Gloves",
+    "koreanName": "강철 반장갑",
     "reqJob": 1,
-    "reqLevel": 50
-  },
-  {
-    "id": 1082011,
-    "name": "Gold Brist",
-    "koreanName": "골드 브리스트",
-    "reqJob": 1,
-    "reqLevel": 50
+    "reqLevel": 15
   },
   {
     "id": 1082012,
@@ -91,116 +70,11 @@
     "reqLevel": 15
   },
   {
-    "id": 1082013,
-    "name": "Blue Diros",
-    "koreanName": "블루 디로스",
-    "reqJob": 4,
-    "reqLevel": 20
-  },
-  {
-    "id": 1082014,
-    "name": "Red Diros",
-    "koreanName": "레드 디로스",
-    "reqJob": 4,
-    "reqLevel": 20
-  },
-  {
-    "id": 1082015,
-    "name": "Green Diros",
-    "koreanName": "그린 디로스",
-    "reqJob": 4,
-    "reqLevel": 20
-  },
-  {
-    "id": 1082016,
-    "name": "Blue Savata",
-    "koreanName": "블루 사바타",
-    "reqJob": 4,
-    "reqLevel": 25
-  },
-  {
-    "id": 1082017,
-    "name": "Red Savata",
-    "koreanName": "레드 사바타",
-    "reqJob": 4,
-    "reqLevel": 25
-  },
-  {
-    "id": 1082018,
-    "name": "Dark Savata",
-    "koreanName": "다크 사바타",
-    "reqJob": 4,
-    "reqLevel": 25
-  },
-  {
     "id": 1082019,
     "name": "Lemona",
     "koreanName": "레모나",
     "reqJob": 2,
     "reqLevel": 15
-  },
-  {
-    "id": 1082020,
-    "name": "Blue Morrican",
-    "koreanName": "블루 모리칸",
-    "reqJob": 2,
-    "reqLevel": 20
-  },
-  {
-    "id": 1082021,
-    "name": "Green Morrican",
-    "koreanName": "그린 모리칸",
-    "reqJob": 2,
-    "reqLevel": 20
-  },
-  {
-    "id": 1082022,
-    "name": "Purple Morrican",
-    "koreanName": "퍼플 모리칸",
-    "reqJob": 2,
-    "reqLevel": 20
-  },
-  {
-    "id": 1082023,
-    "name": "Iron Knuckle",
-    "koreanName": "아이언 너클",
-    "reqJob": 1,
-    "reqLevel": 40
-  },
-  {
-    "id": 1082024,
-    "name": "Adamantium Knuckle",
-    "koreanName": "아다만티움 너클",
-    "reqJob": 1,
-    "reqLevel": 40
-  },
-  {
-    "id": 1082025,
-    "name": "Dark Knuckle",
-    "koreanName": "다크 너클",
-    "reqJob": 1,
-    "reqLevel": 40
-  },
-  {
-    "id": 1082026,
-    "name": "Ocean Mesana",
-    "koreanName": "오션 메사나",
-    "reqJob": 2,
-    "reqLevel": 25
-  },
-  {
-    "id": 1082027,
-    "name": "Blood Mesana",
-    "koreanName": "블러드 메사나",
-    "reqJob": 2,
-    "reqLevel": 25
-  },
-  {
-    "id": 1082028,
-    "name": "Dark Mesana",
-    "koreanName": "다크 메사나",
-    "reqJob": 2,
-    "reqLevel": 25
   },
   {
     "id": 1082029,
@@ -224,6 +98,55 @@
     "reqLevel": 15
   },
   {
+    "id": 1082004,
+    "name": "Venon",
+    "koreanName": "베논",
+    "reqJob": 1,
+    "reqLevel": 20
+  },
+  {
+    "id": 1082013,
+    "name": "Blue Diros",
+    "koreanName": "블루 디로스",
+    "reqJob": 4,
+    "reqLevel": 20
+  },
+  {
+    "id": 1082014,
+    "name": "Red Diros",
+    "koreanName": "레드 디로스",
+    "reqJob": 4,
+    "reqLevel": 20
+  },
+  {
+    "id": 1082015,
+    "name": "Green Diros",
+    "koreanName": "그린 디로스",
+    "reqJob": 4,
+    "reqLevel": 20
+  },
+  {
+    "id": 1082020,
+    "name": "Blue Morrican",
+    "koreanName": "블루 모리칸",
+    "reqJob": 2,
+    "reqLevel": 20
+  },
+  {
+    "id": 1082021,
+    "name": "Green Morrican",
+    "koreanName": "그린 모리칸",
+    "reqJob": 2,
+    "reqLevel": 20
+  },
+  {
+    "id": 1082022,
+    "name": "Purple Morrican",
+    "koreanName": "퍼플 모리칸",
+    "reqJob": 2,
+    "reqLevel": 20
+  },
+  {
     "id": 1082032,
     "name": "Bronze Mischief",
     "koreanName": "브론즈 스틸라인",
@@ -245,18 +168,53 @@
     "reqLevel": 20
   },
   {
-    "id": 1082035,
-    "name": "Yellow Briggon",
-    "koreanName": "옐로우 브리건",
+    "id": 1082001,
+    "name": "White Fingerless Gloves",
+    "koreanName": "흰 무늬 반장갑",
     "reqJob": 1,
-    "reqLevel": 35
+    "reqLevel": 25
   },
   {
-    "id": 1082036,
-    "name": "Dark Briggon",
-    "koreanName": "다크 브리건",
-    "reqJob": 1,
-    "reqLevel": 35
+    "id": 1082016,
+    "name": "Blue Savata",
+    "koreanName": "블루 사바타",
+    "reqJob": 4,
+    "reqLevel": 25
+  },
+  {
+    "id": 1082017,
+    "name": "Red Savata",
+    "koreanName": "레드 사바타",
+    "reqJob": 4,
+    "reqLevel": 25
+  },
+  {
+    "id": 1082018,
+    "name": "Dark Savata",
+    "koreanName": "다크 사바타",
+    "reqJob": 4,
+    "reqLevel": 25
+  },
+  {
+    "id": 1082026,
+    "name": "Ocean Mesana",
+    "koreanName": "오션 메사나",
+    "reqJob": 2,
+    "reqLevel": 25
+  },
+  {
+    "id": 1082027,
+    "name": "Blood Mesana",
+    "koreanName": "블러드 메사나",
+    "reqJob": 2,
+    "reqLevel": 25
+  },
+  {
+    "id": 1082028,
+    "name": "Dark Mesana",
+    "koreanName": "다크 메사나",
+    "reqJob": 2,
+    "reqLevel": 25
   },
   {
     "id": 1082037,
@@ -280,6 +238,27 @@
     "reqLevel": 25
   },
   {
+    "id": 1082005,
+    "name": "Steel Missel",
+    "koreanName": "스틸 미셀",
+    "reqJob": 1,
+    "reqLevel": 30
+  },
+  {
+    "id": 1082006,
+    "name": "Orihalcon Missel",
+    "koreanName": "오리할콘 미셀",
+    "reqJob": 1,
+    "reqLevel": 30
+  },
+  {
+    "id": 1082007,
+    "name": "Bronze Missel",
+    "koreanName": "브론즈 미셀",
+    "reqJob": 1,
+    "reqLevel": 30
+  },
+  {
     "id": 1082042,
     "name": "Steel Sylvia",
     "koreanName": "스틸 실비아",
@@ -299,27 +278,6 @@
     "koreanName": "골드 실비아",
     "reqJob": 8,
     "reqLevel": 30
-  },
-  {
-    "id": 1082045,
-    "name": "Gold Arbion",
-    "koreanName": "골드 아르비욘",
-    "reqJob": 8,
-    "reqLevel": 35
-  },
-  {
-    "id": 1082046,
-    "name": "Steel Arbion",
-    "koreanName": "스틸 아르비욘",
-    "reqJob": 8,
-    "reqLevel": 35
-  },
-  {
-    "id": 1082047,
-    "name": "Orihalcon Arbion",
-    "koreanName": "오리할콘 아르비욘",
-    "reqJob": 8,
-    "reqLevel": 35
   },
   {
     "id": 1082048,
@@ -364,6 +322,41 @@
     "reqLevel": 30
   },
   {
+    "id": 1082035,
+    "name": "Yellow Briggon",
+    "koreanName": "옐로우 브리건",
+    "reqJob": 1,
+    "reqLevel": 35
+  },
+  {
+    "id": 1082036,
+    "name": "Dark Briggon",
+    "koreanName": "다크 브리건",
+    "reqJob": 1,
+    "reqLevel": 35
+  },
+  {
+    "id": 1082045,
+    "name": "Gold Arbion",
+    "koreanName": "골드 아르비욘",
+    "reqJob": 8,
+    "reqLevel": 35
+  },
+  {
+    "id": 1082046,
+    "name": "Steel Arbion",
+    "koreanName": "스틸 아르비욘",
+    "reqJob": 8,
+    "reqLevel": 35
+  },
+  {
+    "id": 1082047,
+    "name": "Orihalcon Arbion",
+    "koreanName": "오리할콘 아르비욘",
+    "reqJob": 8,
+    "reqLevel": 35
+  },
+  {
     "id": 1082054,
     "name": "Red Noel",
     "koreanName": "레드 노엘",
@@ -385,25 +378,46 @@
     "reqLevel": 35
   },
   {
-    "id": 1082059,
-    "name": "Bronze Clench",
-    "koreanName": "브론즈 클랜치",
-    "reqJob": 1,
-    "reqLevel": 60
+    "id": 1082068,
+    "name": "Bronze Scaler",
+    "koreanName": "브론즈 스케일러",
+    "reqJob": 4,
+    "reqLevel": 35
   },
   {
-    "id": 1082060,
-    "name": "Sapphire Clench",
-    "koreanName": "사파이어 클랜치",
-    "reqJob": 1,
-    "reqLevel": 60
+    "id": 1082069,
+    "name": "Mithril Scaler",
+    "koreanName": "미스릴 스케일러",
+    "reqJob": 4,
+    "reqLevel": 35
   },
   {
-    "id": 1082061,
-    "name": "Dark Clench",
-    "koreanName": "다크 클랜치",
+    "id": 1082070,
+    "name": "Gold Scaler",
+    "koreanName": "골드 스케일러",
+    "reqJob": 4,
+    "reqLevel": 35
+  },
+  {
+    "id": 1082023,
+    "name": "Iron Knuckle",
+    "koreanName": "아이언 너클",
     "reqJob": 1,
-    "reqLevel": 60
+    "reqLevel": 40
+  },
+  {
+    "id": 1082024,
+    "name": "Adamantium Knuckle",
+    "koreanName": "아다만티움 너클",
+    "reqJob": 1,
+    "reqLevel": 40
+  },
+  {
+    "id": 1082025,
+    "name": "Dark Knuckle",
+    "koreanName": "다크 너클",
+    "reqJob": 1,
+    "reqLevel": 40
   },
   {
     "id": 1082062,
@@ -425,48 +439,6 @@
     "koreanName": "다크 아르텐",
     "reqJob": 2,
     "reqLevel": 40
-  },
-  {
-    "id": 1082065,
-    "name": "Blue Moon Gloves",
-    "koreanName": "",
-    "reqJob": 8,
-    "reqLevel": 50
-  },
-  {
-    "id": 1082066,
-    "name": "Brown Moon Gloves",
-    "koreanName": "",
-    "reqJob": 8,
-    "reqLevel": 50
-  },
-  {
-    "id": 1082067,
-    "name": "Red Moon Gloves",
-    "koreanName": "",
-    "reqJob": 8,
-    "reqLevel": 50
-  },
-  {
-    "id": 1082068,
-    "name": "Bronze Scaler",
-    "koreanName": "브론즈 스케일러",
-    "reqJob": 4,
-    "reqLevel": 35
-  },
-  {
-    "id": 1082069,
-    "name": "Mithril Scaler",
-    "koreanName": "미스릴 스케일러",
-    "reqJob": 4,
-    "reqLevel": 35
-  },
-  {
-    "id": 1082070,
-    "name": "Gold Scaler",
-    "koreanName": "골드 스케일러",
-    "reqJob": 4,
-    "reqLevel": 35
   },
   {
     "id": 1082071,
@@ -511,6 +483,27 @@
     "reqLevel": 40
   },
   {
+    "id": 1082009,
+    "name": "Steel Brist",
+    "koreanName": "스틸 브리스트",
+    "reqJob": 1,
+    "reqLevel": 50
+  },
+  {
+    "id": 1082010,
+    "name": "Mithril Brist",
+    "koreanName": "미스릴 브리스트",
+    "reqJob": 1,
+    "reqLevel": 50
+  },
+  {
+    "id": 1082011,
+    "name": "Gold Brist",
+    "koreanName": "골드 브리스트",
+    "reqJob": 1,
+    "reqLevel": 50
+  },
+  {
     "id": 1082080,
     "name": "Dark Penance",
     "koreanName": "다크 페넌스",
@@ -551,6 +544,27 @@
     "koreanName": "레드 윌로우",
     "reqJob": 4,
     "reqLevel": 50
+  },
+  {
+    "id": 1082059,
+    "name": "Bronze Clench",
+    "koreanName": "브론즈 클랜치",
+    "reqJob": 1,
+    "reqLevel": 60
+  },
+  {
+    "id": 1082060,
+    "name": "Sapphire Clench",
+    "koreanName": "사파이어 클랜치",
+    "reqJob": 1,
+    "reqLevel": 60
+  },
+  {
+    "id": 1082061,
+    "name": "Dark Clench",
+    "koreanName": "다크 클랜치",
+    "reqJob": 1,
+    "reqLevel": 60
   },
   {
     "id": 1082086,
@@ -697,6 +711,13 @@
     "name": "Dark Eyes",
     "koreanName": "다크 아이즈",
     "reqJob": 4,
+    "reqLevel": 70
+  },
+  {
+    "id": 1082222,
+    "name": "Mechanical Glove",
+    "koreanName": "기계 장갑",
+    "reqJob": 0,
     "reqLevel": 70
   },
   {
@@ -868,6 +889,27 @@
     "reqLevel": 90
   },
   {
+    "id": 1082142,
+    "name": "Green Mystra",
+    "koreanName": "그린 미스트라",
+    "reqJob": 8,
+    "reqLevel": 90
+  },
+  {
+    "id": 1082143,
+    "name": "Purple Mystra",
+    "koreanName": "퍼플 미스트라",
+    "reqJob": 8,
+    "reqLevel": 90
+  },
+  {
+    "id": 1082144,
+    "name": "Dark Mystra",
+    "koreanName": "다크 미스트라",
+    "reqJob": 8,
+    "reqLevel": 90
+  },
+  {
     "id": 1082135,
     "name": "Blue Anelin",
     "koreanName": "블루 아날린",
@@ -917,69 +959,6 @@
     "reqLevel": 100
   },
   {
-    "id": 1082142,
-    "name": "Green Mystra",
-    "koreanName": "그린 미스트라",
-    "reqJob": 8,
-    "reqLevel": 90
-  },
-  {
-    "id": 1082143,
-    "name": "Purple Mystra",
-    "koreanName": "퍼플 미스트라",
-    "reqJob": 8,
-    "reqLevel": 90
-  },
-  {
-    "id": 1082144,
-    "name": "Dark Mystra",
-    "koreanName": "다크 미스트라",
-    "reqJob": 8,
-    "reqLevel": 90
-  },
-  {
-    "id": 1082145,
-    "name": "Yellow Work Gloves",
-    "koreanName": "노란색 노가다 목장갑",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1082146,
-    "name": "Red Work Gloves",
-    "koreanName": "빨간색 노가다 목장갑",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1082147,
-    "name": "Blue Work Gloves",
-    "koreanName": "파랑색 노가다 목장갑",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1082148,
-    "name": "Purple Work Gloves",
-    "koreanName": "보라색 노가다 목장갑",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1082149,
-    "name": "Brown Work Gloves",
-    "koreanName": "갈색 노가다 목장갑",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1082150,
-    "name": "Grey Work Gloves",
-    "koreanName": "회색 노가다 목장갑",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
     "id": 1082151,
     "name": "Green Ciara",
     "koreanName": "그린 시아르",
@@ -1027,96 +1006,5 @@
     "koreanName": "그린 아르시나",
     "reqJob": 4,
     "reqLevel": 100
-  },
-  {
-    "id": 1082174,
-    "name": "Lunar Gloves",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 10
-  },
-  {
-    "id": 1082175,
-    "name": "Red Marker",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 20
-  },
-  {
-    "id": 1082176,
-    "name": "Blue Marker",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 20
-  },
-  {
-    "id": 1082177,
-    "name": "Purple Marker",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 20
-  },
-  {
-    "id": 1082178,
-    "name": "Pink Marker",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 20
-  },
-  {
-    "id": 1082179,
-    "name": "Yellow Marker",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 20
-  },
-  {
-    "id": 1082218,
-    "name": "Dragon Gauntlet",
-    "koreanName": "",
-    "reqJob": 1,
-    "reqLevel": 70
-  },
-  {
-    "id": 1082222,
-    "name": "Mechanical Glove",
-    "koreanName": "기계 장갑",
-    "reqJob": 0,
-    "reqLevel": 70
-  },
-  {
-    "id": 1082223,
-    "name": "Stormcaster Gloves",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 50
-  },
-  {
-    "id": 1082228,
-    "name": "Green Mittens",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 15
-  },
-  {
-    "id": 1082230,
-    "name": "Glitter Gloves",
-    "koreanName": "",
-    "reqJob": 2,
-    "reqLevel": 50
-  },
-  {
-    "id": 1082232,
-    "name": "Goddess Wristband",
-    "koreanName": "여신의 팔찌",
-    "reqJob": 0,
-    "reqLevel": 50
-  },
-  {
-    "id": 1082246,
-    "name": "Flamekeeper Cordon ",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 50
   }
 ]

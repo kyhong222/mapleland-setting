@@ -1,12 +1,5 @@
 [
   {
-    "id": 1422001,
-    "name": "Mithril Maul",
-    "koreanName": "미스릴 모울",
-    "reqJob": 1,
-    "reqLevel": 30
-  },
-  {
     "id": 1422002,
     "name": "Heavy Mace",
     "koreanName": "강철구 망치",
@@ -21,18 +14,18 @@
     "reqLevel": 20
   },
   {
-    "id": 1422005,
-    "name": "Golden Mole",
-    "koreanName": "골든 모울",
+    "id": 1422001,
+    "name": "Mithril Maul",
+    "koreanName": "미스릴 모울",
     "reqJob": 1,
-    "reqLevel": 50
+    "reqLevel": 30
   },
   {
-    "id": 1422007,
-    "name": "Titan",
-    "koreanName": "타이탄",
+    "id": 1422033,
+    "name": "Pink Flower Tube",
+    "koreanName": "분홍색 꽃무늬 튜브",
     "reqJob": 1,
-    "reqLevel": 40
+    "reqLevel": 30
   },
   {
     "id": 1422008,
@@ -42,11 +35,39 @@
     "reqLevel": 35
   },
   {
+    "id": 1422007,
+    "name": "Titan",
+    "koreanName": "타이탄",
+    "reqJob": 1,
+    "reqLevel": 40
+  },
+  {
+    "id": 1422014,
+    "name": "Maple Doom Singer",
+    "koreanName": "메이플 빅 모울",
+    "reqJob": 1,
+    "reqLevel": 43
+  },
+  {
+    "id": 1422005,
+    "name": "Golden Mole",
+    "koreanName": "골든 모울",
+    "reqJob": 1,
+    "reqLevel": 50
+  },
+  {
     "id": 1422009,
     "name": "The Blessing",
     "koreanName": "플루튬",
     "reqJob": 1,
     "reqLevel": 60
+  },
+  {
+    "id": 1422029,
+    "name": "Maple Belzet",
+    "koreanName": "메이플 벨제트",
+    "reqJob": 1,
+    "reqLevel": 64
   },
   {
     "id": 1422010,
@@ -70,97 +91,6 @@
     "reqLevel": 90
   },
   {
-    "id": 1422014,
-    "name": "Maple Doom Singer",
-    "koreanName": "메이플 빅 모울",
-    "reqJob": 1,
-    "reqLevel": 43
-  },
-  {
-    "id": 1422015,
-    "name": "Golden Mole",
-    "koreanName": "골든 모울",
-    "reqJob": 1,
-    "reqLevel": 35
-  },
-  {
-    "id": 1422016,
-    "name": "The Blessing",
-    "koreanName": "플루튬",
-    "reqJob": 1,
-    "reqLevel": 50
-  },
-  {
-    "id": 1422017,
-    "name": "Gigantic Sledge",
-    "koreanName": "호프만",
-    "reqJob": 1,
-    "reqLevel": 60
-  },
-  {
-    "id": 1422018,
-    "name": "The Morningstar",
-    "koreanName": "크롬",
-    "reqJob": 1,
-    "reqLevel": 70
-  },
-  {
-    "id": 1422019,
-    "name": "Golden Mole",
-    "koreanName": "골든 모울",
-    "reqJob": 1,
-    "reqLevel": 35
-  },
-  {
-    "id": 1422020,
-    "name": "The Blessing",
-    "koreanName": "플루튬",
-    "reqJob": 1,
-    "reqLevel": 50
-  },
-  {
-    "id": 1422021,
-    "name": "Gigantic Sledge",
-    "koreanName": "호프만",
-    "reqJob": 1,
-    "reqLevel": 60
-  },
-  {
-    "id": 1422022,
-    "name": "The Morningstar",
-    "koreanName": "크롬",
-    "reqJob": 1,
-    "reqLevel": 70
-  },
-  {
-    "id": 1422023,
-    "name": "Golden Mole",
-    "koreanName": "골든 모울",
-    "reqJob": 1,
-    "reqLevel": 35
-  },
-  {
-    "id": 1422024,
-    "name": "The Blessing",
-    "koreanName": "플루튬",
-    "reqJob": 1,
-    "reqLevel": 50
-  },
-  {
-    "id": 1422025,
-    "name": "Gigantic Sledge",
-    "koreanName": "호프만",
-    "reqJob": 1,
-    "reqLevel": 60
-  },
-  {
-    "id": 1422026,
-    "name": "The Morningstar",
-    "koreanName": "크롬",
-    "reqJob": 1,
-    "reqLevel": 70
-  },
-  {
     "id": 1422027,
     "name": "Golden Smith Hammer",
     "koreanName": "골든 스미스해머",
@@ -173,55 +103,6 @@
     "koreanName": "드래곤 플레임",
     "reqJob": 1,
     "reqLevel": 110
-  },
-  {
-    "id": 1422029,
-    "name": "Maple Belzet",
-    "koreanName": "메이플 벨제트",
-    "reqJob": 1,
-    "reqLevel": 64
-  },
-  {
-    "id": 1422030,
-    "name": "Pink Seal Cushion",
-    "koreanName": "",
-    "reqJob": 1,
-    "reqLevel": 105
-  },
-  {
-    "id": 1422031,
-    "name": "Blue Seal Cushion",
-    "koreanName": "",
-    "reqJob": 1,
-    "reqLevel": 105
-  },
-  {
-    "id": 1422032,
-    "name": "Maple 1500 Anniv. Flag",
-    "koreanName": "메이플 1500일 깃발",
-    "reqJob": 1,
-    "reqLevel": 30
-  },
-  {
-    "id": 1422033,
-    "name": "Pink Flower Tube",
-    "koreanName": "분홍색 꽃무늬 튜브",
-    "reqJob": 1,
-    "reqLevel": 30
-  },
-  {
-    "id": 1422034,
-    "name": "Singapore Flag (Two Handed Mace)",
-    "koreanName": "",
-    "reqJob": 1,
-    "reqLevel": 30
-  },
-  {
-    "id": 1422036,
-    "name": "Toymaker Hammer",
-    "koreanName": "",
-    "reqJob": 0,
-    "reqLevel": 40
   },
   {
     "id": 1422037,
