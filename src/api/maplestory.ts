@@ -2,6 +2,8 @@
  * 메이플스토리 API 호출 유틸
  */
 
+import { getPostItemIcon, getPostItemCategoryKey } from "../utils/postItemLoader";
+
 const API_BASE_URL = "https://maplestory.io/api/gms/62/item";
 
 // 부위별 API 필터 매핑
@@ -156,16 +158,27 @@ export async function fetchAllArmorByJob(jobId: number): Promise<Record<ArmorFil
 
 /**
  * 아이템 ID로 아이콘 이미지 URL 조회
+ * slot/type이 주어지면 postItem 아이콘을 우선 확인
  * @param itemId - 아이템 ID
+ * @param slot - 장비 슬롯 (예: "무기", "투구")
+ * @param type - 장비 타입 (예: "한손검", "방패")
  * @returns 아이콘 이미지 URL
  */
-export async function fetchItemIcon(itemId: number): Promise<string | null> {
+export async function fetchItemIcon(itemId: number, slot?: string, type?: string): Promise<string | null> {
   try {
+    // 1순위: postItem 아이콘
+    if (slot) {
+      const catKey = getPostItemCategoryKey(slot, type);
+      if (catKey) {
+        const postIcon = await getPostItemIcon(catKey, itemId);
+        if (postIcon) return postIcon;
+      }
+    }
+    // 2순위: API 아이콘
     const response = await fetch(`${API_BASE_URL}/${itemId}/icon?resize=5`);
     if (!response.ok) {
       throw new Error(`아이콘 조회 실패: ${response.statusText}`);
     }
-    // 이미지는 blob으로 받아서 Data URL로 변환
     const blob = await response.blob();
     return URL.createObjectURL(blob);
   } catch (error) {

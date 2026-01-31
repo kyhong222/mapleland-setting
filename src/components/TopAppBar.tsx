@@ -60,7 +60,8 @@ export default function TopAppBar({
       for (const slot of slotSummaries) {
         if (slot?.weaponId && !newCache.has(slot.weaponId)) {
           try {
-            const iconUrl = await fetchItemIcon(slot.weaponId);
+            const weapon = slot.equipments?.find((eq) => eq.slot === "무기");
+            const iconUrl = await fetchItemIcon(slot.weaponId, "무기", weapon?.type);
             if (iconUrl) {
               newCache.set(slot.weaponId, iconUrl);
               changed = true;
