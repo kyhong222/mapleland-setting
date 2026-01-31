@@ -28,6 +28,7 @@ export default function TopAppBar({
   onJobChange,
 }: TopAppBarProps) {
   const {
+    character,
     saveCurrentCharacter,
     loadSlot,
     deleteSlot,
@@ -85,6 +86,10 @@ export default function TopAppBar({
   const handleSave = () => {
     const saved = saveCurrentCharacter();
     if (saved) {
+      const job = character.getJob();
+      const jobName = job?.koreanName || "직업";
+      const slotNumber = currentSlotIdx + 1;
+      alert(`${jobName}-${slotNumber}번 슬롯에 저장되었습니다!`);
       refreshSlots();
     } else {
       alert("저장 실패: 직업을 선택해주세요.");
