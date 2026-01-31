@@ -231,6 +231,13 @@
     "reqLevel": 100
   },
   {
+    "id": 1092061,
+    "name": "Crossheider",
+    "koreanName": "크로스헤이더",
+    "reqJob": 1,
+    "reqLevel": 100
+  },
+  {
     "id": 1092042,
     "name": "Gellerhead Shield",
     "koreanName": "겔러헤드 실드",
