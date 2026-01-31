@@ -738,7 +738,14 @@ export default function BuffTable() {
         >
           {/* 스킬 1 - 장착 무기에 따라 변동 */}
           {(() => {
-            const weaponKey = getWeaponKey(character.getWeaponType());
+            const weaponType = character.getWeaponType();
+            let weaponKey = getWeaponKey(weaponType);
+            
+            // 도적 아대는 자벨린 마스터리로 표시
+            if (weaponType === "아대") {
+              weaponKey = "javelin";
+            }
+            
             const iconData =
               weaponKey &&
               mastery1Data.icons[weaponKey as keyof typeof mastery1Data.icons]
@@ -753,6 +760,56 @@ export default function BuffTable() {
                     weaponKey as keyof typeof mastery1Data.names
                   ]
                 : "마스터리";
+
+            const hasSkill = !!iconData;
+
+            if (!hasSkill) {
+              return (
+                <Box sx={{ display: "flex", gap: 1 }}>
+                  <Box
+                    sx={{
+                      minWidth: 40,
+                      height: 40,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      bgcolor: "#f0f0f0",
+                      borderRadius: 1,
+                      fontSize: "0.75rem",
+                      overflow: "hidden",
+                    }}
+                  >
+                    -
+                  </Box>
+                  <Box
+                    sx={{
+                      flex: 1,
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      gap: 0.5,
+                    }}
+                  >
+                    <Typography
+                      variant="body2"
+                      sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
+                    >
+                      기본 마스터리
+                    </Typography>
+                    <Box
+                      sx={{ display: "flex", gap: 0.5, alignItems: "center" }}
+                    >
+                      <Typography
+                        variant="caption"
+                        sx={{ color: "#666", fontSize: "0.7rem" }}
+                      >
+                        없음
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+              );
+            }
 
             const mastery1Props = mastery1Data.properties as MasteryProperty[];
             const masteryValue = mastery1Props[mastery1]?.mastery ?? 0;
@@ -860,7 +917,7 @@ export default function BuffTable() {
                 hasSkill = true;
               }
             } else if (weaponType) {
-              skillName = "없음";
+              skillName = "추가 마스터리";
               hasSkill = false;
             }
 
@@ -897,9 +954,9 @@ export default function BuffTable() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    bgcolor: "#ffffff",
+                    bgcolor: hasSkill ? "#ffffff" : "#f0f0f0",
                     borderRadius: 1,
-                    fontSize: "1.5rem",
+                    fontSize: hasSkill ? "1.5rem" : "0.75rem",
                     overflow: "hidden",
                     cursor: hasSkill ? "pointer" : "default",
                     "&:hover": hasSkill
@@ -920,6 +977,7 @@ export default function BuffTable() {
                       }}
                     />
                   ) : null}
+                  {!skillIcon && <>-</>}
                 </Box>
                 <Box
                   sx={{
