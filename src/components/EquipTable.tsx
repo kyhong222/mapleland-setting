@@ -78,7 +78,23 @@ export default function EquipTable({ onSlotClick, onOpenItemMaker }: EquipTableP
 
   const handleSlotClick = (slotName: string, hasEquipment: boolean) => {
     if (!hasEquipment && onSlotClick) {
-      const categoryKey = SLOT_TO_CATEGORY[slotName];
+      let categoryKey = SLOT_TO_CATEGORY[slotName];
+      
+      // 보조무기의 경우 장착된 무기에 따라 카테고리 결정
+      if (slotName === "보조무기") {
+        if (isBow) {
+          categoryKey = "arrowAmmo";
+        } else if (isCrossbow) {
+          categoryKey = "crossbowBoltAmmo";
+        } else if (isDagger) {
+          categoryKey = "thrownAmmo";
+        } else if (isOneHanded) {
+          categoryKey = "shield";
+        } else {
+          categoryKey = "shield"; // 기본값
+        }
+      }
+      
       if (categoryKey) {
         onSlotClick(categoryKey);
       }

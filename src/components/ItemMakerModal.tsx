@@ -12,7 +12,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useCharacter } from "../contexts/CharacterContext";
 import type { Item, ItemType, PostItemData } from "../types/item";
 import type { EquipmentSlot } from "../types/equipment";
@@ -106,7 +106,7 @@ async function loadItemData(categoryKey: string): Promise<ItemData[]> {
 }
 
 
-export default function ItemMakerModal({ open, onClose }: ItemMakerModalProps) {
+export default function ItemMakerModal({ open, selectedCategory, onClose }: ItemMakerModalProps) {
   const { character, equipItem } = useCharacter();
   const theme = useTheme();
 
@@ -150,7 +150,6 @@ export default function ItemMakerModal({ open, onClose }: ItemMakerModalProps) {
   // 모달이 열릴 때 초기화
   useEffect(() => {
     if (open && !prevOpenRef.current) {
-      setSelectedCategoryInfo(null);
       setCategoryItems([]);
       setCategoryPostItems({});
       setSelectedItem(null);
@@ -167,7 +166,7 @@ export default function ItemMakerModal({ open, onClose }: ItemMakerModalProps) {
   }, [open]);
 
   // 카테고리 선택 시 아이템 로드
-  const handleCategoryClick = async (category: CategoryInfo) => {
+  const handleCategoryClick = useCallback(async (category: CategoryInfo) => {
     setSelectedCategoryInfo(category);
     setSelectedItem(null);
     setItemIcon("");
@@ -193,7 +192,48 @@ export default function ItemMakerModal({ open, onClose }: ItemMakerModalProps) {
     } finally {
       setIsLoadingCategory(false);
     }
-  };
+  }, [jobId]);
+
+  // selectedCategory 변경 시 카테고리 및 아이템 로드
+  useEffect(() => {
+    if (selectedCategory && open) {
+      const allCategories = [...ARMOR_CATEGORIES, ...ACCESSORY_CATEGORIES, ...WEAPON_CATEGORIES, ...SECONDARY_CATEGORIES];
+      const category = allCategories.find(c => c.key === selectedCategory);
+      if (category) {
+        // 버튼 상태 업데이트를 위해 selectedCategoryInfo를 먼저 업데이트
+        setSelectedCategoryInfo(category);
+        setSelectedItem(null);
+        setItemIcon("");
+        setIsLoadingCategory(true);
+
+        // 아이템 로드
+        (async () => {
+          try {
+            const [items, postItems] = await Promise.all([
+              loadItemData(category.key),
+              loadPostItemData(category.key),
+            ]);
+            setCategoryPostItems(postItems);
+            let filtered: ItemData[];
+            if (jobId) {
+              filtered = items.filter((item) => item.reqJob === 0 || (item.reqJob & jobId) !== 0);
+            } else {
+              filtered = items.filter((item) => item.reqJob === 0);
+            }
+            filtered.sort((a, b) => a.reqLevel - b.reqLevel);
+            setCategoryItems(filtered);
+          } catch (error) {
+            console.error("Failed to load items:", error);
+            setCategoryItems([]);
+          } finally {
+            setIsLoadingCategory(false);
+          }
+        })();
+      } else {
+        setSelectedCategoryInfo(null);
+      }
+    }
+  }, [selectedCategory, open, jobId]);
 
   // 아이템 클릭 시 상세 정보 로드 (PostItem 우선, 없으면 API 호출)
   const handleItemClick = async (item: ItemData) => {
