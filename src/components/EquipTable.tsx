@@ -21,6 +21,7 @@ const SLOT_TO_CATEGORY: Record<string, string> = {
   훈장: "medal",
   눈장식: "eyeDecoration",
   목걸이: "pendant",
+  벨트: "belt",
   무기: "weapon",
 };
 
