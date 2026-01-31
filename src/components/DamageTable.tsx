@@ -55,6 +55,11 @@ export default function DamageTable() {
 
   const finalStats = character.getFinalStats(buff1Attack, buff2Attack, masteryAttack);
   const weaponConstants = weaponType ? WEAPON_CONSTANTS[weaponType] : null;
+  const job = character.getJob();
+  const equipStats = character.getEquipmentStats();
+  const buffMAD = job?.koreanName === "마법사" ? buff1Attack + buff2Attack : 0;
+  const magicFromEquipBuff = equipStats.mad + buffMAD;
+  const totalMagic = magicFromEquipBuff + finalStats.totalInt;
 
   // 도적의 경우 STR과 DEX 모두 부스탯으로 처리
   const adjSubStat = useMemo(() => {
@@ -160,7 +165,6 @@ export default function DamageTable() {
   );
 
   // 조건 체크
-  const job = character.getJob();
   const hasDifferentWeaponConstants = weaponConstants && weaponConstants.min !== weaponConstants.max;
   const isClawWeapon = weaponType === "아대";
   const isThief = job?.koreanName === "도적";
@@ -230,10 +234,7 @@ export default function DamageTable() {
             {job?.koreanName === "마법사" ? (
               <>
                 <Typography variant="caption" sx={{ fontSize: "0.75rem", color: "#666", display: "block" }}>
-                  INT: {finalStats.totalInt} | 마력: {finalStats.totalMAD}
-                </Typography>
-                <Typography variant="caption" sx={{ fontSize: "0.75rem", color: "#666", display: "block" }}>
-                  숙련도: {masteryPercent}%
+                  INT: {finalStats.totalInt} | 마력: {magicFromEquipBuff} | 총 마력: {totalMagic}
                 </Typography>
               </>
             ) : (
@@ -242,7 +243,7 @@ export default function DamageTable() {
                   공격력: {finalStats.totalAttack} | 주스탯: {finalStats.mainStat} | 부스탯: {finalStats.subStat}
                 </Typography>
                 <Typography variant="caption" sx={{ fontSize: "0.75rem", color: "#666", display: "block" }}>
-                  마스터리: {masteryPercent}% | 마력: {finalStats.totalMAD}
+                  숙련도: {masteryPercent}%
                 </Typography>
               </>
             )}
