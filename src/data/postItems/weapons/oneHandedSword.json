@@ -1,9 +1,9 @@
 {
-  "1422009": {
-    "koreanName": "플루튬",
-    "icon": "https://maplestory.io/api/GMS/212/item/1422024/icon",
+  "1302020": {
+    "koreanName": "메이플 소드",
+    "icon": "https://maplestory.io/api/GMS/200/item/1302020/icon",
     "stats": {
-      "attack": 82,
+      "attack": 48,
       "str": 0,
       "dex": 0,
       "int": 0,
@@ -11,24 +11,24 @@
       "mad": 0,
       "pdef": 0,
       "mdef": 0,
-      "acc": 0,
+      "acc": 10,
       "eva": 0,
-      "attackSpeed": 7
+      "attackSpeed": 5
     },
     "requireStats": {
-      "level": 60,
-      "str": 190,
+      "level": 35,
+      "str": 0,
       "dex": 0,
       "int": 0,
       "luk": 0
     }
   },
-  "1422014": {
-    "koreanName": "메이플 빅 모울",
-    "icon": "https://maplestory.io/api/GMS/200/item/1422014/icon",
+  "1302030": {
+    "koreanName": "메이플 켈트 소드",
+    "icon": "https://maplestory.io/api/GMS/200/item/1302030/icon",
     "stats": {
-      "attack": 68,
-      "str": 5,
+      "attack": 60,
+      "str": 0,
       "dex": 0,
       "int": 0,
       "luk": 0,
@@ -37,7 +37,7 @@
       "mdef": 0,
       "acc": 20,
       "eva": 0,
-      "attackSpeed": 7
+      "attackSpeed": 5
     },
     "requireStats": {
       "level": 43,
@@ -47,12 +47,12 @@
       "luk": 0
     }
   },
-  "1422029": {
-    "koreanName": "메이플 벨제트",
-    "icon": "https://maplestory.io/api/GMS/200/item/1422029/icon",
+  "1302064": {
+    "koreanName": "메이플 글로리 소드",
+    "icon": "https://maplestory.io/api/GMS/200/item/1302064/icon",
     "stats": {
-      "attack": 85,
-      "str": 6,
+      "attack": 81,
+      "str": 1,
       "dex": 0,
       "int": 0,
       "luk": 0,
@@ -61,7 +61,7 @@
       "mdef": 0,
       "acc": 25,
       "eva": 0,
-      "attackSpeed": 7
+      "attackSpeed": 5
     },
     "requireStats": {
       "level": 64,

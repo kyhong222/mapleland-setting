@@ -137,5 +137,29 @@
       "int": 0,
       "luk": 0
     }
+  },
+  "1402039": {
+    "koreanName": "메이플 소울 로헨",
+    "icon": "https://maplestory.io/api/GMS/200/item/1402039/icon",
+    "stats": {
+      "attack": 83,
+      "str": 4,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 25,
+      "eva": 0,
+      "attackSpeed": 6
+    },
+    "requireStats": {
+      "level": 64,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0
+    }
   }
 }
