@@ -95,7 +95,7 @@ interface ItemMakerModalProps {
 }
 
 // import.meta.glob으로 빌드 시 JSON 파일을 모두 포함
-const itemModules = import.meta.glob("../data/items/*.json");
+const itemModules = import.meta.glob("../data/items/**/*.json");
 
 async function loadItemData(categoryKey: string): Promise<ItemData[]> {
   try {

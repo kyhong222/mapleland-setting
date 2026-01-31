@@ -152,16 +152,14 @@ interface ItemMakerModalProps {
 }
 
 // import.meta.glob으로 빌드 시 JSON 파일을 모두 포함
-const itemModules = import.meta.glob("../data/items/*.json");
-const weaponModules = import.meta.glob("../data/items/weapons/*.json");
+const itemModules = import.meta.glob("../data/items/**/*.json");
 
 async function loadItemData(categoryKey: string, isWeapon: boolean = false): Promise<ItemData[]> {
   try {
-    const modules = isWeapon ? weaponModules : itemModules;
     const path = isWeapon
       ? `../data/items/weapons/${categoryKey}.json`
       : `../data/items/${categoryKey}.json`;
-    const loader = modules[path];
+    const loader = itemModules[path];
     if (!loader) {
       console.error(`Module not found for ${categoryKey}.json`);
       return [];
