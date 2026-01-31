@@ -236,6 +236,13 @@ export default function EquipTable({ onSlotClick, onOpenItemMaker }: EquipTableP
       <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", p: 1.5, borderBottom: "1px solid #ccc" }}>
         <Typography variant="body2" sx={{ fontWeight: "bold" }}>
           장비
+          <Typography
+            component="span"
+            variant="caption"
+            sx={{ ml: 0.5, color: "text.secondary" }}
+          >
+            (더블클릭으로 장착된 장비를 제거)
+          </Typography>
         </Typography>
         {onOpenItemMaker && (
           <Tooltip title="아이템 생성">
