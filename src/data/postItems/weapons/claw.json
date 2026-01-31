@@ -70,5 +70,53 @@
       "int": 0,
       "luk": 0
     }
+  },
+  "1472073": {
+    "koreanName": "밤의 레이븐즈 클로",
+    "icon": "https://maplestory.io/api/GMS/200/item/1472073/icon",
+    "stats": {
+      "attack": 0,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 3
+    },
+    "requireStats": {
+      "level": 90,
+      "str": 0,
+      "dex": 120,
+      "int": 0,
+      "luk": 0
+    }
+  },
+  "1472074": {
+    "koreanName": "황혼의 레이븐즈 클로",
+    "icon": "https://maplestory.io/api/GMS/200/item/1472074/icon",
+    "stats": {
+      "attack": 0,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 7,
+      "attackSpeed": 3
+    },
+    "requireStats": {
+      "level": 90,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0
+    }
   }
 }
