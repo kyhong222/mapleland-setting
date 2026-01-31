@@ -1,5 +1,8 @@
 import type { PostItemData } from "../types/item";
 
+// import.meta.glob으로 빌드 시 JSON 파일을 모두 포함
+const postItemModules = import.meta.glob("../data/postItems/**/*.json");
+
 // PostItem 데이터 캐시 (모듈 레벨 - 앱 전체 공유)
 const postItemCache = new Map<string, Record<string, PostItemData>>();
 
@@ -9,8 +12,13 @@ export async function loadPostItemData(categoryKey: string): Promise<Record<stri
   }
   try {
     const path = `../data/postItems/${categoryKey}.json`;
-    const module = await import(/* @vite-ignore */ path);
-    const data = module.default as Record<string, PostItemData>;
+    const loader = postItemModules[path];
+    if (!loader) {
+      postItemCache.set(categoryKey, {});
+      return {};
+    }
+    const module = await loader();
+    const data = (module as { default: Record<string, PostItemData> }).default;
     postItemCache.set(categoryKey, data);
     return data;
   } catch {

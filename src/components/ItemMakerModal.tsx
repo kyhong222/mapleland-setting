@@ -94,11 +94,19 @@ interface ItemMakerModalProps {
   onClose: () => void;
 }
 
+// import.meta.glob으로 빌드 시 JSON 파일을 모두 포함
+const itemModules = import.meta.glob("../data/items/*.json");
+
 async function loadItemData(categoryKey: string): Promise<ItemData[]> {
   try {
     const path = `../data/items/${categoryKey}.json`;
-    const module = await import(path);
-    return module.default;
+    const loader = itemModules[path];
+    if (!loader) {
+      console.error(`Module not found for ${categoryKey}.json`);
+      return [];
+    }
+    const module = await loader();
+    return (module as { default: ItemData[] }).default;
   } catch (error) {
     console.error(`Failed to load ${categoryKey}.json:`, error);
     return [];
