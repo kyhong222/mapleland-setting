@@ -113,7 +113,7 @@ export default function TopAppBar({
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          메이플랜드 캐릭터 설정 - {currentSlotIdx + 1}번 슬롯
+          메이플랜드 아이템 시뮬레이터 - {currentSlotIdx + 1}번 슬롯
         </Typography>
 
         {/* 5칸 슬롯 버튼 */}
