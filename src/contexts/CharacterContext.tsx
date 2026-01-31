@@ -337,6 +337,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
             dex: eq.dex || 0,
             int: eq.int || 0,
             luk: eq.luk || 0,
+            mad: eq.mad || 0,
           },
           requireStats: {
             level: 0,
