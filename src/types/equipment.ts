@@ -19,6 +19,7 @@ export interface Equipment {
   jump?: number; // 점프력
   hp?: number; // 추가 HP
   mp?: number; // 추가 MP
+  attackSpeed?: number; // 공격속도
 }
 
 // 5*3 그리드 레이아웃 (null은 빈칸)

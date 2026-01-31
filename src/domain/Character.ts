@@ -143,6 +143,7 @@ export class Character {
       jump: item.stats.jump,
       hp: item.stats.hp,
       mp: item.stats.mp,
+      attackSpeed: item.stats.attackSpeed,
     };
 
     this.equipments.set(targetSlot, equipment);

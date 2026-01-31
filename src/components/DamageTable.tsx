@@ -228,7 +228,7 @@ export default function DamageTable() {
           <Box>
             {weapon && (
               <Typography variant="caption" sx={{ fontSize: "0.75rem", color: "#666" }}>
-                무기: {weapon.name} ({weaponType})
+                무기: {weapon.name} ({weaponType}) | 공격속도: {weapon.attackSpeed}
               </Typography>
             )}
             {job?.koreanName === "마법사" ? (
@@ -240,7 +240,7 @@ export default function DamageTable() {
             ) : (
               <>
                 <Typography variant="caption" sx={{ fontSize: "0.75rem", color: "#666", display: "block" }}>
-                  공격력: {finalStats.totalAttack} | 주스탯: {finalStats.mainStat} | 부스탯: {finalStats.subStat}
+                  총 공격력: {finalStats.totalAttack} | 주스탯: {finalStats.mainStat} | 부스탯: {finalStats.subStat}
                 </Typography>
                 <Typography variant="caption" sx={{ fontSize: "0.75rem", color: "#666", display: "block" }}>
                   숙련도: {masteryPercent}%
