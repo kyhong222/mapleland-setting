@@ -112,6 +112,13 @@
     "reqLevel": 100
   },
   {
+    "id": 1432056,
+    "name": "Stormshear",
+    "koreanName": "스톰시어 스피어",
+    "reqJob": 1,
+    "reqLevel": 100
+  },
+  {
     "id": 1432038,
     "name": "Dragon Faltizan",
     "koreanName": "드래곤 팔티잔",
