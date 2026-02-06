@@ -277,8 +277,9 @@
   },
   "2070018": {
     "koreanName": "절제된 분노",
+    "icon": "https://maplestory.io/api/GMS/200/item/2070018/icon",
     "stats": {
-      "attack": 29,
+      "attack": 30,
       "str": 0,
       "dex": 0,
       "int": 0,
@@ -290,7 +291,7 @@
       "eva": 0
     },
     "requireStats": {
-      "level": 0,
+      "level": 70,
       "str": 0,
       "dex": 0,
       "int": 0,

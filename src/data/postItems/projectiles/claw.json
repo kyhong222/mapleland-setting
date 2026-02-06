@@ -738,7 +738,7 @@
     "requireStats": {
       "level": 35,
       "str": 0,
-      "dex": 50,
+      "dex": 0,
       "int": 0,
       "luk": 0
     }
@@ -786,7 +786,7 @@
     "requireStats": {
       "level": 43,
       "str": 0,
-      "dex": 66,
+      "dex": 0,
       "int": 0,
       "luk": 0
     }
@@ -813,6 +813,366 @@
       "dex": 130,
       "int": 0,
       "luk": 260
+    }
+  },
+  "1472034": {
+    "koreanName": "아다만티움 가즈",
+    "icon": "https://maplestory.io/api/GMS/200/item/1472034/icon",
+    "stats": {
+      "attack": 23,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 4,
+      "mad": 0,
+      "pdef": 2,
+      "mdef": 0,
+      "acc": 5,
+      "eva": 0,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 20,
+      "str": 0,
+      "dex": 40,
+      "int": 0,
+      "luk": 50
+    }
+  },
+  "1472035": {
+    "koreanName": "다크 슬레인",
+    "icon": "https://maplestory.io/api/GMS/200/item/1472035/icon",
+    "stats": {
+      "attack": 31,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 6,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 5,
+      "eva": 3,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 35,
+      "str": 0,
+      "dex": 70,
+      "int": 0,
+      "luk": 95
+    }
+  },
+  "1472036": {
+    "koreanName": "다크 기간틱",
+    "icon": "https://maplestory.io/api/GMS/200/item/1472036/icon",
+    "stats": {
+      "attack": 35,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 7,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 5,
+      "eva": 4,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 50,
+      "str": 0,
+      "dex": 90,
+      "int": 0,
+      "luk": 140
+    }
+  },
+  "1472037": {
+    "koreanName": "흑갑충",
+    "icon": "https://maplestory.io/api/GMS/200/item/1472037/icon",
+    "stats": {
+      "attack": 39,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 8,
+      "mad": 0,
+      "pdef": 5,
+      "mdef": 0,
+      "acc": 5,
+      "eva": 0,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 60,
+      "str": 0,
+      "dex": 100,
+      "int": 0,
+      "luk": 170
+    }
+  },
+  "1472038": {
+    "koreanName": "코브라스티어",
+    "icon": "https://maplestory.io/api/GMS/200/item/1472038/icon",
+    "stats": {
+      "attack": 43,
+      "str": 0,
+      "dex": 5,
+      "int": 0,
+      "luk": 2,
+      "mad": 0,
+      "pdef": 4,
+      "mdef": 0,
+      "acc": 5,
+      "eva": 0,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 70,
+      "str": 0,
+      "dex": 110,
+      "int": 0,
+      "luk": 200
+    }
+  },
+  "1472039": {
+    "koreanName": "아다만티움 가즈",
+    "icon": "https://maplestory.io/api/GMS/200/item/1472039/icon",
+    "stats": {
+      "attack": 23,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 4,
+      "mad": 0,
+      "pdef": 2,
+      "mdef": 0,
+      "acc": 5,
+      "eva": 0,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 20,
+      "str": 0,
+      "dex": 40,
+      "int": 0,
+      "luk": 50
+    }
+  },
+  "1472040": {
+    "koreanName": "다크 슬레인",
+    "icon": "https://maplestory.io/api/GMS/200/item/1472040/icon",
+    "stats": {
+      "attack": 31,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 6,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 5,
+      "eva": 3,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 35,
+      "str": 0,
+      "dex": 70,
+      "int": 0,
+      "luk": 95
+    }
+  },
+  "1472041": {
+    "koreanName": "다크 기간틱",
+    "icon": "https://maplestory.io/api/GMS/200/item/1472041/icon",
+    "stats": {
+      "attack": 35,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 7,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 5,
+      "eva": 4,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 50,
+      "str": 0,
+      "dex": 90,
+      "int": 0,
+      "luk": 140
+    }
+  },
+  "1472042": {
+    "koreanName": "흑갑충",
+    "icon": "https://maplestory.io/api/GMS/200/item/1472042/icon",
+    "stats": {
+      "attack": 39,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 8,
+      "mad": 0,
+      "pdef": 5,
+      "mdef": 0,
+      "acc": 5,
+      "eva": 0,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 60,
+      "str": 0,
+      "dex": 100,
+      "int": 0,
+      "luk": 170
+    }
+  },
+  "1472043": {
+    "koreanName": "코브라스티어",
+    "icon": "https://maplestory.io/api/GMS/200/item/1472043/icon",
+    "stats": {
+      "attack": 43,
+      "str": 0,
+      "dex": 5,
+      "int": 0,
+      "luk": 2,
+      "mad": 0,
+      "pdef": 4,
+      "mdef": 0,
+      "acc": 5,
+      "eva": 0,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 70,
+      "str": 0,
+      "dex": 110,
+      "int": 0,
+      "luk": 200
+    }
+  },
+  "1472045": {
+    "koreanName": "아다만티움 가즈",
+    "icon": "https://maplestory.io/api/GMS/200/item/1472045/icon",
+    "stats": {
+      "attack": 18,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 2,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 20,
+      "str": 0,
+      "dex": 40,
+      "int": 0,
+      "luk": 50
+    }
+  },
+  "1472046": {
+    "koreanName": "다크 슬레인",
+    "icon": "https://maplestory.io/api/GMS/200/item/1472046/icon",
+    "stats": {
+      "attack": 26,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 4,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 3,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 35,
+      "str": 0,
+      "dex": 70,
+      "int": 0,
+      "luk": 95
+    }
+  },
+  "1472047": {
+    "koreanName": "다크 기간틱",
+    "icon": "https://maplestory.io/api/GMS/200/item/1472047/icon",
+    "stats": {
+      "attack": 30,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 5,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 4,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 50,
+      "str": 0,
+      "dex": 90,
+      "int": 0,
+      "luk": 140
+    }
+  },
+  "1472048": {
+    "koreanName": "흑갑충",
+    "icon": "https://maplestory.io/api/GMS/200/item/1472048/icon",
+    "stats": {
+      "attack": 34,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 6,
+      "mad": 0,
+      "pdef": 5,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 60,
+      "str": 0,
+      "dex": 100,
+      "int": 0,
+      "luk": 170
+    }
+  },
+  "1472049": {
+    "koreanName": "코브라스티어",
+    "icon": "https://maplestory.io/api/GMS/200/item/1472049/icon",
+    "stats": {
+      "attack": 38,
+      "str": 0,
+      "dex": 5,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 4,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 70,
+      "str": 0,
+      "dex": 110,
+      "int": 0,
+      "luk": 200
     }
   },
   "1472051": {
@@ -906,7 +1266,7 @@
     "requireStats": {
       "level": 64,
       "str": 0,
-      "dex": 99,
+      "dex": 0,
       "int": 0,
       "luk": 0
     }
@@ -935,8 +1295,32 @@
       "luk": 0
     }
   },
+  "1472069": {
+    "koreanName": "클립토",
+    "icon": "https://maplestory.io/api/GMS/200/item/1472069/icon",
+    "stats": {
+      "attack": 22,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 1,
+      "mad": 0,
+      "pdef": 2,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 40,
+      "str": 0,
+      "dex": 80,
+      "int": 0,
+      "luk": 120
+    }
+  },
   "1472072": {
-    "koreanName": "레이븐즈 클로",
+    "koreanName": "Raven's Claw",
     "icon": "https://maplestory.io/api/GMS/200/item/1472072/icon",
     "stats": {
       "attack": 38,
@@ -960,16 +1344,16 @@
     }
   },
   "1472073": {
-    "koreanName": "밤의 레이븐즈 클로",
+    "koreanName": "Night Raven's Claw",
     "icon": "https://maplestory.io/api/GMS/200/item/1472073/icon",
     "stats": {
-      "attack": 0,
+      "attack": 40,
       "str": 0,
       "dex": 0,
       "int": 0,
-      "luk": 0,
+      "luk": 2,
       "mad": 0,
-      "pdef": 0,
+      "pdef": 5,
       "mdef": 0,
       "acc": 0,
       "eva": 0,
@@ -978,37 +1362,37 @@
     "requireStats": {
       "level": 90,
       "str": 0,
-      "dex": 120,
+      "dex": 0,
       "int": 0,
-      "luk": 0
+      "luk": 300
     }
   },
   "1472074": {
-    "koreanName": "황혼의 레이븐즈 클로",
+    "koreanName": "Dawn Raven's Claw",
     "icon": "https://maplestory.io/api/GMS/200/item/1472074/icon",
     "stats": {
-      "attack": 0,
+      "attack": 45,
       "str": 0,
       "dex": 0,
       "int": 0,
-      "luk": 0,
+      "luk": 2,
       "mad": 0,
-      "pdef": 0,
+      "pdef": 5,
       "mdef": 0,
       "acc": 0,
-      "eva": 7,
-      "attackSpeed": 3
+      "eva": 0,
+      "attackSpeed": 4
     },
     "requireStats": {
       "level": 90,
       "str": 0,
-      "dex": 0,
+      "dex": 130,
       "int": 0,
-      "luk": 0
+      "luk": 260
     }
   },
   "1472075": {
-    "koreanName": "여명의 레이븐즈 클로",
+    "koreanName": "Dusk Raven's Claw",
     "icon": "https://maplestory.io/api/GMS/200/item/1472075/icon",
     "stats": {
       "attack": 38,
