@@ -134,7 +134,7 @@ export default function ItemMakerModal({ open, selectedCategory, onClose }: Item
     mad: 0, pdef: 0, mdef: 0, acc: 0, eva: 0,
   };
 
-  const [originStats, setOriginStats] = useState({ ...defaultStats });
+  const [_originStats, setOriginStats] = useState({ ...defaultStats });
   const [editedStats, setEditedStats] = useState({ ...defaultStats });
 
   const [requireStats, setRequireStats] = useState({

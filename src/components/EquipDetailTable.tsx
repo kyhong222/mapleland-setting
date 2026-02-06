@@ -12,12 +12,12 @@ interface EquipDetailTableProps {
 
 export default function EquipDetailTable({
   equipments,
-  postItemIcons,
+  // postItemIcons,
   getIconSrc,
   isJobMagician,
   jobName,
 }: EquipDetailTableProps) {
-  const slotOrder = EQUIPMENT_LAYOUT.flat().filter((s): s is string => s !== null);
+  const slotOrder: string[] = EQUIPMENT_LAYOUT.flat().filter((s) => s !== null);
   const equippedItems = equipments
     .filter((eq) => eq.name)
     .sort((a, b) => slotOrder.indexOf(a.slot) - slotOrder.indexOf(b.slot));
