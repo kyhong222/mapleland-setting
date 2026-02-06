@@ -805,7 +805,7 @@
     }
   },
   "1102054": {
-    "koreanName": "이카루스의 망토",
+    "koreanName": "이카루스의 망토(회피)",
     "icon": "https://maplestory.io/api/GMS/200/item/1102054/icon",
     "stats": {
       "attack": 0,
@@ -828,7 +828,7 @@
     }
   },
   "1102055": {
-    "koreanName": "이카루스의 망토",
+    "koreanName": "이카루스의 망토(이속)",
     "icon": "https://maplestory.io/api/GMS/200/item/1102055/icon",
     "stats": {
       "attack": 0,
@@ -851,7 +851,7 @@
     }
   },
   "1102056": {
-    "koreanName": "이카루스의 망토",
+    "koreanName": "이카루스의 망토(점프)",
     "icon": "https://maplestory.io/api/GMS/200/item/1102056/icon",
     "stats": {
       "attack": 0,
