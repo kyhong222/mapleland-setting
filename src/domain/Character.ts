@@ -144,6 +144,11 @@ export class Character {
       hp: item.stats.hp,
       mp: item.stats.mp,
       attackSpeed: item.stats.attackSpeed,
+      reqLevel: item.requireStats?.level,
+      reqStr: item.requireStats?.str,
+      reqDex: item.requireStats?.dex,
+      reqInt: item.requireStats?.int,
+      reqLuk: item.requireStats?.luk,
     };
 
     this.equipments.set(targetSlot, equipment);

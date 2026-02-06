@@ -1,8 +1,9 @@
 import { Box, Typography, Tooltip, IconButton } from "@mui/material";
-import { Add as AddIcon } from "@mui/icons-material";
+import { Add as AddIcon, OpenInFull as OpenInFullIcon, CloseFullscreen as CloseFullscreenIcon } from "@mui/icons-material";
 import { useState, useEffect } from "react";
 import { useCharacter } from "../contexts/CharacterContext";
 import { EQUIPMENT_LAYOUT } from "../types/equipment";
+import EquipDetailTable from "./EquipDetailTable";
 import type { EquipmentSlot } from "../types/equipment";
 import { getPostItemCategoryKey, getPostItemIcon } from "../utils/postItemLoader";
 
@@ -33,11 +34,13 @@ interface EquipTableProps {
 export default function EquipTable({ onSlotClick, onOpenItemMaker }: EquipTableProps) {
   const { character, unequipItem, version } = useCharacter();
   const [postItemIcons, setPostItemIcons] = useState<Map<number, string>>(new Map());
+  const [expanded, setExpanded] = useState(false);
 
   const equipments = character.getEquipments();
   const equipMap = new Map(equipments.map((eq) => [eq.slot, eq]));
   const job = character.getJob();
-  const isJobMagician = job?.engName === "magician";
+  const jobName = job?.engName;
+  const isJobMagician = jobName === "magician";
 
   // 하의 슬롯 빨간색 표시 여부 (상의에 전신 장착 시)
   const overallEquipment = equipMap.get("상의");
@@ -236,31 +239,50 @@ export default function EquipTable({ onSlotClick, onOpenItemMaker }: EquipTableP
       <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", p: 1.5, borderBottom: "1px solid #ccc" }}>
         <Typography variant="body2" sx={{ fontWeight: "bold" }}>
           장비
-          <Typography
-            component="span"
-            variant="caption"
-            sx={{ ml: 0.5, color: "text.secondary" }}
-          >
-            (더블클릭으로 장착된 장비를 제거)
-          </Typography>
+          {!expanded && (
+            <Typography
+              component="span"
+              variant="caption"
+              sx={{ ml: 0.5, color: "text.secondary" }}
+            >
+              (더블클릭으로 장착된 장비를 제거)
+            </Typography>
+          )}
         </Typography>
-        {onOpenItemMaker && (
-          <Tooltip title="아이템 생성">
-            <IconButton onClick={onOpenItemMaker} size="small" sx={{ p: 0.5 }}>
-              <AddIcon fontSize="small" />
+        <Box sx={{ display: "flex", gap: 0.5 }}>
+          {onOpenItemMaker && (
+            <Tooltip title="아이템 생성">
+              <IconButton onClick={onOpenItemMaker} size="small" sx={{ p: 0.5 }}>
+                <AddIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          )}
+          <Tooltip title={expanded ? "축소" : "확대"}>
+            <IconButton onClick={() => setExpanded(!expanded)} size="small" sx={{ p: 0.5 }}>
+              {expanded ? <CloseFullscreenIcon fontSize="small" /> : <OpenInFullIcon fontSize="small" />}
             </IconButton>
           </Tooltip>
-        )}
+        </Box>
       </Box>
 
-      {/* 장비 그리드 */}
-      <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
-        {EQUIPMENT_LAYOUT.map((row, rowIndex) => (
-          <Box key={rowIndex} sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
-            {row.map((slot) => renderSlot(slot))}
-          </Box>
-        ))}
-      </Box>
+      {/* 장비 그리드 / 상세 뷰 */}
+      {expanded ? (
+        <EquipDetailTable
+          equipments={equipments}
+          postItemIcons={postItemIcons}
+          getIconSrc={getIconSrc}
+          isJobMagician={isJobMagician}
+          jobName={jobName}
+        />
+      ) : (
+        <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
+          {EQUIPMENT_LAYOUT.map((row, rowIndex) => (
+            <Box key={rowIndex} sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
+              {row.map((slot) => renderSlot(slot))}
+            </Box>
+          ))}
+        </Box>
+      )}
     </Box>
   );
 }

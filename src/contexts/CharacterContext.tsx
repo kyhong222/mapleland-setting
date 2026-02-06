@@ -338,13 +338,18 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
             int: eq.int || 0,
             luk: eq.luk || 0,
             mad: eq.mad || 0,
+            pdef: eq.pdef || 0,
+            mdef: eq.mdef || 0,
+            acc: eq.acc || 0,
+            eva: eq.eva || 0,
+            ...(eq.attackSpeed != null ? { attackSpeed: eq.attackSpeed } : {}),
           },
           requireStats: {
-            level: 0,
-            str: 0,
-            dex: 0,
-            int: 0,
-            luk: 0,
+            level: eq.reqLevel || 0,
+            str: eq.reqStr || 0,
+            dex: eq.reqDex || 0,
+            int: eq.reqInt || 0,
+            luk: eq.reqLuk || 0,
           },
         };
         character.equip(item);
@@ -460,7 +465,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
         character.setBuffEnabled("heroEcho", false);
         setBuff1AttackState(0);
         setBuff2AttackState(0);
-        setMastery1State(60);
+        setMastery1State(20);
         setMastery2State(0);
         setBuffMADState(0);
         setHeroEchoEnabledState(false);

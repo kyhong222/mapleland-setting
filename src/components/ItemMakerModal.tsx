@@ -129,18 +129,13 @@ export default function ItemMakerModal({ open, selectedCategory, onClose }: Item
 
   const [attackSpeed, setAttackSpeed] = useState<number | null>(null);
 
-  const [editedStats, setEditedStats] = useState({
-    attack: 0,
-    str: 0,
-    dex: 0,
-    int: 0,
-    luk: 0,
-    mad: 0,
-    pdef: 0,
-    mdef: 0,
-    acc: 0,
-    eva: 0,
-  });
+  const defaultStats = {
+    attack: 0, str: 0, dex: 0, int: 0, luk: 0,
+    mad: 0, pdef: 0, mdef: 0, acc: 0, eva: 0,
+  };
+
+  const [originStats, setOriginStats] = useState({ ...defaultStats });
+  const [editedStats, setEditedStats] = useState({ ...defaultStats });
 
   const [requireStats, setRequireStats] = useState({
     level: 0,
@@ -164,10 +159,8 @@ export default function ItemMakerModal({ open, selectedCategory, onClose }: Item
       setItemIcon("");
       setKoreanName("");
       setAttackSpeed(null);
-      setEditedStats({
-        attack: 0, str: 0, dex: 0, int: 0, luk: 0,
-        mad: 0, pdef: 0, mdef: 0, acc: 0, eva: 0,
-      });
+      setOriginStats({ ...defaultStats });
+      setEditedStats({ ...defaultStats });
       setRequireStats({ level: 0, str: 0, dex: 0, int: 0, luk: 0 });
     }
     prevOpenRef.current = open;
@@ -258,7 +251,9 @@ export default function ItemMakerModal({ open, selectedCategory, onClose }: Item
       if (postItem) {
         // PostItem이 있으면 API 호출 없이 사용
         setKoreanName(postItem.koreanName || item.koreanName || item.name);
-        setEditedStats(postItem.stats);
+        const stats = { ...defaultStats, ...postItem.stats };
+        setOriginStats(stats);
+        setEditedStats(stats);
         setRequireStats(postItem.requireStats);
         setAttackSpeed(postItem.stats.attackSpeed ?? null);
         // 커스텀 아이콘이 있으면 바로 적용
@@ -271,7 +266,7 @@ export default function ItemMakerModal({ open, selectedCategory, onClose }: Item
         if (details) {
           setKoreanName(item.koreanName || item.name);
           const metaInfo = (details as any)?.metaInfo || {};
-          setEditedStats({
+          const stats = {
             attack: metaInfo.incPAD || 0,
             str: metaInfo.incSTR || 0,
             dex: metaInfo.incDEX || 0,
@@ -282,7 +277,9 @@ export default function ItemMakerModal({ open, selectedCategory, onClose }: Item
             mdef: metaInfo.incMDD || 0,
             acc: metaInfo.incACC || 0,
             eva: metaInfo.incEVA || 0,
-          });
+          };
+          setOriginStats(stats);
+          setEditedStats(stats);
           setRequireStats({
             level: metaInfo.reqLevel || item.reqLevel || 0,
             str: metaInfo.reqSTR || 0,

@@ -158,11 +158,107 @@ export default function DamageTable() {
     return results;
   }, [weaponConstants, finalStats, adjSubStat, masteryPercent, character]);
 
+  // 공탯비 계산 (평균 기대값 기준)
+  // 일반 공식: Avg = (P×K + 2S) × A / 200, K = Cmin_factor + Cmax_factor
+  // 1공 = (P×K + 2S) / (K×A) 스탯, 1스탯 = K×A / (P×K + 2S) 공
+  type Ratio = { atkToStat: number; statToAtk: number };
+  const ratios = useMemo((): Record<string, Ratio> => {
+    const result: Record<string, Ratio> = {};
+
+    // 마법사: 마력 vs INT 비율
+    // Avg = (MAD²/1000 + MAD×α)/30 + INT/200, α = (1+0.9M)/2
+    // +1마력 → ∂Avg/∂MAD = (2MAD/1000 + α)/30
+    // +1INT  → ∂Avg/∂MAD + 1/200 (MAD에도 INT 포함 + 직접 INT/200 항)
+    const isMagician = job?.koreanName === "마법사";
+    if (isMagician) {
+      const MAD = finalStats.totalMAD;
+      const M = masteryPercent / 100;
+      if (MAD > 0) {
+        const alpha = (1 + 0.9 * M) / 2;
+        const madMarginal = (2 * MAD / 1000 + alpha) / 30;
+        const intMarginal = madMarginal + 1 / 200;
+        result.magicDamage = {
+          atkToStat: madMarginal / intMarginal, // 1마력 = ?인
+          statToAtk: intMarginal / madMarginal, // 1인 = ?마력
+        };
+      }
+      return result;
+    }
+
+    if (!weaponConstants || finalStats.totalAttack === 0 || finalStats.mainStat === 0) return result;
+
+    const P = finalStats.mainStat;
+    const S = adjSubStat;
+    const A = finalStats.totalAttack;
+    const M = masteryPercent / 100;
+
+    const calcRatio = (K: number): Ratio => {
+      const numerator = P * K + 2 * S;
+      const denominator = K * A;
+      return {
+        atkToStat: numerator / denominator,
+        statToAtk: denominator / numerator,
+      };
+    };
+
+    // 스탯창: K = Cmin×0.9M + Cmax
+    result.stat = calcRatio(weaponConstants.min * 0.9 * M + weaponConstants.max);
+
+    // 최대공: K = Cmax×(0.9M + 1)
+    result.max = calcRatio(weaponConstants.max * (0.9 * M + 1));
+
+    // 최소공: K = Cmin×(0.9M + 1)
+    result.min = calcRatio(weaponConstants.min * (0.9 * M + 1));
+
+    // 로어: K = 4.0×(0.9M + 1)
+    result.lore = calcRatio(4.0 * (0.9 * M + 1));
+
+    // 트스/럭세: 1공 = LUK/A, 1스탯 = A/LUK
+    result.treasure = {
+      atkToStat: P / A,
+      statToAtk: A / P,
+    };
+
+    // 베놈: Avg계수 = (8.0+18.5)/2 = 13.25
+    const stats = character.getStats();
+    const equipStats = character.getEquipmentStats();
+    const str = stats.pureStr + equipStats.str;
+    const dex = stats.pureDex + equipStats.dex;
+    const venomCoeff = 13.25; // (8.0 + 18.5) / 2
+    const venomStatPart = venomCoeff * (str + P) + 2 * dex;
+    if (venomStatPart > 0) {
+      result.venom = {
+        atkToStat: venomStatPart / (venomCoeff * A),
+        statToAtk: (venomCoeff * A) / venomStatPart,
+      };
+    }
+
+    return result;
+  }, [weaponConstants, finalStats, adjSubStat, masteryPercent, character, job?.koreanName]);
+
+  // 주스탯 이름
+  const mainStatName = useMemo(() => {
+    const jobName = job?.koreanName;
+    if (jobName === "전사") return "힘";
+    if (jobName === "궁수") return "덱";
+    if (jobName === "도적") return "럭";
+    return "스탯";
+  }, [job]);
+
   const renderDamage = (damage: DamageResult) => (
     <Typography variant="body2" sx={{ fontSize: "1.1rem", textAlign: "center" }}>
       {damage.min.toLocaleString()} ~ {damage.max.toLocaleString()}
     </Typography>
   );
+
+  const renderRatio = (ratio: Ratio | undefined) => {
+    if (!ratio) return null;
+    return (
+      <Typography variant="caption" sx={{ color: "#888", textAlign: "center", display: "block" }}>
+        평균 공탯비: 1공 = {ratio.atkToStat.toFixed(2)}{mainStatName} | 1{mainStatName} = {ratio.statToAtk.toFixed(2)}공
+      </Typography>
+    );
+  };
 
   // 조건 체크
   const hasDifferentWeaponConstants = weaponConstants && weaponConstants.min !== weaponConstants.max;
@@ -284,6 +380,11 @@ export default function DamageTable() {
                 실질 마법 데미지
               </Typography>
               {renderDamage(damages.magicDamage as DamageResult)}
+                  {ratios.magicDamage && (
+                <Typography variant="caption" sx={{ color: "#888", textAlign: "center", display: "block" }}>
+                  평균 마탯비: 1마력 = {ratios.magicDamage.atkToStat.toFixed(3)}인 | 1인 = {ratios.magicDamage.statToAtk.toFixed(3)}마력
+                </Typography>
+              )}
             </Box>
           )}
         </>
@@ -299,6 +400,7 @@ export default function DamageTable() {
                 스탯창 공격력
               </Typography>
               {renderDamage(damages.stat as DamageResult)}
+              {renderRatio(ratios.stat)}
             </Box>
           )}
 
@@ -309,6 +411,7 @@ export default function DamageTable() {
                 {getMaxDamageLabel()}
               </Typography>
               {renderDamage(damages.max as DamageResult)}
+              {renderRatio(ratios.max)}
             </Box>
           )}
 
@@ -319,6 +422,7 @@ export default function DamageTable() {
                 {getMinDamageLabel()}
               </Typography>
               {renderDamage(damages.min as DamageResult)}
+              {renderRatio(ratios.min)}
             </Box>
           )}
 
@@ -329,6 +433,7 @@ export default function DamageTable() {
                 트스/럭세 실질 공격력
               </Typography>
               {renderDamage(damages.treasure as DamageResult)}
+              {renderRatio(ratios.treasure)}
             </Box>
           )}
 
@@ -339,6 +444,7 @@ export default function DamageTable() {
                 베놈 실질 공격력(베놈 M 기준, 공격력 60 적용)
               </Typography>
               {renderDamage(damages.venom as DamageResult)}
+              {renderRatio(ratios.venom)}
             </Box>
           )}
 
@@ -349,6 +455,7 @@ export default function DamageTable() {
                 로어 실질 공격력
               </Typography>
               {renderDamage(damages.lore as DamageResult)}
+              {renderRatio(ratios.lore)}
             </Box>
           )}
         </>

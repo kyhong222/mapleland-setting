@@ -20,6 +20,11 @@ export interface Equipment {
   hp?: number; // 추가 HP
   mp?: number; // 추가 MP
   attackSpeed?: number; // 공격속도
+  reqLevel?: number; // 착용 필요 레벨
+  reqStr?: number; // 착용 필요 STR
+  reqDex?: number; // 착용 필요 DEX
+  reqInt?: number; // 착용 필요 INT
+  reqLuk?: number; // 착용 필요 LUK
 }
 
 // 5*3 그리드 레이아웃 (null은 빈칸)
