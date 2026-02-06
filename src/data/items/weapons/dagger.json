@@ -21,11 +21,25 @@
     "reqLevel": 12
   },
   {
+    "id": 1332006,
+    "name": "Field Dagger",
+    "koreanName": "필드 대거",
+    "reqJob": 9,
+    "reqLevel": 15
+  },
+  {
     "id": 1332002,
     "name": "Triple-Tipped Zamadar",
     "koreanName": "삼지 자마다르",
     "reqJob": 8,
     "reqLevel": 17
+  },
+  {
+    "id": 1332008,
+    "name": "Coconut Knife",
+    "koreanName": "넙치검",
+    "reqJob": 9,
+    "reqLevel": 20
   },
   {
     "id": 1332013,
@@ -35,11 +49,25 @@
     "reqLevel": 22
   },
   {
+    "id": 1332010,
+    "name": "Iron Dagger",
+    "koreanName": "아이언 대거",
+    "reqJob": 9,
+    "reqLevel": 25
+  },
+  {
     "id": 1332004,
     "name": "Forked Dagger",
     "koreanName": "쌍지단도",
     "reqJob": 8,
     "reqLevel": 27
+  },
+  {
+    "id": 1332009,
+    "name": "Cass",
+    "koreanName": "카스",
+    "reqJob": 9,
+    "reqLevel": 30
   },
   {
     "id": 1332012,
@@ -105,10 +133,24 @@
     "reqLevel": 50
   },
   {
+    "id": 1332016,
+    "name": "Sai",
+    "koreanName": "차",
+    "reqJob": 9,
+    "reqLevel": 50
+  },
+  {
     "id": 1332015,
     "name": "Deadly Fin",
     "koreanName": "게타",
     "reqJob": 8,
+    "reqLevel": 60
+  },
+  {
+    "id": 1332017,
+    "name": "Serpent's Coil",
+    "koreanName": "스네이크",
+    "reqJob": 9,
     "reqLevel": 60
   },
   {
@@ -133,6 +175,20 @@
     "reqLevel": 70
   },
   {
+    "id": 1332019,
+    "name": "Golden River",
+    "koreanName": "금강저",
+    "reqJob": 9,
+    "reqLevel": 70
+  },
+  {
+    "id": 1332022,
+    "name": "Angelic Betrayal",
+    "koreanName": "카타르",
+    "reqJob": 9,
+    "reqLevel": 80
+  },
+  {
     "id": 1332023,
     "name": "Dragon's Tail",
     "koreanName": "용천권",
@@ -152,6 +208,13 @@
     "koreanName": "여명의 레이븐즈 비크",
     "reqJob": 8,
     "reqLevel": 80
+  },
+  {
+    "id": 1332026,
+    "name": "Cursayer",
+    "koreanName": "커세어",
+    "reqJob": 9,
+    "reqLevel": 90
   },
   {
     "id": 1332027,
@@ -175,11 +238,25 @@
     "reqLevel": 90
   },
   {
+    "id": 1332051,
+    "name": "Gold Double Knife",
+    "koreanName": "골드 트윈 나이프",
+    "reqJob": 9,
+    "reqLevel": 100
+  },
+  {
     "id": 1332052,
     "name": "Blood Dagger",
     "koreanName": "블러드 대거",
     "reqJob": 8,
     "reqLevel": 100
+  },
+  {
+    "id": 1332049,
+    "name": "Dragon Kanzir",
+    "koreanName": "드래곤 칸자르",
+    "reqJob": 9,
+    "reqLevel": 110
   },
   {
     "id": 1332050,
