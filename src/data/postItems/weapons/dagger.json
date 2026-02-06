@@ -143,6 +143,30 @@
       "luk": 0
     }
   },
+  "1332006": {
+    "koreanName": "필드 대거",
+    "icon": "https://maplestory.io/api/GMS/200/item/1332006/icon",
+    "stats": {
+      "attack": 30,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 3
+    },
+    "requireStats": {
+      "level": 15,
+      "str": 0,
+      "dex": 30,
+      "int": 0,
+      "luk": 0
+    }
+  },
   "1332007": {
     "koreanName": "후루츠 대거",
     "icon": "https://maplestory.io/api/GMS/200/item/1332007/icon",
@@ -163,6 +187,78 @@
       "level": 8,
       "str": 0,
       "dex": 0,
+      "int": 0,
+      "luk": 0
+    }
+  },
+  "1332008": {
+    "koreanName": "넙치검",
+    "icon": "https://maplestory.io/api/GMS/200/item/1332008/icon",
+    "stats": {
+      "attack": 35,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 3
+    },
+    "requireStats": {
+      "level": 20,
+      "str": 10,
+      "dex": 40,
+      "int": 0,
+      "luk": 0
+    }
+  },
+  "1332009": {
+    "koreanName": "카스",
+    "icon": "https://maplestory.io/api/GMS/200/item/1332009/icon",
+    "stats": {
+      "attack": 45,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 3
+    },
+    "requireStats": {
+      "level": 30,
+      "str": 20,
+      "dex": 60,
+      "int": 0,
+      "luk": 0
+    }
+  },
+  "1332010": {
+    "koreanName": "아이언 대거",
+    "icon": "https://maplestory.io/api/GMS/200/item/1332010/icon",
+    "stats": {
+      "attack": 40,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 3
+    },
+    "requireStats": {
+      "level": 25,
+      "str": 15,
+      "dex": 50,
       "int": 0,
       "luk": 0
     }
@@ -287,6 +383,54 @@
       "luk": 170
     }
   },
+  "1332016": {
+    "koreanName": "차",
+    "icon": "https://maplestory.io/api/GMS/200/item/1332016/icon",
+    "stats": {
+      "attack": 65,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 50,
+      "str": 40,
+      "dex": 90,
+      "int": 0,
+      "luk": 0
+    }
+  },
+  "1332017": {
+    "koreanName": "스네이크",
+    "icon": "https://maplestory.io/api/GMS/200/item/1332017/icon",
+    "stats": {
+      "attack": 75,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 60,
+      "str": 50,
+      "dex": 100,
+      "int": 0,
+      "luk": 0
+    }
+  },
   "1332018": {
     "koreanName": "칸디네",
     "icon": "https://maplestory.io/api/GMS/200/item/1332018/icon",
@@ -311,6 +455,30 @@
       "luk": 190
     }
   },
+  "1332019": {
+    "koreanName": "금강저",
+    "icon": "https://maplestory.io/api/GMS/200/item/1332019/icon",
+    "stats": {
+      "attack": 80,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 70,
+      "str": 55,
+      "dex": 110,
+      "int": 0,
+      "luk": 0
+    }
+  },
   "1332020": {
     "koreanName": "태극부채",
     "icon": "https://maplestory.io/api/GMS/200/item/1332020/icon",
@@ -331,6 +499,30 @@
       "level": 35,
       "str": 0,
       "dex": 0,
+      "int": 0,
+      "luk": 0
+    }
+  },
+  "1332022": {
+    "koreanName": "카타르",
+    "icon": "https://maplestory.io/api/GMS/200/item/1332022/icon",
+    "stats": {
+      "attack": 85,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 80,
+      "str": 60,
+      "dex": 120,
       "int": 0,
       "luk": 0
     }
@@ -378,6 +570,30 @@
       "level": 43,
       "str": 0,
       "dex": 66,
+      "int": 0,
+      "luk": 0
+    }
+  },
+  "1332026": {
+    "koreanName": "커세어",
+    "icon": "https://maplestory.io/api/GMS/200/item/1332026/icon",
+    "stats": {
+      "attack": 90,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 90,
+      "str": 65,
+      "dex": 130,
       "int": 0,
       "luk": 0
     }
@@ -430,6 +646,30 @@
       "luk": 110
     }
   },
+  "1332049": {
+    "koreanName": "드래곤 칸자르",
+    "icon": "https://maplestory.io/api/GMS/200/item/1332049/icon",
+    "stats": {
+      "attack": 100,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 110,
+      "str": 75,
+      "dex": 150,
+      "int": 0,
+      "luk": 0
+    }
+  },
   "1332050": {
     "koreanName": "드래곤 크리스",
     "icon": "https://maplestory.io/api/GMS/200/item/1332050/icon",
@@ -452,6 +692,30 @@
       "dex": 150,
       "int": 0,
       "luk": 270
+    }
+  },
+  "1332051": {
+    "koreanName": "골드 트윈 나이프",
+    "icon": "https://maplestory.io/api/GMS/200/item/1332051/icon",
+    "stats": {
+      "attack": 95,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 100,
+      "str": 70,
+      "dex": 140,
+      "int": 0,
+      "luk": 0
     }
   },
   "1332052": {
