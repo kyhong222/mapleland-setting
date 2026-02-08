@@ -1,11 +1,12 @@
 import { Box, Typography, Tooltip, IconButton } from "@mui/material";
-import { Add as AddIcon, OpenInFull as OpenInFullIcon, CloseFullscreen as CloseFullscreenIcon } from "@mui/icons-material";
+import { Add as AddIcon, OpenInFull as OpenInFullIcon, CloseFullscreen as CloseFullscreenIcon, WebAsset as WebAssetIcon } from "@mui/icons-material";
 import { useState, useEffect } from "react";
 import { useCharacter } from "../contexts/CharacterContext";
 import { EQUIPMENT_LAYOUT } from "../types/equipment";
 import EquipDetailTable from "./EquipDetailTable";
 import type { EquipmentSlot } from "../types/equipment";
 import { getPostItemCategoryKey, getPostItemIcon } from "../utils/postItemLoader";
+import { equipmentToSaved } from "../utils/equipmentConverter";
 
 // 슬롯명을 카테고리 키로 매핑
 const SLOT_TO_CATEGORY: Record<string, string> = {
@@ -29,10 +30,12 @@ const SLOT_TO_CATEGORY: Record<string, string> = {
 interface EquipTableProps {
   onSlotClick?: (category: string) => void;
   onOpenItemMaker?: () => void;
+  onOpenInventory?: () => void;
+  onExpandedChange?: (expanded: boolean) => void;
 }
 
-export default function EquipTable({ onSlotClick, onOpenItemMaker }: EquipTableProps) {
-  const { character, unequipItem, version } = useCharacter();
+export default function EquipTable({ onSlotClick, onOpenItemMaker, onOpenInventory, onExpandedChange }: EquipTableProps) {
+  const { character, unequipItem, version, addToInventory } = useCharacter();
   const [postItemIcons, setPostItemIcons] = useState<Map<number, string>>(new Map());
   const [expanded, setExpanded] = useState(false);
 
@@ -76,6 +79,10 @@ export default function EquipTable({ onSlotClick, onOpenItemMaker }: EquipTableP
   }, [version]);
 
   const handleDoubleClick = (slot: string) => {
+    const eq = equipMap.get(slot);
+    if (eq && eq.id != null) {
+      addToInventory(equipmentToSaved(eq));
+    }
     unequipItem(slot as EquipmentSlot);
   };
 
@@ -245,7 +252,7 @@ export default function EquipTable({ onSlotClick, onOpenItemMaker }: EquipTableP
               variant="caption"
               sx={{ ml: 0.5, color: "text.secondary" }}
             >
-              (더블클릭으로 장착된 장비를 제거)
+              (더블클릭으로 인벤토리 이동)
             </Typography>
           )}
         </Typography>
@@ -257,8 +264,15 @@ export default function EquipTable({ onSlotClick, onOpenItemMaker }: EquipTableP
               </IconButton>
             </Tooltip>
           )}
+          {onOpenInventory && (
+            <Tooltip title="인벤토리">
+              <IconButton onClick={onOpenInventory} size="small" sx={{ p: 0.5 }}>
+                <WebAssetIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          )}
           <Tooltip title={expanded ? "축소" : "확대"}>
-            <IconButton onClick={() => setExpanded(!expanded)} size="small" sx={{ p: 0.5 }}>
+            <IconButton onClick={() => { const next = !expanded; setExpanded(next); onExpandedChange?.(next); }} size="small" sx={{ p: 0.5 }}>
               {expanded ? <CloseFullscreenIcon fontSize="small" /> : <OpenInFullIcon fontSize="small" />}
             </IconButton>
           </Tooltip>

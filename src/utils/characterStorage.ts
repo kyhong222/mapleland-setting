@@ -1,15 +1,13 @@
-import type { Equipment } from "../types/equipment";
+import type { SavedEquipment } from "../types/equipment";
 
 export interface SavedCharacterData {
-  id: string;
   timestamp: number;
-  jobEngName: string;
   level: number;
   pureStr: number;
   pureDex: number;
   pureInt: number;
   pureLuk: number;
-  equipments: Equipment[];
+  equipments: SavedEquipment[];
   weaponId?: number; // 무기 아이콘용
   // 버프 정보
   buffs?: {
@@ -60,19 +58,19 @@ export function getSlotData(jobEngName: string, slotIdx: number): SavedCharacter
  * 특정 슬롯에 캐릭터 데이터 저장
  */
 export function saveSlotData(
+  jobEngName: string,
   slotIdx: number,
-  data: Omit<SavedCharacterData, "id" | "timestamp">
+  data: Omit<SavedCharacterData, "timestamp">
 ): SavedCharacterData {
-  const key = `${SLOT_KEY_PREFIX}${data.jobEngName}_${slotIdx}`;
+  const key = `${SLOT_KEY_PREFIX}${jobEngName}_${slotIdx}`;
 
   const newSave: SavedCharacterData = {
     ...data,
-    id: `${data.jobEngName}_slot${slotIdx}_${Date.now()}`,
     timestamp: Date.now(),
   };
 
   localStorage.setItem(key, JSON.stringify(newSave));
-  setLastActive(data.jobEngName, slotIdx);
+  setLastActive(jobEngName, slotIdx);
 
   return newSave;
 }
@@ -131,11 +129,13 @@ export function migrateFromLegacyStorage(): void {
       if (!firstJob) firstJob = jobEngName;
 
       try {
-        const arr: SavedCharacterData[] = JSON.parse(localStorage.getItem(key) || "[]");
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const arr: any[] = JSON.parse(localStorage.getItem(key) || "[]");
         const toMigrate = arr.slice(0, MAX_SLOTS);
         toMigrate.forEach((save, idx) => {
+          const { id: _id, jobEngName: _job, ...rest } = save;
           const slotKey = `${SLOT_KEY_PREFIX}${jobEngName}_${idx}`;
-          localStorage.setItem(slotKey, JSON.stringify(save));
+          localStorage.setItem(slotKey, JSON.stringify(rest));
         });
       } catch {
         // 파싱 실패 시 무시

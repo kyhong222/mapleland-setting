@@ -14,6 +14,9 @@ import {
   setLastActive,
   type SavedCharacterData,
 } from "../utils/characterStorage";
+import { equipmentToSaved, savedToEquipment } from "../utils/equipmentConverter";
+import { getInventory, saveInventory, INVENTORY_SIZE, type InventoryData } from "../utils/inventoryStorage";
+import type { SavedEquipment } from "../types/equipment";
 
 interface CharacterContextValue {
   character: Character;
@@ -70,12 +73,18 @@ interface CharacterContextValue {
   setBuffMAD: (mad: number) => void;
   buffMAD: number;
 
+  // Inventory
+  inventory: InventoryData;
+  addToInventory: (item: SavedEquipment) => boolean;
+  removeFromInventory: (idx: number) => void;
+  setInventory: (data: InventoryData) => void;
+
   // Slot system
   currentSlotIdx: number;
   setCurrentSlotIdx: (idx: number) => void;
   saveCurrentCharacter: () => SavedCharacterData | null;
-  loadCharacter: (data: SavedCharacterData) => void;
-  loadSlot: (slotIdx: number) => void;
+  loadCharacter: (data: SavedCharacterData) => Promise<void>;
+  loadSlot: (slotIdx: number) => Promise<void>;
   deleteSlot: (slotIdx: number) => void;
   getSlotSummaries: () => (SavedCharacterData | null)[];
 }
@@ -114,6 +123,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
   const [buffMAD, setBuffMADState] = useState(0);
   const [heroEchoEnabled, setHeroEchoEnabledState] = useState(false);
   const [currentSlotIdx, setCurrentSlotIdxState] = useState(0);
+  const [inventory, setInventoryState] = useState<InventoryData>([]);
 
   // Buff selection states
   const [buff1Label, setBuff1LabelState] = useState("버프 선택");
@@ -166,6 +176,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       setCurrentSlotIdxState(0);
 
       character.setJob(job);
+      setInventoryState(job ? getInventory(job.engName) : []);
       refresh();
     },
     [character, refresh],
@@ -300,6 +311,42 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     [character, refresh],
   );
 
+  // Inventory
+  const addToInventory = useCallback(
+    (item: SavedEquipment) => {
+      if (inventory.length >= INVENTORY_SIZE) return false;
+      const next = [...inventory, item];
+      setInventoryState(next);
+      const jobName = character.getJob()?.engName;
+      if (jobName) saveInventory(jobName, next);
+      refresh();
+      return true;
+    },
+    [inventory, character, refresh],
+  );
+
+  const removeFromInventory = useCallback(
+    (idx: number) => {
+      const next = [...inventory];
+      next.splice(idx, 1);
+      setInventoryState(next);
+      const jobName = character.getJob()?.engName;
+      if (jobName) saveInventory(jobName, next);
+      refresh();
+    },
+    [inventory, character, refresh],
+  );
+
+  const setInventory = useCallback(
+    (data: InventoryData) => {
+      setInventoryState(data);
+      const jobName = character.getJob()?.engName;
+      if (jobName) saveInventory(jobName, data);
+      refresh();
+    },
+    [character, refresh],
+  );
+
   const setCurrentSlotIdx = useCallback(
     (idx: number) => {
       setCurrentSlotIdxState(idx);
@@ -309,7 +356,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
 
   // Save/Load
   const loadCharacter = useCallback(
-    (data: SavedCharacterData) => {
+    async (data: SavedCharacterData) => {
       // 레벨과 순스텟 복원
       character.setLevel(data.level);
       character.setPureStat("str", data.pureStr);
@@ -323,8 +370,9 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
         character.unequip(eq.slot as EquipmentSlot);
       });
 
-      // 저장된 장비 장착
-      data.equipments.forEach((eq) => {
+      // 저장된 장비 복원 (postItem에서 uneditable 값 조회)
+      const equipments = await Promise.all(data.equipments.map(savedToEquipment));
+      equipments.forEach((eq) => {
         const item: Item = {
           id: eq.id,
           name: eq.name || "",
@@ -399,14 +447,13 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     const mapleWarrior = character.getBuff("mapleWarrior");
     const heroEcho = character.getBuff("heroEcho");
 
-    const saved = saveSlotData(currentSlotIdx, {
-      jobEngName: job.engName,
+    const saved = saveSlotData(job.engName, currentSlotIdx, {
       level: stats.level,
       pureStr: stats.pureStr,
       pureDex: stats.pureDex,
       pureInt: stats.pureInt,
       pureLuk: stats.pureLuk,
-      equipments,
+      equipments: equipments.filter((eq) => eq.id != null).map(equipmentToSaved),
       weaponId: weaponEquip?.id,
       buffs: {
         mapleWarriorLevel: mapleWarrior?.level || 0,
@@ -444,7 +491,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
   ]);
 
   const loadSlot = useCallback(
-    (slotIdx: number) => {
+    async (slotIdx: number) => {
       setCurrentSlotIdxState(slotIdx);
       const job = character.getJob();
       if (!job) return;
@@ -453,7 +500,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
 
       const data = getSlotData(job.engName, slotIdx);
       if (data) {
-        loadCharacter(data);
+        await loadCharacter(data);
       } else {
         // 빈 슬롯: 장비 전체 해제 + 버프 초기화
         const currentEquipments = character.getEquipments();
@@ -536,6 +583,10 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
         mastery2,
         setBuffMAD,
         buffMAD,
+        inventory,
+        addToInventory,
+        removeFromInventory,
+        setInventory,
         currentSlotIdx,
         setCurrentSlotIdx,
         saveCurrentCharacter,

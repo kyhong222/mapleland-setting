@@ -92,6 +92,7 @@ interface ItemMakerModalProps {
   open: boolean;
   selectedCategory?: string;
   onClose: () => void;
+  mode?: "equip" | "inventory";
 }
 
 // import.meta.glob으로 빌드 시 JSON 파일을 모두 포함
@@ -114,8 +115,8 @@ async function loadItemData(categoryKey: string): Promise<ItemData[]> {
 }
 
 
-export default function ItemMakerModal({ open, selectedCategory, onClose }: ItemMakerModalProps) {
-  const { character, equipItem } = useCharacter();
+export default function ItemMakerModal({ open, selectedCategory, onClose, mode = "equip" }: ItemMakerModalProps) {
+  const { character, equipItem, addToInventory } = useCharacter();
   const theme = useTheme();
 
   const [selectedCategoryInfo, setSelectedCategoryInfo] = useState<CategoryInfo | null>(null);
@@ -334,11 +335,34 @@ export default function ItemMakerModal({ open, selectedCategory, onClose }: Item
       requireStats: requireStats,
     };
 
-    const result = equipItem(item);
-    if (result) {
+    if (mode === "inventory") {
+      const ok = addToInventory({
+        id: item.id!,
+        slot: item.slot,
+        type: item.type,
+        attack: item.stats.attack,
+        str: item.stats.str,
+        dex: item.stats.dex,
+        int: item.stats.int,
+        luk: item.stats.luk,
+        mad: item.stats.mad,
+        pdef: item.stats.pdef,
+        mdef: item.stats.mdef,
+        acc: item.stats.acc,
+        eva: item.stats.eva,
+      });
+      if (!ok) {
+        alert("인벤토리가 가득 찼습니다.");
+        return;
+      }
       onClose();
     } else {
-      alert("아이템 장착에 실패했습니다.");
+      const result = equipItem(item);
+      if (result) {
+        onClose();
+      } else {
+        alert("아이템 장착에 실패했습니다.");
+      }
     }
   };
 

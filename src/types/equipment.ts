@@ -53,3 +53,19 @@ export const EQUIPMENT_SLOTS = [
 ] as const;
 
 export type EquipmentSlot = (typeof EQUIPMENT_SLOTS)[number];
+
+export interface SavedEquipment {
+  id: number;
+  slot: string;
+  type?: string;
+  attack?: number;
+  str?: number;
+  dex?: number;
+  int?: number;
+  luk?: number;
+  mad?: number;
+  pdef?: number;
+  mdef?: number;
+  acc?: number;
+  eva?: number;
+}
