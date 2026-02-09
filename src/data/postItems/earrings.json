@@ -702,7 +702,9 @@
       "pdef": 0,
       "mdef": 20,
       "acc": 0,
-      "eva": 0
+      "eva": 0,
+      "hp": 15,
+      "mp": 15
     },
     "requireStats": {
       "level": 40,
@@ -725,7 +727,9 @@
       "pdef": 0,
       "mdef": 50,
       "acc": 0,
-      "eva": 0
+      "eva": 0,
+      "hp": 25,
+      "mp": 25
     },
     "requireStats": {
       "level": 70,

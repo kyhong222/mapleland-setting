@@ -7,6 +7,7 @@ import EquipTable from "./components/EquipTable";
 import BuffTable from "./components/BuffTable";
 import DamageTable from "./components/DamageTable";
 import Inventory from "./components/Inventory";
+import DetailStatTable from "./components/DetailStatTable";
 import ItemMakerModal from "./components/ItemMakerModal";
 import { JOBS, JOB_COLORS } from "./types/job";
 import { useState, useEffect, useRef, useMemo } from "react";
@@ -18,7 +19,7 @@ function AppContent() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [itemMakerOpen, setItemMakerOpen] = useState(false);
   const [itemMakerMode, setItemMakerMode] = useState<"equip" | "inventory">("equip");
-  const [inventoryOpen, setInventoryOpen] = useState(false);
+  const [middlePanel, setMiddlePanel] = useState<"buff" | "inventory" | "detailStat">("buff");
   const [equipExpanded, setEquipExpanded] = useState(false);
   const initializedRef = useRef(false);
 
@@ -121,13 +122,15 @@ function AppContent() {
             <Box sx={{ display: "flex", gap: 3, justifyContent: "center", mb: 3 }}>
               {/* 왼쪽: 장비 + 스탯 */}
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                <EquipTable onSlotClick={handleOpenItemMakerForSlot} onOpenItemMaker={handleOpenItemMakerForInventory} onOpenInventory={() => setInventoryOpen((v) => !v)} onExpandedChange={setEquipExpanded} />
-                {!equipExpanded && <StatTable />}
+                <EquipTable onSlotClick={handleOpenItemMakerForSlot} onOpenItemMaker={handleOpenItemMakerForInventory} onOpenInventory={() => setMiddlePanel((v) => v === "inventory" ? "buff" : "inventory")} onExpandedChange={setEquipExpanded} />
+                {!equipExpanded && <StatTable onOpenDetailStat={() => setMiddlePanel((v) => v === "detailStat" ? "buff" : "detailStat")} />}
               </Box>
 
-              {/* 중간: 버프 or 인벤토리 */}
-              {inventoryOpen ? (
-                <Inventory onClose={() => setInventoryOpen(false)} />
+              {/* 중간: 버프 / 인벤토리 / 상세스탯 */}
+              {middlePanel === "inventory" ? (
+                <Inventory onClose={() => setMiddlePanel("buff")} />
+              ) : middlePanel === "detailStat" ? (
+                <DetailStatTable onClose={() => setMiddlePanel("buff")} />
               ) : (
                 <BuffTable />
               )}

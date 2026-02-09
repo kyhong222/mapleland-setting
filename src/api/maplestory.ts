@@ -84,6 +84,10 @@ export interface MapleStoryItem {
     incEVA?: number; // 회피율
     incPAD?: number; // 공격력
     incMAD?: number; // 마력
+    incSpeed?: number; // 이동속도
+    incJump?: number; // 점프력
+    incMHP?: number; // 체력증가량
+    incMMP?: number; // 마나증가량
     attackSpeed?: number; // 공격속도
   };
   typeInfo?: any;

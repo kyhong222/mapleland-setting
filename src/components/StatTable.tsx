@@ -1,8 +1,13 @@
-import { Box, Typography, TextField, Divider } from "@mui/material";
+import { Box, Typography, TextField, Divider, IconButton, Tooltip } from "@mui/material";
+import { WebAsset as WebAssetIcon } from "@mui/icons-material";
 import { useCharacter } from "../contexts/CharacterContext";
 import { useMemo } from "react";
 
-export default function StatTable() {
+interface StatTableProps {
+  onOpenDetailStat?: () => void;
+}
+
+export default function StatTable({ onOpenDetailStat }: StatTableProps) {
   const { character, setLevel, setPureStat, buff1Attack, buff2Attack, masteryAttack, buffMAD, heroEchoEnabled } = useCharacter();
 
   const stats = character.getStats();
@@ -71,9 +76,26 @@ export default function StatTable() {
       }}
     >
       {/* 타이틀 */}
-      <Typography variant="body2" sx={{ fontWeight: "bold", p: 1.5, borderBottom: "1px solid #ccc" }}>
-        스탯
-      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          p: 1.5,
+          borderBottom: "1px solid #ccc",
+        }}
+      >
+        <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+          스탯
+        </Typography>
+        {onOpenDetailStat && (
+          <Tooltip title="상세 스탯">
+            <IconButton onClick={onOpenDetailStat} size="small" sx={{ p: 0.5 }}>
+              <WebAssetIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        )}
+      </Box>
 
       {/* 스탯 내용 */}
       <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 1.5 }}>

@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
 import { Character } from "../domain/Character";
 import type { Item } from "../types/item";
 import type { Job } from "../types/job";
@@ -390,6 +390,10 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
             mdef: eq.mdef || 0,
             acc: eq.acc || 0,
             eva: eq.eva || 0,
+            speed: eq.speed || 0,
+            jump: eq.jump || 0,
+            hp: eq.hp || 0,
+            mp: eq.mp || 0,
             ...(eq.attackSpeed != null ? { attackSpeed: eq.attackSpeed } : {}),
           },
           requireStats: {
@@ -502,7 +506,12 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       if (data) {
         await loadCharacter(data);
       } else {
-        // 빈 슬롯: 장비 전체 해제 + 버프 초기화
+        // 빈 슬롯: 스탯 + 장비 + 버프 전체 초기화
+        character.setLevel(10);
+        character.setPureStat("str", 4);
+        character.setPureStat("dex", 4);
+        character.setPureStat("int", 4);
+        character.setPureStat("luk", 4);
         const currentEquipments = character.getEquipments();
         currentEquipments.forEach((eq) => {
           character.unequip(eq.slot as EquipmentSlot);
@@ -512,6 +521,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
         character.setBuffEnabled("heroEcho", false);
         setBuff1AttackState(0);
         setBuff2AttackState(0);
+        setMasteryAttack(0);
         setMastery1State(20);
         setMastery2State(0);
         setBuffMADState(0);
@@ -537,6 +547,13 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     },
     [character, refresh],
   );
+
+  // Auto-save: version이 바뀔 때마다 현재 슬롯에 자동 저장
+  useEffect(() => {
+    if (version === 0) return;
+    if (!character.getJob()) return;
+    saveCurrentCharacter();
+  }, [version, saveCurrentCharacter, character]);
 
   const getSlotSummaries = useCallback(() => {
     const job = character.getJob();

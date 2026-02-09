@@ -7,6 +7,7 @@ import type { Item } from "../types/item";
 import { equipmentToSaved, savedToEquipment } from "../utils/equipmentConverter";
 import { INVENTORY_COLS, INVENTORY_ROWS } from "../utils/inventoryStorage";
 import { getPostItemCategoryKey, loadPostItemData } from "../utils/postItemLoader";
+import ItemTooltip from "./ItemTooltip";
 
 interface InventoryProps {
   onClose: () => void;
@@ -60,6 +61,10 @@ export default function Inventory({ onClose }: InventoryProps) {
         mdef: eq.mdef || 0,
         acc: eq.acc || 0,
         eva: eq.eva || 0,
+        speed: eq.speed || 0,
+        jump: eq.jump || 0,
+        hp: eq.hp || 0,
+        mp: eq.mp || 0,
         ...(eq.attackSpeed != null ? { attackSpeed: eq.attackSpeed } : {}),
       },
       requireStats: {
@@ -110,24 +115,7 @@ export default function Inventory({ onClose }: InventoryProps) {
     [inventory, handleDelete],
   );
 
-  const getTooltipText = (item: SavedEquipment) => {
-    const itemName = names.get(item.id) || item.slot;
-    const lines: string[] = [itemName];
-
-    const isJobMagician = job?.engName === "magician";
-    if (isJobMagician) {
-      if (item.mad) lines.push(`마력: ${item.mad}`);
-    } else {
-      if (item.attack) lines.push(`공격력: ${item.attack}`);
-    }
-
-    if (item.str) lines.push(`STR: ${item.str}`);
-    if (item.dex) lines.push(`DEX: ${item.dex}`);
-    if (item.int) lines.push(`INT: ${item.int}`);
-    if (item.luk) lines.push(`LUK: ${item.luk}`);
-
-    return lines.join("\n");
-  };
+  const isJobMagician = job?.engName === "magician";
 
   const getIconSrc = (id: number) => {
     if (icons.has(id)) return icons.get(id)!;
@@ -182,12 +170,31 @@ export default function Inventory({ onClose }: InventoryProps) {
             return (
               <Tooltip
                 key={idx}
-                title={item ? getTooltipText(item) : "빈 칸"}
-                slotProps={{
-                  tooltip: {
-                    sx: { whiteSpace: "pre-wrap", wordBreak: "break-word" },
-                  },
-                }}
+                disableInteractive
+                leaveDelay={0}
+                title={item ? (
+                  <ItemTooltip
+                    name={names.get(item.id) || item.slot}
+                    slot={item.slot}
+                    type={item.type}
+                    icon={getIconSrc(item.id)}
+                    attack={item.attack}
+                    str={item.str}
+                    dex={item.dex}
+                    int={item.int}
+                    luk={item.luk}
+                    mad={item.mad}
+                    pdef={item.pdef}
+                    mdef={item.mdef}
+                    acc={item.acc}
+                    eva={item.eva}
+                    speed={item.speed}
+                    jump={item.jump}
+                    hp={item.hp}
+                    mp={item.mp}
+                    isJobMagician={isJobMagician}
+                  />
+                ) : "빈 칸"}
               >
                 <Box
                   onDoubleClick={() => item && handleEquipFromInventory(idx)}

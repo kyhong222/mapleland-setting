@@ -840,7 +840,8 @@
       "pdef": 0,
       "mdef": 0,
       "acc": 0,
-      "eva": 0
+      "eva": 0,
+      "speed": 10
     },
     "requireStats": {
       "level": 42,
@@ -863,7 +864,8 @@
       "pdef": 0,
       "mdef": 0,
       "acc": 0,
-      "eva": 0
+      "eva": 0,
+      "jump": 5
     },
     "requireStats": {
       "level": 42,
@@ -978,7 +980,9 @@
       "pdef": 0,
       "mdef": 0,
       "acc": 0,
-      "eva": 0
+      "eva": 0,
+      "speed": 5,
+      "jump": 2
     },
     "requireStats": {
       "level": 35,
@@ -1001,7 +1005,9 @@
       "pdef": 0,
       "mdef": 0,
       "acc": 0,
-      "eva": 0
+      "eva": 0,
+      "speed": 5,
+      "jump": 2
     },
     "requireStats": {
       "level": 35,
@@ -1024,7 +1030,9 @@
       "pdef": 28,
       "mdef": 33,
       "acc": 0,
-      "eva": 0
+      "eva": 0,
+      "speed": 7,
+      "jump": 3
     },
     "requireStats": {
       "level": 80,
@@ -1047,7 +1055,9 @@
       "pdef": 28,
       "mdef": 33,
       "acc": 0,
-      "eva": 0
+      "eva": 0,
+      "speed": 7,
+      "jump": 3
     },
     "requireStats": {
       "level": 80,
@@ -1093,7 +1103,9 @@
       "pdef": 8,
       "mdef": 12,
       "acc": 0,
-      "eva": 0
+      "eva": 0,
+      "speed":5,
+      "jump": 2
     },
     "requireStats": {
       "level": 40,
@@ -1116,7 +1128,9 @@
       "pdef": 23,
       "mdef": 28,
       "acc": 0,
-      "eva": 0
+      "eva": 0,
+      "speed":10,
+      "jump": 5
     },
     "requireStats": {
       "level": 70,

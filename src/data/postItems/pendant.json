@@ -81,7 +81,11 @@
       "pdef": 0,
       "mdef": 0,
       "acc": 0,
-      "eva": 0
+      "eva": 15,
+      "speed": 5,
+      "jump": 5,
+      "hp": 150,
+      "mp": 150
     },
     "requireStats": {
       "level": 110,

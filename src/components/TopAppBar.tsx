@@ -5,14 +5,13 @@ import {
   Select,
   MenuItem,
   FormControl,
-  Button,
   IconButton,
   Tooltip,
   Box,
 } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material";
 import { JOBS } from "../types/job";
-import { Save as SaveIcon, Close as CloseIcon } from "@mui/icons-material";
+import { Close as CloseIcon } from "@mui/icons-material";
 import { useCharacter } from "../contexts/CharacterContext";
 import { useState, useEffect, useCallback } from "react";
 import { MAX_SLOTS, type SavedCharacterData } from "../utils/characterStorage";
@@ -28,8 +27,6 @@ export default function TopAppBar({
   onJobChange,
 }: TopAppBarProps) {
   const {
-    character,
-    saveCurrentCharacter,
     loadSlot,
     deleteSlot,
     getSlotSummaries,
@@ -82,19 +79,6 @@ export default function TopAppBar({
 
   const handleChange = (event: SelectChangeEvent) => {
     onJobChange(event.target.value);
-  };
-
-  const handleSave = () => {
-    const saved = saveCurrentCharacter();
-    if (saved) {
-      const job = character.getJob();
-      const jobName = job?.koreanName || "직업";
-      const slotNumber = currentSlotIdx + 1;
-      alert(`${jobName}-${slotNumber}번 슬롯에 저장되었습니다!`);
-      refreshSlots();
-    } else {
-      alert("저장 실패: 직업을 선택해주세요.");
-    }
   };
 
   const handleSlotClick = (slotIdx: number) => {
@@ -194,23 +178,6 @@ export default function TopAppBar({
             );
           })}
         </Box>
-
-        {/* 저장 버튼 */}
-        <Button
-          variant="outlined"
-          startIcon={<SaveIcon />}
-          onClick={handleSave}
-          sx={{
-            mr: 2,
-            color: "success.light",
-            borderColor: "success.light",
-            bgcolor: "white",
-            "&:hover": { borderColor: "success.main", bgcolor: "white" },
-          }}
-          disabled={!selectedJob}
-        >
-          저장
-        </Button>
 
         <FormControl size="small" sx={{ minWidth: 120 }}>
           <Select

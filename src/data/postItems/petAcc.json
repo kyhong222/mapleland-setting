@@ -1,7 +1,7 @@
 {
-   "1132010": {
-    "koreanName": "황금돼지 허리띠",
-    "icon": "https://maplestory.io/api/GMS/200/item/1132010/icon",
+  "1802000": {
+    "koreanName": "투명한 리본",
+    "icon": "https://maplestory.io/api/GMS/200/item/1802000/icon",
     "stats": {
       "attack": 0,
       "str": 0,
@@ -9,8 +9,8 @@
       "int": 0,
       "luk": 0,
       "mad": 0,
-      "pdef": 7,
-      "mdef": 7,
+      "pdef": 0,
+      "mdef": 0,
       "acc": 0,
       "eva": 0
     },

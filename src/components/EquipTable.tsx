@@ -7,6 +7,7 @@ import EquipDetailTable from "./EquipDetailTable";
 import type { EquipmentSlot } from "../types/equipment";
 import { getPostItemCategoryKey, getPostItemIcon } from "../utils/postItemLoader";
 import { equipmentToSaved } from "../utils/equipmentConverter";
+import ItemTooltip from "./ItemTooltip";
 
 // 슬롯명을 카테고리 키로 매핑
 const SLOT_TO_CATEGORY: Record<string, string> = {
@@ -24,6 +25,7 @@ const SLOT_TO_CATEGORY: Record<string, string> = {
   눈장식: "eyeDecoration",
   목걸이: "pendant",
   벨트: "belt",
+  펫장비: "petAcc",
   무기: "weapon",
 };
 
@@ -136,8 +138,7 @@ export default function EquipTable({ onSlotClick, onOpenItemMaker, onOpenInvento
     const isBottomSlotBlocked = slotName === "하의" && hasOverall;
     const slotIsSecondaryWeaponBlocked = slotName === "보조무기" && isSecondaryWeaponBlocked;
 
-    // 0이 아닌 스탯만 표기
-    const getTooltipText = () => {
+    const getTooltipContent = () => {
       if (!equipment) {
         if (slotIsSecondaryWeaponBlocked) {
           return "해당 무기 타입에는 보조무기를 장착할 수 없습니다";
@@ -148,36 +149,38 @@ export default function EquipTable({ onSlotClick, onOpenItemMaker, onOpenInvento
         return "클릭하여 아이템 선택";
       }
 
-      const lines: string[] = [equipment.name || ""];
-
-      // 마법사인 경우 공격력 대신 마력 표시
-      if (isJobMagician) {
-        if (equipment.mad) lines.push(`마력: ${equipment.mad}`);
-      } else {
-        if (equipment.attack) lines.push(`공격력: ${equipment.attack}`);
-      }
-
-      if (equipment.str) lines.push(`STR: ${equipment.str}`);
-      if (equipment.dex) lines.push(`DEX: ${equipment.dex}`);
-      if (equipment.int) lines.push(`INT: ${equipment.int}`);
-      if (equipment.luk) lines.push(`LUK: ${equipment.luk}`);
-
-      return lines.join("\n");
+      return (
+        <ItemTooltip
+          name={equipment.name || ""}
+          slot={slotName}
+          type={equipment.type}
+          icon={getIconSrc(equipment) || undefined}
+          attack={equipment.attack}
+          str={equipment.str}
+          dex={equipment.dex}
+          int={equipment.int}
+          luk={equipment.luk}
+          mad={equipment.mad}
+          pdef={equipment.pdef}
+          mdef={equipment.mdef}
+          acc={equipment.acc}
+          eva={equipment.eva}
+          speed={equipment.speed}
+          jump={equipment.jump}
+          hp={equipment.hp}
+          mp={equipment.mp}
+          isJobMagician={isJobMagician}
+        />
+      );
     };
 
     return (
       <Tooltip
         key={slotName}
-        title={getTooltipText()}
+        title={getTooltipContent()}
         placement="top"
-        slotProps={{
-          tooltip: {
-            sx: {
-              whiteSpace: "pre-wrap",
-              wordBreak: "break-word",
-            },
-          },
-        }}
+        disableInteractive
+        leaveDelay={0}
       >
         <Box
           onClick={() =>

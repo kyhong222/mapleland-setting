@@ -31,7 +31,7 @@ export interface Equipment {
 export const EQUIPMENT_LAYOUT = [
   ["투구", "상의", "망토", "귀고리", "무기"],
   ["목걸이", "하의", "신발", "장갑", "보조무기"],
-  ["벨트", "얼굴장식", "눈장식", "훈장", null],
+  ["벨트", "얼굴장식", "눈장식", "훈장", "펫장비"],
 ] as const;
 
 export const EQUIPMENT_SLOTS = [
@@ -50,6 +50,7 @@ export const EQUIPMENT_SLOTS = [
   "눈장식",
   "훈장",
   "벨트",
+  "펫장비",
 ] as const;
 
 export type EquipmentSlot = (typeof EQUIPMENT_SLOTS)[number];
@@ -68,4 +69,8 @@ export interface SavedEquipment {
   mdef?: number;
   acc?: number;
   eva?: number;
+  speed?: number;
+  jump?: number;
+  hp?: number;
+  mp?: number;
 }

@@ -16,6 +16,10 @@ export function equipmentToSaved(eq: Equipment): SavedEquipment {
     mdef: eq.mdef,
     acc: eq.acc,
     eva: eq.eva,
+    speed: eq.speed,
+    jump: eq.jump,
+    hp: eq.hp,
+    mp: eq.mp,
   };
 }
 
@@ -40,6 +44,10 @@ export async function savedToEquipment(saved: SavedEquipment): Promise<Equipment
     mdef: saved.mdef,
     acc: saved.acc,
     eva: saved.eva,
+    speed: saved.speed,
+    jump: saved.jump,
+    hp: saved.hp,
+    mp: saved.mp,
     attackSpeed: postItem?.stats.attackSpeed,
     reqLevel: postItem?.requireStats.level,
     reqStr: postItem?.requireStats.str,

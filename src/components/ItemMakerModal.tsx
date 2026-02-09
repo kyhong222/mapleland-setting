@@ -46,6 +46,7 @@ const ACCESSORY_CATEGORIES = [
   { key: "eyeDecoration", name: "눈장식", slot: "눈장식" as EquipmentSlot, type: "방어구" as ItemType },
   { key: "medal", name: "훈장", slot: "훈장" as EquipmentSlot, type: "방어구" as ItemType },
   { key: "belt", name: "벨트", slot: "벨트" as EquipmentSlot, type: "방어구" as ItemType },
+  { key: "petAcc", name: "펫장비", slot: "펫장비" as EquipmentSlot, type: "방어구" as ItemType },
 ];
 
 const WEAPON_CATEGORIES = [
@@ -132,10 +133,9 @@ export default function ItemMakerModal({ open, selectedCategory, onClose, mode =
 
   const defaultStats = {
     attack: 0, str: 0, dex: 0, int: 0, luk: 0,
-    mad: 0, pdef: 0, mdef: 0, acc: 0, eva: 0,
+    mad: 0, pdef: 0, mdef: 0, acc: 0, eva: 0, speed: 0, jump: 0, hp: 0, mp: 0,
   };
 
-  const [_originStats, setOriginStats] = useState({ ...defaultStats });
   const [editedStats, setEditedStats] = useState({ ...defaultStats });
 
   const [requireStats, setRequireStats] = useState({
@@ -160,7 +160,6 @@ export default function ItemMakerModal({ open, selectedCategory, onClose, mode =
       setItemIcon("");
       setKoreanName("");
       setAttackSpeed(null);
-      setOriginStats({ ...defaultStats });
       setEditedStats({ ...defaultStats });
       setRequireStats({ level: 0, str: 0, dex: 0, int: 0, luk: 0 });
     }
@@ -253,7 +252,6 @@ export default function ItemMakerModal({ open, selectedCategory, onClose, mode =
         // PostItem이 있으면 API 호출 없이 사용
         setKoreanName(postItem.koreanName || item.koreanName || item.name);
         const stats = { ...defaultStats, ...postItem.stats };
-        setOriginStats(stats);
         setEditedStats(stats);
         setRequireStats(postItem.requireStats);
         setAttackSpeed(postItem.stats.attackSpeed ?? null);
@@ -278,8 +276,11 @@ export default function ItemMakerModal({ open, selectedCategory, onClose, mode =
             mdef: metaInfo.incMDD || 0,
             acc: metaInfo.incACC || 0,
             eva: metaInfo.incEVA || 0,
+            speed: metaInfo.incSpeed || 0,
+            jump: metaInfo.incJump || 0,
+            hp: metaInfo.incMHP || 0,
+            mp: metaInfo.incMMP || 0,
           };
-          setOriginStats(stats);
           setEditedStats(stats);
           setRequireStats({
             level: metaInfo.reqLevel || item.reqLevel || 0,
@@ -330,6 +331,10 @@ export default function ItemMakerModal({ open, selectedCategory, onClose, mode =
         mdef: editedStats.mdef,
         acc: editedStats.acc,
         eva: editedStats.eva,
+        speed: editedStats.speed,
+        jump: editedStats.jump,
+        hp: editedStats.hp,
+        mp: editedStats.mp,
         ...(attackSpeed != null ? { attackSpeed } : {}),
       },
       requireStats: requireStats,
@@ -350,6 +355,10 @@ export default function ItemMakerModal({ open, selectedCategory, onClose, mode =
         mdef: item.stats.mdef,
         acc: item.stats.acc,
         eva: item.stats.eva,
+        speed: item.stats.speed,
+        jump: item.stats.jump,
+        hp: item.stats.hp,
+        mp: item.stats.mp,
       });
       if (!ok) {
         alert("인벤토리가 가득 찼습니다.");
@@ -410,7 +419,7 @@ export default function ItemMakerModal({ open, selectedCategory, onClose, mode =
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle sx={{ pb: 1 }}>아이템 장착</DialogTitle>
+      <DialogTitle sx={{ pb: 1 }}>{mode === "inventory" ? "아이템 생성" : "아이템 장착"}</DialogTitle>
       <DialogContent sx={{ pt: 1 }}>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
           {/* 카테고리 탭 - 방어구 */}
@@ -649,6 +658,10 @@ export default function ItemMakerModal({ open, selectedCategory, onClose, mode =
                       { key: "mdef", label: "마방" },
                       { key: "acc", label: "명중" },
                       { key: "eva", label: "회피" },
+                      { key: "speed", label: "이속" },
+                      { key: "jump", label: "점프" },
+                      { key: "hp", label: "HP" },
+                      { key: "mp", label: "MP" },
                     ].map((stat) => (
                       <Box key={stat.key} sx={{ display: "flex", alignItems: "center", gap: 0.3, mb: 0.3 }}>
                         <Typography sx={{ width: 45, fontSize: "0.75rem" }}>{stat.label}</Typography>
@@ -694,7 +707,7 @@ export default function ItemMakerModal({ open, selectedCategory, onClose, mode =
       <DialogActions>
         <Button onClick={onClose}>취소</Button>
         <Button onClick={handleEquip} variant="contained" color="primary" disabled={!selectedItem}>
-          장착
+          {mode === "inventory" ? "생성" : "장착"}
         </Button>
       </DialogActions>
     </Dialog>

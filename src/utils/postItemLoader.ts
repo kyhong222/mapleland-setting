@@ -80,6 +80,7 @@ export function getPostItemCategoryKey(slot: string, type?: string): string | nu
     눈장식: "eyeDecoration",
     훈장: "medal",
     벨트: "belt",
+    펫장비: "petAcc",
   };
 
   if (type && weaponTypeMap[type]) return weaponTypeMap[type];
