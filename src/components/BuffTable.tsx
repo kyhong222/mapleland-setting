@@ -843,10 +843,6 @@ export default function BuffTable() {
               );
             }
 
-            const mastery1Props = mastery1Data.properties as MasteryProperty[];
-            const masteryValue = mastery1Props[mastery1]?.mastery ?? 0;
-            const displayMastery = masteryValue + 10; // 기본 10% 추가
-
             return (
               <Box sx={{ display: "flex", gap: 1 }}>
                 <Box
@@ -962,11 +958,6 @@ export default function BuffTable() {
                 skillData = skill;
               }
             }
-
-            const masteryProp: MasteryProperty | undefined =
-              skillData?.properties[mastery2];
-            const masteryAttack = masteryProp?.att ?? 0;
-            const masteryValue = masteryProp?.mastery ?? 0;
 
             return (
               <Box sx={{ display: "flex", gap: 1 }}>
