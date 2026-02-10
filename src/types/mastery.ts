@@ -19,6 +19,7 @@ export interface MasterySkill {
   englishName: string;
   description: string;
   weaponType: ItemType | ItemType[]; // 단일 또는 배열
+  maxLevel: number; // 최대 레벨
   properties: MasteryProperty[];
 }
 

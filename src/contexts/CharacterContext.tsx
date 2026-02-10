@@ -4,6 +4,7 @@ import { Character } from "../domain/Character";
 import type { Item } from "../types/item";
 import type { Job } from "../types/job";
 import type { EquipmentSlot } from "../types/equipment";
+import mastery1Data from "../data/buff/mastery/mastery1.json";
 import mastery2Data from "../data/buff/mastery/mastery2.json";
 import type { MasterySkill } from "../types/mastery";
 import {
@@ -118,8 +119,8 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
   const [buff1Attack, setBuff1AttackState] = useState(0);
   const [buff2Attack, setBuff2AttackState] = useState(0);
   const [masteryAttack, setMasteryAttack] = useState(0);
-  const [mastery1, setMastery1State] = useState(20); // mastery level (0-20)
-  const [mastery2, setMastery2State] = useState(10); // mastery level (varies: bow/crossbow=30, spear/polearm=10)
+  const [mastery1, setMastery1State] = useState(mastery1Data.maxLevel);
+  const [mastery2, setMastery2State] = useState(0); // 무기 미장착 시 0
   const [buffMAD, setBuffMADState] = useState(0);
   const [heroEchoEnabled, setHeroEchoEnabledState] = useState(false);
   const [currentSlotIdx, setCurrentSlotIdxState] = useState(0);
@@ -160,8 +161,8 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       character.setBuffEnabled("heroEcho", false);
       setBuff1AttackState(0);
       setBuff2AttackState(0);
-      setMastery1State(20); // mastery1 maxLevel
-      setMastery2State(10); // mastery2 default (lowest maxLevel)
+      setMastery1State(mastery1Data.maxLevel);
+      setMastery2State(0); // 무기 미장착 시 0
       setMasteryAttack(0);
       setBuffMADState(0);
       setHeroEchoEnabledState(false);
@@ -200,9 +201,9 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
         const weaponType = item.type;
         const skill = getMastery2SkillByWeaponType(weaponType);
         if (skill) {
-          const nextLevel = skill.properties.length - 1;
-          setMastery2State(nextLevel);
-          setMasteryAttack(getMastery2AttackByLevel(weaponType, nextLevel));
+          const maxLevel = skill.maxLevel;
+          setMastery2State(maxLevel);
+          setMasteryAttack(getMastery2AttackByLevel(weaponType, maxLevel));
         } else {
           setMastery2State(0);
           setMasteryAttack(0);
@@ -522,7 +523,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
         setBuff1AttackState(0);
         setBuff2AttackState(0);
         setMasteryAttack(0);
-        setMastery1State(20);
+        setMastery1State(mastery1Data.maxLevel);
         setMastery2State(0);
         setBuffMADState(0);
         setHeroEchoEnabledState(false);

@@ -4,7 +4,8 @@
     "koreanName": "보우 엑스퍼트",
     "englishName": "Bow Expert",
     "description": "활 전용 마스터리",
-    "weaponType": "활",
+    "weaponType": ["활"],
+    "maxLevel": 30,
     "properties": [
       { "level": 0, "att": 0, "mastery": 0 },
       { "level": 1, "att": 0, "mastery": 5 },
@@ -44,7 +45,8 @@
     "koreanName": "크로스보우 엑스퍼트",
     "englishName": "Crossbow Expert",
     "description": "석궁 전용 마스터리",
-    "weaponType": "석궁",
+    "weaponType": ["석궁"],
+    "maxLevel": 30,
     "properties": [
       { "level": 0, "att": 0, "mastery": 0 },
       { "level": 1, "att": 0, "mastery": 5 },
@@ -85,6 +87,7 @@
     "englishName": "Beholder",
     "description": "창과 폴암 전용 마스터리",
     "weaponType": ["창", "폴암"],
+    "maxLevel": 10,
     "properties": [
       { "level": 0, "mastery": 0 },
       { "level": 1, "mastery": 5 },

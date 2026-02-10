@@ -21,6 +21,7 @@
     "dagger": "대거 마스터리",
     "javelin": "자벨린 마스터리"
   },
+  "maxLevel": 20,
   "properties": [
     { "level": 0, "acc": 0, "mastery": 0 },
     { "level": 1, "acc": 1, "mastery": 5 },
