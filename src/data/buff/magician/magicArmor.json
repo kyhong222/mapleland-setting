@@ -1,0 +1,30 @@
+{
+  "icon": "",
+  "koreanName": "매직 아머",
+  "englishName": "Magic Armor",
+  "description": "",
+  "maxLevel": 20,
+  "properties": [
+    { "level": 0, "pdef": 0 },
+    { "level": 1, "pdef": 2 },
+    { "level": 2, "pdef": 4 },
+    { "level": 3, "pdef": 6 },
+    { "level": 4, "pdef": 8 },
+    { "level": 5, "pdef": 10 },
+    { "level": 6, "pdef": 12 },
+    { "level": 7, "pdef": 14 },
+    { "level": 8, "pdef": 16 },
+    { "level": 9, "pdef": 18 },
+    { "level": 10, "pdef": 20 },
+    { "level": 11, "pdef": 22 },
+    { "level": 12, "pdef": 24 },
+    { "level": 13, "pdef": 26 },
+    { "level": 14, "pdef": 28 },
+    { "level": 15, "pdef": 30 },
+    { "level": 16, "pdef": 32 },
+    { "level": 17, "pdef": 34 },
+    { "level": 18, "pdef": 36 },
+    { "level": 19, "pdef": 38 },
+    { "level": 20, "pdef": 40 }
+  ]
+}

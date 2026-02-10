@@ -1,0 +1,31 @@
+{
+  "icon": "",
+  "koreanName": "쉴드 마스터리",
+  "englishName": "Shield Mastery",
+  "description": "방패 장착 시 적용",
+  "maxLevel": 20,
+  "requireSecondaryType": "방패",
+  "properties": [
+    { "level": 0, "pdefP": 0 },
+    { "level": 1, "pdefP": 5 },
+    { "level": 2, "pdefP": 10 },
+    { "level": 3, "pdefP": 15 },
+    { "level": 4, "pdefP": 20 },
+    { "level": 5, "pdefP": 25 },
+    { "level": 6, "pdefP": 30 },
+    { "level": 7, "pdefP": 35 },
+    { "level": 8, "pdefP": 40 },
+    { "level": 9, "pdefP": 45 },
+    { "level": 10, "pdefP": 50 },
+    { "level": 11, "pdefP": 55 },
+    { "level": 12, "pdefP": 60 },
+    { "level": 13, "pdefP": 65 },
+    { "level": 14, "pdefP": 70 },
+    { "level": 15, "pdefP": 75 },
+    { "level": 16, "pdefP": 80 },
+    { "level": 17, "pdefP": 85 },
+    { "level": 18, "pdefP": 90 },
+    { "level": 19, "pdefP": 95 },
+    { "level": 20, "pdefP": 100 }
+  ]
+}

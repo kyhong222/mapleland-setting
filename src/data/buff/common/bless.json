@@ -1,0 +1,30 @@
+{
+  "icon": "",
+  "koreanName": "블레스",
+  "englishName": "Bless",
+  "description": "",
+  "maxLevel": 20,
+  "properties": [
+    { "level": 0, "acc": 0, "eva": 0, "pdef": 0, "mdef": 0 },
+    { "level": 1, "acc": 1, "eva": 1, "pdef": 1, "mdef": 1 },
+    { "level": 2, "acc": 2, "eva": 2, "pdef": 2, "mdef": 2 },
+    { "level": 3, "acc": 3, "eva": 3, "pdef": 3, "mdef": 3 },
+    { "level": 4, "acc": 4, "eva": 4, "pdef": 4, "mdef": 4 },
+    { "level": 5, "acc": 5, "eva": 5, "pdef": 5, "mdef": 5 },
+    { "level": 6, "acc": 6, "eva": 6, "pdef": 6, "mdef": 6 },
+    { "level": 7, "acc": 7, "eva": 7, "pdef": 7, "mdef": 7 },
+    { "level": 8, "acc": 8, "eva": 8, "pdef": 8, "mdef": 8 },
+    { "level": 9, "acc": 9, "eva": 9, "pdef": 9, "mdef": 9 },
+    { "level": 10, "acc": 10, "eva": 10, "pdef": 10, "mdef": 10 },
+    { "level": 11, "acc": 11, "eva": 11, "pdef": 11, "mdef": 11 },
+    { "level": 12, "acc": 12, "eva": 12, "pdef": 12, "mdef": 12 },
+    { "level": 13, "acc": 13, "eva": 13, "pdef": 13, "mdef": 13 },
+    { "level": 14, "acc": 14, "eva": 14, "pdef": 14, "mdef": 14 },
+    { "level": 15, "acc": 15, "eva": 15, "pdef": 15, "mdef": 15 },
+    { "level": 16, "acc": 16, "eva": 16, "pdef": 16, "mdef": 16 },
+    { "level": 17, "acc": 17, "eva": 17, "pdef": 17, "mdef": 17 },
+    { "level": 18, "acc": 18, "eva": 18, "pdef": 18, "mdef": 18 },
+    { "level": 19, "acc": 19, "eva": 19, "pdef": 19, "mdef": 19 },
+    { "level": 20, "acc": 20, "eva": 20, "pdef": 20, "mdef": 20 }
+  ]
+}
