@@ -58,8 +58,11 @@ export default function ItemTooltip({
   if (mdef) statLines.push({ label: "마법방어력", value: mdef });
   if (acc) statLines.push({ label: "명중률", value: acc });
   if (eva) statLines.push({ label: "회피율", value: eva });
-  if (speed) statLines.push({ label: "이동속도", value: speed });
-  if (jump) statLines.push({ label: "점프력", value: jump });
+  // 펫장비만 이동속도와 점프력 표시
+  if (slot === "펫장비") {
+    if (speed) statLines.push({ label: "이동속도", value: speed });
+    if (jump) statLines.push({ label: "점프력", value: jump });
+  }
   if (hp) statLines.push({ label: "HP", value: hp });
   if (mp) statLines.push({ label: "MP", value: mp });
 

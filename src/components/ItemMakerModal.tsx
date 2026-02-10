@@ -62,6 +62,7 @@ const WEAPON_CATEGORIES = [
   { key: "weapons/crossbow", name: "석궁", slot: "무기" as EquipmentSlot, type: "석궁" as ItemType, jobs: [4] },
   { key: "weapons/staff", name: "스태프", slot: "무기" as EquipmentSlot, type: "스태프" as ItemType, jobs: [2] },
   { key: "weapons/wand", name: "완드", slot: "무기" as EquipmentSlot, type: "완드" as ItemType, jobs: [2] },
+  { key: "weapons/specialWeapons", name: "그 외", slot: "무기" as EquipmentSlot, type: "그 외" as ItemType, jobs: [2] },
   { key: "weapons/dagger", name: "단검", slot: "무기" as EquipmentSlot, type: "단검" as ItemType, jobs: [8] },
   { key: "weapons/claw", name: "아대", slot: "무기" as EquipmentSlot, type: "아대" as ItemType, jobs: [8] },
 ];

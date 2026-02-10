@@ -56,6 +56,7 @@ export function getPostItemCategoryKey(slot: string, type?: string): string | nu
     완드: "weapons/wand",
     단검: "weapons/dagger",
     아대: "weapons/claw",
+    "그 외": "weapons/specialWeapons",
   };
 
   // 보조무기 타입별 매핑
