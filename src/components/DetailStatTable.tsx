@@ -41,8 +41,8 @@ export default function DetailStatTable({ onClose }: DetailStatTableProps) {
       ? { label: "마법명중률", value: totalMacc }
       : { label: "명중률", value: totalAcc },
     { label: "회피율", value: totalEva },
-    { label: "이동속도", value: equipStats.speed + 100 },
-    { label: "점프력", value: equipStats.jump + 100 },
+    { label: "이동속도", value: Math.min(equipStats.speed + 100, 140) },
+    { label: "점프력", value: Math.min(equipStats.jump + 100, 123) },
     { label: "추가 HP", value: equipStats.hp },
     { label: "추가 MP", value: equipStats.mp },
   ];
