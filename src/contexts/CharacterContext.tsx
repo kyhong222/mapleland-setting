@@ -7,6 +7,10 @@ import type { EquipmentSlot } from "../types/equipment";
 import mastery1Data from "../data/buff/mastery/mastery1.json";
 import mastery2Data from "../data/buff/mastery/mastery2.json";
 import type { MasterySkill } from "../types/mastery";
+import shieldMasteryData from "../data/passive/warrior/shieldMastery.json";
+import thrustData from "../data/passive/archer/thrust.json";
+import amazonBlessingData from "../data/passive/archer/amazonBlessing.json";
+import nimbleBodyData from "../data/passive/thief/nimbleBody.json";
 import {
   saveSlotData,
   getSlotData,
@@ -70,6 +74,10 @@ interface CharacterContextValue {
   mastery1: number;
   mastery2: number;
 
+  // Passive Skills
+  passiveLevels: Record<string, number>;
+  setPassiveLevel: (key: string, level: number) => void;
+
   // Magic Attack (마력)
   setBuffMAD: (mad: number) => void;
   buffMAD: number;
@@ -91,6 +99,32 @@ interface CharacterContextValue {
 }
 
 const CharacterContext = createContext<CharacterContextValue | null>(null);
+
+interface PassiveSkillData {
+  koreanName: string;
+  englishName: string;
+  description: string;
+  maxLevel: number;
+  icon: string;
+  requireSecondaryType?: string;
+  properties: Record<string, number>[];
+}
+
+const passivesByJob: Record<string, PassiveSkillData[]> = {
+  warrior: [shieldMasteryData as unknown as PassiveSkillData],
+  archer: [thrustData as unknown as PassiveSkillData, amazonBlessingData as unknown as PassiveSkillData],
+  thief: [nimbleBodyData as unknown as PassiveSkillData],
+  magician: [],
+};
+
+function getDefaultPassiveLevels(jobEngName: string): Record<string, number> {
+  const passives = passivesByJob[jobEngName] || [];
+  const levels: Record<string, number> = {};
+  for (const p of passives) {
+    levels[p.englishName] = p.maxLevel;
+  }
+  return levels;
+}
 
 const mastery2Skills = mastery2Data as MasterySkill[];
 
@@ -123,6 +157,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
   const [mastery2, setMastery2State] = useState(0); // 무기 미장착 시 0
   const [buffMAD, setBuffMADState] = useState(0);
   const [heroEchoEnabled, setHeroEchoEnabledState] = useState(false);
+  const [passiveLevels, setPassiveLevelsState] = useState<Record<string, number>>({});
   const [currentSlotIdx, setCurrentSlotIdxState] = useState(0);
   const [inventory, setInventoryState] = useState<InventoryData>([]);
 
@@ -172,6 +207,9 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       setBuff2LabelState("버프 선택");
       setBuff2IconState(null);
       setBuff2IsManualState(false);
+
+      // 패시브 초기화
+      setPassiveLevelsState(job ? getDefaultPassiveLevels(job.engName) : {});
 
       // 슬롯 초기화
       setCurrentSlotIdxState(0);
@@ -302,6 +340,14 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     [character, refresh],
   );
 
+  const setPassiveLevel = useCallback(
+    (key: string, level: number) => {
+      setPassiveLevelsState((prev) => ({ ...prev, [key]: level }));
+      refresh();
+    },
+    [refresh],
+  );
+
   const setBuffMAD = useCallback(
     (mad: number) => {
       setBuffMADState(mad);
@@ -426,6 +472,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
         if (data.buffs.buff2Label) setBuff2LabelState(data.buffs.buff2Label);
         if (data.buffs.buff2Icon !== undefined) setBuff2IconState(data.buffs.buff2Icon);
         if (data.buffs.buff2IsManual !== undefined) setBuff2IsManualState(data.buffs.buff2IsManual);
+        if (data.buffs.passiveLevels) setPassiveLevelsState(data.buffs.passiveLevels);
       }
 
       const weaponType = character.getWeaponType();
@@ -475,6 +522,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
         buff2Label,
         buff2Icon,
         buff2IsManual,
+        passiveLevels,
       },
     });
 
@@ -493,6 +541,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     buff2Label,
     buff2Icon,
     buff2IsManual,
+    passiveLevels,
   ]);
 
   const loadSlot = useCallback(
@@ -533,6 +582,8 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
         setBuff2LabelState("버프 선택");
         setBuff2IconState(null);
         setBuff2IsManualState(false);
+        const jobName = character.getJob()?.engName;
+        setPassiveLevelsState(jobName ? getDefaultPassiveLevels(jobName) : {});
         refresh();
       }
     },
@@ -599,6 +650,8 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
         setMasteryAttack,
         mastery1,
         mastery2,
+        passiveLevels,
+        setPassiveLevel,
         setBuffMAD,
         buffMAD,
         inventory,

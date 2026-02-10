@@ -22,6 +22,34 @@ import mastery2Data from "../data/buff/mastery/mastery2.json";
 import type { MasteryProperty, MasterySkill } from "../types/mastery";
 import buff1Data from "../data/buff/buff/buff1.json";
 import buff2Data from "../data/buff/buff/buff2.json";
+import shieldMasteryData from "../data/passive/warrior/shieldMastery.json";
+import thrustData from "../data/passive/archer/thrust.json";
+import amazonBlessingData from "../data/passive/archer/amazonBlessing.json";
+import nimbleBodyData from "../data/passive/thief/nimbleBody.json";
+
+interface PassiveSkillData {
+  koreanName: string;
+  englishName: string;
+  description: string;
+  maxLevel: number;
+  icon: string;
+  requireSecondaryType?: string;
+  properties: Record<string, number>[];
+}
+
+const passivesByJob: Record<string, PassiveSkillData[]> = {
+  warrior: [shieldMasteryData as unknown as PassiveSkillData],
+  archer: [thrustData as unknown as PassiveSkillData, amazonBlessingData as unknown as PassiveSkillData],
+  thief: [nimbleBodyData as unknown as PassiveSkillData],
+  magician: [],
+};
+
+const propLabels: Record<string, string> = {
+  pdefP: "방패 착용 시 물리방어력%",
+  speed: "이속",
+  acc: "명중",
+  eva: "회피",
+};
 
 interface BuffData {
   empty: {
@@ -57,6 +85,8 @@ export default function BuffTable() {
     mastery2,
     setMastery2,
     setBuffMAD,
+    passiveLevels,
+    setPassiveLevel,
   } = useCharacter();
 
   const [buff1Menu, setBuff1Menu] = useState<null | HTMLElement>(null);
@@ -67,6 +97,8 @@ export default function BuffTable() {
   const [mastery2Dialog, setMastery2Dialog] = useState(false);
   const [tempMastery1Level, setTempMastery1Level] = useState(0);
   const [tempMastery2Level, setTempMastery2Level] = useState(0);
+  const [passiveDialog, setPassiveDialog] = useState<PassiveSkillData | null>(null);
+  const [tempPassiveLevel, setTempPassiveLevel] = useState(0);
 
   const mapleWarrior = character.getBuff("mapleWarrior");
   const heroEcho = character.getBuff("heroEcho");
@@ -874,7 +906,7 @@ export default function BuffTable() {
                       variant="caption"
                       sx={{ color: "#666", fontSize: "0.7rem" }}
                     >
-                      Lv {mastery1} ({displayMastery}%)
+                      Lv {mastery1}
                     </Typography>
                   </Box>
                 </Box>
@@ -1000,8 +1032,7 @@ export default function BuffTable() {
                         variant="caption"
                         sx={{ color: "#666", fontSize: "0.7rem" }}
                       >
-                        Lv {mastery2} ({masteryValue}%){" "}
-                        {masteryAttack > 0 ? `, 공격력 +${masteryAttack}` : ""}
+                        Lv {mastery2}
                       </Typography>
                     )}
                     {!hasSkill && (
@@ -1016,6 +1047,90 @@ export default function BuffTable() {
                 </Box>
               </Box>
             );
+          })()}
+
+          {/* 패시브 스킬 */}
+          {(() => {
+            const jobEngName = job?.engName;
+            if (!jobEngName) return null;
+            const passives = passivesByJob[jobEngName] || [];
+            return passives.map((passive) => {
+              const level = passiveLevels[passive.englishName] ?? 0;
+
+              // requireSecondaryType 체크 (예: 쉴드 마스터리)
+              const secondaryItem = character.getEquippedItem("보조무기");
+              const meetsRequirement = !passive.requireSecondaryType ||
+                secondaryItem?.type === passive.requireSecondaryType;
+
+              return (
+                <Box key={passive.englishName} sx={{ display: "flex", gap: 1 }}>
+                  <Box
+                    onClick={() => {
+                      setTempPassiveLevel(level);
+                      setPassiveDialog(passive);
+                    }}
+                    sx={{
+                      minWidth: 40,
+                      height: 40,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      bgcolor: meetsRequirement ? "#ffffff" : "#f0f0f0",
+                      borderRadius: 1,
+                      fontSize: "0.75rem",
+                      overflow: "hidden",
+                      cursor: "pointer",
+                      "&:hover": { opacity: 0.8 },
+                    }}
+                  >
+                    {passive.icon ? (
+                      <img
+                        src={`data:image/png;base64,${passive.icon}`}
+                        alt={passive.koreanName}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "contain",
+                          filter: meetsRequirement ? "none" : "grayscale(100%)",
+                        }}
+                      />
+                    ) : (
+                      passive.koreanName.charAt(0)
+                    )}
+                  </Box>
+                  <Box
+                    sx={{
+                      flex: 1,
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      gap: 0.5,
+                    }}
+                  >
+                    <Typography
+                      variant="body2"
+                      sx={{ fontWeight: "bold", fontSize: "0.75rem", color: meetsRequirement ? "inherit" : "#aaa" }}
+                    >
+                      {passive.koreanName}
+                    </Typography>
+                    <Box sx={{ display: "flex", gap: 0.5, alignItems: "center" }}>
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          color: meetsRequirement ? "#666" : "#aaa",
+                          fontSize: "0.7rem",
+                        }}
+                      >
+                        Lv {level}
+                        {!meetsRequirement && passive.description
+                          ? ` - ${passive.description}`
+                          : ""}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+              );
+            });
           })()}
         </Box>
       </Box>
@@ -1055,7 +1170,13 @@ export default function BuffTable() {
               </Typography>
             </Box>
             <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-              {[0, 5, 10, 15, 20].map((level) => (
+              {(() => {
+                const max = mastery1Data.properties.length - 1;
+                const levels = [];
+                for (let i = 0; i <= max; i += 10) levels.push(i);
+                if (levels[levels.length - 1] !== max) levels.push(max);
+                return levels;
+              })().map((level) => (
                 <Button
                   key={level}
                   size="small"
@@ -1150,12 +1271,12 @@ export default function BuffTable() {
                   })()}
                 </Box>
                 <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-                  {[
-                    0,
-                    Math.floor(maxLevel / 3),
-                    Math.floor((maxLevel * 2) / 3),
-                    maxLevel,
-                  ].map((level) => (
+                  {(() => {
+                    const levels = [];
+                    for (let i = 0; i <= maxLevel; i += 10) levels.push(i);
+                    if (levels[levels.length - 1] !== maxLevel) levels.push(maxLevel);
+                    return levels;
+                  })().map((level) => (
                     <Button
                       key={level}
                       size="small"
@@ -1184,6 +1305,83 @@ export default function BuffTable() {
             적용
           </Button>
         </DialogActions>
+      </Dialog>
+
+      {/* Passive Skill Dialog */}
+      <Dialog
+        open={!!passiveDialog}
+        onClose={() => setPassiveDialog(null)}
+        maxWidth="xs"
+        fullWidth
+      >
+        {passiveDialog && (
+          <>
+            <DialogTitle>{passiveDialog.koreanName} 레벨 설정</DialogTitle>
+            <DialogContent>
+              <Box sx={{ pt: 2, display: "flex", flexDirection: "column", gap: 2 }}>
+                <TextField
+                  type="number"
+                  label="레벨"
+                  value={tempPassiveLevel}
+                  onChange={(e) =>
+                    setTempPassiveLevel(
+                      Math.min(
+                        Math.max(0, parseInt(e.target.value) || 0),
+                        passiveDialog.maxLevel,
+                      ),
+                    )
+                  }
+                  inputProps={{ min: 0, max: passiveDialog.maxLevel }}
+                  fullWidth
+                />
+                <Box>
+                  {(() => {
+                    const props = passiveDialog.properties[tempPassiveLevel] || {};
+                    return Object.entries(props)
+                      .filter(([k]) => k !== "level")
+                      .map(([k, v]) => (
+                        <Typography key={k} variant="body2" color="text.secondary">
+                          {propLabels[k] || k}: +{v}{k.endsWith("P") ? "%" : ""}
+                        </Typography>
+                      ));
+                  })()}
+                </Box>
+                <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+                  {(() => {
+                    const max = passiveDialog.maxLevel;
+                    const levels = [];
+                    for (let i = 0; i <= max; i += 10) levels.push(i);
+                    if (levels[levels.length - 1] !== max) levels.push(max);
+                    return levels;
+                  })().map((level) => (
+                    <Button
+                      key={level}
+                      size="small"
+                      variant={tempPassiveLevel === level ? "contained" : "outlined"}
+                      onClick={() => setTempPassiveLevel(level)}
+                    >
+                      Lv {level}
+                    </Button>
+                  ))}
+                </Box>
+              </Box>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setPassiveDialog(null)}>취소</Button>
+              <Button
+                onClick={() => {
+                  if (passiveDialog) {
+                    setPassiveLevel(passiveDialog.englishName, tempPassiveLevel);
+                  }
+                  setPassiveDialog(null);
+                }}
+                variant="contained"
+              >
+                적용
+              </Button>
+            </DialogActions>
+          </>
+        )}
       </Dialog>
     </Box>
   );

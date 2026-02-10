@@ -26,6 +26,8 @@ export interface SavedCharacterData {
     buff2Label?: string;
     buff2Icon?: string | null;
     buff2IsManual?: boolean;
+    // 패시브 스킬 레벨
+    passiveLevels?: Record<string, number>;
   };
 }
 
