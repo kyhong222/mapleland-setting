@@ -92,6 +92,7 @@ export default function DamageReceivedTable() {
   const finalStats = character.getFinalStats();
   const weaponType = character.getWeaponType();
   const isWarrior = jobEngName === "warrior";
+  const isThief = jobEngName === "thief";
 
   // 쉴드 마스터리 PDD 보너스
   const shieldMasteryBonus = useMemo(() => {
@@ -109,7 +110,6 @@ export default function DamageReceivedTable() {
   // userPDD = 스탯창 물방 + 버프 물방 (standardPDD와는 독립)
   const stdPDD = lookupPDD(jobEngName, stats.level);
   const wdef = equipStats.pdef + shieldMasteryBonus + defenseBuffs.pdef.value;
-  const totalMDD = equipStats.mdef + finalStats.totalInt + defenseBuffs.mdef.value;
 
   // 패시브 회피 보너스 (도적: Nimble Body)
   const passiveEva = useMemo(() => {
@@ -187,28 +187,53 @@ export default function DamageReceivedTable() {
     return { min, max, finalMin, finalMax, hasReduction: multiplier < 1 };
   }, [monsterATT, wdef, stdPDD, stats.level, monsterLevel, isWarrior, finalStats, activeReductions]);
 
-  // 마법 피격 데미지 계산 (마법은 기존 단순 공식 유지 — 별도 공식 미제공)
-  const magicResult = useMemo(() => {
-    const baseDmg = Math.max(1, monsterMATT - totalMDD);
-    let multiplier = 1;
-    for (const r of activeReductions) {
-      if (r.type === "magic") {
-        multiplier *= (1 - r.damR / 100);
+  // 특수 스킬 추가 회피확률 (페이크 등)
+  const specialEvaInfo = useMemo(() => {
+    const skills = specialSkillsByJob[jobEngName] || [];
+    const results: { name: string; icon: string; level: number; evaP: number }[] = [];
+    for (const skill of skills) {
+      const level = specialSkillLevels[skill.englishName] ?? 0;
+      if (level === 0) continue;
+      if (skill.excludeWeaponTypes && weaponType && skill.excludeWeaponTypes.includes(weaponType)) continue;
+      if (skill.requireWeaponTypes && (!weaponType || !skill.requireWeaponTypes.includes(weaponType))) continue;
+      const props = skill.properties.find(p => p.level === level) || {};
+      const evaP = props.evaP ?? 0;
+      if (evaP > 0) {
+        results.push({ name: skill.koreanName, icon: skill.icon, level, evaP });
       }
     }
-    const finalDmg = Math.floor(baseDmg * multiplier);
-    return { baseDmg, finalDmg, hasReduction: multiplier < 1 };
-  }, [monsterMATT, totalMDD, activeReductions]);
+    return results;
+  }, [jobEngName, specialSkillLevels, weaponType]);
 
-  // 회피확률 계산
-  const evasionRate = useMemo(() => {
-    if (monsterACC <= 0) return 100;
-    const rate = (totalEva / (totalEva + monsterACC)) * 100;
-    return Math.min(99, Math.max(1, Math.round(rate)));
-  }, [totalEva, monsterACC]);
+  const totalSpecialEvaP = specialEvaInfo.reduce((sum, r) => sum + r.evaP, 0);
+
+  // 물리 회피확률: totalEva / (4.5 × monsterACC)
+  const physicalEvasionRate = useMemo(() => {
+    const min = isThief ? 5 : 2;
+    const max = isThief ? 95 : 80;
+    if (monsterACC <= 0) return max;
+    const rate = totalEva / (4.5 * monsterACC) * 100;
+    return Math.min(max, Math.max(min, rate));
+  }, [totalEva, monsterACC, isThief]);
+
+  // 마법 회피확률: 10/9 - monsterACC / (0.9 × totalEva)
+  const magicEvasionRate = useMemo(() => {
+    const min = isThief ? 5 : 2;
+    const max = isThief ? 95 : 80;
+    if (monsterACC <= 0 || totalEva <= 0) return max;
+    const rate = (10 / 9 - monsterACC / (0.9 * totalEva)) * 100;
+    return Math.min(max, Math.max(min, rate));
+  }, [totalEva, monsterACC, isThief]);
+
+  // 페이크 등 별도 독립 회피 판정 적용: 1 - (1 - base) × (1 - evaP)
+  const combinedPhysEva = totalSpecialEvaP > 0
+    ? (1 - (1 - physicalEvasionRate / 100) * (1 - totalSpecialEvaP / 100)) * 100
+    : physicalEvasionRate;
+  const combinedMagicEva = totalSpecialEvaP > 0
+    ? (1 - (1 - magicEvasionRate / 100) * (1 - totalSpecialEvaP / 100)) * 100
+    : magicEvasionRate;
 
   const physicalReductions = activeReductions.filter((r) => r.type === "physical");
-  const magicReductions = activeReductions.filter((r) => r.type === "magic");
 
   return (
     <Box
@@ -324,7 +349,7 @@ export default function DamageReceivedTable() {
       <Box sx={{ p: 1.5, display: "flex", flexDirection: "column", gap: 1.5 }}>
         {/* === 물리 피격 데미지 섹션 === */}
         <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-          물리 피격 데미지
+          물리 접촉 데미지
         </Typography>
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5, pl: 1 }}>
@@ -345,82 +370,24 @@ export default function DamageReceivedTable() {
 
           {/* 피격 데미지 */}
           <Box sx={{ display: "flex", justifyContent: "space-between", mt: 0.5 }}>
-            <Typography variant="caption" sx={{ color: "#666" }}>
+            <Typography variant="caption" sx={{ ...(!physicalResult.hasReduction ? { fontWeight: "bold", textDecoration: "underline" } : { color: "#666" }) }}>
               피격 데미지
             </Typography>
-            <Typography variant="caption" sx={{ fontWeight: "bold" }}>
+            <Typography variant="caption" sx={{ fontWeight: "bold", ...(!physicalResult.hasReduction ? { textDecoration: "underline", color: "primary.main" } : {}) }}>
               {physicalResult.min}~{physicalResult.max}
             </Typography>
           </Box>
           {physicalResult.hasReduction && (
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography variant="caption" sx={{ color: "#666" }}>
+              <Typography variant="caption" sx={{ fontWeight: "bold", textDecoration: "underline" }}>
                 스킬 감소 후
               </Typography>
-              <Typography variant="caption" sx={{ fontWeight: "bold", color: "primary.main" }}>
+              <Typography variant="caption" sx={{ fontWeight: "bold", color: "primary.main", textDecoration: "underline" }}>
                 {physicalResult.finalMin}~{physicalResult.finalMax}
               </Typography>
             </Box>
           )}
           {physicalReductions.map((r) => (
-            <Box key={r.name} sx={{ display: "flex", alignItems: "center", gap: 0.5, pl: 1 }}>
-              {r.icon && (
-                <img
-                  src={`data:image/png;base64,${r.icon}`}
-                  alt={r.name}
-                  style={{ width: 16, height: 16, objectFit: "contain" }}
-                />
-              )}
-              <Typography variant="caption" sx={{ color: "#888", fontSize: "0.65rem" }}>
-                {r.name} Lv{r.level} (-{r.damR}%)
-              </Typography>
-            </Box>
-          ))}
-        </Box>
-
-        <Divider />
-
-        {/* === 마법 피격 데미지 섹션 === */}
-        <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-          마법 피격 데미지
-        </Typography>
-
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5, pl: 1 }}>
-          {/* 방어력 요약 */}
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography variant="caption" sx={{ color: "#666" }}>
-              마법방어력(MDEF)
-            </Typography>
-            <Typography variant="caption" sx={{ fontWeight: "bold" }}>
-              {totalMDD}
-            </Typography>
-          </Box>
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography variant="caption" sx={{ color: "#888", fontSize: "0.65rem", pl: 1 }}>
-              장비 {equipStats.mdef} + INT {finalStats.totalInt} + 버프 {defenseBuffs.mdef.value}
-            </Typography>
-          </Box>
-
-          {/* 피격 데미지 */}
-          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 0.5 }}>
-            <Typography variant="caption" sx={{ color: "#666" }}>
-              피격 데미지 ({monsterMATT} - {totalMDD})
-            </Typography>
-            <Typography variant="caption" sx={{ fontWeight: "bold" }}>
-              {magicResult.baseDmg}
-            </Typography>
-          </Box>
-          {magicResult.hasReduction && (
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography variant="caption" sx={{ color: "#666" }}>
-                스킬 감소 후
-              </Typography>
-              <Typography variant="caption" sx={{ fontWeight: "bold", color: "primary.main" }}>
-                {magicResult.finalDmg}
-              </Typography>
-            </Box>
-          )}
-          {magicReductions.map((r) => (
             <Box key={r.name} sx={{ display: "flex", alignItems: "center", gap: 0.5, pl: 1 }}>
               {r.icon && (
                 <img
@@ -460,13 +427,55 @@ export default function DamageReceivedTable() {
             </Typography>
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between", mt: 0.5 }}>
-            <Typography variant="caption" sx={{ color: "#666" }}>
-              회피확률
+            <Typography variant="caption" sx={{ ...(totalSpecialEvaP === 0 ? { fontWeight: "bold", textDecoration: "underline" } : { color: "#666" }) }}>
+              물리 회피확률
             </Typography>
-            <Typography variant="caption" sx={{ fontWeight: "bold", color: "primary.main" }}>
-              {evasionRate}%
+            <Typography variant="caption" sx={{ fontWeight: "bold", color: "primary.main", ...(totalSpecialEvaP === 0 ? { textDecoration: "underline" } : {}) }}>
+              {physicalEvasionRate.toFixed(1)}%
             </Typography>
           </Box>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Typography variant="caption" sx={{ ...(totalSpecialEvaP === 0 ? { fontWeight: "bold", textDecoration: "underline" } : { color: "#666" }) }}>
+              마법 회피확률
+            </Typography>
+            <Typography variant="caption" sx={{ fontWeight: "bold", color: "primary.main", ...(totalSpecialEvaP === 0 ? { textDecoration: "underline" } : {}) }}>
+              {magicEvasionRate.toFixed(1)}%
+            </Typography>
+          </Box>
+          {totalSpecialEvaP > 0 && (
+            <>
+              {specialEvaInfo.map((r) => (
+                <Box key={r.name} sx={{ display: "flex", alignItems: "center", gap: 0.5, pl: 1 }}>
+                  {r.icon && (
+                    <img
+                      src={`data:image/png;base64,${r.icon}`}
+                      alt={r.name}
+                      style={{ width: 16, height: 16, objectFit: "contain" }}
+                    />
+                  )}
+                  <Typography variant="caption" sx={{ color: "#888", fontSize: "0.65rem" }}>
+                    {r.name} Lv{r.level} (독립 {r.evaP}%)
+                  </Typography>
+                </Box>
+              ))}
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography variant="caption" sx={{ fontWeight: "bold", textDecoration: "underline" }}>
+                  물리 종합 회피확률
+                </Typography>
+                <Typography variant="caption" sx={{ fontWeight: "bold", color: "primary.main", textDecoration: "underline" }}>
+                  {combinedPhysEva.toFixed(1)}%
+                </Typography>
+              </Box>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography variant="caption" sx={{ fontWeight: "bold", textDecoration: "underline" }}>
+                  마법 종합 회피확률
+                </Typography>
+                <Typography variant="caption" sx={{ fontWeight: "bold", color: "primary.main", textDecoration: "underline" }}>
+                  {combinedMagicEva.toFixed(1)}%
+                </Typography>
+              </Box>
+            </>
+          )}
         </Box>
       </Box>
     </Box>
