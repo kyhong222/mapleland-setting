@@ -48,12 +48,12 @@ const getMasteryPercent = (weaponType: string | null, mastery1Level: number, mas
 };
 
 export default function DamageTable() {
-  const { character, buff1Attack, buff2Attack, mastery1, mastery2, masteryAttack } = useCharacter();
+  const { character, buff1Attack, buff2Attack, mastery1, mastery2 } = useCharacter();
   const weaponType = character.getWeaponType();
   const weapon = character.getEquippedItem("무기");
   const masteryPercent = getMasteryPercent(weaponType, mastery1, mastery2);
 
-  const finalStats = character.getFinalStats(buff1Attack, buff2Attack, masteryAttack);
+  const finalStats = character.getFinalStats();
   const weaponConstants = weaponType ? WEAPON_CONSTANTS[weaponType] : null;
   const job = character.getJob();
   const equipStats = character.getEquipmentStats();

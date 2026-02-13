@@ -22,18 +22,29 @@ const [character] = useState(() => new Character());  // 한 번만 생성
 const [version, setVersion] = useState(0);
 const refresh = useCallback(() => setVersion(v => v + 1), []);
 
-// 상태 변경 시
+// 커스텀 훅으로 콜백 분리
+const buffCallbacks = useBuffCallbacks(character, refresh, version);
+const storageCallbacks = useStorageCallbacks(character, refresh, currentSlotIdx, ...);
+const inventoryCallbacks = useInventoryCallbacks(character, refresh);
+
+// 직접 정의 콜백 (스탯, 장비)
 const setLevel = useCallback((level: number) => {
   character.setLevel(level);   // 도메인 객체 직접 mutate
   refresh();                   // version++ → 전체 리렌더링
 }, [character, refresh]);
+
+// Context value에 스프레드로 병합
+const value = useMemo(() => ({
+  character, version, setLevel, ...buffCallbacks, ...storageCallbacks, ...inventoryCallbacks,
+}), [...]);
 ```
 
 - `Character`는 `src/domain/Character.ts`의 mutable 클래스
-- 내부에 `stats`, `equipments(Map)`, `buffs(Map)` 보유
+- 내부에 `stats`, `equipments(Map)`, `buffs(Map)`, `buffUI(BuffUIState)` 보유
 - 중첩 구조(stats, equipment Map, buff Map)의 깊은 복사 비용을 피하고, 도메인 계산 로직을 클래스 메서드에 응집시키기 위한 의도적 설계이다.
 - **절대 immutable로 바꾸거나, 새로운 상태관리 라이브러리를 도입하지 말 것**
 - 모든 Context setter는 `useCallback`으로 감싸고, 의존성에 `[character, refresh]` 포함
+- `CharacterContext.tsx`가 비대해지면 커스텀 훅(`src/hooks/use*.ts`)으로 콜백을 분리. Context 자체를 쪼개지는 않는다
 
 ### 데이터 우선순위: PostItem JSON(로컬) → maplestory.io API
 
@@ -66,6 +77,7 @@ const response = await fetch(`${API_BASE_URL}/${itemId}/icon?resize=5`);
 | 컴포넌트 파일 | PascalCase.tsx | `StatTable.tsx`, `ItemTooltip.tsx` |
 | 타입/인터페이스 | PascalCase | `Equipment`, `PassiveSkillData`, `FinalStats` |
 | 타입 파일 | camelCase.ts | `character.ts`, `equipment.ts`, `stats.ts` |
+| 커스텀 훅 파일 | use + PascalCase.ts | `useBuffCallbacks.ts`, `useStorageCallbacks.ts` |
 | 유틸 파일 | camelCase.ts | `characterStorage.ts`, `postItemLoader.ts` |
 | 함수 | camelCase | `getDefaultPassiveLevels`, `fetchItemIcon` |
 | 상수 객체 | UPPER_SNAKE_CASE | `WEAPON_CONSTANTS`, `ARMOR_FILTERS`, `EQUIPMENT_LAYOUT` |
@@ -138,6 +150,7 @@ try {
 
 ```
 새 UI 컴포넌트      → src/components/{ComponentName}.tsx
+새 커스텀 훅        → src/hooks/use{기능}.ts  (CharacterContext 콜백 분리용)
 새 타입 정의         → src/types/ (기존 파일에 추가 우선. 새 파일은 최소화)
 새 유틸 함수         → src/utils/{기능}.ts
 새 API 호출 함수     → src/api/maplestory.ts에 추가
@@ -159,8 +172,7 @@ try {
 ### 주의사항
 
 - 컴포넌트는 **파일당 하나의 `export default function`**
-- `src/utils/maplestotyAPI.ts`는 **레거시 파일** — 새 코드에서 import 금지. `src/api/maplestory.ts`만 사용
-  - 현재 `itemConverter.ts`만 레거시 참조 중 (리팩토링 예정)
+- API 호출은 `src/api/maplestory.ts`만 사용
 - 타입과 관련 상수는 같은 파일에 함께 둠 (예: `job.ts`에 `Job` 인터페이스 + `JOBS` 배열 + `JOB_COLORS`)
 
 ---
@@ -173,11 +185,11 @@ try {
 |-----------|------|
 | Zustand, Recoil, Redux 등 상태관리 라이브러리 도입 | `CharacterContext` 단일 Context로 확립됨 |
 | Character 객체를 immutable 패턴으로 변경 | mutable + version++ 패턴이 전체 앱의 기반 |
-| `utils/maplestotyAPI.ts` import | 레거시. `api/maplestory.ts`만 사용 |
+| `utils/` 디렉토리에서 API 직접 호출 | `api/maplestory.ts`만 사용 |
 | localStorage 키 패턴 변경 | 기존 사용자 데이터 호환성 깨짐 |
 | 서버 사이드 코드 / API 서버 코드 생성 | 순수 클라이언트 앱 |
 | MUI 외 UI 라이브러리 추가 | Chakra, Ant Design 등 도입 금지 |
-| 새 React Context 생성 | 상태 소스는 `CharacterContext` 하나를 유지. 비대해질 경우 내부 로직을 커스텀 훅(`useEquipment`, `useBuff` 등)으로 분리하는 것은 허용 |
+| 새 React Context 생성 | 상태 소스는 `CharacterContext` 하나를 유지. 콜백은 이미 `useBuffCallbacks`, `useStorageCallbacks`, `useInventoryCallbacks` 훅으로 분리되어 있으므로 추가 분리 시 같은 패턴을 따를 것 |
 | 라우터(react-router 등) 도입 | 단일 페이지. 패널 전환은 `middlePanel` state |
 | i18n 라이브러리 도입 | 한국어 전용 서비스 |
 | styled-components, CSS Modules | MUI `sx` prop으로 통일 |
@@ -356,7 +368,7 @@ master push → GitHub Actions (trigger-deploy.yml)
 
 새 기능 추가 시 빠뜨리기 쉬운 파일들:
 
-- **새 스킬/버프**: JSON 데이터 → `CharacterContext.tsx`(상태) → `BuffTable.tsx`(UI) → `DetailStatTable.tsx`(스탯 반영) → `characterStorage.ts`(저장 필드)
+- **새 스킬/버프**: JSON 데이터 → `useBuffCallbacks.ts`(상태/콜백) → `BuffTable.tsx`(UI) → `DetailStatTable.tsx`(스탯 반영) → `useStorageCallbacks.ts`(저장 필드)
 - **새 장비 슬롯**: `equipment.ts`(EQUIPMENT_LAYOUT) → `EquipTable.tsx` → `Character.ts`
 - **새 스탯 종류**: `stats.ts` → `character.ts`(FinalStats) → `Character.ts`(계산) → `DetailStatTable.tsx`(표시)
-- **새 상태 필드**: `CharacterContext.tsx`의 `saveCurrentCharacter()`와 `loadCharacter()` 양쪽에 반드시 반영
+- **새 상태 필드**: `useStorageCallbacks.ts`의 `saveCurrentCharacter()`와 `loadCharacter()` 양쪽에 반드시 반영

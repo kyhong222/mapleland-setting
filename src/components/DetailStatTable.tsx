@@ -12,9 +12,9 @@ interface DetailStatTableProps {
 }
 
 export default function DetailStatTable({ onClose }: DetailStatTableProps) {
-  const { character, buff1Attack, buff2Attack, masteryAttack, mastery1, passiveLevels } = useCharacter();
+  const { character, mastery1, passiveLevels } = useCharacter();
   const equipStats = character.getEquipmentStats();
-  const finalStats = character.getFinalStats(buff1Attack, buff2Attack, masteryAttack);
+  const finalStats = character.getFinalStats();
   const job = character.getJob();
 
   // 마스터리1 명중률

@@ -78,7 +78,8 @@ export default function EquipTable({ onSlotClick, onOpenItemMaker, onOpenInvento
       setPostItemIcons(newIcons);
     };
     loadIcons();
-  }, [version]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [version]); // equipments는 character.getEquipments()로 매 렌더 새 배열 → version이 변경 트리거 역할
 
   const handleDoubleClick = (slot: string) => {
     const eq = equipMap.get(slot);

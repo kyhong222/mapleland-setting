@@ -40,12 +40,18 @@ mapleland-setting/
 │   │   ├── StatTable.tsx       # 캐릭터 스탯 입력/표시
 │   │   ├── EquipTable.tsx      # 장비 장착 슬롯 (5×3 그리드)
 │   │   ├── EquipDetailTable.tsx# 장비 상세 스탯 표시
-│   │   ├── BuffTable.tsx       # 버프·마스터리·패시브 스킬 관리
+│   │   ├── BuffTable.tsx       # 버프 패널 (서브 컴포넌트 조합)
+│   │   ├── MapleWarriorRow.tsx # 메이플 용사 행 (BuffTable에서 분리)
+│   │   ├── MasteryRow.tsx      # 마스터리1+2 그리드 셀 (BuffTable에서 분리)
+│   │   ├── PassiveSkillList.tsx# 패시브 스킬 목록 (BuffTable에서 분리)
+│   │   ├── BuffSelectDialog.tsx# 버프 선택 다이얼로그
+│   │   ├── MasteryDialog.tsx   # 마스터리 레벨 조정 다이얼로그
+│   │   ├── PassiveDialog.tsx   # 패시브 스킬 레벨 조정 다이얼로그
 │   │   ├── DamageTable.tsx     # 데미지 계산 결과 (읽기 전용)
 │   │   ├── DetailStatTable.tsx # 상세 스탯 (명중/회피/방어/이속 등)
 │   │   ├── Inventory.tsx       # 인벤토리 (장비 보관함, 4×6 그리드)
-│   │   ├── ItemMaker.tsx       # 아이템 생성/검색/편집 UI
-│   │   ├── ItemMakerModal.tsx  # ItemMaker를 감싸는 다이얼로그
+│   │   ├── ItemMakerModal.tsx  # 아이템 검색/생성/편집 다이얼로그
+│   │   ├── StatEditForm.tsx    # 아이템 스탯 편집 폼 (ItemMakerModal에서 분리)
 │   │   └── ItemTooltip.tsx     # 아이템 툴팁 (마우스 오버 시 스탯 표시)
 │   ├── contexts/
 │   │   └── CharacterContext.tsx # 전역 상태 관리 (캐릭터·장비·버프·인벤토리·저장/로드)
@@ -73,6 +79,10 @@ mapleland-setting/
 │   │       ├── warrior/        #   쉴드 마스터리 (방패 물방% 증가)
 │   │       ├── archer/         #   쓰러스트 (이속), 아마존의 축복 (명중)
 │   │       └── thief/          #   님블 바디 (명중+회피)
+│   ├── hooks/
+│   │   ├── useBuffCallbacks.ts  # 버프·마스터리·패시브 관련 useCallback 묶음
+│   │   ├── useStorageCallbacks.ts # 저장/로드/슬롯 관련 useCallback 묶음
+│   │   └── useInventoryCallbacks.ts # 인벤토리 관련 useCallback 묶음
 │   ├── domain/
 │   │   └── Character.ts        # Character 도메인 클래스 (상태·장비·버프·데미지 계산)
 │   ├── types/
@@ -80,15 +90,13 @@ mapleland-setting/
 │   │   ├── equipment.ts        # Equipment, EquipmentSlot, SavedEquipment, 슬롯 레이아웃
 │   │   ├── item.ts             # Item, ItemType, ItemStats, PreItem, PostItemData
 │   │   ├── job.ts              # Job 인터페이스, JOBS 상수, JOB_COLORS
-│   │   ├── mastery.ts          # MasteryProperty, MasterySkill, MasteryState
+│   │   ├── mastery.ts          # MasteryProperty, MasterySkill
 │   │   └── stats.ts            # Stats 인터페이스 (순수·장비·버프 스탯)
 │   ├── utils/
 │   │   ├── characterStorage.ts # localStorage 기반 캐릭터 저장/로드/슬롯 관리
 │   │   ├── inventoryStorage.ts # localStorage 기반 인벤토리 저장/로드
 │   │   ├── equipmentConverter.ts # Equipment ↔ SavedEquipment 변환
-│   │   ├── itemConverter.ts    # 아이템 데이터 변환 유틸
 │   │   ├── postItemLoader.ts   # PostItem JSON 동적 로드 (import.meta.glob)
-│   │   ├── maplestotyAPI.ts    # maplestory.io API 호출 (레거시 버전)
 │   │   └── attackSpeedToKorean.ts # 공격속도 숫자 → 한글 변환
 │   ├── scripts/
 │   │   ├── generateItemData.ts # 아이템 데이터 생성 스크립트
@@ -115,7 +123,7 @@ maplestory.io API ──(scripts/fetchPostItems.mjs)──→ src/data/postItems
 
 [런타임 - 아이템 검색/장착]
 사용자 아이템 선택
-  → ItemMaker.tsx (검색 UI)
+  → ItemMakerModal.tsx (아이템 검색/생성/편집 UI)
   → maplestory.ts (API 호출: 아이템 목록·상세·아이콘)
   → postItemLoader.ts (로컬 PostItem JSON에서 스탯·아이콘 보충)
   → CharacterContext.equipItem()
@@ -128,6 +136,7 @@ maplestory.io API ──(scripts/fetchPostItems.mjs)──→ src/data/postItems
 ```
 사용자 입력 (UI 컴포넌트)
   → CharacterContext의 setter 함수 호출
+    (직접 정의 또는 커스텀 훅에서 제공)
   → Character 도메인 객체 상태 변경
   → version++ (강제 리렌더링 트리거)
   → 각 컴포넌트가 context에서 최신 상태 읽어 렌더링
@@ -152,22 +161,25 @@ main.tsx → App.tsx → useEffect
 
 ### 5.1 전역 상태: `CharacterContext` (React Context API)
 
-모든 캐릭터 관련 상태를 단일 Context에서 관리한다.
+모든 캐릭터 관련 상태를 단일 Context에서 관리한다. `CharacterProvider`는 3개의 직접 `useState`와 3개의 커스텀 훅으로 구성된다.
+
+**직접 useState (CharacterContext.tsx)**
 
 | 상태 | 타입 | 설명 |
 |------|------|------|
 | `character` | `Character` | 도메인 객체 (스탯, 장비, 버프) |
 | `version` | `number` | 강제 리렌더링 카운터 |
-| `buff1Attack` / `buff2Attack` | `number` | 버프 공격력 값 |
-| `mastery1` / `mastery2` | `number` | 마스터리 레벨 |
-| `masteryAttack` | `number` | 마스터리 추가 공격력 |
-| `passiveLevels` | `Record<string, number>` | 패시브 스킬 레벨 맵 |
-| `buffMAD` | `number` | 버프 마력 합산 |
-| `heroEchoEnabled` | `boolean` | 영웅의 메아리 활성화 |
-| `buff1Label/Icon/IsManual` | 각각 | 버프1 선택 정보 |
-| `buff2Label/Icon/IsManual` | 각각 | 버프2 선택 정보 |
-| `inventory` | `InventoryData` | 인벤토리 아이템 목록 |
 | `currentSlotIdx` | `number` | 현재 저장 슬롯 인덱스 (0~4) |
+
+**커스텀 훅으로 분리된 상태·콜백**
+
+| 훅 | 파일 | 관리하는 상태/콜백 |
+|----|------|-------------------|
+| `useBuffCallbacks` | `src/hooks/useBuffCallbacks.ts` | buff1Attack, buff2Attack, mastery1/2, masteryAttack, passiveLevels, buffMAD, heroEchoEnabled, buff1/2 Label·Icon·IsManual 및 각각의 setter |
+| `useStorageCallbacks` | `src/hooks/useStorageCallbacks.ts` | saveCurrentCharacter, loadCharacter, loadSlot, deleteSlot, getSlotSummaries, setCurrentSlotIdx |
+| `useInventoryCallbacks` | `src/hooks/useInventoryCallbacks.ts` | inventory, addToInventory, removeFromInventory, setInventory |
+
+각 훅은 `(character, refresh, ...)` 인자를 받아 `useMemo`로 감싼 객체를 반환하며, Context value에 스프레드(`...buffCallbacks`)로 병합된다.
 
 ### 5.2 도메인 상태: `Character` 클래스
 
@@ -175,11 +187,19 @@ main.tsx → App.tsx → useEffect
 
 ```
 Character
-├── stats: Stats          (레벨, 순수스탯, 장비스탯, 버프스탯)
-├── job: Job | null       (직업 정보)
-├── equipments: Map       (슬롯 → Equipment)
-└── buffs: Map            (버프ID → Buff)
+├── stats: Stats              (레벨, 순수스탯, 장비스탯, 버프스탯)
+├── job: Job | null           (직업 정보)
+├── equipments: Map           (슬롯 → Equipment)
+├── buffs: Map                (버프ID → Buff)
+├── buffUI: BuffUIState       (버프 UI 메타데이터: label, icon, isManual)
+├── buff1Attack / buff2Attack (버프 공격력 값)
+├── mastery1 / mastery2       (마스터리 레벨)
+├── masteryAttack             (마스터리 추가 공격력)
+├── passiveLevels             (패시브 스킬 레벨 맵)
+└── buffMAD                   (버프 마력 합산)
 ```
+
+`BuffUIState`는 버프 선택 UI 상태(label, icon, isManual × 2)를 하나의 구조체로 묶은 인터페이스로, `getBuffUIState()` / `updateBuffUI()` 메서드로 접근한다.
 
 ### 5.3 로컬 상태
 

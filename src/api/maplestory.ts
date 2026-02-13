@@ -90,9 +90,9 @@ export interface MapleStoryItem {
     incMMP?: number; // 마나증가량
     attackSpeed?: number; // 공격속도
   };
-  typeInfo?: any;
-  frameBooks?: any;
-  equipGroup?: any;
+  typeInfo?: unknown;
+  frameBooks?: unknown;
+  equipGroup?: unknown;
 }
 
 /**

@@ -135,9 +135,11 @@ export function migrateFromLegacyStorage(): void {
         const arr: any[] = JSON.parse(localStorage.getItem(key) || "[]");
         const toMigrate = arr.slice(0, MAX_SLOTS);
         toMigrate.forEach((save, idx) => {
-          const { id: _id, jobEngName: _job, ...rest } = save;
+          const slotData = { ...save };
+          delete slotData.id;
+          delete slotData.jobEngName;
           const slotKey = `${SLOT_KEY_PREFIX}${jobEngName}_${idx}`;
-          localStorage.setItem(slotKey, JSON.stringify(rest));
+          localStorage.setItem(slotKey, JSON.stringify(slotData));
         });
       } catch {
         // 파싱 실패 시 무시

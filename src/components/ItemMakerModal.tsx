@@ -1,9 +1,7 @@
 import {
   Box,
   Typography,
-  TextField,
   Button,
-  IconButton,
   Divider,
   Dialog,
   DialogTitle,
@@ -18,6 +16,7 @@ import type { Item, ItemType, PostItemData } from "../types/item";
 import type { EquipmentSlot } from "../types/equipment";
 import { fetchItemDetails, fetchItemIcon } from "../api/maplestory";
 import { loadPostItemData } from "../utils/postItemLoader";
+import StatEditForm from "./StatEditForm";
 
 // 직업별 ID 매핑
 const JOB_ID_MAP: Record<string, number> = {
@@ -100,6 +99,11 @@ interface ItemMakerModalProps {
 // import.meta.glob으로 빌드 시 JSON 파일을 모두 포함
 const itemModules = import.meta.glob("../data/items/**/*.json");
 
+const DEFAULT_STATS = {
+  attack: 0, str: 0, dex: 0, int: 0, luk: 0,
+  mad: 0, pdef: 0, mdef: 0, acc: 0, eva: 0, speed: 0, jump: 0, hp: 0, mp: 0,
+};
+
 async function loadItemData(categoryKey: string): Promise<ItemData[]> {
   try {
     const path = `../data/items/${categoryKey}.json`;
@@ -132,12 +136,7 @@ export default function ItemMakerModal({ open, selectedCategory, onClose, mode =
 
   const [attackSpeed, setAttackSpeed] = useState<number | null>(null);
 
-  const defaultStats = {
-    attack: 0, str: 0, dex: 0, int: 0, luk: 0,
-    mad: 0, pdef: 0, mdef: 0, acc: 0, eva: 0, speed: 0, jump: 0, hp: 0, mp: 0,
-  };
-
-  const [editedStats, setEditedStats] = useState({ ...defaultStats });
+  const [editedStats, setEditedStats] = useState({ ...DEFAULT_STATS });
 
   const [requireStats, setRequireStats] = useState({
     level: 0,
@@ -161,7 +160,7 @@ export default function ItemMakerModal({ open, selectedCategory, onClose, mode =
       setItemIcon("");
       setKoreanName("");
       setAttackSpeed(null);
-      setEditedStats({ ...defaultStats });
+      setEditedStats({ ...DEFAULT_STATS });
       setRequireStats({ level: 0, str: 0, dex: 0, int: 0, luk: 0 });
     }
     prevOpenRef.current = open;
@@ -252,7 +251,7 @@ export default function ItemMakerModal({ open, selectedCategory, onClose, mode =
       if (postItem) {
         // PostItem이 있으면 API 호출 없이 사용
         setKoreanName(postItem.koreanName || item.koreanName || item.name);
-        const stats = { ...defaultStats, ...postItem.stats };
+        const stats = { ...DEFAULT_STATS, ...postItem.stats };
         setEditedStats(stats);
         setRequireStats(postItem.requireStats);
         setAttackSpeed(postItem.stats.attackSpeed ?? null);
@@ -265,7 +264,7 @@ export default function ItemMakerModal({ open, selectedCategory, onClose, mode =
         const details = await fetchItemDetails(item.id);
         if (details) {
           setKoreanName(item.koreanName || item.name);
-          const metaInfo = (details as any)?.metaInfo || {};
+          const metaInfo = details.metaInfo || {};
           const stats = {
             attack: metaInfo.incPAD || 0,
             str: metaInfo.incSTR || 0,
@@ -576,130 +575,12 @@ export default function ItemMakerModal({ open, selectedCategory, onClose, mode =
                   {koreanName || selectedItem.name} (Lv.{selectedItem.reqLevel})
                 </Typography>
 
-                <Box sx={{ display: "flex", gap: 2 }}>
-                  {/* 착용 제한 (왼쪽) */}
-                  <Box sx={{ flex: 0.8 }}>
-                    <Typography variant="caption" sx={{ fontWeight: "bold", color: "#666", mb: 0.5, display: "block" }}>
-                      착용 제한
-                    </Typography>
-                    {[
-                      { key: "level", label: "레벨" },
-                      { key: "str", label: "STR" },
-                      { key: "dex", label: "DEX" },
-                      { key: "int", label: "INT" },
-                      { key: "luk", label: "LUK" },
-                    ].map((stat) => (
-                      <Box key={stat.key} sx={{ display: "flex", alignItems: "center", gap: 0.5, mb: 0.3 }}>
-                        <Typography sx={{ width: 35, fontSize: "0.7rem", color: "#888" }}>{stat.label}</Typography>
-                        <Typography sx={{ fontSize: "0.75rem" }}>
-                          {requireStats[stat.key as keyof typeof requireStats]}
-                        </Typography>
-                      </Box>
-                    ))}
-                    {attackSpeed != null && (
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mb: 0.3, mt: 0.5 }}>
-                        <Typography sx={{ width: 35, fontSize: "0.7rem", color: "#888" }}>공속</Typography>
-                        <Typography sx={{ fontSize: "0.75rem" }}>
-                          {attackSpeed}
-                        </Typography>
-                      </Box>
-                    )}
-                  </Box>
-
-                  {/* 스탯 수정 (오른쪽) */}
-                  <Box sx={{ flex: 1, borderLeft: "1px solid #eee", pl: 2 }}>
-                    {[
-                      { key: "str", label: "STR" },
-                      { key: "dex", label: "DEX" },
-                      { key: "int", label: "INT" },
-                      { key: "luk", label: "LUK" },
-                      { key: "attack", label: "공격력" },
-                      { key: "mad", label: "마력" },
-                    ].map((stat) => (
-                      <Box key={stat.key} sx={{ display: "flex", alignItems: "center", gap: 0.3, mb: 0.3 }}>
-                        <Typography sx={{ width: 45, fontSize: "0.75rem" }}>{stat.label}</Typography>
-                        <TextField
-                          type="number"
-                          size="small"
-                          value={editedStats[stat.key as keyof typeof editedStats]}
-                          onChange={(e) =>
-                            setEditedStats({ ...editedStats, [stat.key]: parseInt(e.target.value) || 0 })
-                          }
-                          sx={{
-                            width: 55,
-                            "& .MuiInputBase-input": { textAlign: "right", p: "2px 4px", fontSize: "0.75rem" },
-                          }}
-                        />
-                        <IconButton
-                          size="small"
-                          onClick={() =>
-                            setEditedStats({ ...editedStats, [stat.key]: (editedStats[stat.key as keyof typeof editedStats] || 0) + 1 })
-                          }
-                          sx={{ p: 1, width: 18, height: 18, fontSize: "0.7rem", border: "solid 1px #ccc", fontWeight: "bold" }}
-                        >
-                          +
-                        </IconButton>
-                        <IconButton
-                          size="small"
-                          onClick={() =>
-                            setEditedStats({ ...editedStats, [stat.key]: Math.max(0, (editedStats[stat.key as keyof typeof editedStats] || 0) - 1) })
-                          }
-                          sx={{ p: 1, width: 18, height: 18, fontSize: "0.7rem", border: "solid 1px #ccc", fontWeight: "bold" }}
-                        >
-                          -
-                        </IconButton>
-                      </Box>
-                    ))}
-                  </Box>
-
-                  {/* 추가 스탯 수정 */}
-                  <Box sx={{ flex: 1 }}>
-                    {[
-                      { key: "pdef", label: "물방" },
-                      { key: "mdef", label: "마방" },
-                      { key: "acc", label: "명중" },
-                      { key: "eva", label: "회피" },
-                      { key: "speed", label: "이속" },
-                      { key: "jump", label: "점프" },
-                      { key: "hp", label: "HP" },
-                      { key: "mp", label: "MP" },
-                    ].map((stat) => (
-                      <Box key={stat.key} sx={{ display: "flex", alignItems: "center", gap: 0.3, mb: 0.3 }}>
-                        <Typography sx={{ width: 45, fontSize: "0.75rem" }}>{stat.label}</Typography>
-                        <TextField
-                          type="number"
-                          size="small"
-                          value={editedStats[stat.key as keyof typeof editedStats]}
-                          onChange={(e) =>
-                            setEditedStats({ ...editedStats, [stat.key]: parseInt(e.target.value) || 0 })
-                          }
-                          sx={{
-                            width: 55,
-                            "& .MuiInputBase-input": { textAlign: "right", p: "2px 4px", fontSize: "0.75rem" },
-                          }}
-                        />
-                        <IconButton
-                          size="small"
-                          onClick={() =>
-                            setEditedStats({ ...editedStats, [stat.key]: (editedStats[stat.key as keyof typeof editedStats] || 0) + 1 })
-                          }
-                          sx={{ p: 1, width: 18, height: 18, fontSize: "0.7rem", border: "solid 1px #ccc", fontWeight: "bold" }}
-                        >
-                          +
-                        </IconButton>
-                        <IconButton
-                          size="small"
-                          onClick={() =>
-                            setEditedStats({ ...editedStats, [stat.key]: Math.max(0, (editedStats[stat.key as keyof typeof editedStats] || 0) - 1) })
-                          }
-                          sx={{ p: 1, width: 18, height: 18, fontSize: "0.7rem", border: "solid 1px #ccc", fontWeight: "bold" }}
-                        >
-                          -
-                        </IconButton>
-                      </Box>
-                    ))}
-                  </Box>
-                </Box>
+                <StatEditForm
+                  editedStats={editedStats}
+                  onChange={(key, value) => setEditedStats({ ...editedStats, [key]: value })}
+                  requireStats={requireStats}
+                  attackSpeed={attackSpeed}
+                />
               </Box>
             </Box>
           )}

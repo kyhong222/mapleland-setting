@@ -8,13 +8,13 @@ interface StatTableProps {
 }
 
 export default function StatTable({ onOpenDetailStat }: StatTableProps) {
-  const { character, setLevel, setPureStat, buff1Attack, buff2Attack, masteryAttack, buffMAD, heroEchoEnabled } = useCharacter();
+  const { character, setLevel, setPureStat, buffMAD, heroEchoEnabled } = useCharacter();
 
   const stats = character.getStats();
   const job = character.getJob();
-  const finalStats = character.getFinalStats(buff1Attack, buff2Attack, masteryAttack);
+  const finalStats = character.getFinalStats();
   const equipStats = character.getEquipmentStats();
-  const buffStats = character.getBuffStats(buff1Attack, buff2Attack, masteryAttack);
+  const buffStats = character.getBuffStats();
   const isJobMagician = job?.engName === "magician";
 
   // 총 AP 계산

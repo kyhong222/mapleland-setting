@@ -4,6 +4,25 @@ import type { Job } from "../types/job";
 import type { Stats } from "../types/stats";
 import type { Buff, StatsSummary, FinalStats } from "../types/character";
 import mapleWarriorData from "../data/buff/MapleWarrior/MapleWarrior.json";
+import mastery1Data from "../data/buff/mastery/mastery1.json";
+
+export interface BuffUIState {
+  buff1Label: string;
+  buff1Icon: string | null;
+  buff1IsManual: boolean;
+  buff2Label: string;
+  buff2Icon: string | null;
+  buff2IsManual: boolean;
+}
+
+const DEFAULT_BUFF_UI_STATE: BuffUIState = {
+  buff1Label: "버프 선택",
+  buff1Icon: null,
+  buff1IsManual: false,
+  buff2Label: "버프 선택",
+  buff2Icon: null,
+  buff2IsManual: false,
+};
 
 /**
  * Character 도메인 객체
@@ -19,6 +38,16 @@ export class Character {
 
   // 버프
   private buffs: Map<string, Buff>;
+
+  // 버프 확장 상태
+  private buff1Attack = 0;
+  private buff2Attack = 0;
+  private masteryAttack = 0;
+  private mastery1: number;
+  private mastery2 = 0;
+  private buffMAD = 0;
+  private passiveLevels: Record<string, number> = {};
+  private buffUI: BuffUIState = { ...DEFAULT_BUFF_UI_STATE };
 
   constructor() {
     this.stats = {
@@ -44,6 +73,7 @@ export class Character {
     this.job = null;
     this.equipments = new Map();
     this.buffs = new Map();
+    this.mastery1 = mastery1Data.maxLevel;
 
     // 기본 버프 초기화
     this.buffs.set("mapleWarrior", {
@@ -230,12 +260,69 @@ export class Character {
     }
   }
 
-  getBuffStats(buff1Attack: number, buff2Attack: number, masteryAttack: number): StatsSummary {
+  // ============================================================
+  // 버프 확장 상태 getter/setter
+  // ============================================================
+
+  getBuff1Attack(): number { return this.buff1Attack; }
+  setBuff1Attack(v: number): void { this.buff1Attack = v; }
+
+  getBuff2Attack(): number { return this.buff2Attack; }
+  setBuff2Attack(v: number): void { this.buff2Attack = v; }
+
+  getMasteryAttack(): number { return this.masteryAttack; }
+  setMasteryAttack(v: number): void { this.masteryAttack = v; }
+
+  getMastery1(): number { return this.mastery1; }
+  setMastery1(v: number): void { this.mastery1 = v; }
+
+  getMastery2(): number { return this.mastery2; }
+  setMastery2(v: number): void { this.mastery2 = v; }
+
+  getBuffMAD(): number { return this.buffMAD; }
+  setBuffMAD(v: number): void { this.buffMAD = v; }
+
+  getHeroEchoEnabled(): boolean {
+    return this.buffs.get("heroEcho")?.enabled ?? false;
+  }
+  setHeroEchoEnabled(enabled: boolean): void {
+    this.setBuffEnabled("heroEcho", enabled);
+  }
+
+  getPassiveLevels(): Record<string, number> { return this.passiveLevels; }
+  setPassiveLevels(levels: Record<string, number>): void { this.passiveLevels = levels; }
+  setPassiveLevel(key: string, level: number): void { this.passiveLevels[key] = level; }
+
+  getBuffUIState(): BuffUIState { return { ...this.buffUI }; }
+  updateBuffUI(partial: Partial<BuffUIState>): void { Object.assign(this.buffUI, partial); }
+
+  /**
+   * 버프 상태 전체 초기화 (직업 변경, 빈 슬롯 로드 시)
+   */
+  resetBuffState(): void {
+    this.buff1Attack = 0;
+    this.buff2Attack = 0;
+    this.masteryAttack = 0;
+    this.mastery1 = mastery1Data.maxLevel;
+    this.mastery2 = 0;
+    this.buffMAD = 0;
+    this.setBuffLevel("mapleWarrior", 0);
+    this.setBuffEnabled("mapleWarrior", false);
+    this.setBuffEnabled("heroEcho", false);
+    this.buffUI = { ...DEFAULT_BUFF_UI_STATE };
+    this.passiveLevels = {};
+  }
+
+  // ============================================================
+  // 파생 데이터 계산
+  // ============================================================
+
+  getBuffStats(): StatsSummary {
     const heroEcho = this.buffs.get("heroEcho");
     const heroEchoMultiplier = heroEcho?.enabled ? 1.04 : 1;
 
     const equipStats = this.getEquipmentStats();
-    const totalBuffAttack = buff1Attack + buff2Attack + masteryAttack;
+    const totalBuffAttack = this.buff1Attack + this.buff2Attack + this.masteryAttack;
     const totalAttackBeforeEcho = equipStats.attack + totalBuffAttack;
     const finalAttack = Math.floor(totalAttackBeforeEcho * heroEchoMultiplier);
 
@@ -258,10 +345,6 @@ export class Character {
     };
   }
 
-  // ============================================================
-  // 파생 데이터 계산
-  // ============================================================
-
   private getMapleWarriorBonus(): number {
     const mapleWarrior = this.buffs.get("mapleWarrior");
     if (!mapleWarrior || !mapleWarrior.enabled || mapleWarrior.level === 0) {
@@ -269,8 +352,8 @@ export class Character {
     }
 
     // 메이플용사 JSON 데이터에서 x 값 가져오기
-    const mapleWarriorTable = (mapleWarriorData as any).table;
-    const entry = mapleWarriorTable.find((e: any) => e.level === mapleWarrior.level);
+    const mapleWarriorTable = (mapleWarriorData as { table: { level: number; x: number }[] }).table;
+    const entry = mapleWarriorTable.find((e) => e.level === mapleWarrior.level);
     const xValue = entry?.x ?? 0;
 
     return xValue / 100;
@@ -283,7 +366,7 @@ export class Character {
     return this.job?.engName === "magician";
   }
 
-  getFinalStats(buff1Value: number, buff2Value: number, masteryAttack: number): FinalStats {
+  getFinalStats(): FinalStats {
     const equipStats = this.getEquipmentStats();
     const mapleWarriorBonus = this.getMapleWarriorBonus();
     const heroEcho = this.buffs.get("heroEcho");
@@ -335,15 +418,15 @@ export class Character {
 
     // 버프1, 버프2는 마법사면 마력으로, 그 외엔 공격력으로
     const isMage = this.isMagician();
-    const buffAttack = isMage ? 0 : buff1Value + buff2Value + masteryAttack;
-    const buffMAD = isMage ? buff1Value + buff2Value : 0;
+    const buffAttack = isMage ? 0 : this.buff1Attack + this.buff2Attack + this.masteryAttack;
+    const buffMADCalc = isMage ? this.buff1Attack + this.buff2Attack : 0;
 
     // 총 공격력 = int((장비공격력 + 버프1 + 버프2) * 영메배율)
     const totalAttack = Math.floor((equipStats.attack + buffAttack) * heroEchoMultiplier);
 
     // 총 마력 = int((장비마력 + 버프1 + 버프2 + 인트마력) * 영메배율)
     // 인트마력 = 총INT (1:1)
-    const totalMAD = Math.floor((equipStats.mad + buffMAD + totalInt) * heroEchoMultiplier);
+    const totalMAD = Math.floor((equipStats.mad + buffMADCalc + totalInt) * heroEchoMultiplier);
 
     // 주스탯 / 부스탯 결정
     let mainStat = 0;
