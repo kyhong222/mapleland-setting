@@ -86,6 +86,14 @@ export function useStorageCallbacks(
           ...(data.buffs.buff2IsManual !== undefined ? { buff2IsManual: data.buffs.buff2IsManual } : {}),
         });
         if (data.buffs.passiveLevels) character.setPassiveLevels(data.buffs.passiveLevels);
+        if (data.buffs.specialSkillLevels) character.setSpecialSkillLevels(data.buffs.specialSkillLevels);
+        if (data.buffs.defenseBuffs) {
+          for (const stat of ["pdef", "mdef", "acc", "eva"] as const) {
+            if (data.buffs.defenseBuffs[stat]) {
+              character.setDefenseBuff(stat, data.buffs.defenseBuffs[stat]);
+            }
+          }
+        }
       }
 
       const weaponType = character.getWeaponType();
@@ -129,6 +137,8 @@ export function useStorageCallbacks(
         buffMAD: character.getBuffMAD(),
         ...character.getBuffUIState(),
         passiveLevels: character.getPassiveLevels(),
+        specialSkillLevels: character.getSpecialSkillLevels(),
+        defenseBuffs: character.getDefenseBuffs(),
       },
     });
 

@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from "react";
 import type { Character } from "../domain/Character";
+import type { DefenseBuffStat, DefenseBuffEntry } from "../domain/Character";
 import mastery2Data from "../data/buff/mastery/mastery2.json";
 import type { MasterySkill } from "../types/mastery";
 import { passivesByJob } from "../types/passive";
@@ -118,6 +119,14 @@ export function useBuffCallbacks(character: Character, refresh: () => void, vers
     [character, refresh],
   );
 
+  const setSpecialSkillLevel = useCallback(
+    (key: string, level: number) => {
+      character.setSpecialSkillLevel(key, level);
+      refresh();
+    },
+    [character, refresh],
+  );
+
   const setBuffMAD = useCallback(
     (mad: number) => {
       character.setBuffMAD(mad);
@@ -174,6 +183,14 @@ export function useBuffCallbacks(character: Character, refresh: () => void, vers
     [character, refresh],
   );
 
+  const setDefenseBuff = useCallback(
+    (stat: DefenseBuffStat, entry: Partial<DefenseBuffEntry>) => {
+      character.setDefenseBuff(stat, entry);
+      refresh();
+    },
+    [character, refresh],
+  );
+
   return useMemo(
     () => ({
       setBuffEnabled,
@@ -193,6 +210,10 @@ export function useBuffCallbacks(character: Character, refresh: () => void, vers
       setBuff2Label,
       setBuff2Icon,
       setBuff2IsManual,
+      setDefenseBuff,
+      setSpecialSkillLevel,
+      defenseBuffs: character.getDefenseBuffs(),
+      specialSkillLevels: character.getSpecialSkillLevels(),
       heroEchoEnabled: character.getHeroEchoEnabled(),
       buff1Attack: character.getBuff1Attack(),
       buff2Attack: character.getBuff2Attack(),
@@ -224,6 +245,8 @@ export function useBuffCallbacks(character: Character, refresh: () => void, vers
       setBuff2Label,
       setBuff2Icon,
       setBuff2IsManual,
+      setDefenseBuff,
+      setSpecialSkillLevel,
     ],
   );
 }

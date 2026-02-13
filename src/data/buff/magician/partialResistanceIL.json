@@ -1,0 +1,29 @@
+{
+  "icon": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAACf0lEQVR4nL2XjZWjIBSFn+ekAVIClqAlaAlJCUkJYwlMCVqClkBK0BK0hFhClgcBkYBr3NV75iSKjveb9+dwgrlecIwifWADvHjbH+Kep/FLQ2gAaZ4l9BAAVrdQXFMJcXLNr/diV/O6ZJDRCWJWA3ubo7qugzRNoW1beX6CDfq5XT7Wfqtm1e+hecl78R1vA8CHjI/Cs84WIWzzqunM+lcA2jwvHh/XOCuCEK55V11lCnBtNYBt/nrNx0U3DJDGsRciZP4Y1PVVAEvmqIRSaPv+AyJkniSJAOjWA2zRR86J/z4DgO0RepCv6JaE95OMTQvEfBhl1AIgMJredPM3dir0vMyChlgDttT9NjSRPwnjxge/DQCe9LyG2IIw5neV9yiKJAR+Y75dyfyL63i/qQc8z2MoxaRtsOoIgUutzNvnE9LzeUrB8KhmED7hw7UZShu5122pvzaGun1CIyJFBQQTQMMIUwR0SLg4DkH4qj+07qZEPf8MvH9CN44SghALYBQJCkFgLjHsS6Z6DtjC8JNkakcUmlJQ5rokTQqwN5cgtHxhtk21bHOdcwy7bT4DcOWriXH4Szviw6lqP3ckY8H5ZNrwf8o1DxW1eRfYvcnZO4wrmLA2QsUZgkHhPyW/jTWK+76EOBbmZWKM6eUmwn+dzYU9JAGGrgJev82JaJPkZ2a+p+ZFiG1Cb4eZTwC6L0YIvrVs2YPGHTrbALSISoeuCTsKqg4YcF7Mho4+5lwMHsK+jpoEyHP3VXz33mxDuNpibgBCfboE4VvfIvMu+GZj8i/FiTPABYhwr6Z3R+4NewiHkNgV4WGki1BC4HbpCGlz/LC7IHpvGI+Qeb//Aa2AsP6gioR9AAAAAElFTkSuQmCC",
+  "koreanName": "파셜 레지스턴스",
+  "englishName": "Partial Resistance IL",
+  "description": "썬콜",
+  "maxLevel": 20,
+  "properties": [
+    { "level": 1, "damR": 23 },
+    { "level": 2, "damR": 26 },
+    { "level": 3, "damR": 29 },
+    { "level": 4, "damR": 32 },
+    { "level": 5, "damR": 35 },
+    { "level": 6, "damR": 38 },
+    { "level": 7, "damR": 41 },
+    { "level": 8, "damR": 44 },
+    { "level": 9, "damR": 47 },
+    { "level": 10, "damR": 50 },
+    { "level": 11, "damR": 52 },
+    { "level": 12, "damR": 54 },
+    { "level": 13, "damR": 56 },
+    { "level": 14, "damR": 58 },
+    { "level": 15, "damR": 60 },
+    { "level": 16, "damR": 62 },
+    { "level": 17, "damR": 64 },
+    { "level": 18, "damR": 66 },
+    { "level": 19, "damR": 68 },
+    { "level": 20, "damR": 70 }
+  ]
+}

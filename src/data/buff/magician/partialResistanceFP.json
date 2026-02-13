@@ -1,0 +1,29 @@
+{
+  "icon": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAACi0lEQVR4nL2XbZWjMBSGL+fUACsBJBAJIKFIaCUUCVRCkcBICBJAAkhYJHRzkyZcQsJS5sD7Y4CQ8j7kfjC5wFxvOEeBPqEAb972p7hnLH5rCA0gzdMkOgWgrFsociYhLrZ5fi8ONa9fJaTRBDHLgaPNUV3XAWMM2raV1xfYocftuhh7Vj+bfofmfV1DLI67APAhY1M4xstVCGo+VJUZ/wpAm2dFs7jHy8ILYZtnTSNDgGObAaj5+z1vF90wAItjJ4TPvBnU/U0Aa+aoJIqg7fsFhM88SRIB0G0H2CNfzG0ZACwP34NcSbcmnB+m5TQQLuekEQEIYTS1acdv7NTS81fqNcQcoFLzLWgBwR+p8WG0DPHiVZczCGN+V3EPgkBC4BHjbUvGX9zH+SYfxHWc59BzEYZGhYGXCqJvsRfkUwieYgKFcAkfrs1Q2si+T4XPij+GEgJXQoANQzWtgF6SJ/ghXNnvG7dDMoPoFITOCwkwiisNUVkQGEtc9jVT3Qeo8C3DZCpHI2JuAFBYm76VoAnlWmZqanwSqxf05O2JnH0A57hyYhz+U47ih2Gkys9uyXGcO39iynDxIBwKHQW8Qba5L6nNt4DWZvpKxKuONpJTmBu+5PTBoPCfkucPacXt3xrYHwZXjuYqKR/pDXJ2n/WFIyQBuqGBsr3CgG8u1v6WCPP4vuiMhwGEGGvx5pE4JOENMpEwZ5hPADLrQELAhryjjcZuOrsAKMQgwsE/OUFXQeVBCZwXs6ajzzkXjScsv141CZDFdn27v98UwtYecwPgq9M1CNf4HplvwTcbk98kJ/YAGyDAvZreHdkTjhA2IbErwtNAJ6GEwO3SGdLm+Id+jILPhvEMme/7P1mItiups3nAAAAAAElFTkSuQmCC",
+  "koreanName": "파셜 레지스턴스",
+  "englishName": "Partial Resistance FP",
+  "description": "불독",
+  "maxLevel": 20,
+  "properties": [
+    { "level": 1, "damR": 23 },
+    { "level": 2, "damR": 26 },
+    { "level": 3, "damR": 29 },
+    { "level": 4, "damR": 32 },
+    { "level": 5, "damR": 35 },
+    { "level": 6, "damR": 38 },
+    { "level": 7, "damR": 41 },
+    { "level": 8, "damR": 44 },
+    { "level": 9, "damR": 47 },
+    { "level": 10, "damR": 50 },
+    { "level": 11, "damR": 52 },
+    { "level": 12, "damR": 54 },
+    { "level": 13, "damR": 56 },
+    { "level": 14, "damR": 58 },
+    { "level": 15, "damR": 60 },
+    { "level": 16, "damR": 62 },
+    { "level": 17, "damR": 64 },
+    { "level": 18, "damR": 66 },
+    { "level": 19, "damR": 68 },
+    { "level": 20, "damR": 70 }
+  ]
+}

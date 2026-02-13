@@ -1,183 +1,139 @@
-import {
-  Box,
-  Typography,
-  TextField,
-  Divider,
-  InputAdornment,
-  Button,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import mapleWarriorData from "../data/buff/MapleWarrior/MapleWarrior.json";
+import herosEchoData from "../data/buff/HerosEcho/herosecho.json";
 
 interface MapleWarriorRowProps {
   level: number;
-  onLevelChange: (level: number) => void;
+  onMapleWarriorClick: () => void;
+  heroEchoEnabled: boolean;
+  onHeroEchoToggle: () => void;
 }
 
 export default function MapleWarriorRow({
   level,
-  onLevelChange,
+  onMapleWarriorClick,
+  heroEchoEnabled,
+  onHeroEchoToggle,
 }: MapleWarriorRowProps) {
   return (
     <Box
       sx={{
-        display: "flex",
-        gap: 1.5,
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gap: 1,
         padding: 1.5,
         borderRadius: 1,
         bgcolor: "#f5f5f5",
       }}
     >
-      {/* 아이콘 */}
-      <Box
-        sx={{
-          minWidth: 50,
-          height: 50,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          bgcolor: "#f0f0f0",
-          borderRadius: 1,
-          overflow: "hidden",
-        }}
-      >
-        <img
-          src={`data:image/png;base64,${mapleWarriorData.icon}`}
-          alt="메이플 용사"
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-            filter: level === 0 ? "grayscale(100%)" : "none",
+      {/* 메이플 용사 */}
+      <Box sx={{ display: "flex", gap: 1 }}>
+        <Box
+          onClick={onMapleWarriorClick}
+          sx={{
+            minWidth: 40,
+            height: 40,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            bgcolor: "#ffffff",
+            borderRadius: 1,
+            overflow: "hidden",
+            cursor: "pointer",
+            "&:hover": { opacity: 0.8 },
           }}
-        />
-      </Box>
-
-      {/* 정보 영역 */}
-      <Box
-        sx={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          gap: 1,
-        }}
-      >
-        {/* 제목과 레벨 입력 */}
+        >
+          <img
+            src={`data:image/png;base64,${mapleWarriorData.icon}`}
+            alt="메이플 용사"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "contain",
+              filter: level === 0 ? "grayscale(100%)" : "none",
+            }}
+          />
+        </Box>
         <Box
           sx={{
+            flex: 1,
             display: "flex",
-            gap: 1,
-            alignItems: "center",
-            justifyContent: "space-between",
+            flexDirection: "column",
+            justifyContent: "center",
+            gap: 0.5,
           }}
         >
           <Typography
             variant="body2"
-            sx={{ fontWeight: "bold", fontSize: "0.875rem" }}
+            sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
           >
             메이플 용사
           </Typography>
-          <TextField
-            type="number"
-            size="small"
-            value={level}
-            onChange={(e) =>
-              onLevelChange(parseInt(e.target.value) || 0)
-            }
-            inputProps={{ min: 0, max: 20 }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment
-                  position="start"
-                  sx={{ fontSize: "0.65rem", userSelect: "none" }}
-                >
-                  Lv
-                </InputAdornment>
-              ),
-            }}
-            sx={{
-              width: 70,
-              "& .MuiInputBase-input": {
-                bgcolor: "white",
-                p: 0.5,
-                textAlign: "center",
-                fontSize: "0.75rem",
-              },
+          <Typography
+            variant="caption"
+            sx={{ color: "#666", fontSize: "0.7rem" }}
+          >
+            Lv {level} ({Math.floor((level + 1) / 2)}%)
+          </Typography>
+        </Box>
+      </Box>
+
+      {/* 영웅의 메아리 */}
+      <Box sx={{ display: "flex", gap: 1 }}>
+        <Box
+          onClick={onHeroEchoToggle}
+          sx={{
+            minWidth: 40,
+            height: 40,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            bgcolor: heroEchoEnabled ? "#ffffff" : "#f0f0f0",
+            borderRadius: 1,
+            overflow: "hidden",
+            cursor: "pointer",
+            "&:hover": { opacity: 0.8 },
+          }}
+        >
+          <img
+            src={`data:image/webp;base64,${herosEchoData.icon}`}
+            alt="영웅의 메아리"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "contain",
+              filter: heroEchoEnabled ? "none" : "grayscale(100%)",
             }}
           />
         </Box>
-
-        <Divider sx={{ my: 0 }} />
-
-        {/* 설명 */}
         <Box
           sx={{
+            flex: 1,
             display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
             gap: 0.5,
-            alignItems: "center",
-            justifyContent: "space-between",
           }}
         >
           <Typography
-            variant="caption"
-            sx={{ color: "#666", fontSize: "0.75rem" }}
+            variant="body2"
+            sx={{
+              fontWeight: "bold",
+              fontSize: "0.75rem",
+              color: heroEchoEnabled ? "inherit" : "#aaa",
+            }}
           >
-            스탯 {Math.floor((level + 1) / 2)}% 증가
+            영웅의 메아리
           </Typography>
-          <Box sx={{ display: "flex", gap: 0.5 }}>
-            <Button
-              size="small"
-              variant={level === 0 ? "contained" : "outlined"}
-              onClick={() => onLevelChange(0)}
-              sx={{
-                minWidth: 28,
-                height: 28,
-                p: 0,
-                fontSize: "0.65rem",
-              }}
-            >
-              0
-            </Button>
-            <Button
-              size="small"
-              variant={level === 10 ? "contained" : "outlined"}
-              onClick={() => onLevelChange(10)}
-              sx={{
-                minWidth: 28,
-                height: 28,
-                p: 0,
-                fontSize: "0.65rem",
-              }}
-            >
-              10
-            </Button>
-            <Button
-              size="small"
-              variant={level === 20 ? "contained" : "outlined"}
-              onClick={() => onLevelChange(20)}
-              sx={{
-                minWidth: 28,
-                height: 28,
-                p: 0,
-                fontSize: "0.65rem",
-              }}
-            >
-              20
-            </Button>
-            <Button
-              size="small"
-              variant={level === 30 ? "contained" : "outlined"}
-              onClick={() => onLevelChange(30)}
-              sx={{
-                minWidth: 28,
-                height: 28,
-                p: 0,
-                fontSize: "0.65rem",
-              }}
-            >
-              30
-            </Button>
-          </Box>
+          <Typography
+            variant="caption"
+            sx={{
+              color: heroEchoEnabled ? "#666" : "#aaa",
+              fontSize: "0.7rem",
+            }}
+          >
+            {heroEchoEnabled ? "공/마 4% 증가" : "OFF"}
+          </Typography>
         </Box>
       </Box>
     </Box>

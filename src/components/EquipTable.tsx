@@ -184,12 +184,15 @@ export default function EquipTable({ onSlotClick, onOpenItemMaker, onOpenInvento
         leaveDelay={0}
       >
         <Box
-          onClick={() =>
-            !slotIsSecondaryWeaponBlocked && !isBottomSlotBlocked && handleSlotClick(slotName, !!equipment)
-          }
-          onDoubleClick={() =>
-            !slotIsSecondaryWeaponBlocked && !isBottomSlotBlocked && equipment && handleDoubleClick(slotName)
-          }
+          onClick={() => {
+            if (slotIsSecondaryWeaponBlocked || isBottomSlotBlocked) return;
+            handleSlotClick(slotName, !!equipment);
+          }}
+          onDoubleClick={() => {
+            if (!equipment) return;
+            // blocked 슬롯이라도 장비가 있으면 해제 허용
+            handleDoubleClick(slotName);
+          }}
           sx={{
             width: 60,
             height: 60,
@@ -199,7 +202,7 @@ export default function EquipTable({ onSlotClick, onOpenItemMaker, onOpenInvento
             alignItems: "center",
             justifyContent: "center",
             bgcolor: slotIsSecondaryWeaponBlocked || isBottomSlotBlocked ? "#FFCDD2" : equipment ? "white" : "#f5f5f5",
-            cursor: slotIsSecondaryWeaponBlocked || isBottomSlotBlocked ? "not-allowed" : "pointer",
+            cursor: (slotIsSecondaryWeaponBlocked || isBottomSlotBlocked) && !equipment ? "not-allowed" : "pointer",
             fontSize: "0.75rem",
             textAlign: "center",
             p: 0.5,

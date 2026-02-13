@@ -6,6 +6,7 @@ import StatTable from "./components/StatTable";
 import EquipTable from "./components/EquipTable";
 import BuffTable from "./components/BuffTable";
 import DamageTable from "./components/DamageTable";
+import DamageReceivedTable from "./components/DamageReceivedTable";
 import Inventory from "./components/Inventory";
 import DetailStatTable from "./components/DetailStatTable";
 import ItemMakerModal from "./components/ItemMakerModal";
@@ -136,7 +137,7 @@ function AppContent() {
               )}
 
               {/* 오른쪽: 데미지 */}
-              <DamageTable />
+              {middlePanel === "detailStat" ? <DamageReceivedTable /> : <DamageTable />}
             </Box>
           </>
         )}

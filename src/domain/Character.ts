@@ -15,6 +15,22 @@ export interface BuffUIState {
   buff2IsManual: boolean;
 }
 
+export interface DefenseBuffEntry {
+  value: number;
+  label: string;
+  icon: string | null;
+  isManual: boolean;
+}
+
+export type DefenseBuffStat = "pdef" | "mdef" | "acc" | "eva";
+
+export interface DefenseBuffState {
+  pdef: DefenseBuffEntry;
+  mdef: DefenseBuffEntry;
+  acc: DefenseBuffEntry;
+  eva: DefenseBuffEntry;
+}
+
 const DEFAULT_BUFF_UI_STATE: BuffUIState = {
   buff1Label: "버프 선택",
   buff1Icon: null,
@@ -23,6 +39,20 @@ const DEFAULT_BUFF_UI_STATE: BuffUIState = {
   buff2Icon: null,
   buff2IsManual: false,
 };
+
+const DEFAULT_DEFENSE_BUFF_ENTRY: DefenseBuffEntry = {
+  value: 0,
+  label: "버프 선택",
+  icon: null,
+  isManual: false,
+};
+
+const createDefaultDefenseBuffs = (): DefenseBuffState => ({
+  pdef: { ...DEFAULT_DEFENSE_BUFF_ENTRY },
+  mdef: { ...DEFAULT_DEFENSE_BUFF_ENTRY },
+  acc: { ...DEFAULT_DEFENSE_BUFF_ENTRY },
+  eva: { ...DEFAULT_DEFENSE_BUFF_ENTRY },
+});
 
 /**
  * Character 도메인 객체
@@ -47,7 +77,9 @@ export class Character {
   private mastery2 = 0;
   private buffMAD = 0;
   private passiveLevels: Record<string, number> = {};
+  private specialSkillLevels: Record<string, number> = {};
   private buffUI: BuffUIState = { ...DEFAULT_BUFF_UI_STATE };
+  private defenseBuffs: DefenseBuffState = createDefaultDefenseBuffs();
 
   constructor() {
     this.stats = {
@@ -208,7 +240,10 @@ export class Character {
       mp: 0,
     };
 
-    for (const item of this.equipments.values()) {
+    const blockedSlots = this.getBlockedSlots();
+
+    for (const [slot, item] of this.equipments.entries()) {
+      if (blockedSlots.has(slot)) continue;
       summary.attack += item.attack || 0;
       summary.str += item.str || 0;
       summary.dex += item.dex || 0;
@@ -227,6 +262,27 @@ export class Character {
     }
 
     return summary;
+  }
+
+  /** 특정 슬롯이 현재 무기/장비 조합에서 비활성화 상태인지 확인 */
+  isSlotBlocked(slot: string): boolean {
+    return this.getBlockedSlots().has(slot);
+  }
+
+  /** 현재 무기/장비 조합에서 스탯이 적용되지 않는 슬롯 목록 */
+  private getBlockedSlots(): Set<string> {
+    const blocked = new Set<string>();
+    const weaponType = this.getWeaponType();
+    const oneHandedWeapons = ["한손검", "한손도끼", "한손둔기", "단검", "스태프", "완드"];
+    const canEquipSecondary = !weaponType || oneHandedWeapons.includes(weaponType) || ["활", "석궁", "아대"].includes(weaponType);
+    if (!canEquipSecondary) {
+      blocked.add("보조무기");
+    }
+    const overall = this.equipments.get("전신");
+    if (overall) {
+      blocked.add("하의");
+    }
+    return blocked;
   }
 
   getWeaponType(): ItemType | null {
@@ -289,12 +345,28 @@ export class Character {
     this.setBuffEnabled("heroEcho", enabled);
   }
 
-  getPassiveLevels(): Record<string, number> { return this.passiveLevels; }
+  getPassiveLevels(): Record<string, number> { return { ...this.passiveLevels }; }
   setPassiveLevels(levels: Record<string, number>): void { this.passiveLevels = levels; }
   setPassiveLevel(key: string, level: number): void { this.passiveLevels[key] = level; }
 
+  getSpecialSkillLevels(): Record<string, number> { return { ...this.specialSkillLevels }; }
+  setSpecialSkillLevels(levels: Record<string, number>): void { this.specialSkillLevels = levels; }
+  setSpecialSkillLevel(key: string, level: number): void { this.specialSkillLevels[key] = level; }
+
   getBuffUIState(): BuffUIState { return { ...this.buffUI }; }
   updateBuffUI(partial: Partial<BuffUIState>): void { Object.assign(this.buffUI, partial); }
+
+  getDefenseBuffs(): DefenseBuffState {
+    return {
+      pdef: { ...this.defenseBuffs.pdef },
+      mdef: { ...this.defenseBuffs.mdef },
+      acc: { ...this.defenseBuffs.acc },
+      eva: { ...this.defenseBuffs.eva },
+    };
+  }
+  setDefenseBuff(stat: DefenseBuffStat, entry: Partial<DefenseBuffEntry>): void {
+    Object.assign(this.defenseBuffs[stat], entry);
+  }
 
   /**
    * 버프 상태 전체 초기화 (직업 변경, 빈 슬롯 로드 시)
@@ -311,6 +383,8 @@ export class Character {
     this.setBuffEnabled("heroEcho", false);
     this.buffUI = { ...DEFAULT_BUFF_UI_STATE };
     this.passiveLevels = {};
+    this.specialSkillLevels = {};
+    this.defenseBuffs = createDefaultDefenseBuffs();
   }
 
   // ============================================================

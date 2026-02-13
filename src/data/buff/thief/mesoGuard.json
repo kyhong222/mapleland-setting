@@ -1,0 +1,30 @@
+{
+  "icon": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD60lEQVR4nL1Xi5HqMAwUMzTgFkwJpgRTQiiBK+Eo4SjhKIGUgEvAJeAWXAJPK9vB+QIzb04zgcRxtKuVLCdr6tuD/sZW5aQm8Lje7n+CvttuHoVEISDgiqJcGGP+O6j3vjv/udzouN8KiXUBZ1bdhNvtNnLwCakarNh2u+35LyTW9SAmXa+2N7m+PyQBoKmxqeevF0u7vev8uJBIrkczOQsgMRVBTaIATY31no+D/4F1BOCkU+EyIDB4uAA9Hg9arVZjdcIYaPflJlUcKVCTiCEytiWtvFyXiAt4OJ/ofr/TZrPpk2fCITJQdKS16sAXFRjljp1ERM4OQmQS5DoSjdUUQqDgnNzHdR/cjpQrvocqjBSQ/MX+w7ax5J0iFdsuPefjjuzhm86nEx0OWo4OXFFmn/xcf9MYinBWgc4G+VPiTZGxhrC6kBatHFmO2nEKDo3uRa2UkiPEytEgoEkCdRGKEr/9QoRTYywFrofgAeolv4EJKX3gg7OhdQocP+r57O6YIv+oCCsJBDyRiGQEiNdxmyNkMKXadBoaTMopGPtdVKAuwlJMJfKMxOeaWneUtCD6FHEk53xWseVrK/Nqg5qfFSEHB2lJNxJtAXftXghpbWXMu7PcRz2Ar2dVRA2+D5JeGVaFuyWTBQksx1kFOivgqsmRcC/ggnKIHHXAzgXMtbw6Lrwa9mSkEDk9RlHLJDhBPEfL8zyaW7aiKVvTnOXcY71rHSWtiNz7c7fCvPuSf9d6GYMSStFHtl6+Dem95FizZ0jeHH75+qurkTqyM0ffWMzj+E1gsrGqoU8IxOcRo5d/xeWP94UTS66hjn46dj6KAgCPM+v9JYHeZsQFEzxXNNY3peZDubFIWwJ4B8S7heT+iVxz4CSKSugFb/WBngcOByVljGcAL5VtrErjATXB0bPclsdwIAVGChWdUOUi9rRkszWQGlqUtY6uJyoxSHtOSpisAiQ/t1HmYlMCIU15K+DGpV6kpEegl4YfrvjgWAGsec0yk3Q/26QmE1xIwEQCDLFRdEiHj2k/eCX/ogJPKVIT8tiEOGonzSZVfylE9A1EDFUKOBR5Z0WOCIxV8BIlSCDvRgepRCy1Ylqn/o8hLTsh2k98Gf2sAlMkfNQSmQ8qN6XnfJf3pdS4GFi9Bz5LYIoEwkdBeZX6vgtPBaTlomBVah6Ge8Y74IsEJknAfUjhhixBAq5Xhnob/CWBIQlYIcK5IHQGyXUuxqUXjyUCK3yr4evIGj05qZCA9YgwCaN1D7jMX7ITNzX+KsLpqiggJPC59MpqItdv3uNPz1fuUozlq2fOCjh+6hSs8gfj2wbwQuZD6z7P/wFTuXi8HZVWeQAAAABJRU5ErkJggg==",
+  "koreanName": "메소 가드",
+  "englishName": "Meso Guard",
+  "description": "단검 장착 시 적용",
+  "maxLevel": 20,
+  "requireWeaponTypes": ["단검"],
+  "properties": [
+    { "level": 1, "mesoR": 90 },
+    { "level": 2, "mesoR": 90 },
+    { "level": 3, "mesoR": 89 },
+    { "level": 4, "mesoR": 89 },
+    { "level": 5, "mesoR": 88 },
+    { "level": 6, "mesoR": 88 },
+    { "level": 7, "mesoR": 87 },
+    { "level": 8, "mesoR": 87 },
+    { "level": 9, "mesoR": 86 },
+    { "level": 10, "mesoR": 86 },
+    { "level": 11, "mesoR": 85 },
+    { "level": 12, "mesoR": 85 },
+    { "level": 13, "mesoR": 84 },
+    { "level": 14, "mesoR": 84 },
+    { "level": 15, "mesoR": 83 },
+    { "level": 16, "mesoR": 82 },
+    { "level": 17, "mesoR": 81 },
+    { "level": 18, "mesoR": 80 },
+    { "level": 19, "mesoR": 79 },
+    { "level": 20, "mesoR": 78 }
+  ]
+}

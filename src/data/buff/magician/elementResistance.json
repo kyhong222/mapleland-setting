@@ -1,0 +1,29 @@
+{
+  "icon": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAACf0lEQVR4nL2XgZGCMBBFw4wNcCWEEkIJWIKWoCUcJWAJWgKWEEuAEqCESwlefjBxCYRDbuDPnELA/Mdmd7nsWF9Pto0ie0ABnrJqNnHfp8nTQlgAY54JvglAUVYsP6YGYuebH8/5qubltWAZf0P0cmBtc6iua5amKauqypzv2AJ9nw6DscvtPut3MJfXynwvAsAk6pGPjBeTENT8cavd+EcA1nyfPwbXZJEHIXzzS302S4Cx2QDU/Pnst4u6bVmaJKMQIfNH212fBTBlDgnOWdU0A4iQuRBCA9TzAZbIN48D9zkAlEdoorGkmxLuj7PCncevP6qME4CYKVeb/vqpugu9vGZBQ+QAVXd/PjAvRel8emVIa9NCOPNzt+5RFBkIfGO9fZn119dxv8sHfZ6e9Zx67vbWsliTyEMH8SMb9rVP3kuAdaIQY8Lk1gyyRv51Kvu0Tdmw9q5zQVM035KpVr0j4EJyuwYhxrI/NO4vCeZK0sQ8tUL98dhEwwEovUohCKwlwj5lavsAFcIfi3c5OlnzF4FbAtTmFITVWJipqRU1t2uOsFPzHgAVLo/lhGr/KEf9w5h35ee3ZCTcmFwZ+gD/kW8eSmr3LqC1iVpVJiv+BkFuhJIzBAPhn5LLnbRiU5M6S1GjJhgqZvzEuxomfWENdVWgk8PUpmLm6cVJsOSYDDrjagBISoXy0CD8IEzCbGHuAECARATEHNFG4zedZQAUQkfB5gSNQpcHBZMy7zUdeyylbjxx8XHUDECoRn1RCF9LzB1AqE6nIMbGl8i9Cz7ZmPwnOdEDfIAIezW7O/JvWENoQnpXhMPIJqGBwHZpC1lzfNCXUfTaMG4h937/BTFQvRBLMiDAAAAAAElFTkSuQmCC",
+  "koreanName": "엘리먼트 레지스턴스",
+  "englishName": "Element Resistance",
+  "description": "",
+  "maxLevel": 20,
+  "properties": [
+    { "level": 1, "damR": 12 },
+    { "level": 2, "damR": 14 },
+    { "level": 3, "damR": 16 },
+    { "level": 4, "damR": 18 },
+    { "level": 5, "damR": 20 },
+    { "level": 6, "damR": 22 },
+    { "level": 7, "damR": 24 },
+    { "level": 8, "damR": 26 },
+    { "level": 9, "damR": 28 },
+    { "level": 10, "damR": 30 },
+    { "level": 11, "damR": 32 },
+    { "level": 12, "damR": 34 },
+    { "level": 13, "damR": 36 },
+    { "level": 14, "damR": 38 },
+    { "level": 15, "damR": 40 },
+    { "level": 16, "damR": 42 },
+    { "level": 17, "damR": 44 },
+    { "level": 18, "damR": 46 },
+    { "level": 19, "damR": 48 },
+    { "level": 20, "damR": 50 }
+  ]
+}

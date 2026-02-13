@@ -1,0 +1,31 @@
+{
+  "icon": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEC0lEQVR4nL1Xi5GjOhCcrboEtCHIIeAQ5BDkEHAIdggQAoRgQjAhWCGYEJ5C8JseMZiPMXt1Vze17GoRUvf0fAS/aGpP+jf2pYMxgeft/vgruxuKq3ORZw/73VNJKAEBd5n9KwRCCLTf7xf37/e7YBTXO12OeyHxaw5+PF0+bn7O/epcWTeTZ+7/3Ya5/ffhtYfPiHoSkxz4BK6bvvNMwNi7d+Sarpn8D3Vgrhd7noSbwM/nNE9jjMM1J8e35L7aeB6ENwkAfA68330P82b4RVRUSe7b4zqmQAk/Tu4fdsdhvEpAwefALjPDMz631NTdZB0A67Ze7Fd2y3urBMbgh/23bBq6SEWOwBkyysFYHkfx8MVgKvuWLQjMwTObAHMGu7C3VZFIOH8WNJ8bapp2WH88vOStbhWVTSnjbqbURwUGZ9gRYxIBYy3xD6HSCgY12m5EhSSJJhZMcmcmznj+LYGx94h5VTkKbcfAtieSrrKJdHVpjWECEKCsj9R1He9hWZVXws3DgV5xrQreI3xWAMtafigvruItrDA1KxD7ecM1ncglIoaqc0Y2e+1xOp5oywYC2j7Ve49s500Dx9D5Qp7Jspw7S8nKVOIZPIbleU5lWZJ1hvq6eys3bN6sPuaAJnsIdQKHCkUi09QltUxaZD8XfCEp66Qch0ObEP46l1EXLdV1vSC2IIBFZvQ/Mh8qG8NKOCdSd6FlQikJkP9leSHvc16bcUU0Q2f0ztCWvSUABmXzSj41eIsrxiS9KhC5RwBY80GtaaOs92Qm+3wkoHb2CRzJKqrw2EopWvG47QlpkmfZK/s0872zUiW/pcDYIiUZ4ZhjiVENTRsk5iABzwWcQwPQ3HfyfNPYgVgiEBfqrBKY1G1MJLA4xhYjkRq5gJijcqAM1mAcvZE1TkhIF0sXxe0QQEJkKErx8XjgZSHFzxshEbuWSxKlR5LNIIEQYJ2Ag0QDNQBkKD87JsF5RHy5nA6Hg+yfGlG2JLBUAf2ePanhSaqMvnmJuazlC6Mg3mINOqSP2pi4iXFphqZe9X5BAOxUhdvtxj3nJN73TV88xmZ5X14aLcRdO2QCN3J2ANzlBe12u8H7jwTmKkjNd5pNsfdc33Smz4JEGwRdwMXrHxzLCwJjFa5XPgf45SLJG9LLSJ+YkN17K3HWnomyw3uDs4nhlverCsxJgEBhUocLff9/HbNGSk2Oa76J9wckHRTYAl8lMCcBkzMAXpmguFwZpk/EnpFNrRoZD9sC/0hgTAKmRHDyKZ7w6DMcfy+n0wCs67dsQgAvCvNvA91kTuSd/QQYGHMCX/hW06+j+QNrIO9Mz4Nxo3lnSGg0Ouo/zUhJ4JvtT6ztAv3EFBy/xiH46j8Y/4UNn+f/A/pYZ+e4qIKOAAAAAElFTkSuQmCC",
+  "koreanName": "쉴드 마스터리",
+  "englishName": "Shield Mastery",
+  "description": "",
+  "maxLevel": 0,
+  "requireSecondaryType": "방패",
+  "requireWeaponTypes": ["단검"],
+  "properties": [
+    { "level": 1, "pdefP": 5 },
+    { "level": 2, "pdefP": 10 },
+    { "level": 3, "pdefP": 15 },
+    { "level": 4, "pdefP": 20 },
+    { "level": 5, "pdefP": 25 },
+    { "level": 6, "pdefP": 30 },
+    { "level": 7, "pdefP": 35 },
+    { "level": 8, "pdefP": 40 },
+    { "level": 9, "pdefP": 45 },
+    { "level": 10, "pdefP": 50 },
+    { "level": 11, "pdefP": 55 },
+    { "level": 12, "pdefP": 60 },
+    { "level": 13, "pdefP": 65 },
+    { "level": 14, "pdefP": 70 },
+    { "level": 15, "pdefP": 75 },
+    { "level": 16, "pdefP": 80 },
+    { "level": 17, "pdefP": 85 },
+    { "level": 18, "pdefP": 90 },
+    { "level": 19, "pdefP": 95 },
+    { "level": 20, "pdefP": 100 }
+  ]
+}

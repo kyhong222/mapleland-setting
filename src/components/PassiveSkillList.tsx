@@ -6,6 +6,7 @@ interface PassiveSkillListProps {
   jobEngName: string | undefined;
   passiveLevels: Record<string, number>;
   secondaryItemType: string | undefined;
+  weaponType: string | undefined;
   onPassiveClick: (passive: PassiveSkillData, currentLevel: number) => void;
 }
 
@@ -13,15 +14,25 @@ export default function PassiveSkillList({
   jobEngName,
   passiveLevels,
   secondaryItemType,
+  weaponType,
   onPassiveClick,
 }: PassiveSkillListProps) {
   if (!jobEngName) return null;
   const passives = passivesByJob[jobEngName] || [];
 
-  return passives.map((passive) => {
+  const filtered = passives.filter((passive) => {
+    // 무기 타입 불일치 시 아예 렌더링하지 않음
+    if (passive.requireWeaponTypes &&
+      (weaponType == null || !passive.requireWeaponTypes.includes(weaponType))) {
+      return false;
+    }
+    return true;
+  });
+
+  return filtered.map((passive) => {
     const level = passiveLevels[passive.englishName] ?? 0;
 
-    // requireSecondaryType 체크 (예: 쉴드 마스터리)
+    // requireSecondaryType 체크 (예: 쉴드 마스터리 - 방패 장착 여부)
     const meetsRequirement = !passive.requireSecondaryType ||
       secondaryItemType === passive.requireSecondaryType;
 

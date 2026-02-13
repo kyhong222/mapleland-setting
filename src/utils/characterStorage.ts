@@ -1,4 +1,5 @@
 import type { SavedEquipment } from "../types/equipment";
+import type { DefenseBuffState } from "../domain/Character";
 
 export interface SavedCharacterData {
   timestamp: number;
@@ -28,6 +29,10 @@ export interface SavedCharacterData {
     buff2IsManual?: boolean;
     // 패시브 스킬 레벨
     passiveLevels?: Record<string, number>;
+    // 방어 버프
+    defenseBuffs?: DefenseBuffState;
+    // 특수 스킬 레벨
+    specialSkillLevels?: Record<string, number>;
   };
 }
 

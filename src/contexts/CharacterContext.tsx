@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useCallback, useEffect, useMemo, type ReactNode } from "react";
 import { Character } from "../domain/Character";
+import type { DefenseBuffStat, DefenseBuffEntry, DefenseBuffState } from "../domain/Character";
 import type { Item } from "../types/item";
 import type { Job } from "../types/job";
 import type { EquipmentSlot } from "../types/equipment";
@@ -65,6 +66,14 @@ interface CharacterContextValue {
   // Passive Skills
   passiveLevels: Record<string, number>;
   setPassiveLevel: (key: string, level: number) => void;
+
+  // Special Skills
+  specialSkillLevels: Record<string, number>;
+  setSpecialSkillLevel: (key: string, level: number) => void;
+
+  // Defense Buffs
+  defenseBuffs: DefenseBuffState;
+  setDefenseBuff: (stat: DefenseBuffStat, entry: Partial<DefenseBuffEntry>) => void;
 
   // Magic Attack (마력)
   setBuffMAD: (mad: number) => void;

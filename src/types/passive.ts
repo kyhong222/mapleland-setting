@@ -1,4 +1,5 @@
 import shieldMasteryData from "../data/passive/warrior/shieldMastery.json";
+import thiefShieldMasteryData from "../data/passive/thief/shieldMastery.json";
 import thrustData from "../data/passive/archer/thrust.json";
 import amazonBlessingData from "../data/passive/archer/amazonBlessing.json";
 import nimbleBodyData from "../data/passive/thief/nimbleBody.json";
@@ -10,6 +11,7 @@ export interface PassiveSkillData {
   maxLevel: number;
   icon: string;
   requireSecondaryType?: string;
+  requireWeaponTypes?: string[];
   properties: Record<string, number>[];
 }
 
@@ -19,7 +21,10 @@ export const passivesByJob: Record<string, PassiveSkillData[]> = {
     thrustData as unknown as PassiveSkillData,
     amazonBlessingData as unknown as PassiveSkillData,
   ],
-  thief: [nimbleBodyData as unknown as PassiveSkillData],
+  thief: [
+    nimbleBodyData as unknown as PassiveSkillData,
+    thiefShieldMasteryData as unknown as PassiveSkillData,
+  ],
   magician: [],
 };
 

@@ -2,29 +2,34 @@ import {
   Box,
   Typography,
   Divider,
-  Switch,
 } from "@mui/material";
 import { useState } from "react";
 import { useCharacter } from "../contexts/CharacterContext";
 import type { PassiveSkillData } from "../types/passive";
-import herosEchoData from "../data/buff/HerosEcho/herosecho.json";
+import type { SpecialSkillData } from "../types/specialSkill";
 import MasteryDialog from "./MasteryDialog";
 import BuffSelectDialog from "./BuffSelectDialog";
 import PassiveDialog from "./PassiveDialog";
 import MapleWarriorRow from "./MapleWarriorRow";
+import MapleWarriorDialog from "./MapleWarriorDialog";
 import MasteryRow from "./MasteryRow";
 import PassiveSkillList from "./PassiveSkillList";
+import DefenseBuffSection from "./DefenseBuffSection";
+import SpecialSkillSection from "./SpecialSkillSection";
+import SpecialSkillDialog from "./SpecialSkillDialog";
 
 export default function BuffTable() {
   const {
     character,
-    setMapleWarriorLevel,
     setHeroEchoEnabled,
     mastery1,
     mastery2,
     passiveLevels,
+    specialSkillLevels,
   } = useCharacter();
 
+  const [mapleWarriorDialog, setMapleWarriorDialog] = useState(false);
+  const [tempMapleWarriorLevel, setTempMapleWarriorLevel] = useState(0);
   const [mastery1Dialog, setMastery1Dialog] = useState(false);
   const [mastery2Dialog, setMastery2Dialog] = useState(false);
   const [passiveDialogData, setPassiveDialogData] =
@@ -32,6 +37,9 @@ export default function BuffTable() {
   const [tempMastery1Level, setTempMastery1Level] = useState(0);
   const [tempMastery2Level, setTempMastery2Level] = useState(0);
   const [tempPassiveLevel, setTempPassiveLevel] = useState(0);
+  const [specialSkillDialogData, setSpecialSkillDialogData] =
+    useState<SpecialSkillData | null>(null);
+  const [tempSpecialSkillLevel, setTempSpecialSkillLevel] = useState(0);
 
   const mapleWarrior = character.getBuff("mapleWarrior");
   const heroEcho = character.getBuff("heroEcho");
@@ -54,111 +62,69 @@ export default function BuffTable() {
         sx={{ fontWeight: "bold", p: 1.5, borderBottom: "1px solid #ccc" }}
       >
         버프
+        <Typography
+          component="span"
+          variant="caption"
+          sx={{ ml: 0.5, color: "text.secondary" }}
+        >
+          (아이콘을 클릭하여 조정)
+        </Typography>
       </Typography>
 
       {/* 버프 섹션 */}
       <Box sx={{ p: 1.5, display: "flex", flexDirection: "column", gap: 1.5 }}>
-        {/* 메이플 용사 */}
+        {/* 메이플 용사 & 영웅의 메아리 */}
+        <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+          메이플 용사 & 영웅의 메아리
+        </Typography>
         <MapleWarriorRow
           level={mapleWarrior?.level || 0}
-          onLevelChange={setMapleWarriorLevel}
+          onMapleWarriorClick={() => {
+            setTempMapleWarriorLevel(mapleWarrior?.level || 0);
+            setMapleWarriorDialog(true);
+          }}
+          heroEchoEnabled={heroEcho?.enabled || false}
+          onHeroEchoToggle={() => setHeroEchoEnabled(!heroEcho?.enabled)}
         />
 
         {/* 버프 선택 (버프1, 버프2) */}
         <BuffSelectDialog />
 
-        {/* 영웅의 메아리 */}
+        {/* 추가 버프 (물방, 마방, 명중, 회피) */}
         <Divider sx={{ my: 0 }} />
+        <DefenseBuffSection />
+
+        {/* 특수 스킬 */}
+        <Divider sx={{ my: 0 }} />
+        <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+          특수 스킬
+        </Typography>
         <Box
           sx={{
-            display: "flex",
-            gap: 1.5,
             padding: 1.5,
             borderRadius: 1,
             bgcolor: "#f5f5f5",
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 1,
+            minHeight: 40,
           }}
         >
-          {/* 아이콘 */}
-          <Box
-            sx={{
-              minWidth: 50,
-              height: 50,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              bgcolor: "#f0f0f0",
-              borderRadius: 1,
-              overflow: "hidden",
+          <SpecialSkillSection
+            jobEngName={job?.engName}
+            specialSkillLevels={specialSkillLevels}
+            weaponType={character.getWeaponType() ?? undefined}
+            onSkillClick={(skill, level) => {
+              setTempSpecialSkillLevel(level);
+              setSpecialSkillDialogData(skill);
             }}
-          >
-            <img
-              src={`data:image/webp;base64,${herosEchoData.icon}`}
-              alt="영웅의 메아리"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                filter: !heroEcho?.enabled ? "grayscale(100%)" : "none",
-              }}
-            />
-          </Box>
-
-          {/* 정보 영역 */}
-          <Box
-            sx={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              gap: 1,
-            }}
-          >
-            {/* 제목과 스위치 */}
-            <Box
-              sx={{
-                display: "flex",
-                gap: 1,
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography
-                variant="body2"
-                sx={{ fontWeight: "bold", fontSize: "0.875rem" }}
-              >
-                영웅의 메아리
-              </Typography>
-              <Switch
-                checked={heroEcho?.enabled || false}
-                onChange={(e) => setHeroEchoEnabled(e.target.checked)}
-                size="small"
-                sx={{ m: 0 }}
-              />
-            </Box>
-
-            <Divider sx={{ my: 0 }} />
-
-            {/* 설명 */}
-            <Typography
-              variant="caption"
-              sx={{ color: "#666", fontSize: "0.75rem" }}
-            >
-              총 공격력/마력 4% 증가
-            </Typography>
-          </Box>
+          />
         </Box>
 
-        {/* 마스터리 스킬 */}
+        {/* 패시브 스킬 */}
         <Divider sx={{ my: 0 }} />
         <Typography variant="body2" sx={{ fontWeight: "bold" }}>
           패시브 스킬
-          <Typography
-            component="span"
-            variant="caption"
-            sx={{ ml: 0.5, color: "text.secondary" }}
-          >
-            (스킬 아이콘을 클릭하여 레벨 조정)
-          </Typography>
         </Typography>
         <Box
           sx={{
@@ -187,7 +153,8 @@ export default function BuffTable() {
           <PassiveSkillList
             jobEngName={job?.engName}
             passiveLevels={passiveLevels}
-            secondaryItemType={character.getEquippedItem("보조무기")?.type}
+            secondaryItemType={character.isSlotBlocked("보조무기") ? undefined : character.getEquippedItem("보조무기")?.type}
+            weaponType={character.getWeaponType() ?? undefined}
             onPassiveClick={(passive, level) => {
               setTempPassiveLevel(level);
               setPassiveDialogData(passive);
@@ -195,6 +162,14 @@ export default function BuffTable() {
           />
         </Box>
       </Box>
+
+      {/* 메이플 용사 다이얼로그 */}
+      <MapleWarriorDialog
+        open={mapleWarriorDialog}
+        onClose={() => setMapleWarriorDialog(false)}
+        tempLevel={tempMapleWarriorLevel}
+        onTempLevelChange={setTempMapleWarriorLevel}
+      />
 
       {/* 마스터리 다이얼로그 */}
       <MasteryDialog
@@ -214,6 +189,14 @@ export default function BuffTable() {
         onClose={() => setPassiveDialogData(null)}
         tempLevel={tempPassiveLevel}
         onTempLevelChange={setTempPassiveLevel}
+      />
+
+      {/* 특수 스킬 다이얼로그 */}
+      <SpecialSkillDialog
+        skill={specialSkillDialogData}
+        onClose={() => setSpecialSkillDialogData(null)}
+        tempLevel={tempSpecialSkillLevel}
+        onTempLevelChange={setTempSpecialSkillLevel}
       />
     </Box>
   );
