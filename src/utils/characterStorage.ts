@@ -45,6 +45,7 @@ const SLOT_KEY_PREFIX = "mapleland_slot_";
 const LAST_ACTIVE_KEY = "mapleland_last_active";
 const MIGRATION_KEY = "mapleland_storage_migrated";
 const LEGACY_KEY_PREFIX = "mapleland_character_";
+const MOB_KEY_PREFIX = "mapleland_mob_";
 export const MAX_SLOTS = 5;
 
 /**
@@ -159,4 +160,21 @@ export function migrateFromLegacyStorage(): void {
   }
 
   localStorage.setItem(MIGRATION_KEY, "true");
+}
+
+/**
+ * 직업별 선택된 몬스터 ID 저장
+ */
+export function saveSelectedMobId(jobEngName: string, mobId: number): void {
+  localStorage.setItem(`${MOB_KEY_PREFIX}${jobEngName}`, String(mobId));
+}
+
+/**
+ * 직업별 선택된 몬스터 ID 조회
+ */
+export function getSelectedMobId(jobEngName: string): number | null {
+  const val = localStorage.getItem(`${MOB_KEY_PREFIX}${jobEngName}`);
+  if (!val) return null;
+  const id = Number(val);
+  return Number.isNaN(id) ? null : id;
 }

@@ -1,6 +1,6 @@
 import { Box, Typography, TextField, Button, Divider, Dialog, DialogContent, Tooltip, IconButton } from "@mui/material";
 import { Close as CloseIcon, Search as SearchIcon, Info as InfoIcon } from "@mui/icons-material";
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { useCharacter } from "../contexts/CharacterContext";
 import { specialSkillsByJob } from "../types/specialSkill";
 import standardPDDData from "../data/buff/standardPDD.json";
@@ -9,6 +9,7 @@ import thiefShieldMasteryData from "../data/passive/thief/shieldMastery.json";
 import nimbleBodyData from "../data/passive/thief/nimbleBody.json";
 import { fetchMobDetails, fetchMobIcon } from "../api/maplestory";
 import mobListData from "../data/mobs/mobList.json";
+import { saveSelectedMobId, getSelectedMobId } from "../utils/characterStorage";
 
 const standardPDD = standardPDDData as Record<string, Record<string, number>>;
 
@@ -207,10 +208,15 @@ export default function DamageReceivedTable() {
   const [selectedSubRegion, setSelectedSubRegion] = useState<string | null>(null);
   const [mobSearchText, setMobSearchText] = useState("");
 
-  const handleMobSelect = useCallback(async (mob: MobListEntry | null) => {
+  const job = character.getJob();
+  const jobEngName = job?.engName ?? "";
+
+  const handleMobSelect = useCallback(async (mob: MobListEntry | null, save = true) => {
     setSelectedMob(mob);
     setMobIcon(null);
     if (!mob) return;
+
+    if (save && jobEngName) saveSelectedMobId(jobEngName, mob.id);
 
     const details = await fetchMobDetails(mob.id);
     if (details) {
@@ -222,13 +228,29 @@ export default function DamageReceivedTable() {
 
     const iconUrl = await fetchMobIcon(mob.id);
     if (iconUrl) setMobIcon(iconUrl);
-  }, []);
+  }, [jobEngName]);
 
   const handleMobSelectFromModal = useCallback(async (mob: MobListEntry) => {
     setMobModalOpen(false);
     setMobSearchText("");
     await handleMobSelect(mob);
   }, [handleMobSelect]);
+
+  // 직업 변경 시 저장된 몬스터 로드
+  const prevJobRef = useRef(jobEngName);
+  useEffect(() => {
+    if (!jobEngName) return;
+    // 초기 로드 또는 직업 변경 시
+    if (prevJobRef.current !== jobEngName || !selectedMob) {
+      prevJobRef.current = jobEngName;
+      const savedMobId = getSelectedMobId(jobEngName);
+      if (savedMobId !== null) {
+        const mob = mobList.find(m => m.id === savedMobId);
+        if (mob) handleMobSelect(mob, false);
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [jobEngName]);
 
   // 모달 내 표시할 몬스터 목록
   const filteredModalMobs = useMemo(() => {
@@ -244,8 +266,6 @@ export default function DamageReceivedTable() {
     return [];
   }, [mobSearchText, selectedSubRegion]);
 
-  const job = character.getJob();
-  const jobEngName = job?.engName ?? "";
   const stats = character.getStats();
   const equipStats = character.getEquipmentStats();
   const finalStats = character.getFinalStats();
