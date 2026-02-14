@@ -173,9 +173,7 @@ export default function BuffSelectDialog() {
               sx={{
                 fontWeight: "bold",
                 fontSize: "0.75rem",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
+                wordBreak: "keep-all",
               }}
             >
               {buff1Label}
@@ -268,9 +266,7 @@ export default function BuffSelectDialog() {
               sx={{
                 fontWeight: "bold",
                 fontSize: "0.75rem",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
+                wordBreak: "keep-all",
               }}
             >
               {buff2Label}

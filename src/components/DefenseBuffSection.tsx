@@ -161,9 +161,7 @@ export default function DefenseBuffSection() {
                   sx={{
                     fontWeight: "bold",
                     fontSize: "0.75rem",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
+                    wordBreak: "keep-all",
                   }}
                 >
                   {entry.label}
