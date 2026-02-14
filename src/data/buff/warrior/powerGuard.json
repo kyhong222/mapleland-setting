@@ -5,6 +5,7 @@
   "description": "창/폴암 제외",
   "maxLevel": 30,
   "excludeWeaponTypes": ["창", "폴암"],
+  "halfOnBoss": true,
   "properties": [
     { "level": 1, "damR": 11 },
     { "level": 2, "damR": 12 },

@@ -285,7 +285,7 @@ export default function DamageReceivedTable() {
   // 적용 중인 데미지 감소 스킬 수집 (메소가드 제외)
   const activeReductions = useMemo(() => {
     const skills = specialSkillsByJob[jobEngName] || [];
-    const results: { name: string; icon: string; level: number; damR: number; types: DamageType[] }[] = [];
+    const results: { name: string; icon: string; level: number; damR: number; types: DamageType[]; halfOnBoss?: boolean }[] = [];
 
     for (const skill of skills) {
       const level = specialSkillLevels[skill.englishName] ?? 0;
@@ -305,6 +305,7 @@ export default function DamageReceivedTable() {
           level,
           damR,
           types,
+          halfOnBoss: (skill as unknown as Record<string, unknown>).halfOnBoss as boolean | undefined,
         });
       }
     }
@@ -327,12 +328,16 @@ export default function DamageReceivedTable() {
 
   /** 특정 데미지 타입에 적용되는 스킬 감소 multiplier (메소가드 제외) */
   const getReductionMultiplier = useCallback((dmgType: DamageType) => {
+    const isBoss = selectedMob?.isBoss ?? false;
     let multiplier = 1;
     for (const r of activeReductions) {
-      if (r.types.includes(dmgType)) multiplier *= (1 - r.damR / 100);
+      if (r.types.includes(dmgType)) {
+        const damR = (r.halfOnBoss && isBoss) ? r.damR / 2 : r.damR;
+        multiplier *= (1 - damR / 100);
+      }
     }
     return multiplier;
-  }, [activeReductions]);
+  }, [activeReductions, selectedMob?.isBoss]);
 
   /** 데미지 타입에 따른 PowerUp/MagicUp 배율 (보스: 1.3, 일반: 1.15) */
   const getPowerUpMultiplier = useCallback((dmgType: DamageType) => {
