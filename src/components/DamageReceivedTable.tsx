@@ -1,5 +1,6 @@
-import { Box, Typography, TextField, Divider } from "@mui/material";
-import { useState, useMemo } from "react";
+import { Box, Typography, TextField, Divider, Select, MenuItem } from "@mui/material";
+import type { SelectChangeEvent } from "@mui/material";
+import { useState, useMemo, useCallback } from "react";
 import { useCharacter } from "../contexts/CharacterContext";
 import { specialSkillsByJob } from "../types/specialSkill";
 import standardPDDData from "../data/buff/standardPDD.json";
@@ -23,22 +24,21 @@ function lookupPDD(jobEngName: string, level: number): number {
 }
 
 /**
- * 물리 피격 데미지 공식 (클라이언트 추출):
+ * 물리 접촉/물리타입 스킬 데미지 공식 (해외 검증):
  *
- * base (warrior) = floor((LUK+DEX)/4 + INT/9 + STR*2/7)
- * base (others)  = floor(INT/9 + DEX*2/7 + STR*0.4 + LUK/4)
- * mod = base × 0.00125
+ * C (warrior) = STR/2800 + DEX/3200 + INT/7200 + LUK/3200
+ * C (others)  = STR/2000 + DEX/2800 + INT/7200 + LUK/3200
+ * A = C + 0.28
  *
- * t = pad × rand(pad*0.8, pad*0.85) × 0.01
- *   = pad² × rand(0.008, 0.0085)
+ * t = ATT² × rand(0.008, 0.0085)
  *
- * userPDD >= standardPDD:
- *   fac = base/900 + (charLv/1300 + 0.28) × (userPDD - stdPDD) × 0.7
- * userPDD < standardPDD:
- *   charLv >= mobLv: fac = (charLv/550 + mod + 0.28) × (userPDD - stdPDD) × 13/(13+charLv-mobLv)
- *   charLv <  mobLv: fac = (charLv/550 + mod + 0.28) × (userPDD - stdPDD) × 1.3
+ * D (charLv >= mobLv) = 13/(13 + charLv - mobLv)
+ * D (charLv <  mobLv) = 1.3
  *
- * def = t - fac - (mod + 0.28) × userPDD
+ * B (PDD >= stdPDD) = C×28/45 + charLv×7/13000 + 0.196
+ * B (PDD <  stdPDD) = D × (C + charLv/550 + 0.28)
+ *
+ * damage = t - PDD×A - (PDD - stdPDD)×B
  */
 function calcPhysicalDamage(
   monsterATT: number,
@@ -52,29 +52,94 @@ function calcPhysicalDamage(
   int: number,
   luk: number,
 ): { min: number; max: number } {
-  const base = isWarrior
-    ? Math.floor((luk + dex) / 4 + int / 9 + str * 2 / 7)
-    : Math.floor(int / 9 + dex * 2 / 7 + str * 0.4 + luk / 4);
-  const mod = base * 0.00125;
+  const C = isWarrior
+    ? str / 2800 + dex / 3200 + int / 7200 + luk / 3200
+    : str / 2000 + dex / 2800 + int / 7200 + luk / 3200;
+  const A = C + 0.28;
 
-  let fac: number;
+  let B: number;
   if (userPDD >= stdPDD) {
-    fac = base / 900 + (charLevel / 1300 + 0.28) * (userPDD - stdPDD) * 0.7;
+    B = C * 28 / 45 + charLevel * 7 / 13000 + 0.196;
   } else {
-    const opt = charLevel / 550 + mod + 0.28;
-    if (charLevel >= mobLevel) {
-      fac = opt * (userPDD - stdPDD) * 13 / (charLevel - mobLevel + 13);
-    } else {
-      fac = opt * (userPDD - stdPDD) * 1.3;
-    }
+    const D = charLevel >= mobLevel
+      ? 13 / (13 + charLevel - mobLevel)
+      : 1.3;
+    B = D * (C + charLevel / 550 + 0.28);
   }
 
   const t_min = monsterATT * monsterATT * 0.008;
   const t_max = monsterATT * monsterATT * 0.0085;
-  const defReduction = fac + (mod + 0.28) * userPDD;
+  const defReduction = userPDD * A + (userPDD - stdPDD) * B;
   const minDmg = Math.max(1, Math.floor(t_min - defReduction));
   const maxDmg = Math.max(1, Math.floor(t_max - defReduction));
   return { min: minDmg, max: maxDmg };
+}
+
+/**
+ * 마법 스킬 피격 데미지 공식 (검증 완료):
+ *
+ * t = MAD² × rand(0.0075, 0.008)
+ * defense = (MDD/4 + STR/28 + DEX/24 + LUK/20) × K
+ * K = 1.2 (마법사), K = 1.0 (그 외)
+ *
+ * damage = t - defense
+ */
+function calcMagicDamage(
+  monsterMATT: number,
+  userMDD: number,
+  isMagician: boolean,
+  str: number,
+  dex: number,
+  luk: number,
+): { min: number; max: number } {
+  const K = isMagician ? 1.2 : 1.0;
+  const defense = (userMDD / 4 + str / 28 + dex / 24 + luk / 20) * K;
+
+  const t_min = monsterMATT * monsterMATT * 0.0075;
+  const t_max = monsterMATT * monsterMATT * 0.008;
+  const minDmg = Math.max(1, Math.floor(t_min - defense));
+  const maxDmg = Math.max(1, Math.floor(t_max - defense));
+  return { min: minDmg, max: maxDmg };
+}
+
+// 데미지 타입: touch(접촉), physical(물리스킬), magic(무속성마법), fire, ice, lightning, poison
+type DamageType = "touch" | "physical" | "magic" | "fire" | "ice" | "lightning" | "poison";
+const ALL_DAMAGE_TYPES: DamageType[] = ["touch", "physical", "magic", "fire", "ice", "lightning", "poison"];
+
+const POWER_UP_MULTIPLIER = [1, 1.15, 1.3] as const;
+
+const SKILL_DAMAGE_TYPES: Record<string, DamageType[]> = {
+  "Power Guard": ["touch"],
+  "Achilles": ALL_DAMAGE_TYPES,
+  "Element Resistance": ["fire", "ice", "lightning", "poison"],
+  "Invincible": ["touch", "physical"],
+  "Partial Resistance FP": ["fire", "poison"],
+  "Partial Resistance IL": ["ice", "lightning"],
+};
+
+interface DamageResult {
+  min: number; max: number;
+  reducedMin: number; reducedMax: number;
+  afterPUpMin: number; afterPUpMax: number;
+  finalMin: number; finalMax: number;
+  hasReduction: boolean;
+  hasPowerUp: boolean;
+  hasMesoGuard: boolean;
+  mesoAbsMin: number; mesoAbsMax: number;
+}
+
+/** 피격 데미지 결과 표시 (DamageTable과 동일 디자인) */
+function DamageResultSection({ label, result }: { label: string; result: DamageResult }) {
+  return (
+    <Box sx={{ borderBottom: "1px solid #ccc", p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
+      <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+        {label}
+      </Typography>
+      <Typography variant="body2" sx={{ fontSize: "1.1rem", textAlign: "center" }}>
+        {result.finalMin.toLocaleString()} ~ {result.finalMax.toLocaleString()}
+      </Typography>
+    </Box>
+  );
 }
 
 export default function DamageReceivedTable() {
@@ -84,6 +149,9 @@ export default function DamageReceivedTable() {
   const [monsterMATT, setMonsterMATT] = useState(480);
   const [monsterACC, setMonsterACC] = useState(250);
   const [monsterLevel, setMonsterLevel] = useState(125);
+  const [powerUpLevel, setPowerUpLevel] = useState(0);
+  const [magicUpLevel, setMagicUpLevel] = useState(0);
+
 
   const job = character.getJob();
   const jobEngName = job?.engName ?? "";
@@ -92,6 +160,7 @@ export default function DamageReceivedTable() {
   const finalStats = character.getFinalStats();
   const weaponType = character.getWeaponType();
   const isWarrior = jobEngName === "warrior";
+  const isMagician = jobEngName === "magician";
   const isThief = jobEngName === "thief";
 
   // 쉴드 마스터리 PDD 보너스
@@ -110,6 +179,7 @@ export default function DamageReceivedTable() {
   // userPDD = 스탯창 물방 + 버프 물방 (standardPDD와는 독립)
   const stdPDD = lookupPDD(jobEngName, stats.level);
   const wdef = equipStats.pdef + shieldMasteryBonus + defenseBuffs.pdef.value;
+  const mdef = equipStats.mdef + finalStats.totalInt + defenseBuffs.mdef.value;
 
   // 패시브 회피 보너스 (도적: Nimble Body)
   const passiveEva = useMemo(() => {
@@ -121,10 +191,10 @@ export default function DamageReceivedTable() {
   // 총 회피율
   const totalEva = equipStats.eva + finalStats.totalDex * 0.25 + finalStats.totalLuk * 0.5 + passiveEva + defenseBuffs.eva.value;
 
-  // 적용 중인 데미지 감소 스킬 수집
+  // 적용 중인 데미지 감소 스킬 수집 (메소가드 제외)
   const activeReductions = useMemo(() => {
     const skills = specialSkillsByJob[jobEngName] || [];
-    const results: { name: string; icon: string; level: number; damR: number; type: "physical" | "magic" }[] = [];
+    const results: { name: string; icon: string; level: number; damR: number; types: DamageType[] }[] = [];
 
     for (const skill of skills) {
       const level = specialSkillLevels[skill.englishName] ?? 0;
@@ -135,57 +205,116 @@ export default function DamageReceivedTable() {
 
       const props = skill.properties.find(p => p.level === level) || {};
       const damR = props.damR ?? 0;
-      const mesoR = props.mesoR ?? 0;
 
       if (damR > 0) {
-        const isMagicOnly = skill.englishName === "Element Resistance" ||
-          skill.englishName === "Partial Resistance FP" ||
-          skill.englishName === "Partial Resistance IL";
+        const types = SKILL_DAMAGE_TYPES[skill.englishName] ?? ALL_DAMAGE_TYPES;
         results.push({
           name: skill.koreanName,
           icon: skill.icon,
           level,
           damR,
-          type: isMagicOnly ? "magic" : "physical",
-        });
-      }
-      // 메소가드: 항상 50% 데미지 감소, 물리/마법 양쪽 적용
-      if (mesoR > 0) {
-        results.push({
-          name: skill.koreanName,
-          icon: skill.icon,
-          level,
-          damR: 50,
-          type: "physical",
-        });
-        results.push({
-          name: skill.koreanName,
-          icon: skill.icon,
-          level,
-          damR: 50,
-          type: "magic",
+          types,
         });
       }
     }
     return results;
   }, [jobEngName, specialSkillLevels, weaponType]);
 
-  // 물리 피격 데미지 계산 (실제 공식)
+  // 메소가드 정보 (별도 처리: powerUp 적용 전 기준으로 50% 흡수)
+  const mesoGuardInfo = useMemo(() => {
+    const skills = specialSkillsByJob[jobEngName] || [];
+    const found = skills.map(skill => {
+      const level = specialSkillLevels[skill.englishName] ?? 0;
+      if (level === 0) return null;
+      if (skill.requireWeaponTypes && (!weaponType || !skill.requireWeaponTypes.includes(weaponType))) return null;
+      const props = skill.properties.find(p => p.level === level) || {};
+      if ((props.mesoR ?? 0) > 0) return { active: true as const, level, icon: skill.icon, name: skill.koreanName };
+      return null;
+    }).find(x => x !== null);
+    return found ?? { active: false as const, level: 0, icon: "", name: "" };
+  }, [jobEngName, specialSkillLevels, weaponType]);
+
+  /** 특정 데미지 타입에 적용되는 스킬 감소 multiplier (메소가드 제외) */
+  const getReductionMultiplier = useCallback((dmgType: DamageType) => {
+    let multiplier = 1;
+    for (const r of activeReductions) {
+      if (r.types.includes(dmgType)) multiplier *= (1 - r.damR / 100);
+    }
+    return multiplier;
+  }, [activeReductions]);
+
+  /** 데미지 타입에 따른 PowerUp/MagicUp 배율 */
+  const getPowerUpMultiplier = useCallback((dmgType: DamageType) => {
+    if (dmgType === "touch" || dmgType === "physical") return POWER_UP_MULTIPLIER[powerUpLevel];
+    return POWER_UP_MULTIPLIER[magicUpLevel];
+  }, [powerUpLevel, magicUpLevel]);
+
+  /**
+   * 데미지 계산 공통 처리:
+   * 1. base = 공식 결과
+   * 2. reduced = base × 스킬감소 (메소가드 제외)
+   * 3. mesoAbs = reduced × 0.5 (메소가드 기준값, powerUp 적용 전)
+   * 4. afterPowerUp = reduced × powerUp배율
+   * 5. final = afterPowerUp - mesoAbs
+   */
+  const applyModifiers = useCallback((
+    base: { min: number; max: number },
+    dmgType: DamageType,
+  ) => {
+    const skillMult = getReductionMultiplier(dmgType);
+    const reducedMin = Math.max(1, Math.floor(base.min * skillMult));
+    const reducedMax = Math.max(1, Math.floor(base.max * skillMult));
+
+    const mesoAbs = mesoGuardInfo.active ? 0.5 : 0;
+    const mesoAbsMin = Math.floor(reducedMin * mesoAbs);
+    const mesoAbsMax = Math.floor(reducedMax * mesoAbs);
+
+    const pUpMult = getPowerUpMultiplier(dmgType);
+    const afterPUpMin = Math.floor(reducedMin * pUpMult);
+    const afterPUpMax = Math.floor(reducedMax * pUpMult);
+
+    const finalMin = Math.max(1, afterPUpMin - mesoAbsMin);
+    const finalMax = Math.max(1, afterPUpMax - mesoAbsMax);
+
+    return {
+      min: base.min, max: base.max,
+      reducedMin, reducedMax,
+      afterPUpMin: afterPUpMin, afterPUpMax: afterPUpMax,
+      finalMin, finalMax,
+      hasReduction: skillMult < 1,
+      hasPowerUp: pUpMult > 1,
+      hasMesoGuard: mesoGuardInfo.active,
+      mesoAbsMin, mesoAbsMax,
+    };
+  }, [getReductionMultiplier, getPowerUpMultiplier, mesoGuardInfo.active]);
+
+  // 물리 접촉 데미지
   const physicalResult = useMemo(() => {
-    const { min, max } = calcPhysicalDamage(
+    const base = calcPhysicalDamage(
       monsterATT, wdef, stdPDD, stats.level, monsterLevel, isWarrior,
       finalStats.totalStr, finalStats.totalDex, finalStats.totalInt, finalStats.totalLuk,
     );
-    let multiplier = 1;
-    for (const r of activeReductions) {
-      if (r.type === "physical") {
-        multiplier *= (1 - r.damR / 100);
-      }
-    }
-    const finalMin = Math.max(1, Math.floor(min * multiplier));
-    const finalMax = Math.max(1, Math.floor(max * multiplier));
-    return { min, max, finalMin, finalMax, hasReduction: multiplier < 1 };
-  }, [monsterATT, wdef, stdPDD, stats.level, monsterLevel, isWarrior, finalStats, activeReductions]);
+    return applyModifiers(base, "touch");
+  }, [monsterATT, wdef, stdPDD, stats.level, monsterLevel, isWarrior, finalStats, applyModifiers]);
+
+  // 스킬(물리) 피격 데미지
+  const physSkillResult = useMemo(() => {
+    const base = calcPhysicalDamage(
+      monsterMATT, wdef, stdPDD, stats.level, monsterLevel, isWarrior,
+      finalStats.totalStr, finalStats.totalDex, finalStats.totalInt, finalStats.totalLuk,
+    );
+    return applyModifiers(base, "physical");
+  }, [monsterMATT, wdef, stdPDD, stats.level, monsterLevel, isWarrior, finalStats, applyModifiers]);
+
+  // 스킬(마법) 피격 데미지
+  const magicSkillResult = useMemo(() => {
+    const base = calcMagicDamage(
+      monsterMATT, mdef, isMagician,
+      finalStats.totalStr, finalStats.totalDex, finalStats.totalLuk,
+    );
+    return applyModifiers(base, "magic");
+  }, [monsterMATT, mdef, isMagician, finalStats, applyModifiers]);
+
 
   // 특수 스킬 추가 회피확률 (페이크 등)
   const specialEvaInfo = useMemo(() => {
@@ -232,8 +361,6 @@ export default function DamageReceivedTable() {
   const combinedMagicEva = totalSpecialEvaP > 0
     ? (1 - (1 - magicEvasionRate / 100) * (1 - totalSpecialEvaP / 100)) * 100
     : magicEvasionRate;
-
-  const physicalReductions = activeReductions.filter((r) => r.type === "physical");
 
   return (
     <Box
@@ -340,142 +467,68 @@ export default function DamageReceivedTable() {
               }}
             />
           </Box>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+            <Typography variant="caption" sx={{ color: "#666" }}>
+              파워업
+            </Typography>
+            <Select
+              size="small"
+              value={powerUpLevel}
+              onChange={(e: SelectChangeEvent<number>) => setPowerUpLevel(Number(e.target.value))}
+              sx={{
+                height: 28, minWidth: 50,
+                "& .MuiSelect-select": { p: "4px 8px", fontSize: "0.8rem" },
+              }}
+            >
+              <MenuItem value={0}>-</MenuItem>
+              <MenuItem value={1}>1</MenuItem>
+              <MenuItem value={2}>2</MenuItem>
+            </Select>
+          </Box>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+            <Typography variant="caption" sx={{ color: "#666" }}>
+              매직업
+            </Typography>
+            <Select
+              size="small"
+              value={magicUpLevel}
+              onChange={(e: SelectChangeEvent<number>) => setMagicUpLevel(Number(e.target.value))}
+              sx={{
+                height: 28, minWidth: 50,
+                "& .MuiSelect-select": { p: "4px 8px", fontSize: "0.8rem" },
+              }}
+            >
+              <MenuItem value={0}>-</MenuItem>
+              <MenuItem value={1}>1</MenuItem>
+              <MenuItem value={2}>2</MenuItem>
+            </Select>
+          </Box>
         </Box>
       </Box>
 
       <Divider />
 
-      {/* 하단: 물리/마법 피격 + 회피확률 */}
-      <Box sx={{ p: 1.5, display: "flex", flexDirection: "column", gap: 1.5 }}>
-        {/* === 물리 피격 데미지 섹션 === */}
-        <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-          물리 접촉 데미지
-        </Typography>
+      {/* 피격 데미지 섹션 */}
+      <DamageResultSection label="물리 접촉 데미지" result={physicalResult} />
+      <DamageResultSection label="스킬(물리) 피격 데미지" result={physSkillResult} />
+      <DamageResultSection label="스킬(마법) 피격 데미지" result={magicSkillResult} />
 
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5, pl: 1 }}>
-          {/* 방어력 요약 */}
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography variant="caption" sx={{ color: "#666" }}>
-              물리방어력
-            </Typography>
-            <Typography variant="caption" sx={{ fontWeight: "bold" }}>
-              {wdef}
-            </Typography>
-          </Box>
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography variant="caption" sx={{ color: "#888", fontSize: "0.65rem", pl: 1 }}>
-              장비 {equipStats.pdef} + 쉴드 {shieldMasteryBonus} + 버프 {defenseBuffs.pdef.value}
-            </Typography>
-          </Box>
-
-          {/* 피격 데미지 */}
-          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 0.5 }}>
-            <Typography variant="caption" sx={{ ...(!physicalResult.hasReduction ? { fontWeight: "bold", textDecoration: "underline" } : { color: "#666" }) }}>
-              피격 데미지
-            </Typography>
-            <Typography variant="caption" sx={{ fontWeight: "bold", ...(!physicalResult.hasReduction ? { textDecoration: "underline", color: "primary.main" } : {}) }}>
-              {physicalResult.min}~{physicalResult.max}
-            </Typography>
-          </Box>
-          {physicalResult.hasReduction && (
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography variant="caption" sx={{ fontWeight: "bold", textDecoration: "underline" }}>
-                스킬 감소 후
-              </Typography>
-              <Typography variant="caption" sx={{ fontWeight: "bold", color: "primary.main", textDecoration: "underline" }}>
-                {physicalResult.finalMin}~{physicalResult.finalMax}
-              </Typography>
-            </Box>
-          )}
-          {physicalReductions.map((r) => (
-            <Box key={r.name} sx={{ display: "flex", alignItems: "center", gap: 0.5, pl: 1 }}>
-              {r.icon && (
-                <img
-                  src={`data:image/png;base64,${r.icon}`}
-                  alt={r.name}
-                  style={{ width: 16, height: 16, objectFit: "contain" }}
-                />
-              )}
-              <Typography variant="caption" sx={{ color: "#888", fontSize: "0.65rem" }}>
-                {r.name} Lv{r.level} (-{r.damR}%)
-              </Typography>
-            </Box>
-          ))}
-        </Box>
-
-        <Divider />
-
-        {/* === 회피확률 섹션 === */}
+      {/* 회피확률 */}
+      <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
         <Typography variant="body2" sx={{ fontWeight: "bold" }}>
           회피확률
         </Typography>
-
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5, pl: 1 }}>
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography variant="caption" sx={{ color: "#666" }}>
-              총 회피율
-            </Typography>
-            <Typography variant="caption" sx={{ fontWeight: "bold" }}>
-              {Number.isInteger(totalEva) ? totalEva : totalEva.toFixed(1)}
-            </Typography>
-          </Box>
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography variant="caption" sx={{ color: "#888", fontSize: "0.65rem", pl: 1 }}>
-              장비 {equipStats.eva} + DEX {(finalStats.totalDex * 0.25).toFixed(1)} + LUK {(finalStats.totalLuk * 0.5).toFixed(1)}
-              {passiveEva > 0 ? ` + 패시브 ${passiveEva}` : ""}
-              {defenseBuffs.eva.value > 0 ? ` + 버프 ${defenseBuffs.eva.value}` : ""}
-            </Typography>
-          </Box>
-          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 0.5 }}>
-            <Typography variant="caption" sx={{ ...(totalSpecialEvaP === 0 ? { fontWeight: "bold", textDecoration: "underline" } : { color: "#666" }) }}>
-              물리 회피확률
-            </Typography>
-            <Typography variant="caption" sx={{ fontWeight: "bold", color: "primary.main", ...(totalSpecialEvaP === 0 ? { textDecoration: "underline" } : {}) }}>
-              {physicalEvasionRate.toFixed(1)}%
-            </Typography>
-          </Box>
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography variant="caption" sx={{ ...(totalSpecialEvaP === 0 ? { fontWeight: "bold", textDecoration: "underline" } : { color: "#666" }) }}>
-              마법 회피확률
-            </Typography>
-            <Typography variant="caption" sx={{ fontWeight: "bold", color: "primary.main", ...(totalSpecialEvaP === 0 ? { textDecoration: "underline" } : {}) }}>
-              {magicEvasionRate.toFixed(1)}%
-            </Typography>
-          </Box>
-          {totalSpecialEvaP > 0 && (
-            <>
-              {specialEvaInfo.map((r) => (
-                <Box key={r.name} sx={{ display: "flex", alignItems: "center", gap: 0.5, pl: 1 }}>
-                  {r.icon && (
-                    <img
-                      src={`data:image/png;base64,${r.icon}`}
-                      alt={r.name}
-                      style={{ width: 16, height: 16, objectFit: "contain" }}
-                    />
-                  )}
-                  <Typography variant="caption" sx={{ color: "#888", fontSize: "0.65rem" }}>
-                    {r.name} Lv{r.level} (독립 {r.evaP}%)
-                  </Typography>
-                </Box>
-              ))}
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography variant="caption" sx={{ fontWeight: "bold", textDecoration: "underline" }}>
-                  물리 종합 회피확률
-                </Typography>
-                <Typography variant="caption" sx={{ fontWeight: "bold", color: "primary.main", textDecoration: "underline" }}>
-                  {combinedPhysEva.toFixed(1)}%
-                </Typography>
-              </Box>
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography variant="caption" sx={{ fontWeight: "bold", textDecoration: "underline" }}>
-                  마법 종합 회피확률
-                </Typography>
-                <Typography variant="caption" sx={{ fontWeight: "bold", color: "primary.main", textDecoration: "underline" }}>
-                  {combinedMagicEva.toFixed(1)}%
-                </Typography>
-              </Box>
-            </>
-          )}
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography variant="body2">물리 회피확률</Typography>
+          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+            {combinedPhysEva.toFixed(1)}%
+          </Typography>
+        </Box>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography variant="body2">마법 회피확률</Typography>
+          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+            {combinedMagicEva.toFixed(1)}%
+          </Typography>
         </Box>
       </Box>
     </Box>
