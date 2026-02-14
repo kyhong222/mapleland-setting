@@ -562,7 +562,7 @@ export default function DamageReceivedTable() {
 
       {/* 피격 데미지 섹션 */}
       <DamageResultSection label="물리 접촉 데미지" result={physicalResult} />
-      <DamageResultSection label="스킬(물리) 피격 데미지" result={physSkillResult} infoTooltip="일부 몬스터의 스킬은 물리타입입니다." />
+      <DamageResultSection label="스킬(물리) 피격 데미지" result={physSkillResult} infoTooltip="일부 몬스터의 스킬은 물리타입입니다. ex. 예티와페페의 땅찍기" />
       <DamageResultSection label="스킬(마법) 피격 데미지" result={magicSkillResult} infoTooltip="일부 몬스터의 스킬은 마법타입이면서, 속성타입을 가집니다. 속성은 무속성, 불, 냉기, 번개, 독 속성이 있습니다. 현재 플레이어의 속성 내성은 반영되어있지 않습니다." />
 
       {/* 회피확률 */}
