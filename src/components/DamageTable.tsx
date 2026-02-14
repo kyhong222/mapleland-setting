@@ -315,11 +315,15 @@ export default function DamageTable() {
         overflow: "auto",
       }}
     >
+      {/* 타이틀 */}
+      <Typography
+        variant="body2"
+        sx={{ fontWeight: "bold", p: 1.5, borderBottom: "1px solid #ccc" }}
+      >
+        데미지 계산기
+      </Typography>
       {/* 헤더 - 무기 정보 */}
       <Box sx={{ borderBottom: "1px solid #ccc", p: 1.5, bgcolor: "#e3f2fd" }}>
-        <Typography variant="body2" sx={{ fontWeight: "bold", mb: 0.5 }}>
-          {job?.koreanName === "마법사" ? "마법 계산" : "데미지 계산"}
-        </Typography>
         {weapon || job?.koreanName === "마법사" ? (
           <Box>
             {weapon && (

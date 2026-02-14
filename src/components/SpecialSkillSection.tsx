@@ -1,6 +1,12 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Tooltip } from "@mui/material";
 import type { SpecialSkillData } from "../types/specialSkill";
 import { specialSkillsByJob } from "../types/specialSkill";
+
+const DISABLED_SKILLS = new Set([
+  "Element Resistance",
+  "Partial Resistance FP",
+  "Partial Resistance IL",
+]);
 
 interface SpecialSkillSectionProps {
   jobEngName: string | undefined;
@@ -31,12 +37,13 @@ export default function SpecialSkillSection({
 
   return filtered.map((skill) => {
     const level = specialSkillLevels[skill.englishName] ?? 0;
+    const isDisabled = DISABLED_SKILLS.has(skill.englishName);
 
-    return (
-      <Box key={skill.englishName} sx={{ display: "flex", gap: 1 }}>
+    const content = (
+      <Box key={skill.englishName} sx={{ display: "flex", gap: 1, opacity: isDisabled ? 0.4 : 1 }}>
         <Box
           onClick={() => {
-            onSkillClick(skill, specialSkillLevels[skill.englishName] ?? 0);
+            if (!isDisabled) onSkillClick(skill, specialSkillLevels[skill.englishName] ?? 0);
           }}
           sx={{
             minWidth: 40,
@@ -48,8 +55,8 @@ export default function SpecialSkillSection({
             borderRadius: 1,
             fontSize: "0.75rem",
             overflow: "hidden",
-            cursor: "pointer",
-            "&:hover": { opacity: 0.8 },
+            cursor: isDisabled ? "not-allowed" : "pointer",
+            "&:hover": isDisabled ? {} : { opacity: 0.8 },
           }}
         >
           {skill.icon ? (
@@ -82,11 +89,21 @@ export default function SpecialSkillSection({
               {skill.koreanName}
             </Typography>{" "}
             <Typography component="span" sx={{ color: "#666", fontSize: "0.7rem" }}>
-              Lv {level}
+              {isDisabled ? "미구현" : `Lv ${level}`}
             </Typography>
           </Typography>
         </Box>
       </Box>
     );
+
+    if (isDisabled) {
+      return (
+        <Tooltip key={skill.englishName} title="미구현" arrow placement="top">
+          {content}
+        </Tooltip>
+      );
+    }
+
+    return content;
   });
 }

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>몬스터 목록 편집기</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', sans-serif; background: #f5f5f5; padding: 20px; }
+  h1 { margin-bottom: 10px; }
+  .controls { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; flex-wrap: wrap; }
+  .controls input { padding: 6px 10px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; }
+  .controls input[type="text"] { width: 250px; }
+  .controls input[type="number"] { width: 80px; }
+  .controls button { padding: 6px 14px; font-size: 13px; border: none; border-radius: 4px; cursor: pointer; }
+  .btn-export { background: #1976d2; color: #fff; }
+  .btn-export:hover { background: #1565c0; }
+  .btn-delete-selected { background: #d32f2f; color: #fff; }
+  .btn-delete-selected:hover { background: #b71c1c; }
+  .btn-load { background: #388e3c; color: #fff; }
+  .btn-load:hover { background: #2e7d32; }
+  .btn-toggle { background: #f57c00; color: #fff; }
+  .btn-toggle:hover { background: #e65100; }
+  .stats { font-size: 13px; color: #666; margin-bottom: 8px; }
+  table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 6px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  th, td { padding: 6px 10px; text-align: left; border-bottom: 1px solid #eee; font-size: 13px; }
+  th { background: #fafafa; font-weight: 600; position: sticky; top: 0; z-index: 1; }
+  tr:hover { background: #f0f7ff; }
+  tr.marked { background: #ffebee; }
+  tr.marked:hover { background: #ffcdd2; }
+  .cb { width: 16px; height: 16px; cursor: pointer; }
+  .del-btn { background: #ef5350; color: #fff; border: none; padding: 2px 8px; border-radius: 3px; cursor: pointer; font-size: 12px; }
+  .del-btn:hover { background: #c62828; }
+  .no-kr { color: #999; font-style: italic; }
+  .boss-tag { background: #ff9800; color: #fff; padding: 1px 5px; border-radius: 3px; font-size: 11px; margin-left: 4px; }
+  .table-wrap { max-height: calc(100vh - 180px); overflow-y: auto; }
+  #fileInput { display: none; }
+</style>
+</head>
+<body>
+
+<h1>몬스터 목록 편집기</h1>
+
+<div class="controls">
+  <input type="text" id="search" placeholder="이름 검색..." oninput="render()">
+  <input type="number" id="minLv" placeholder="최소Lv" oninput="render()">
+  <input type="number" id="maxLv" placeholder="최대Lv" oninput="render()">
+  <label><input type="checkbox" id="bossOnly" onchange="render()"> 보스만</label>
+  <label><input type="checkbox" id="noKrOnly" onchange="render()"> 한글없음만</label>
+  <label><input type="checkbox" id="noFoundAt" onchange="render()"> 출현지없음만</label>
+  <button class="btn-toggle" onclick="toggleSelectFiltered()">필터 결과 전체선택/해제</button>
+  <button class="btn-delete-selected" onclick="deleteSelected()">선택 삭제</button>
+  <button class="btn-export" onclick="exportJSON()">JSON 내보내기</button>
+  <button class="btn-load" onclick="document.getElementById('fileInput').click()">JSON 불러오기</button>
+  <input type="file" id="fileInput" accept=".json" onchange="loadFile(event)">
+</div>
+
+<div class="stats" id="stats"></div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th><input type="checkbox" class="cb" id="selectAll" onchange="toggleAll()"></th>
+        <th>ID</th>
+        <th>레벨</th>
+        <th>한글이름</th>
+        <th>영문이름</th>
+        <th>출현지</th>
+        <th>보스</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<script>
+let mobs = [];
+let selected = new Set();
+
+// 초기 로드: 같은 프로젝트의 mobList.json
+fetch('../src/data/mobs/mobList.json')
+  .then(r => r.json())
+  .then(data => { mobs = data; render(); })
+  .catch(() => {
+    document.getElementById('stats').textContent = 'mobList.json을 불러올 수 없습니다. "JSON 불러오기" 버튼을 사용하세요.';
+  });
+
+function loadFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      mobs = JSON.parse(ev.target.result);
+      selected.clear();
+      render();
+    } catch { alert('JSON 파싱 실패'); }
+  };
+  reader.readAsText(file);
+}
+
+function getFiltered() {
+  const search = document.getElementById('search').value.toLowerCase();
+  const minLv = parseInt(document.getElementById('minLv').value) || 0;
+  const maxLv = parseInt(document.getElementById('maxLv').value) || 99999;
+  const bossOnly = document.getElementById('bossOnly').checked;
+  const noKrOnly = document.getElementById('noKrOnly').checked;
+  const noFoundAt = document.getElementById('noFoundAt').checked;
+
+  return mobs.filter(m => {
+    if (m.level < minLv || m.level > maxLv) return false;
+    if (bossOnly && !m.isBoss) return false;
+    if (noKrOnly && m.koreanName) return false;
+    if (noFoundAt && m.foundAt && m.foundAt.length > 0) return false;
+    if (search && !m.koreanName.toLowerCase().includes(search) && !m.name.toLowerCase().includes(search) && !String(m.id).includes(search)) return false;
+    return true;
+  });
+}
+
+function render() {
+  const filtered = getFiltered();
+  const tbody = document.getElementById('tbody');
+
+  document.getElementById('stats').textContent =
+    `전체: ${mobs.length}마리 | 필터: ${filtered.length}마리 | 선택: ${selected.size}마리`;
+
+  tbody.innerHTML = filtered.map(m => `
+    <tr class="${selected.has(m.id) ? 'marked' : ''}">
+      <td><input type="checkbox" class="cb" ${selected.has(m.id) ? 'checked' : ''} onchange="toggleSelect(${m.id})"></td>
+      <td>${m.id}</td>
+      <td>${m.level}</td>
+      <td>${m.koreanName || '<span class="no-kr">없음</span>'}${m.isBoss ? '<span class="boss-tag">BOSS</span>' : ''}</td>
+      <td>${m.name}</td>
+      <td style="max-width:200px;font-size:11px;color:#555">${(m.foundAt || []).join(', ') || '<span class="no-kr">-</span>'}</td>
+      <td>${m.isBoss ? 'Y' : ''}</td>
+      <td><button class="del-btn" onclick="deleteMob(${m.id})">삭제</button></td>
+    </tr>
+  `).join('');
+}
+
+function toggleSelect(id) {
+  if (selected.has(id)) selected.delete(id);
+  else selected.add(id);
+  render();
+}
+
+function toggleAll() {
+  const all = document.getElementById('selectAll').checked;
+  const filtered = getFiltered();
+  if (all) filtered.forEach(m => selected.add(m.id));
+  else filtered.forEach(m => selected.delete(m.id));
+  render();
+}
+
+function toggleSelectFiltered() {
+  const filtered = getFiltered();
+  const allSelected = filtered.every(m => selected.has(m.id));
+  if (allSelected) filtered.forEach(m => selected.delete(m.id));
+  else filtered.forEach(m => selected.add(m.id));
+  render();
+}
+
+function deleteMob(id) {
+  mobs = mobs.filter(m => m.id !== id);
+  selected.delete(id);
+  render();
+}
+
+function deleteSelected() {
+  if (selected.size === 0) return;
+  if (!confirm(`${selected.size}마리를 삭제하시겠습니까?`)) return;
+  mobs = mobs.filter(m => !selected.has(m.id));
+  selected.clear();
+  render();
+}
+
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(mobs, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'mobList.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+
+</body>
+</html>

@@ -5,6 +5,8 @@
 import { getPostItemIcon, getPostItemCategoryKey } from "../utils/postItemLoader";
 
 const API_BASE_URL = "https://maplestory.io/api/gms/62/item";
+const MOB_API_BASE_URL = "https://maplestory.io/api/gms/62/mob";
+const MOB_KMS_API_BASE_URL = "https://maplestory.io/api/kms/284/mob";
 
 // 부위별 API 필터 매핑
 export const ARMOR_FILTERS = {
@@ -259,4 +261,89 @@ export async function fetchItemNamesKMS(itemIds: number[]): Promise<Record<numbe
   }
 
   return results;
+}
+
+// ===== 몬스터 API =====
+
+export interface MobMeta {
+  isBodyAttack: boolean;
+  level: number;
+  maxHP: number;
+  maxMP: number;
+  speed: number;
+  physicalDamage: number;
+  physicalDefense: number;
+  magicDamage: number;
+  magicDefense: number;
+  accuracy: number;
+  evasion: number;
+  exp: number;
+  isUndead: boolean;
+  minimumPushDamage: number;
+  elementalAttributes: string;
+  summonType: number;
+}
+
+export interface MobDetails {
+  id: number;
+  name: string;
+  meta: MobMeta;
+}
+
+/**
+ * 몬스터 ID로 상세 정보 조회 (GMS/62)
+ * @param mobId - 몬스터 ID
+ * @returns 몬스터 상세 정보
+ */
+export async function fetchMobDetails(mobId: number): Promise<MobDetails | null> {
+  try {
+    const response = await fetch(`${MOB_API_BASE_URL}/${mobId}`);
+    if (!response.ok) return null;
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("몬스터 상세 정보 조회 오류:", error);
+    return null;
+  }
+}
+
+/**
+ * KMS에서 몬스터의 한글 이름 조회
+ * @param mobId - 몬스터 ID
+ * @returns 한글 몬스터 이름
+ */
+export async function fetchMobNameKMS(mobId: number): Promise<string | null> {
+  try {
+    const response = await fetch(`${MOB_KMS_API_BASE_URL}/${mobId}/name`);
+    if (!response.ok) return null;
+    const data = await response.json();
+    return data.name || null;
+  } catch (error) {
+    console.error("몬스터 이름 조회 오류:", error);
+    return null;
+  }
+}
+
+/**
+ * 몬스터 아이콘 이미지 URL 조회 (gms/62 → gms/200 → kms/284 순서로 시도)
+ * @param mobId - 몬스터 ID
+ * @returns 아이콘 이미지 blob URL
+ */
+export async function fetchMobIcon(mobId: number): Promise<string | null> {
+  const bases = [
+    "https://maplestory.io/api/gms/62/mob",
+    "https://maplestory.io/api/gms/200/mob",
+    "https://maplestory.io/api/kms/284/mob",
+  ];
+  for (const base of bases) {
+    try {
+      const response = await fetch(`${base}/${mobId}/icon`);
+      if (!response.ok) continue;
+      const blob = await response.blob();
+      return URL.createObjectURL(blob);
+    } catch {
+      continue;
+    }
+  }
+  return null;
 }

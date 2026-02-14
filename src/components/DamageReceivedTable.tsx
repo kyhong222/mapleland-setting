@@ -1,5 +1,5 @@
-import { Box, Typography, TextField, Divider, Select, MenuItem } from "@mui/material";
-import type { SelectChangeEvent } from "@mui/material";
+import { Box, Typography, TextField, Button, Divider, Dialog, DialogContent, Tooltip, IconButton } from "@mui/material";
+import { Close as CloseIcon, Search as SearchIcon, Info as InfoIcon } from "@mui/icons-material";
 import { useState, useMemo, useCallback } from "react";
 import { useCharacter } from "../contexts/CharacterContext";
 import { specialSkillsByJob } from "../types/specialSkill";
@@ -7,8 +7,50 @@ import standardPDDData from "../data/buff/standardPDD.json";
 import shieldMasteryData from "../data/passive/warrior/shieldMastery.json";
 import thiefShieldMasteryData from "../data/passive/thief/shieldMastery.json";
 import nimbleBodyData from "../data/passive/thief/nimbleBody.json";
+import { fetchMobDetails, fetchMobIcon } from "../api/maplestory";
+import mobListData from "../data/mobs/mobList.json";
 
 const standardPDD = standardPDDData as Record<string, Record<string, number>>;
+
+interface MobListEntry {
+  id: number;
+  name: string;
+  koreanName: string;
+  level: number;
+  isBoss: boolean;
+  foundAt: string[];
+}
+
+const mobList = mobListData as unknown as MobListEntry[];
+
+// 지역 카테고리 매핑
+const REGION_CATEGORIES: { name: string; regions: string[] }[] = [
+  { name: "빅토리아", regions: ["빅토리아 아일랜드", "해외여행: 태국", "뉴 리프 시티", "해외여행: 중국", "샤레니안", "해외여행: 대만", "해외여행: 일본"] },
+  { name: "엘나스", regions: ["아쿠아리움", "오르비스", "엘나스", "폐광", "무릉도원", "백초마을"] },
+  { name: "루더스 호수", regions: ["아리안트", "루디브리엄", "마가티아", "루디브리엄 파퀘", "지구방위본부", "아랫마을", "시계탑 최하층", "엘린숲"] },
+  { name: "리프레", regions: ["리프레"] },
+  { name: "시간의 신전", regions: ["시간의 신전"] },
+];
+
+// foundAt 기반으로 지역별 그룹 생성 (한 몹이 여러 지역에 속할 수 있음)
+const mobsByRegion = (() => {
+  const regionMap = new Map<string, MobListEntry[]>();
+  for (const mob of mobList) {
+    if (mob.foundAt.length === 0) {
+      const arr = regionMap.get("기타") ?? [];
+      arr.push(mob);
+      regionMap.set("기타", arr);
+    } else {
+      for (const region of mob.foundAt) {
+        const arr = regionMap.get(region) ?? [];
+        arr.push(mob);
+        regionMap.set(region, arr);
+      }
+    }
+  }
+  for (const [, mobs] of regionMap) mobs.sort((a, b) => a.level - b.level);
+  return regionMap;
+})();
 
 /** 주어진 레벨 이하의 가장 가까운 키 값을 반환 */
 function lookupPDD(jobEngName: string, level: number): number {
@@ -106,7 +148,8 @@ function calcMagicDamage(
 type DamageType = "touch" | "physical" | "magic" | "fire" | "ice" | "lightning" | "poison";
 const ALL_DAMAGE_TYPES: DamageType[] = ["touch", "physical", "magic", "fire", "ice", "lightning", "poison"];
 
-const POWER_UP_MULTIPLIER = [1, 1.15, 1.3] as const;
+const POWER_UP_NORMAL = 1.15;
+const POWER_UP_BOSS = 1.3;
 
 const SKILL_DAMAGE_TYPES: Record<string, DamageType[]> = {
   "Power Guard": ["touch"],
@@ -129,12 +172,19 @@ interface DamageResult {
 }
 
 /** 피격 데미지 결과 표시 (DamageTable과 동일 디자인) */
-function DamageResultSection({ label, result }: { label: string; result: DamageResult }) {
+function DamageResultSection({ label, result, infoTooltip }: { label: string; result: DamageResult; infoTooltip?: string }) {
   return (
     <Box sx={{ borderBottom: "1px solid #ccc", p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
-      <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-        {label}
-      </Typography>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+        <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+          {label}
+        </Typography>
+        {infoTooltip && (
+          <Tooltip title={infoTooltip} arrow placement="top">
+            <InfoIcon sx={{ fontSize: 14, color: "#aaa", cursor: "help" }} />
+          </Tooltip>
+        )}
+      </Box>
       <Typography variant="body2" sx={{ fontSize: "1.1rem", textAlign: "center" }}>
         {result.finalMin.toLocaleString()} ~ {result.finalMax.toLocaleString()}
       </Typography>
@@ -149,9 +199,50 @@ export default function DamageReceivedTable() {
   const [monsterMATT, setMonsterMATT] = useState(480);
   const [monsterACC, setMonsterACC] = useState(250);
   const [monsterLevel, setMonsterLevel] = useState(125);
-  const [powerUpLevel, setPowerUpLevel] = useState(0);
-  const [magicUpLevel, setMagicUpLevel] = useState(0);
+  const [powerUpEnabled, setPowerUpEnabled] = useState(false);
+  const [magicUpEnabled, setMagicUpEnabled] = useState(false);
+  const [selectedMob, setSelectedMob] = useState<MobListEntry | null>(null);
+  const [mobIcon, setMobIcon] = useState<string | null>(null);
+  const [mobModalOpen, setMobModalOpen] = useState(false);
+  const [selectedSubRegion, setSelectedSubRegion] = useState<string | null>(null);
+  const [mobSearchText, setMobSearchText] = useState("");
 
+  const handleMobSelect = useCallback(async (mob: MobListEntry | null) => {
+    setSelectedMob(mob);
+    setMobIcon(null);
+    if (!mob) return;
+
+    const details = await fetchMobDetails(mob.id);
+    if (details) {
+      setMonsterATT(details.meta.physicalDamage);
+      setMonsterMATT(details.meta.magicDamage);
+      setMonsterACC(details.meta.accuracy);
+      setMonsterLevel(details.meta.level);
+    }
+
+    const iconUrl = await fetchMobIcon(mob.id);
+    if (iconUrl) setMobIcon(iconUrl);
+  }, []);
+
+  const handleMobSelectFromModal = useCallback(async (mob: MobListEntry) => {
+    setMobModalOpen(false);
+    setMobSearchText("");
+    await handleMobSelect(mob);
+  }, [handleMobSelect]);
+
+  // 모달 내 표시할 몬스터 목록
+  const filteredModalMobs = useMemo(() => {
+    if (mobSearchText) {
+      const lower = mobSearchText.toLowerCase();
+      return mobList.filter(m =>
+        m.koreanName.includes(lower) || m.name.toLowerCase().includes(lower)
+      ).slice(0, 50);
+    }
+    if (selectedSubRegion) {
+      return mobsByRegion.get(selectedSubRegion) ?? [];
+    }
+    return [];
+  }, [mobSearchText, selectedSubRegion]);
 
   const job = character.getJob();
   const jobEngName = job?.engName ?? "";
@@ -243,11 +334,13 @@ export default function DamageReceivedTable() {
     return multiplier;
   }, [activeReductions]);
 
-  /** 데미지 타입에 따른 PowerUp/MagicUp 배율 */
+  /** 데미지 타입에 따른 PowerUp/MagicUp 배율 (보스: 1.3, 일반: 1.15) */
   const getPowerUpMultiplier = useCallback((dmgType: DamageType) => {
-    if (dmgType === "touch" || dmgType === "physical") return POWER_UP_MULTIPLIER[powerUpLevel];
-    return POWER_UP_MULTIPLIER[magicUpLevel];
-  }, [powerUpLevel, magicUpLevel]);
+    const isBoss = selectedMob?.isBoss ?? false;
+    const mult = isBoss ? POWER_UP_BOSS : POWER_UP_NORMAL;
+    if (dmgType === "touch" || dmgType === "physical") return powerUpEnabled ? mult : 1;
+    return magicUpEnabled ? mult : 1;
+  }, [powerUpEnabled, magicUpEnabled, selectedMob?.isBoss]);
 
   /**
    * 데미지 계산 공통 처리:
@@ -362,6 +455,33 @@ export default function DamageReceivedTable() {
     ? (1 - (1 - magicEvasionRate / 100) * (1 - totalSpecialEvaP / 100)) * 100
     : magicEvasionRate;
 
+  // 회피율 10당 증가량 (현재 상태에서 회피 10 올렸을 때 최종 회피확률 변화)
+  const physEvaPer10 = useMemo(() => {
+    if (monsterACC <= 0) return 0;
+    const min = isThief ? 5 : 2;
+    const max = isThief ? 95 : 80;
+    const calcPhys = (eva: number) => {
+      const base = Math.min(max, Math.max(min, eva / (4.5 * monsterACC) * 100));
+      return totalSpecialEvaP > 0
+        ? (1 - (1 - base / 100) * (1 - totalSpecialEvaP / 100)) * 100
+        : base;
+    };
+    return calcPhys(totalEva + 10) - calcPhys(totalEva);
+  }, [totalEva, monsterACC, isThief, totalSpecialEvaP]);
+
+  const magicEvaPer10 = useMemo(() => {
+    if (monsterACC <= 0 || totalEva <= 0) return 0;
+    const min = isThief ? 5 : 2;
+    const max = isThief ? 95 : 80;
+    const calcMagic = (eva: number) => {
+      const base = Math.min(max, Math.max(min, (10 / 9 - monsterACC / (0.9 * eva)) * 100));
+      return totalSpecialEvaP > 0
+        ? (1 - (1 - base / 100) * (1 - totalSpecialEvaP / 100)) * 100
+        : base;
+    };
+    return calcMagic(totalEva + 10) - calcMagic(totalEva);
+  }, [totalEva, monsterACC, isThief, totalSpecialEvaP]);
+
   return (
     <Box
       sx={{
@@ -374,135 +494,67 @@ export default function DamageReceivedTable() {
       }}
     >
       {/* 타이틀 */}
-      <Typography
-        variant="body2"
-        sx={{ fontWeight: "bold", p: 1.5, borderBottom: "1px solid #ccc" }}
-      >
-        피격/회피 계산기
-      </Typography>
-
-      {/* 상단: 몬스터 정보 (추후 몬스터 선택 UI로 대체) */}
-      <Box sx={{ p: 1.5, minHeight: 160, display: "flex", flexDirection: "column", gap: 1 }}>
-        <Typography variant="body2" sx={{ fontWeight: "bold", mb: 0.5 }}>
-          몬스터 정보
+      <Box sx={{ display: "flex", alignItems: "baseline", gap: 0.5, p: 1.5, borderBottom: "1px solid #ccc" }}>
+        <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+          피격/회피 계산기
         </Typography>
-        <Box sx={{ display: "flex", gap: 2, pl: 1, flexWrap: "wrap", rowGap: 1 }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-            <Typography variant="caption" sx={{ color: "#666" }}>
-              레벨
-            </Typography>
-            <TextField
-              type="number"
-              size="small"
-              value={monsterLevel}
-              onChange={(e) => setMonsterLevel(Math.max(1, parseInt(e.target.value) || 1))}
-              sx={{
-                width: 60,
-                "& .MuiOutlinedInput-root": { height: 28 },
-                "& .MuiInputBase-input": {
-                  p: "4px 8px",
-                  fontSize: "0.8rem",
-                  textAlign: "center",
-                },
-              }}
+        <Typography variant="caption" sx={{ ml: 0.5, color: "text.secondary" }}>
+          (오차가 있을 수 있습니다.)
+        </Typography>
+      </Box>
+
+      {/* 상단: 몬스터 정보 */}
+      <Box sx={{ p: 1.5, display: "flex", flexDirection: "column", gap: 1 }}>
+        {/* 몬스터 아이콘 — 클릭으로 모달 열기 */}
+        <Box
+          onClick={() => setMobModalOpen(true)}
+          sx={{
+            display: "flex", flexDirection: "column", alignItems: "center",
+            cursor: "pointer", py: 1,
+            "&:hover": { bgcolor: "#eee" }, borderRadius: 1,
+          }}
+        >
+          {mobIcon ? (
+            <img
+              src={mobIcon}
+              alt={selectedMob?.koreanName ?? ""}
+              style={{ width: 96, height: 96, objectFit: "contain" }}
             />
-          </Box>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-            <Typography variant="caption" sx={{ color: "#666" }}>
-              물리ATT
-            </Typography>
-            <TextField
-              type="number"
-              size="small"
-              value={monsterATT}
-              onChange={(e) => setMonsterATT(Math.max(0, parseInt(e.target.value) || 0))}
-              sx={{
-                width: 70,
-                "& .MuiOutlinedInput-root": { height: 28 },
-                "& .MuiInputBase-input": {
-                  p: "4px 8px",
-                  fontSize: "0.8rem",
-                  textAlign: "center",
-                },
-              }}
-            />
-          </Box>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-            <Typography variant="caption" sx={{ color: "#666" }}>
-              마법ATT
-            </Typography>
-            <TextField
-              type="number"
-              size="small"
-              value={monsterMATT}
-              onChange={(e) => setMonsterMATT(Math.max(0, parseInt(e.target.value) || 0))}
-              sx={{
-                width: 70,
-                "& .MuiOutlinedInput-root": { height: 28 },
-                "& .MuiInputBase-input": {
-                  p: "4px 8px",
-                  fontSize: "0.8rem",
-                  textAlign: "center",
-                },
-              }}
-            />
-          </Box>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-            <Typography variant="caption" sx={{ color: "#666" }}>
-              명중률
-            </Typography>
-            <TextField
-              type="number"
-              size="small"
-              value={monsterACC}
-              onChange={(e) => setMonsterACC(Math.max(0, parseInt(e.target.value) || 0))}
-              sx={{
-                width: 70,
-                "& .MuiOutlinedInput-root": { height: 28 },
-                "& .MuiInputBase-input": {
-                  p: "4px 8px",
-                  fontSize: "0.8rem",
-                  textAlign: "center",
-                },
-              }}
-            />
-          </Box>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-            <Typography variant="caption" sx={{ color: "#666" }}>
-              파워업
-            </Typography>
-            <Select
-              size="small"
-              value={powerUpLevel}
-              onChange={(e: SelectChangeEvent<number>) => setPowerUpLevel(Number(e.target.value))}
-              sx={{
-                height: 28, minWidth: 50,
-                "& .MuiSelect-select": { p: "4px 8px", fontSize: "0.8rem" },
-              }}
-            >
-              <MenuItem value={0}>-</MenuItem>
-              <MenuItem value={1}>1</MenuItem>
-              <MenuItem value={2}>2</MenuItem>
-            </Select>
-          </Box>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-            <Typography variant="caption" sx={{ color: "#666" }}>
-              매직업
-            </Typography>
-            <Select
-              size="small"
-              value={magicUpLevel}
-              onChange={(e: SelectChangeEvent<number>) => setMagicUpLevel(Number(e.target.value))}
-              sx={{
-                height: 28, minWidth: 50,
-                "& .MuiSelect-select": { p: "4px 8px", fontSize: "0.8rem" },
-              }}
-            >
-              <MenuItem value={0}>-</MenuItem>
-              <MenuItem value={1}>1</MenuItem>
-              <MenuItem value={2}>2</MenuItem>
-            </Select>
-          </Box>
+          ) : (
+            <Box sx={{
+              width: 96, height: 96, bgcolor: "#ddd", borderRadius: 1,
+              display: "flex", alignItems: "center", justifyContent: "center",
+            }}>
+              <SearchIcon sx={{ color: "#999" }} />
+            </Box>
+          )}
+          <Typography variant="caption" sx={{ mt: 0.5, color: "#666" }}>
+            {selectedMob
+              ? `Lv.${selectedMob.level} ${selectedMob.koreanName || selectedMob.name}`
+              : "몬스터를 선택하세요"}
+          </Typography>
+        </Box>
+        {/* 파워업 / 매직업 버튼 */}
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 1 }}>
+          <Button
+            size="small"
+            variant={powerUpEnabled ? "contained" : "outlined"}
+            onClick={() => setPowerUpEnabled(!powerUpEnabled)}
+            sx={{ minWidth: 0, px: 1.5, py: 0.25, fontSize: "0.75rem", textTransform: "none" }}
+          >
+            파워업
+          </Button>
+          <Button
+            size="small"
+            variant={magicUpEnabled ? "contained" : "outlined"}
+            onClick={() => setMagicUpEnabled(!magicUpEnabled)}
+            sx={{ minWidth: 0, px: 1.5, py: 0.25, fontSize: "0.75rem", textTransform: "none" }}
+          >
+            매직업
+          </Button>
+          <Tooltip title="파워업과 매직업은 1단계, 2단계가 있으며 각각 최종데미지를 1.15배, 1.3배 증폭시킵니다. 일반몬스터는 1단계, 보스몬스터는 2단계를 시전하는것으로 '추정'됩니다." arrow placement="top">
+            <InfoIcon sx={{ fontSize: 14, color: "#aaa", cursor: "help" }} />
+          </Tooltip>
         </Box>
       </Box>
 
@@ -510,27 +562,149 @@ export default function DamageReceivedTable() {
 
       {/* 피격 데미지 섹션 */}
       <DamageResultSection label="물리 접촉 데미지" result={physicalResult} />
-      <DamageResultSection label="스킬(물리) 피격 데미지" result={physSkillResult} />
-      <DamageResultSection label="스킬(마법) 피격 데미지" result={magicSkillResult} />
+      <DamageResultSection label="스킬(물리) 피격 데미지" result={physSkillResult} infoTooltip="일부 몬스터의 스킬은 물리타입입니다." />
+      <DamageResultSection label="스킬(마법) 피격 데미지" result={magicSkillResult} infoTooltip="일부 몬스터의 스킬은 마법타입이면서, 속성타입을 가집니다. 속성은 무속성, 불, 냉기, 번개, 독 속성이 있습니다. 현재 플레이어의 속성 내성은 반영되어있지 않습니다." />
 
       {/* 회피확률 */}
       <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
         <Typography variant="body2" sx={{ fontWeight: "bold" }}>
           회피확률
         </Typography>
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
           <Typography variant="body2">물리 회피확률</Typography>
-          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-            {combinedPhysEva.toFixed(1)}%
-          </Typography>
+          <Box sx={{ display: "flex", alignItems: "baseline", gap: 0.5 }}>
+            {monsterACC > 0 && (
+              <Typography variant="caption" sx={{ color: physEvaPer10 > 0 ? "success.main" : "text.disabled" }}>
+                회피율 10당 {physEvaPer10.toFixed(2)}%
+              </Typography>
+            )}
+            <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+              {combinedPhysEva.toFixed(1)}%
+            </Typography>
+          </Box>
         </Box>
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
           <Typography variant="body2">마법 회피확률</Typography>
-          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-            {combinedMagicEva.toFixed(1)}%
-          </Typography>
+          <Box sx={{ display: "flex", alignItems: "baseline", gap: 0.5 }}>
+            {monsterACC > 0 && (
+              <Typography variant="caption" sx={{ color: magicEvaPer10 > 0 ? "success.main" : "text.disabled" }}>
+                회피율 10당 {magicEvaPer10.toFixed(2)}%
+              </Typography>
+            )}
+            <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+              {combinedMagicEva.toFixed(1)}%
+            </Typography>
+          </Box>
         </Box>
       </Box>
+
+      {/* 몬스터 선택 모달 */}
+      <Dialog open={mobModalOpen} onClose={() => setMobModalOpen(false)} maxWidth="md" fullWidth>
+        <DialogContent sx={{ p: 1.5, display: "flex", flexDirection: "column", gap: 1 }}>
+          {/* 상단: 검색 + 닫기 */}
+          <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+            <TextField
+              size="small"
+              fullWidth
+              placeholder="이름 검색..."
+              value={mobSearchText}
+              onChange={(e) => { setMobSearchText(e.target.value); setSelectedSubRegion(null); }}
+              sx={{
+                "& .MuiOutlinedInput-root": { height: 32 },
+                "& .MuiInputBase-input": { fontSize: "0.8rem" },
+              }}
+            />
+            <IconButton size="small" onClick={() => setMobModalOpen(false)}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </Box>
+          {/* 지역 필터 — 카테고리별 한 줄씩 (라벨 + 서브지역 버튼) */}
+          {REGION_CATEGORIES.map((cat) => (
+            <Box key={cat.name} sx={{ display: "flex", gap: 0.5, flexWrap: "wrap", alignItems: "center" }}>
+              <Typography variant="caption" sx={{ width: 60, flexShrink: 0, color: "#666", fontWeight: "bold", fontSize: "0.7rem" }}>
+                {cat.name}
+              </Typography>
+              {cat.regions.map((region) => (
+                <Button
+                  key={region}
+                  size="small"
+                  variant={selectedSubRegion === region ? "contained" : "outlined"}
+                  onClick={() => {
+                    setSelectedSubRegion(selectedSubRegion === region ? null : region);
+                    setMobSearchText("");
+                  }}
+                  sx={{ minWidth: "auto", px: 1, py: 0.125, fontSize: "0.7rem", textTransform: "none" }}
+                >
+                  {region}
+                </Button>
+              ))}
+            </Box>
+          ))}
+          <Divider />
+          {/* 몬스터 그리드 */}
+          <Box sx={{ maxHeight: 450, overflow: "auto" }}>
+            {filteredModalMobs.length > 0 ? (
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                {filteredModalMobs.map((mob) => (
+                  <Tooltip
+                    key={mob.id}
+                    title={`Lv.${mob.level} ${mob.koreanName || mob.name}`}
+                    arrow
+                    placement="top"
+                  >
+                    <Box
+                      onClick={() => handleMobSelectFromModal(mob)}
+                      sx={{
+                        width: 44, height: 44,
+                        border: selectedMob?.id === mob.id ? "2px solid #1976d2" : "1px solid #ddd",
+                        borderRadius: 1,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        cursor: "pointer",
+                        bgcolor: selectedMob?.id === mob.id ? "#e3f2fd" : "#fff",
+                        "&:hover": { bgcolor: "#f0f7ff", borderColor: "#1976d2" },
+                        overflow: "hidden",
+                        position: "relative",
+                        "@keyframes spin": { to: { transform: "rotate(360deg)" } },
+                      }}
+                    >
+                      <Box sx={{
+                        position: "absolute",
+                        width: 14, height: 14,
+                        border: "2px solid #e0e0e0",
+                        borderTopColor: "#999",
+                        borderRadius: "50%",
+                        animation: "spin 0.8s linear infinite",
+                      }} />
+                      <img
+                        src={`https://maplestory.io/api/gms/62/mob/${mob.id}/icon`}
+                        alt={mob.koreanName || mob.name}
+                        style={{ maxWidth: 40, maxHeight: 40, objectFit: "contain", position: "relative" }}
+                        loading="lazy"
+                        onLoad={(e) => {
+                          const spinner = e.currentTarget.previousElementSibling as HTMLElement;
+                          if (spinner) spinner.style.display = "none";
+                        }}
+                        onError={(e) => {
+                          const img = e.currentTarget;
+                          if (img.src.includes("/gms/62/")) {
+                            img.src = `https://maplestory.io/api/gms/200/mob/${mob.id}/icon`;
+                          } else if (img.src.includes("/gms/200/")) {
+                            img.src = `https://maplestory.io/api/kms/284/mob/${mob.id}/icon`;
+                          }
+                        }}
+                      />
+                    </Box>
+                  </Tooltip>
+                ))}
+              </Box>
+            ) : (
+              <Typography variant="body2" sx={{ color: "#999", textAlign: "center", py: 4 }}>
+                {mobSearchText ? "검색 결과가 없습니다" : "지역을 선택하세요"}
+              </Typography>
+            )}
+          </Box>
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 }

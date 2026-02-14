@@ -16,6 +16,7 @@ import blessData from "../data/buff/common/bless.json";
 import focusData from "../data/buff/archer/focus.json";
 import beholderBuffData from "../data/buff/warrior/beholderBuff.json";
 import customData from "../data/buff/custom/custom.json";
+import itemBuffsData from "../data/buff/common/itemBuffs.json";
 
 interface BuffOption {
   name: string;
@@ -30,30 +31,40 @@ const statIcons = customData as Record<string, { icon: string }>;
 // 직업별 + 공용 옵션 (job 필드가 없으면 모든 직업에 표시)
 const beholderMaxProps = beholderBuffData.properties[beholderBuffData.maxLevel] as Record<string, number>;
 
+// 아이템 버프를 스탯별 배열로 변환
+const itemPdefOptions: BuffOption[] = itemBuffsData.filter(i => i.pdef > 0).map(i => ({ name: i.koreanName, icon: i.icon, value: i.pdef }));
+const itemMdefOptions: BuffOption[] = itemBuffsData.filter(i => i.mdef > 0).map(i => ({ name: i.koreanName, icon: i.icon, value: i.mdef }));
+const itemAccOptions: BuffOption[] = itemBuffsData.filter(i => i.acc > 0).map(i => ({ name: i.koreanName, icon: i.icon, value: i.acc }));
+const itemEvaOptions: BuffOption[] = itemBuffsData.filter(i => i.eva > 0).map(i => ({ name: i.koreanName, icon: i.icon, value: i.eva }));
+
 const allPdefOptions: BuffOption[] = [
   { name: ironBodyData.koreanName, icon: ironBodyData.icon, value: (ironBodyData.properties[ironBodyData.maxLevel] as Record<string, number>).pdef, job: "warrior" },
   { name: beholderBuffData.koreanName, icon: beholderBuffData.icon, value: beholderMaxProps.pdef, job: "warrior", weaponTypes: ["창", "폴암"] },
   { name: magicArmorData.koreanName, icon: magicArmorData.icon, value: (magicArmorData.properties[magicArmorData.maxLevel] as Record<string, number>).pdef, job: "magician" },
   { name: ironWillData.koreanName, icon: ironWillData.icon, value: (ironWillData.properties[ironWillData.maxLevel] as Record<string, number>).pdef },
   { name: blessData.koreanName, icon: blessData.icon, value: (blessData.properties[blessData.maxLevel] as Record<string, number>).pdef },
+  ...itemPdefOptions,
 ];
 
 const allMdefOptions: BuffOption[] = [
   { name: beholderBuffData.koreanName, icon: beholderBuffData.icon, value: beholderMaxProps.mdef, job: "warrior", weaponTypes: ["창", "폴암"] },
   { name: ironWillData.koreanName, icon: ironWillData.icon, value: (ironWillData.properties[ironWillData.maxLevel] as Record<string, number>).mdef },
   { name: blessData.koreanName, icon: blessData.icon, value: (blessData.properties[blessData.maxLevel] as Record<string, number>).mdef },
+  ...itemMdefOptions,
 ];
 
 const allAccOptions: BuffOption[] = [
   { name: focusData.koreanName, icon: focusData.icon, value: (focusData.properties[focusData.maxLevel] as Record<string, number>).acc, job: "archer" },
   { name: beholderBuffData.koreanName, icon: beholderBuffData.icon, value: beholderMaxProps.acc, job: "warrior", weaponTypes: ["창", "폴암"] },
   { name: blessData.koreanName, icon: blessData.icon, value: (blessData.properties[blessData.maxLevel] as Record<string, number>).acc },
+  ...itemAccOptions,
 ];
 
 const allEvaOptions: BuffOption[] = [
   { name: focusData.koreanName, icon: focusData.icon, value: (focusData.properties[focusData.maxLevel] as Record<string, number>).eva, job: "archer" },
   { name: beholderBuffData.koreanName, icon: beholderBuffData.icon, value: beholderMaxProps.eva, job: "warrior", weaponTypes: ["창", "폴암"] },
   { name: blessData.koreanName, icon: blessData.icon, value: (blessData.properties[blessData.maxLevel] as Record<string, number>).eva },
+  ...itemEvaOptions,
 ];
 
 const ALL_STAT_OPTIONS: { stat: DefenseBuffStat; label: string; options: BuffOption[] }[] = [
