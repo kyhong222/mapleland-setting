@@ -165,6 +165,7 @@ try {
 새 패시브 데이터     → src/data/passive/{직업}/{skillName}.json
 새 아이템 목록       → src/data/items/{카테고리}.json         (PreItem)
 새 아이템 상세       → src/data/postItems/{카테고리}.json     (PostItem)
+새 몬스터 데이터     → src/data/mobs/mobList.json
 ```
 
 직업 폴더명: `warrior`, `archer`, `magician`, `thief`, `common`
@@ -232,9 +233,13 @@ src/data/buff/                   src/data/passive/
 ├── mastery/
 │   ├── mastery1.json
 │   └── mastery2.json
-├── common/                      ← 직업 공용
-├── warrior/ archer/ magician/ thief/  ← 직업별
-└── custom/                      ← 커스텀
+├── common/                      ← 직업 공용 (bless, ironWill, itemBuffs)
+├── warrior/ archer/ magician/ thief/  ← 직업별 (방어/특수 스킬 포함)
+├── custom/                      ← 커스텀
+└── standardPDD.json             ← 직업별 표준 물방 테이블
+
+src/data/mobs/
+└── mobList.json                 ← 몬스터 목록 (id, name, koreanName, level, isBoss, foundAt)
 ```
 
 **스킬 JSON 공통 구조:**
@@ -258,6 +263,27 @@ src/data/buff/                   src/data/passive/
 - `properties[i]` = 레벨 i의 효과. **인덱스 = 레벨** 규칙 필수
 - 스탯 키: `acc`(명중), `eva`(회피), `speed`(이속), `pdefP`(물방%), `mastery`(숙련도), `att`(공격력)
 
+**특수 스킬 JSON 추가 필드:**
+
+```json
+{
+  "excludeWeaponTypes": ["창", "폴암"],   // 해당 무기 장착 시 비활성
+  "requireWeaponTypes": ["아대"],         // 해당 무기만 활성
+  "halfOnBoss": true,                     // 보스 상대 시 효과 반감
+  "properties": [{ "level": 1, "damR": 11 }]  // damR: 데미지감소%, mesoR: 메소소모%, evaP: 추가회피확률
+}
+```
+
+**아이템 버프 JSON (`common/itemBuffs.json`) 구조:**
+
+```json
+[
+  { "koreanName": "아이템명", "icon": "base64...", "pdef": 100, "mdef": 100, "acc": 0, "eva": 0 }
+]
+```
+
+- 레벨 개념 없는 고정값. 스탯이 0보다 큰 항목만 해당 방어 버프 옵션에 자동 등록됨
+
 ### localStorage 키 네이밍 규칙
 
 | 키 패턴 | 용도 | 정의 위치 |
@@ -265,6 +291,7 @@ src/data/buff/                   src/data/passive/
 | `mapleland_slot_{job}_{0-4}` | 직업별 캐릭터 슬롯 (5개) | `characterStorage.ts` |
 | `mapleland_last_active` | 마지막 활성 직업+슬롯 | `characterStorage.ts` |
 | `mapleland_inventory_{job}` | 직업별 인벤토리 | `inventoryStorage.ts` |
+| `mapleland_mob_{job}` | 직업별 선택된 몬스터 ID | `characterStorage.ts` |
 | `mapleland_storage_migrated` | 레거시 마이그레이션 완료 플래그 | `characterStorage.ts` |
 
 **이 키 패턴을 절대 변경하지 말 것.** 기존 사용자의 저장 데이터가 유실된다.
@@ -369,6 +396,8 @@ master push → GitHub Actions (trigger-deploy.yml)
 새 기능 추가 시 빠뜨리기 쉬운 파일들:
 
 - **새 스킬/버프**: JSON 데이터 → `useBuffCallbacks.ts`(상태/콜백) → `BuffTable.tsx`(UI) → `DetailStatTable.tsx`(스탯 반영) → `useStorageCallbacks.ts`(저장 필드)
+- **새 특수 스킬**: JSON 데이터(`src/data/buff/{직업}/`) → `specialSkill.ts`(등록) → `SpecialSkillSection.tsx`(UI) → `DamageReceivedTable.tsx`(계산 반영) → `SKILL_DAMAGE_TYPES` 매핑 추가
+- **새 방어 버프 옵션**: `DefenseBuffSection.tsx`의 옵션 배열에 추가. 아이템 버프는 `itemBuffs.json`에 추가하면 자동 등록
 - **새 장비 슬롯**: `equipment.ts`(EQUIPMENT_LAYOUT) → `EquipTable.tsx` → `Character.ts`
 - **새 스탯 종류**: `stats.ts` → `character.ts`(FinalStats) → `Character.ts`(계산) → `DetailStatTable.tsx`(표시)
 - **새 상태 필드**: `useStorageCallbacks.ts`의 `saveCurrentCharacter()`와 `loadCharacter()` 양쪽에 반드시 반영

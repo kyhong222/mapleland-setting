@@ -47,7 +47,11 @@ mapleland-setting/
 │   │   ├── BuffSelectDialog.tsx# 버프 선택 다이얼로그
 │   │   ├── MasteryDialog.tsx   # 마스터리 레벨 조정 다이얼로그
 │   │   ├── PassiveDialog.tsx   # 패시브 스킬 레벨 조정 다이얼로그
-│   │   ├── DamageTable.tsx     # 데미지 계산 결과 (읽기 전용)
+│   │   ├── DefenseBuffSection.tsx  # 방어 버프 선택 (물방/마방/명중/회피, 아이템 버프 포함)
+│   │   ├── SpecialSkillSection.tsx # 특수 스킬 아이콘 그리드 (파워가드, 아킬레스 등)
+│   │   ├── SpecialSkillDialog.tsx  # 특수 스킬 레벨 조정 다이얼로그
+│   │   ├── DamageTable.tsx     # 공격 데미지 계산 결과 (읽기 전용)
+│   │   ├── DamageReceivedTable.tsx # 피격 데미지 계산 (몬스터 선택, 물리/마법/회피율)
 │   │   ├── DetailStatTable.tsx # 상세 스탯 (명중/회피/방어/이속 등)
 │   │   ├── Inventory.tsx       # 인벤토리 (장비 보관함, 4×6 그리드)
 │   │   ├── ItemMakerModal.tsx  # 아이템 검색/생성/편집 다이얼로그
@@ -69,16 +73,19 @@ mapleland-setting/
 │   │   │   ├── HerosEcho/      #   영웅의 메아리 (공격력/마력 4% 증가)
 │   │   │   ├── buff/           #   직업별 공격력/마력 버프 (buff1, buff2)
 │   │   │   ├── mastery/        #   마스터리 스킬 (mastery1: 기본, mastery2: 추가)
-│   │   │   ├── common/         #   공용 버프 (블레스, 아이언 윌)
-│   │   │   ├── warrior/        #   전사 버프 (비홀더 버프, 아이언 바디)
+│   │   │   ├── common/         #   공용 버프 (블레스, 아이언 윌, 아이템 버프)
+│   │   │   ├── warrior/        #   전사 버프 + 특수 스킬 (파워가드, 아킬레스, 원소저항)
 │   │   │   ├── archer/         #   궁수 버프 (포커스)
-│   │   │   ├── magician/       #   마법사 버프 (매직 아머)
-│   │   │   ├── thief/          #   도적 버프 (페이크, 페이크 아대)
-│   │   │   └── custom/         #   커스텀 버프
+│   │   │   ├── magician/       #   마법사 버프 + 특수 스킬 (무적, 부분저항 FP/IL)
+│   │   │   ├── thief/          #   도적 버프 + 특수 스킬 (메소가드, 페이크)
+│   │   │   ├── custom/         #   커스텀 버프
+│   │   │   └── standardPDD.json#   직업별 표준 물방 테이블 (피격 계산용)
+│   │   ├── mobs/               # 몬스터 데이터
+│   │   │   └── mobList.json    #   몬스터 목록 (id, name, koreanName, level, isBoss, foundAt)
 │   │   └── passive/            # 패시브 스킬 데이터
 │   │       ├── warrior/        #   쉴드 마스터리 (방패 물방% 증가)
 │   │       ├── archer/         #   쓰러스트 (이속), 아마존의 축복 (명중)
-│   │       └── thief/          #   님블 바디 (명중+회피)
+│   │       └── thief/          #   님블 바디 (명중+회피), 쉴드 마스터리
 │   ├── hooks/
 │   │   ├── useBuffCallbacks.ts  # 버프·마스터리·패시브 관련 useCallback 묶음
 │   │   ├── useStorageCallbacks.ts # 저장/로드/슬롯 관련 useCallback 묶음
@@ -91,6 +98,7 @@ mapleland-setting/
 │   │   ├── item.ts             # Item, ItemType, ItemStats, PreItem, PostItemData
 │   │   ├── job.ts              # Job 인터페이스, JOBS 상수, JOB_COLORS
 │   │   ├── mastery.ts          # MasteryProperty, MasterySkill
+│   │   ├── specialSkill.ts     # SpecialSkillData 인터페이스, specialSkillsByJob 매핑
 │   │   └── stats.ts            # Stats 인터페이스 (순수·장비·버프 스탯)
 │   ├── utils/
 │   │   ├── characterStorage.ts # localStorage 기반 캐릭터 저장/로드/슬롯 관리
@@ -196,10 +204,14 @@ Character
 ├── mastery1 / mastery2       (마스터리 레벨)
 ├── masteryAttack             (마스터리 추가 공격력)
 ├── passiveLevels             (패시브 스킬 레벨 맵)
-└── buffMAD                   (버프 마력 합산)
+├── buffMAD                   (버프 마력 합산)
+├── defenseBuffs: DefenseBuffState  (물방/마방/명중/회피 방어 버프)
+└── specialSkillLevels        (특수 스킬 레벨 맵: 파워가드, 아킬레스 등)
 ```
 
 `BuffUIState`는 버프 선택 UI 상태(label, icon, isManual × 2)를 하나의 구조체로 묶은 인터페이스로, `getBuffUIState()` / `updateBuffUI()` 메서드로 접근한다.
+
+`DefenseBuffState`는 `{ pdef, mdef, acc, eva }` 각각 `{ value, label, icon, isManual }` 구조의 `DefenseBuffEntry`를 보유한다.
 
 ### 5.3 로컬 상태
 
@@ -212,6 +224,7 @@ Character
 | `mapleland_slot_{job}_{0~4}` | 직업별 5개 슬롯의 캐릭터 데이터 |
 | `mapleland_last_active` | 마지막 활성 직업+슬롯 |
 | `mapleland_inventory_{job}` | 직업별 인벤토리 |
+| `mapleland_mob_{job}` | 직업별 선택된 몬스터 ID |
 
 서버 상태(Server State)는 존재하지 않음.
 
@@ -227,6 +240,9 @@ Character
 | 아이템 상세 조회 | `GET /api/gms/62/item/{id}` | `maplestory.ts` |
 | 아이템 아이콘 | `GET /api/gms/62/item/{id}/icon?resize=5` | `maplestory.ts` |
 | 한글 이름 조회 | `GET /api/kms/284/item/{id}/name` | `maplestory.ts` |
+| 몬스터 상세 조회 | `GET /api/gms/62/mob/{id}` | `maplestory.ts` |
+| 몬스터 한글 이름 | `GET /api/kms/284/mob/{id}/name` | `maplestory.ts` |
+| 몬스터 아이콘 | `GET /api/gms/62/mob/{id}/render/stand` (GMS→GMS200→KMS 순 시도) | `maplestory.ts` |
 
 ### 6.2 에러 핸들링
 
@@ -242,8 +258,9 @@ Character
 
 - `src/data/items/` — PreItem: 아이템 ID, 이름, 필요레벨 목록 (가벼운 목록용)
 - `src/data/postItems/` — PostItem: 상세 스탯, 아이콘 base64, 필요스탯 (스크립트로 API에서 생성)
-- `src/data/buff/` — 버프/마스터리 스킬별 레벨 테이블
+- `src/data/buff/` — 버프/마스터리/특수스킬별 레벨 테이블 + 아이템 버프 + 표준 PDD
 - `src/data/passive/` — 패시브 스킬별 레벨 테이블
+- `src/data/mobs/` — 몬스터 목록 (ID, 이름, 레벨, 보스여부, 출현지역)
 
 ### 7.2 사용자 데이터 (`localStorage`)
 
@@ -265,6 +282,8 @@ Character
     buff1Label / buff1Icon / buff1IsManual: ...;
     buff2Label / buff2Icon / buff2IsManual: ...;
     passiveLevels?: Record<string, number>;
+    defenseBuffs?: DefenseBuffState;           // 방어 버프 (물방/마방/명중/회피)
+    specialSkillLevels?: Record<string, number>; // 특수 스킬 레벨
   };
 }
 ```
