@@ -33,6 +33,8 @@ export interface SavedCharacterData {
     defenseBuffs?: DefenseBuffState;
     // 특수 스킬 레벨
     specialSkillLevels?: Record<string, number>;
+    // 마법사 서브직업
+    magicianSubClass?: string;
   };
 }
 

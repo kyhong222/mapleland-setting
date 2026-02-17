@@ -1,9 +1,10 @@
-import { Box, Typography, IconButton, Divider } from "@mui/material";
+import { Box, Typography, IconButton, Divider, Button } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
 import { useState } from "react";
 import { useCharacter } from "../contexts/CharacterContext";
 import type { PassiveSkillData } from "../types/passive";
 import type { SpecialSkillData } from "../types/specialSkill";
+import { MAGICIAN_SUBCLASSES } from "../types/specialSkill";
 import mastery1Data from "../data/buff/mastery/mastery1.json";
 import shieldMasteryData from "../data/passive/warrior/shieldMastery.json";
 import thiefShieldMasteryData from "../data/passive/thief/shieldMastery.json";
@@ -23,7 +24,7 @@ interface DetailStatTableProps {
 }
 
 export default function DetailStatTable({ onClose }: DetailStatTableProps) {
-  const { character, mastery1, mastery2, passiveLevels, specialSkillLevels, defenseBuffs } = useCharacter();
+  const { character, mastery1, mastery2, passiveLevels, specialSkillLevels, defenseBuffs, magicianSubClass, setMagicianSubClass } = useCharacter();
   const equipStats = character.getEquipmentStats();
   const finalStats = character.getFinalStats();
   const job = character.getJob();
@@ -152,9 +153,26 @@ export default function DetailStatTable({ onClose }: DetailStatTableProps) {
 
         {/* 특수 스킬 */}
         <Divider sx={{ my: 0 }} />
-        <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-          특수 스킬
-        </Typography>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+            특수 스킬
+          </Typography>
+          {job?.engName === "magician" && (
+            <Box sx={{ display: "flex", gap: 0.5 }}>
+              {MAGICIAN_SUBCLASSES.map((sub) => (
+                <Button
+                  key={sub}
+                  size="small"
+                  variant={magicianSubClass === sub ? "contained" : "outlined"}
+                  onClick={() => setMagicianSubClass(sub)}
+                  sx={{ minWidth: 0, px: 1, py: 0, fontSize: "0.65rem", textTransform: "none" }}
+                >
+                  {sub}
+                </Button>
+              ))}
+            </Box>
+          )}
+        </Box>
         <Box
           sx={{
             padding: 1.5,
@@ -170,6 +188,7 @@ export default function DetailStatTable({ onClose }: DetailStatTableProps) {
             jobEngName={job?.engName}
             specialSkillLevels={specialSkillLevels}
             weaponType={character.getWeaponType() ?? undefined}
+            magicianSubClass={magicianSubClass}
             onSkillClick={(skill, level) => {
               setTempSpecialSkillLevel(level);
               setSpecialSkillDialogData(skill);

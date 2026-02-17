@@ -70,6 +70,8 @@ interface CharacterContextValue {
   // Special Skills
   specialSkillLevels: Record<string, number>;
   setSpecialSkillLevel: (key: string, level: number) => void;
+  magicianSubClass: string;
+  setMagicianSubClass: (subClass: string) => void;
 
   // Defense Buffs
   defenseBuffs: DefenseBuffState;

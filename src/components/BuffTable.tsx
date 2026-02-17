@@ -2,11 +2,13 @@ import {
   Box,
   Typography,
   Divider,
+  Button,
 } from "@mui/material";
 import { useState } from "react";
 import { useCharacter } from "../contexts/CharacterContext";
 import type { PassiveSkillData } from "../types/passive";
 import type { SpecialSkillData } from "../types/specialSkill";
+import { MAGICIAN_SUBCLASSES } from "../types/specialSkill";
 import MasteryDialog from "./MasteryDialog";
 import BuffSelectDialog from "./BuffSelectDialog";
 import PassiveDialog from "./PassiveDialog";
@@ -26,6 +28,8 @@ export default function BuffTable() {
     mastery2,
     passiveLevels,
     specialSkillLevels,
+    magicianSubClass,
+    setMagicianSubClass,
   } = useCharacter();
 
   const [mapleWarriorDialog, setMapleWarriorDialog] = useState(false);
@@ -96,9 +100,26 @@ export default function BuffTable() {
 
         {/* 특수 스킬 */}
         <Divider sx={{ my: 0 }} />
-        <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-          특수 스킬
-        </Typography>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+            특수 스킬
+          </Typography>
+          {job?.engName === "magician" && (
+            <Box sx={{ display: "flex", gap: 0.5 }}>
+              {MAGICIAN_SUBCLASSES.map((sub) => (
+                <Button
+                  key={sub}
+                  size="small"
+                  variant={magicianSubClass === sub ? "contained" : "outlined"}
+                  onClick={() => setMagicianSubClass(sub)}
+                  sx={{ minWidth: 0, px: 1, py: 0, fontSize: "0.65rem", textTransform: "none" }}
+                >
+                  {sub}
+                </Button>
+              ))}
+            </Box>
+          )}
+        </Box>
         <Box
           sx={{
             padding: 1.5,
@@ -114,6 +135,7 @@ export default function BuffTable() {
             jobEngName={job?.engName}
             specialSkillLevels={specialSkillLevels}
             weaponType={character.getWeaponType() ?? undefined}
+            magicianSubClass={magicianSubClass}
             onSkillClick={(skill, level) => {
               setTempSpecialSkillLevel(level);
               setSpecialSkillDialogData(skill);

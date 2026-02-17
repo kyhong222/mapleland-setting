@@ -78,6 +78,7 @@ export class Character {
   private buffMAD = 0;
   private passiveLevels: Record<string, number> = {};
   private specialSkillLevels: Record<string, number> = {};
+  private magicianSubClass = "썬콜";
   private buffUI: BuffUIState = { ...DEFAULT_BUFF_UI_STATE };
   private defenseBuffs: DefenseBuffState = createDefaultDefenseBuffs();
 
@@ -352,6 +353,9 @@ export class Character {
   getSpecialSkillLevels(): Record<string, number> { return { ...this.specialSkillLevels }; }
   setSpecialSkillLevels(levels: Record<string, number>): void { this.specialSkillLevels = levels; }
   setSpecialSkillLevel(key: string, level: number): void { this.specialSkillLevels[key] = level; }
+
+  getMagicianSubClass(): string { return this.magicianSubClass; }
+  setMagicianSubClass(subClass: string): void { this.magicianSubClass = subClass; }
 
   getBuffUIState(): BuffUIState { return { ...this.buffUI }; }
   updateBuffUI(partial: Partial<BuffUIState>): void { Object.assign(this.buffUI, partial); }

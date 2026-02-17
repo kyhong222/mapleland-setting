@@ -87,6 +87,7 @@ export function useStorageCallbacks(
         });
         if (data.buffs.passiveLevels) character.setPassiveLevels(data.buffs.passiveLevels);
         if (data.buffs.specialSkillLevels) character.setSpecialSkillLevels(data.buffs.specialSkillLevels);
+        if (data.buffs.magicianSubClass) character.setMagicianSubClass(data.buffs.magicianSubClass);
         if (data.buffs.defenseBuffs) {
           for (const stat of ["pdef", "mdef", "acc", "eva"] as const) {
             if (data.buffs.defenseBuffs[stat]) {
@@ -138,6 +139,7 @@ export function useStorageCallbacks(
         ...character.getBuffUIState(),
         passiveLevels: character.getPassiveLevels(),
         specialSkillLevels: character.getSpecialSkillLevels(),
+        magicianSubClass: character.getMagicianSubClass(),
         defenseBuffs: character.getDefenseBuffs(),
       },
     });

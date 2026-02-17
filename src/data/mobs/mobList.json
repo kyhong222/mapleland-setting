@@ -3076,7 +3076,7 @@
   {
     "id": 8500004,
     "name": "Low Darkstar",
-    "koreanName": "하이 다크스타",
+    "koreanName": "로우 다크스타",
     "level": 71,
     "isBoss": true,
     "foundAt": [
@@ -3346,7 +3346,7 @@
   {
     "id": 8500003,
     "name": "High Darkstar",
-    "koreanName": "로우 다크스타",
+    "koreanName": "하이 다크스타",
     "level": 80,
     "isBoss": true,
     "foundAt": [

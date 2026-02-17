@@ -191,6 +191,14 @@ export function useBuffCallbacks(character: Character, refresh: () => void, vers
     [character, refresh],
   );
 
+  const setMagicianSubClass = useCallback(
+    (subClass: string) => {
+      character.setMagicianSubClass(subClass);
+      refresh();
+    },
+    [character, refresh],
+  );
+
   return useMemo(
     () => ({
       setBuffEnabled,
@@ -212,8 +220,10 @@ export function useBuffCallbacks(character: Character, refresh: () => void, vers
       setBuff2IsManual,
       setDefenseBuff,
       setSpecialSkillLevel,
+      setMagicianSubClass,
       defenseBuffs: character.getDefenseBuffs(),
       specialSkillLevels: character.getSpecialSkillLevels(),
+      magicianSubClass: character.getMagicianSubClass(),
       heroEchoEnabled: character.getHeroEchoEnabled(),
       buff1Attack: character.getBuff1Attack(),
       buff2Attack: character.getBuff2Attack(),
@@ -247,6 +257,7 @@ export function useBuffCallbacks(character: Character, refresh: () => void, vers
       setBuff2IsManual,
       setDefenseBuff,
       setSpecialSkillLevel,
+      setMagicianSubClass,
     ],
   );
 }

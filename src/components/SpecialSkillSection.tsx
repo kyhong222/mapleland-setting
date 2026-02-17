@@ -1,17 +1,13 @@
-import { Box, Typography, Tooltip } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import type { SpecialSkillData } from "../types/specialSkill";
-import { specialSkillsByJob } from "../types/specialSkill";
-
-const DISABLED_SKILLS = new Set([
-  "Element Resistance",
-  "Partial Resistance FP",
-  "Partial Resistance IL",
-]);
+import { specialSkillsByJob, MAGICIAN_SUBCLASS_SKILLS } from "../types/specialSkill";
+import type { MagicianSubClass } from "../types/specialSkill";
 
 interface SpecialSkillSectionProps {
   jobEngName: string | undefined;
   specialSkillLevels: Record<string, number>;
   weaponType: string | undefined;
+  magicianSubClass?: string;
   onSkillClick: (skill: SpecialSkillData, currentLevel: number) => void;
 }
 
@@ -19,32 +15,36 @@ export default function SpecialSkillSection({
   jobEngName,
   specialSkillLevels,
   weaponType,
+  magicianSubClass,
   onSkillClick,
 }: SpecialSkillSectionProps) {
   if (!jobEngName) return null;
   const skills = specialSkillsByJob[jobEngName] || [];
   if (skills.length === 0) return null;
 
+  const isMagician = jobEngName === "magician";
+  const activeSubClass = (magicianSubClass ?? "썬콜") as MagicianSubClass;
+  const activeSkillNames = isMagician
+    ? MAGICIAN_SUBCLASS_SKILLS[activeSubClass] ?? []
+    : null;
+
   const filtered = skills.filter((skill) => {
     const meetsRequire = !skill.requireWeaponTypes ||
       (weaponType != null && skill.requireWeaponTypes.includes(weaponType));
     const meetsExclude = !skill.excludeWeaponTypes ||
       (weaponType != null && !skill.excludeWeaponTypes.includes(weaponType));
-    return meetsRequire && meetsExclude;
+    if (!meetsRequire || !meetsExclude) return false;
+    if (activeSkillNames) return activeSkillNames.includes(skill.englishName);
+    return true;
   });
-
-  if (filtered.length === 0) return null;
 
   return filtered.map((skill) => {
     const level = specialSkillLevels[skill.englishName] ?? 0;
-    const isDisabled = DISABLED_SKILLS.has(skill.englishName);
 
-    const content = (
-      <Box key={skill.englishName} sx={{ display: "flex", gap: 1, opacity: isDisabled ? 0.4 : 1 }}>
+    return (
+      <Box key={skill.englishName} sx={{ display: "flex", gap: 1 }}>
         <Box
-          onClick={() => {
-            if (!isDisabled) onSkillClick(skill, specialSkillLevels[skill.englishName] ?? 0);
-          }}
+          onClick={() => onSkillClick(skill, specialSkillLevels[skill.englishName] ?? 0)}
           sx={{
             minWidth: 40,
             height: 40,
@@ -55,8 +55,8 @@ export default function SpecialSkillSection({
             borderRadius: 1,
             fontSize: "0.75rem",
             overflow: "hidden",
-            cursor: isDisabled ? "not-allowed" : "pointer",
-            "&:hover": isDisabled ? {} : { opacity: 0.8 },
+            cursor: "pointer",
+            "&:hover": { opacity: 0.8 },
           }}
         >
           {skill.icon ? (
@@ -89,21 +89,11 @@ export default function SpecialSkillSection({
               {skill.koreanName}
             </Typography>{" "}
             <Typography component="span" sx={{ color: "#666", fontSize: "0.7rem" }}>
-              {isDisabled ? "미구현" : `Lv ${level}`}
+              Lv {level}
             </Typography>
           </Typography>
         </Box>
       </Box>
     );
-
-    if (isDisabled) {
-      return (
-        <Tooltip key={skill.englishName} title="미구현" arrow placement="top">
-          {content}
-        </Tooltip>
-      );
-    }
-
-    return content;
   });
 }

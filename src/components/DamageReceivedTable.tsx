@@ -1,8 +1,9 @@
-import { Box, Typography, TextField, Button, Divider, Dialog, DialogContent, Tooltip, IconButton } from "@mui/material";
+import { Box, Typography, TextField, Button, Divider, Dialog, DialogContent, Tooltip, IconButton, CircularProgress } from "@mui/material";
 import { Close as CloseIcon, Search as SearchIcon, Info as InfoIcon } from "@mui/icons-material";
-import { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef, type JSX } from "react";
 import { useCharacter } from "../contexts/CharacterContext";
-import { specialSkillsByJob } from "../types/specialSkill";
+import { specialSkillsByJob, MAGICIAN_SUBCLASS_SKILLS } from "../types/specialSkill";
+import type { MagicianSubClass } from "../types/specialSkill";
 import standardPDDData from "../data/buff/standardPDD.json";
 import shieldMasteryData from "../data/passive/warrior/shieldMastery.json";
 import thiefShieldMasteryData from "../data/passive/thief/shieldMastery.json";
@@ -12,6 +13,36 @@ import mobListData from "../data/mobs/mobList.json";
 import { saveSelectedMobId, getSelectedMobId } from "../utils/characterStorage";
 
 const standardPDD = standardPDDData as Record<string, Record<string, number>>;
+
+interface MobSkillInfo {
+  type?: number;
+  magic?: number;
+  elemAttr?: string;
+  PADamage?: number;
+  MADamage?: number;
+}
+interface MobWzEntry {
+  id: number;
+  PADamage?: number;
+  MADamage?: number;
+  acc?: number;
+  skills?: Record<string, MobSkillInfo>;
+}
+
+// 모듈 레벨 캐시: 한 번 로드하면 재사용
+let mobWzCache: Record<string, MobWzEntry> | null = null;
+let mobWzPromise: Promise<Record<string, MobWzEntry>> | null = null;
+
+function loadMobWzData(): Promise<Record<string, MobWzEntry>> {
+  if (mobWzCache) return Promise.resolve(mobWzCache);
+  if (!mobWzPromise) {
+    mobWzPromise = import("../data/mobs/mobWzData.json").then((mod) => {
+      mobWzCache = mod.default as Record<string, MobWzEntry>;
+      return mobWzCache;
+    });
+  }
+  return mobWzPromise;
+}
 
 interface MobListEntry {
   id: number;
@@ -152,6 +183,13 @@ const ALL_DAMAGE_TYPES: DamageType[] = ["touch", "physical", "magic", "fire", "i
 const POWER_UP_NORMAL = 1.15;
 const POWER_UP_BOSS = 1.3;
 
+const ELEM_LABELS: Record<string, string> = {
+  F: "불", I: "얼음", L: "번개", S: "독",
+};
+const ELEM_TO_DAMAGE_TYPE: Record<string, DamageType> = {
+  F: "fire", I: "ice", L: "lightning", S: "poison",
+};
+
 const SKILL_DAMAGE_TYPES: Record<string, DamageType[]> = {
   "Power Guard": ["touch"],
   "Achilles": ALL_DAMAGE_TYPES,
@@ -172,8 +210,17 @@ interface DamageResult {
   mesoAbsMin: number; mesoAbsMax: number;
 }
 
+interface SkillDamageEntry {
+  name: string;
+  names: string[];
+  label: string;
+  result: DamageResult;
+}
+
 /** 피격 데미지 결과 표시 (DamageTable과 동일 디자인) */
-function DamageResultSection({ label, result, infoTooltip }: { label: string; result: DamageResult; infoTooltip?: string }) {
+function DamageResultSection({ label, result, infoTooltip, endAdornment }: {
+  label: string; result: DamageResult; infoTooltip?: string; endAdornment?: JSX.Element;
+}) {
   return (
     <Box sx={{ borderBottom: "1px solid #ccc", p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
       <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
@@ -185,6 +232,7 @@ function DamageResultSection({ label, result, infoTooltip }: { label: string; re
             <InfoIcon sx={{ fontSize: 14, color: "#aaa", cursor: "help" }} />
           </Tooltip>
         )}
+        {endAdornment}
       </Box>
       <Typography variant="body2" sx={{ fontSize: "1.1rem", textAlign: "center" }}>
         {result.finalMin.toLocaleString()} ~ {result.finalMax.toLocaleString()}
@@ -193,8 +241,48 @@ function DamageResultSection({ label, result, infoTooltip }: { label: string; re
   );
 }
 
+/** 스킬 애니메이션 GIF 툴팁 (key로 mobId-skillName을 전달하여 몬스터 변경 시 상태 초기화) */
+function SkillAnimationTooltip({ mobId, skillName }: { mobId: number; skillName: string }) {
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState(false);
+  const animUrl = `https://maplestory.io/api/GMS/62/mob/${mobId}/render/${skillName}`;
+
+  if (error) return null;
+
+  return (
+    <Tooltip
+      arrow
+      placement="right"
+      slotProps={{
+        tooltip: { sx: { bgcolor: "rgba(30,30,30,0.95)", p: 1, maxWidth: "none" } },
+      }}
+      title={
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", minWidth: 64, minHeight: 64 }}>
+          {!loaded && <CircularProgress size={20} sx={{ color: "#fff" }} />}
+          <img
+            src={animUrl}
+            alt={skillName}
+            style={{ maxWidth: 240, maxHeight: 240, display: loaded ? "block" : "none" }}
+            onLoad={() => setLoaded(true)}
+            onError={(e) => {
+              const img = e.currentTarget;
+              if (img.src.includes("/GMS/62/")) {
+                img.src = `https://maplestory.io/api/GMS/200/mob/${mobId}/render/${skillName}`;
+              } else {
+                setError(true);
+              }
+            }}
+          />
+        </Box>
+      }
+    >
+      <InfoIcon sx={{ fontSize: 14, color: "#aaa", cursor: "help" }} />
+    </Tooltip>
+  );
+}
+
 export default function DamageReceivedTable() {
-  const { character, defenseBuffs, specialSkillLevels, passiveLevels } = useCharacter();
+  const { character, defenseBuffs, specialSkillLevels, passiveLevels, magicianSubClass } = useCharacter();
 
   const [monsterATT, setMonsterATT] = useState(630);
   const [monsterMATT, setMonsterMATT] = useState(480);
@@ -207,6 +295,12 @@ export default function DamageReceivedTable() {
   const [mobModalOpen, setMobModalOpen] = useState(false);
   const [selectedSubRegion, setSelectedSubRegion] = useState<string | null>(null);
   const [mobSearchText, setMobSearchText] = useState("");
+  const [mobWzData, setMobWzData] = useState<Record<string, MobWzEntry> | null>(null);
+
+  // WZ 데이터 동적 로드
+  useEffect(() => {
+    loadMobWzData().then(setMobWzData);
+  }, []);
 
   const job = character.getJob();
   const jobEngName = job?.engName ?? "";
@@ -218,12 +312,22 @@ export default function DamageReceivedTable() {
 
     if (save && jobEngName) saveSelectedMobId(jobEngName, mob.id);
 
-    const details = await fetchMobDetails(mob.id);
-    if (details) {
-      setMonsterATT(details.meta.physicalDamage);
-      setMonsterMATT(details.meta.magicDamage);
-      setMonsterACC(details.meta.accuracy);
-      setMonsterLevel(details.meta.level);
+    // WZ 데이터 동적 로드 후 우선 사용, 없으면 API 폴백
+    const wzData = await loadMobWzData();
+    const wzEntry = wzData[String(mob.id)];
+    if (wzEntry) {
+      if (wzEntry.PADamage !== undefined) setMonsterATT(wzEntry.PADamage);
+      if (wzEntry.MADamage !== undefined) setMonsterMATT(wzEntry.MADamage);
+      if (wzEntry.acc !== undefined) setMonsterACC(wzEntry.acc);
+      setMonsterLevel(mob.level);
+    } else {
+      const details = await fetchMobDetails(mob.id);
+      if (details) {
+        setMonsterATT(details.meta.physicalDamage);
+        setMonsterMATT(details.meta.magicDamage);
+        setMonsterACC(details.meta.accuracy);
+        setMonsterLevel(details.meta.level);
+      }
     }
 
     const iconUrl = await fetchMobIcon(mob.id);
@@ -306,6 +410,10 @@ export default function DamageReceivedTable() {
   const activeReductions = useMemo(() => {
     const skills = specialSkillsByJob[jobEngName] || [];
     const results: { name: string; icon: string; level: number; damR: number; types: DamageType[]; halfOnBoss?: boolean }[] = [];
+    // 마법사: 선택한 서브직업의 스킬만 적용
+    const mageActiveSkills = isMagician
+      ? MAGICIAN_SUBCLASS_SKILLS[(magicianSubClass ?? "썬콜") as MagicianSubClass] ?? []
+      : null;
 
     for (const skill of skills) {
       const level = specialSkillLevels[skill.englishName] ?? 0;
@@ -313,6 +421,7 @@ export default function DamageReceivedTable() {
 
       if (skill.excludeWeaponTypes && weaponType && skill.excludeWeaponTypes.includes(weaponType)) continue;
       if (skill.requireWeaponTypes && (!weaponType || !skill.requireWeaponTypes.includes(weaponType))) continue;
+      if (mageActiveSkills && !mageActiveSkills.includes(skill.englishName)) continue;
 
       const props = skill.properties.find(p => p.level === level) || {};
       const damR = props.damR ?? 0;
@@ -330,7 +439,7 @@ export default function DamageReceivedTable() {
       }
     }
     return results;
-  }, [jobEngName, specialSkillLevels, weaponType]);
+  }, [jobEngName, specialSkillLevels, weaponType, isMagician, magicianSubClass]);
 
   // 메소가드 정보 (별도 처리: powerUp 적용 전 기준으로 50% 흡수)
   const mesoGuardInfo = useMemo(() => {
@@ -415,24 +524,50 @@ export default function DamageReceivedTable() {
     return applyModifiers(base, "touch");
   }, [monsterATT, wdef, stdPDD, stats.level, monsterLevel, isWarrior, finalStats, applyModifiers]);
 
-  // 스킬(물리) 피격 데미지
-  const physSkillResult = useMemo(() => {
-    const base = calcPhysicalDamage(
-      monsterMATT, wdef, stdPDD, stats.level, monsterLevel, isWarrior,
-      finalStats.totalStr, finalStats.totalDex, finalStats.totalInt, finalStats.totalLuk,
-    );
-    return applyModifiers(base, "physical");
-  }, [monsterMATT, wdef, stdPDD, stats.level, monsterLevel, isWarrior, finalStats, applyModifiers]);
+  // WZ 데이터 기반 스킬별 데미지 계산
+  const skillResults = useMemo((): SkillDamageEntry[] => {
+    if (!selectedMob || !mobWzData) return [];
+    const wzEntry = mobWzData[String(selectedMob.id)];
+    if (!wzEntry?.skills) return [];
 
-  // 스킬(마법) 피격 데미지
-  const magicSkillResult = useMemo(() => {
-    const base = calcMagicDamage(
-      monsterMATT, mdef, isMagician,
-      finalStats.totalStr, finalStats.totalDex, finalStats.totalLuk,
-    );
-    return applyModifiers(base, "magic");
-  }, [monsterMATT, mdef, isMagician, finalStats, applyModifiers]);
+    const entries: SkillDamageEntry[] = [];
+    const skillKeys = Object.keys(wzEntry.skills).sort((a, b) => {
+      const na = parseInt(a.replace(/\D/g, "")) || 0;
+      const nb = parseInt(b.replace(/\D/g, "")) || 0;
+      return a.replace(/\d/g, "").localeCompare(b.replace(/\d/g, "")) || na - nb;
+    });
 
+    for (const key of skillKeys) {
+      const sk = wzEntry.skills[key];
+      if (sk.magic === 1) {
+        const att = wzEntry.MADamage ?? monsterMATT;
+        const elemLabel = sk.elemAttr ? ELEM_LABELS[sk.elemAttr] ?? sk.elemAttr : "무";
+        const dmgType: DamageType = sk.elemAttr ? (ELEM_TO_DAMAGE_TYPE[sk.elemAttr] ?? "magic") : "magic";
+        const base = calcMagicDamage(att, mdef, isMagician, finalStats.totalStr, finalStats.totalDex, finalStats.totalLuk);
+        entries.push({ name: key, names: [key], label: `${elemLabel}속성 마법`, result: applyModifiers(base, dmgType) });
+      } else {
+        // 물리 스킬: 자체 PADamage가 있는 경우만 표시 (없으면 접촉과 동일하거나 비데미지 스킬)
+        if (!sk.PADamage) continue;
+        const base = calcPhysicalDamage(sk.PADamage, wdef, stdPDD, stats.level, monsterLevel, isWarrior,
+          finalStats.totalStr, finalStats.totalDex, finalStats.totalInt, finalStats.totalLuk);
+        const elemLabel = sk.elemAttr ? `${ELEM_LABELS[sk.elemAttr] ?? sk.elemAttr}속성 ` : "";
+        entries.push({ name: key, names: [key], label: `${elemLabel}물리`, result: applyModifiers(base, "physical") });
+      }
+    }
+
+    // 동일 label + 동일 결과 중복 제거 (names는 합침)
+    const deduped: SkillDamageEntry[] = [];
+    for (const entry of entries) {
+      const dup = deduped.find(d => d.label === entry.label && d.result.finalMin === entry.result.finalMin && d.result.finalMax === entry.result.finalMax);
+      if (dup) {
+        dup.names.push(...entry.names);
+      } else {
+        deduped.push(entry);
+      }
+    }
+    return deduped;
+  }, [selectedMob, mobWzData, monsterMATT, monsterLevel, wdef, mdef, stdPDD,
+      stats.level, isWarrior, isMagician, finalStats, applyModifiers]);
 
   // 특수 스킬 추가 회피확률 (페이크 등)
   const specialEvaInfo = useMemo(() => {
@@ -586,9 +721,17 @@ export default function DamageReceivedTable() {
       <Divider />
 
       {/* 피격 데미지 섹션 */}
-      <DamageResultSection label="물리 접촉 데미지" result={physicalResult} />
-      <DamageResultSection label="스킬(물리) 피격 데미지" result={physSkillResult} infoTooltip="일부 몬스터의 스킬은 물리타입입니다. ex. 예티와페페의 땅찍기" />
-      <DamageResultSection label="스킬(마법) 피격 데미지" result={magicSkillResult} infoTooltip="일부 몬스터의 스킬은 마법타입이면서, 속성타입을 가집니다. 속성은 무속성, 불, 냉기, 번개, 독 속성이 있습니다. 현재 플레이어의 속성 내성은 반영되어있지 않습니다." />
+      <DamageResultSection label="접촉 데미지" result={physicalResult} />
+      {skillResults.map((entry) => (
+        <DamageResultSection
+          key={entry.name}
+          label={`스킬 - ${entry.label}`}
+          result={entry.result}
+          endAdornment={selectedMob ? <>{entry.names.map(name => (
+            <SkillAnimationTooltip key={`${selectedMob.id}-${name}`} mobId={selectedMob.id} skillName={name} />
+          ))}</> : undefined}
+        />
+      ))}
 
       {/* 회피확률 */}
       <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
