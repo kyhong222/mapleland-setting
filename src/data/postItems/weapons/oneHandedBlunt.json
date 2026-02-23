@@ -349,6 +349,7 @@
       "mdef": 0,
       "acc": 0,
       "eva": 0,
+      "speed": 10,
       "attackSpeed": 5
     },
     "requireStats": {
@@ -397,6 +398,7 @@
       "mdef": 0,
       "acc": 0,
       "eva": 0,
+      "maxMp": 50,
       "attackSpeed": 5
     },
     "requireStats": {
@@ -421,6 +423,7 @@
       "mdef": 0,
       "acc": 0,
       "eva": 0,
+      "maxHp": 150,
       "attackSpeed": 5
     },
     "requireStats": {
@@ -445,6 +448,7 @@
       "mdef": 0,
       "acc": 0,
       "eva": 0,
+      "jump": 10,
       "attackSpeed": 5
     },
     "requireStats": {
