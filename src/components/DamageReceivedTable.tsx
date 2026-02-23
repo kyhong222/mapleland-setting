@@ -218,8 +218,9 @@ interface SkillDamageEntry {
 }
 
 /** 피격 데미지 결과 표시 (DamageTable과 동일 디자인) */
-function DamageResultSection({ label, result, infoTooltip, endAdornment }: {
+function DamageResultSection({ label, result, infoTooltip, endAdornment, appliedSkills }: {
   label: string; result: DamageResult; infoTooltip?: string; endAdornment?: JSX.Element;
+  appliedSkills?: Array<{ name: string; icon: string; level: number }>;
 }) {
   return (
     <Box sx={{ borderBottom: "1px solid #ccc", p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
@@ -233,6 +234,27 @@ function DamageResultSection({ label, result, infoTooltip, endAdornment }: {
           </Tooltip>
         )}
         {endAdornment}
+        {/* 적용된 스킬 아이콘 표시 */}
+        {appliedSkills && appliedSkills.length > 0 && (
+          <Box sx={{ display: "flex", gap: 0.25, ml: "auto" }}>
+            {appliedSkills.map((skill) => (
+              <Tooltip key={skill.name} title={`${skill.name} Lv.${skill.level}`} arrow placement="top">
+                <Box
+                  component="img"
+                  src={`data:image/webp;base64,${skill.icon}`}
+                  alt={skill.name}
+                  sx={{
+                    width: 20,
+                    height: 20,
+                    objectFit: "contain",
+                    opacity: 0.85,
+                    "&:hover": { opacity: 1 },
+                  }}
+                />
+              </Tooltip>
+            ))}
+          </Box>
+        )}
       </Box>
       <Typography variant="body2" sx={{ fontSize: "1.1rem", textAlign: "center" }}>
         {result.finalMin.toLocaleString()} ~ {result.finalMax.toLocaleString()}
@@ -454,6 +476,15 @@ export default function DamageReceivedTable() {
     }).find(x => x !== null);
     return found ?? { active: false as const, level: 0, icon: "", name: "" };
   }, [jobEngName, specialSkillLevels, weaponType]);
+
+  /** 특정 데미지 타입에 적용되는 스킬 목록 반환 (메소가드 제외) */
+  const getAppliedSkills = useCallback((dmgType: DamageType) => {
+    return activeReductions.filter(r => r.types.includes(dmgType)).map(r => ({
+      name: r.name,
+      icon: r.icon,
+      level: r.level,
+    }));
+  }, [activeReductions]);
 
   /** 특정 데미지 타입에 적용되는 스킬 감소 multiplier (메소가드 제외) */
   const getReductionMultiplier = useCallback((dmgType: DamageType) => {
@@ -721,17 +752,30 @@ export default function DamageReceivedTable() {
       <Divider />
 
       {/* 피격 데미지 섹션 */}
-      <DamageResultSection label="접촉 데미지" result={physicalResult} />
-      {skillResults.map((entry) => (
-        <DamageResultSection
-          key={entry.name}
-          label={`스킬 - ${entry.label}`}
-          result={entry.result}
-          endAdornment={selectedMob ? <>{entry.names.map(name => (
-            <SkillAnimationTooltip key={`${selectedMob.id}-${name}`} mobId={selectedMob.id} skillName={name} />
-          ))}</> : undefined}
-        />
-      ))}
+      <DamageResultSection
+        label="접촉 데미지"
+        result={physicalResult}
+        appliedSkills={getAppliedSkills("touch")}
+      />
+      {skillResults.map((entry) => {
+        // 각 스킬 데미지에 적용된 특수 스킬 찾기
+        const dmgType = entry.label.includes("물리") ? "physical" :
+                       entry.label.includes("불속성") ? "fire" :
+                       entry.label.includes("얼음속성") ? "ice" :
+                       entry.label.includes("번개속성") ? "lightning" :
+                       entry.label.includes("독속성") ? "poison" : "magic";
+        return (
+          <DamageResultSection
+            key={entry.name}
+            label={`스킬 - ${entry.label}`}
+            result={entry.result}
+            appliedSkills={getAppliedSkills(dmgType)}
+            endAdornment={selectedMob ? <>{entry.names.map(name => (
+              <SkillAnimationTooltip key={`${selectedMob.id}-${name}`} mobId={selectedMob.id} skillName={name} />
+            ))}</> : undefined}
+          />
+        );
+      })}
 
       {/* 회피확률 */}
       <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
