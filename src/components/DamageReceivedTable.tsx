@@ -9,6 +9,8 @@ import standardPDDData from "../data/buff/standardPDD.json";
 import shieldMasteryData from "../data/passive/warrior/shieldMastery.json";
 import thiefShieldMasteryData from "../data/passive/thief/shieldMastery.json";
 import nimbleBodyData from "../data/passive/thief/nimbleBody.json";
+import mastery1Data from "../data/buff/mastery/mastery1.json";
+import amazonBlessingData from "../data/passive/archer/amazonBlessing.json";
 
 const standardPDD = standardPDDData as Record<string, Record<string, number>>;
 
@@ -180,9 +182,10 @@ function DamageResultSection({ label, result, infoTooltip, endAdornment, applied
                   src={`data:image/webp;base64,${skill.icon}`}
                   alt={skill.name}
                   sx={{
-                    width: 20,
-                    height: 20,
+                    width: 28,
+                    height: 28,
                     objectFit: "contain",
+                    my: "-6px",
                     opacity: 0.85,
                     "&:hover": { opacity: 1 },
                   }}
@@ -240,13 +243,14 @@ function SkillAnimationTooltip({ mobId, skillName }: { mobId: number; skillName:
 }
 
 export default function DamageReceivedTable() {
-  const { character, defenseBuffs, specialSkillLevels, passiveLevels, magicianSubClass } = useCharacter();
+  const { character, defenseBuffs, specialSkillLevels, passiveLevels, magicianSubClass, mastery1 } = useCharacter();
   const {
     selectedMob,
     monsterATT,
     monsterMATT,
     monsterACC,
     monsterLevel,
+    monsterEVA,
     powerUpEnabled,
     magicUpEnabled,
     mobWzData,
@@ -536,6 +540,52 @@ export default function DamageReceivedTable() {
     return calcMagic(totalEva + 10) - calcMagic(totalEva);
   }, [totalEva, monsterACC, isThief, totalSpecialEvaP]);
 
+  // 명중확률 계산
+  const charAccuracy = useMemo(() => {
+    if (isMagician) {
+      // 마법명중치: 장비 + floor(INT/10) + floor(LUK/10)
+      return equipStats.macc + finalStats.magicAccuracy;
+    }
+    // 일반 명중치: 장비 + 스탯보정 + 마스터리1 + 패시브 + 버프
+    const isArcherOrThief = jobEngName === "archer" || jobEngName === "thief";
+    const statAcc = isArcherOrThief
+      ? finalStats.totalDex * 0.6 + finalStats.totalLuk * 0.3
+      : finalStats.totalDex * 0.8 + finalStats.totalLuk * 0.5;
+    const mastery1Acc = (mastery1Data.properties[mastery1] as Record<string, number>)?.acc ?? 0;
+    const passiveAcc =
+      (jobEngName === "archer" ? ((amazonBlessingData.properties[passiveLevels["Amazon's Blessing"] ?? 0] as Record<string, number>)?.acc ?? 0) : 0) +
+      (jobEngName === "thief" ? ((nimbleBodyData.properties[passiveLevels["Nimble Body"] ?? 0] as Record<string, number>)?.acc ?? 0) : 0);
+    return equipStats.acc + statAcc + mastery1Acc + passiveAcc + defenseBuffs.acc.value;
+  }, [isMagician, jobEngName, equipStats, finalStats, mastery1, passiveLevels, defenseBuffs.acc.value]);
+
+  const hitRate = useMemo(() => {
+    if (monsterEVA <= 0) return 100;
+    if (isMagician) {
+      // 마법사: 명중확률(%) = {마법명중치 / (몬스터 회피치 + 1)} × {1 + 0.0415 × (캐릭터 레벨 - 몬스터 레벨)}
+      const raw = (charAccuracy / (monsterEVA + 1)) * (1 + 0.0415 * (stats.level - monsterLevel));
+      return Math.min(100, Math.max(0, raw * 100));
+    }
+    // 그 외: 명중률(%) = {캐릭터 명중치 / ((11 / 6 + 0.07 × D) × 몬스터 회피치)} - 1
+    // D = 몬스터 레벨 - 캐릭터 레벨
+    const D = Math.max(0, monsterLevel - stats.level);
+    const raw = charAccuracy / ((11 / 6 + 0.07 * D) * monsterEVA) - 1;
+    return Math.min(100, Math.max(0, raw * 100));
+  }, [charAccuracy, monsterEVA, monsterLevel, stats.level, isMagician]);
+
+  // 100% 명중에 필요한 명중치 역산
+  const requiredAccFor100 = useMemo(() => {
+    if (monsterEVA <= 0) return 0;
+    if (isMagician) {
+      // raw >= 1 → acc / (EVA+1) × modifier >= 1 → acc >= (EVA+1) / modifier
+      const modifier = 1 + 0.0415 * (stats.level - monsterLevel);
+      if (modifier <= 0) return Infinity;
+      return Math.ceil((monsterEVA + 1) / modifier);
+    }
+    // raw >= 1 → acc / ((1.84+0.07D)×EVA) - 1 >= 1 → acc >= 2×(1.84+0.07D)×EVA
+    const D = Math.max(0, monsterLevel - stats.level);
+    return Math.round(2 * (11 / 6 + 0.07 * D) * monsterEVA);
+  }, [monsterEVA, monsterLevel, stats.level, isMagician]);
+
   return (
     <Box
       sx={{
@@ -614,6 +664,26 @@ export default function DamageReceivedTable() {
             </Typography>
           </Box>
         </Box>
+      </Box>
+
+      {/* 명중확률 */}
+      <Box sx={{ p: 2, borderTop: "1px solid #ccc", display: "flex", flexDirection: "column", gap: 1 }}>
+        <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+          명중확률
+        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+          <Typography variant="body2">
+            {isMagician ? "마법 명중확률" : "명중확률"}
+          </Typography>
+          <Typography variant="body2" sx={{ fontWeight: "bold", color: hitRate >= 100 ? "success.main" : hitRate <= 0 ? "error.main" : undefined }}>
+            {hitRate.toFixed(1)}%
+          </Typography>
+        </Box>
+        {monsterEVA > 0 && hitRate < 100 && (
+          <Typography variant="caption" sx={{ color: "#999" }}>
+            100% 필요 {isMagician ? "마법명중" : "명중률"}: {requiredAccFor100}
+          </Typography>
+        )}
       </Box>
     </Box>
   );

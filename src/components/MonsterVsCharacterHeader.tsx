@@ -122,24 +122,25 @@ export default function MonsterVsCharacterHeader() {
           VS
         </Typography>
 
-        {/* 우측: 몬스터 선택 및 정보 */}
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 1, flex: 1 }}>
-          <Box
-            onClick={() => setMobModalOpen(true)}
-            sx={{
-              display: "flex",
-              gap: 2,
-              alignItems: "flex-start",
-              cursor: "pointer",
-              p: 1,
-              borderRadius: 1,
-              border: "1px solid transparent",
-              width: "100%",
-              "&:hover": { bgcolor: "#eee", borderColor: "#bbb" },
-            }}
-          >
-            {/* 몬스터 아이콘 (크게) */}
-            <Box sx={{ flexShrink: 0 }}>
+        {/* 우측: 몬스터 선택 + 설명 가로 배치 */}
+        <Box sx={{ display: "flex", gap: 2, flex: 1, alignItems: "stretch" }}>
+          {/* 몬스터 선택 섹션 */}
+          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0.5 }}>
+            <Box
+              onClick={() => setMobModalOpen(true)}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 0.5,
+                cursor: "pointer",
+                p: 1,
+                borderRadius: 1,
+                border: "1px solid transparent",
+                "&:hover": { bgcolor: "#eee", borderColor: "#bbb" },
+                minWidth: 140,
+              }}
+            >
               {mobIcon ? (
                 <img src={mobIcon} alt={selectedMob?.koreanName ?? ""} style={{ width: 120, height: 120, objectFit: "contain" }} />
               ) : (
@@ -147,48 +148,55 @@ export default function MonsterVsCharacterHeader() {
                   <SearchIcon sx={{ fontSize: 48, color: "#999" }} />
                 </Box>
               )}
-            </Box>
-            
-            {/* 몬스터 정보 (오른쪽 공간 활용) */}
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5, flex: 1, justifyContent: "center" }}>
-              <Typography variant="h6" sx={{ fontWeight: selectedMob ? "bold" : "normal", mb: 0.5 }}>
+              <Typography variant="body2" sx={{ fontWeight: selectedMob ? "bold" : "normal", textAlign: "center" }}>
                 {selectedMob ? `Lv.${selectedMob.level} ${selectedMob.koreanName}` : "몬스터 선택"}
               </Typography>
-              {selectedMob && (
-                <>
-                  <Typography variant="body2" color="text.secondary">
-                    HP: {monsterHP.toLocaleString()}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    물리방어력: {monsterPDD} / 마법방어력: {monsterMDD}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    회피율: {monsterEVA} / 명중률: {monsterACC}
-                  </Typography>
-                </>
-              )}
+            </Box>
+            {/* 파워업/매직업 버튼 */}
+            <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
+              <Button
+                size="small"
+                variant={powerUpEnabled ? "contained" : "outlined"}
+                onClick={() => setPowerUpEnabled(!powerUpEnabled)}
+                sx={{ minWidth: 70, fontSize: "0.75rem" }}
+              >
+                파워업
+              </Button>
+              <Button
+                size="small"
+                variant={magicUpEnabled ? "contained" : "outlined"}
+                onClick={() => setMagicUpEnabled(!magicUpEnabled)}
+                sx={{ minWidth: 70, fontSize: "0.75rem" }}
+              >
+                매직업
+              </Button>
             </Box>
           </Box>
-          
-          {/* 파워업/매직업 버튼 */}
-          <Box sx={{ display: "flex", gap: 1, width: "100%", justifyContent: "flex-start", pl: 1 }}>
-            <Button
-              size="small"
-              variant={powerUpEnabled ? "contained" : "outlined"}
-              onClick={() => setPowerUpEnabled(!powerUpEnabled)}
-              sx={{ minWidth: 80 }}
-            >
-              파워업
-            </Button>
-            <Button
-              size="small"
-              variant={magicUpEnabled ? "contained" : "outlined"}
-              onClick={() => setMagicUpEnabled(!magicUpEnabled)}
-              sx={{ minWidth: 80 }}
-            >
-              매직업
-            </Button>
-          </Box>
+
+          {/* 몬스터 설명 섹션 */}
+          {selectedMob && (
+            <Box sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              gap: 0.5,
+              p: 1,
+              bgcolor: "#fff",
+              borderRadius: 1,
+              border: "1px solid #e0e0e0",
+              flex: 1,
+            }}>
+              <Typography variant="body2" color="text.secondary">
+                HP: {monsterHP.toLocaleString()}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                물리방어력: {monsterPDD} / 마법방어력: {monsterMDD}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                회피율: {monsterEVA} / 명중률: {monsterACC}
+              </Typography>
+            </Box>
+          )}
         </Box>
       </Box>
 

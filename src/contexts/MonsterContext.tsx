@@ -111,7 +111,7 @@ export function MonsterProvider({ children }: { children: ReactNode }) {
 
     if (jobEngName) saveSelectedMobId(jobEngName, mob.id);
 
-    // WZ 데이터 동적 로드 후 우선 사용, 없으면 API 폴백
+    // WZ 데이터 동적 로드 후 우선 사용 (ATT/MATT/ACC), 없으면 API 폴백
     const wzData = await loadMobWzData();
     const wzEntry = wzData[String(mob.id)];
     if (wzEntry) {
@@ -119,18 +119,21 @@ export function MonsterProvider({ children }: { children: ReactNode }) {
       if (wzEntry.MADamage !== undefined) setMonsterMATT(wzEntry.MADamage);
       if (wzEntry.acc !== undefined) setMonsterACC(wzEntry.acc);
       setMonsterLevel(mob.level);
-    } else {
-      const details = await fetchMobDetails(mob.id);
-      if (details) {
+    }
+
+    // HP/PDD/MDD/EVA는 WZ에 없으므로 항상 API에서 fetch
+    const details = await fetchMobDetails(mob.id);
+    if (details) {
+      if (!wzEntry) {
         setMonsterATT(details.meta.physicalDamage);
         setMonsterMATT(details.meta.magicDamage);
         setMonsterACC(details.meta.accuracy);
         setMonsterLevel(details.meta.level);
-        setMonsterHP(details.meta.maxHP);
-        setMonsterPDD(details.meta.physicalDefense);
-        setMonsterMDD(details.meta.magicDefense);
-        setMonsterEVA(details.meta.evasion);
       }
+      setMonsterHP(details.meta.maxHP);
+      setMonsterPDD(details.meta.physicalDefense);
+      setMonsterMDD(details.meta.magicDefense);
+      setMonsterEVA(details.meta.evasion);
     }
 
     const iconUrl = await fetchMobIcon(mob.id);
