@@ -1,9 +1,8 @@
 import { Box, Typography, Tooltip, IconButton } from "@mui/material";
-import { Add as AddIcon, OpenInFull as OpenInFullIcon, CloseFullscreen as CloseFullscreenIcon, WebAsset as WebAssetIcon } from "@mui/icons-material";
+import { Add as AddIcon } from "@mui/icons-material";
 import { useState, useEffect } from "react";
 import { useCharacter } from "../contexts/CharacterContext";
 import { EQUIPMENT_LAYOUT } from "../types/equipment";
-import EquipDetailTable from "./EquipDetailTable";
 import type { EquipmentSlot } from "../types/equipment";
 import { getPostItemCategoryKey, getPostItemIcon } from "../utils/postItemLoader";
 import { equipmentToSaved } from "../utils/equipmentConverter";
@@ -32,14 +31,11 @@ const SLOT_TO_CATEGORY: Record<string, string> = {
 interface EquipTableProps {
   onSlotClick?: (category: string) => void;
   onOpenItemMaker?: () => void;
-  onOpenInventory?: () => void;
-  onExpandedChange?: (expanded: boolean) => void;
 }
 
-export default function EquipTable({ onSlotClick, onOpenItemMaker, onOpenInventory, onExpandedChange }: EquipTableProps) {
+export default function EquipTable({ onSlotClick, onOpenItemMaker }: EquipTableProps) {
   const { character, unequipItem, version, addToInventory } = useCharacter();
   const [postItemIcons, setPostItemIcons] = useState<Map<number, string>>(new Map());
-  const [expanded, setExpanded] = useState(false);
 
   const equipments = character.getEquipments();
   const equipMap = new Map(equipments.map((eq) => [eq.slot, eq]));
@@ -253,15 +249,13 @@ export default function EquipTable({ onSlotClick, onOpenItemMaker, onOpenInvento
       <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", p: 1.5, borderBottom: "1px solid #ccc" }}>
         <Typography variant="body2" sx={{ fontWeight: "bold" }}>
           장비
-          {!expanded && (
-            <Typography
-              component="span"
-              variant="caption"
-              sx={{ ml: 0.5, color: "text.secondary" }}
-            >
-              (더블클릭으로 인벤토리 이동)
-            </Typography>
-          )}
+          <Typography
+            component="span"
+            variant="caption"
+            sx={{ ml: 0.5, color: "text.secondary" }}
+          >
+            (더블클릭으로 인벤토리 이동)
+          </Typography>
         </Typography>
         <Box sx={{ display: "flex", gap: 0.5 }}>
           {onOpenItemMaker && (
@@ -271,39 +265,17 @@ export default function EquipTable({ onSlotClick, onOpenItemMaker, onOpenInvento
               </IconButton>
             </Tooltip>
           )}
-          {onOpenInventory && (
-            <Tooltip title="인벤토리">
-              <IconButton onClick={onOpenInventory} size="small" sx={{ p: 0.5 }}>
-                <WebAssetIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-          )}
-          <Tooltip title={expanded ? "축소" : "확대"}>
-            <IconButton onClick={() => { const next = !expanded; setExpanded(next); onExpandedChange?.(next); }} size="small" sx={{ p: 0.5 }}>
-              {expanded ? <CloseFullscreenIcon fontSize="small" /> : <OpenInFullIcon fontSize="small" />}
-            </IconButton>
-          </Tooltip>
         </Box>
       </Box>
 
-      {/* 장비 그리드 / 상세 뷰 */}
-      {expanded ? (
-        <EquipDetailTable
-          equipments={equipments}
-          postItemIcons={postItemIcons}
-          getIconSrc={getIconSrc}
-          isJobMagician={isJobMagician}
-          jobName={jobName}
-        />
-      ) : (
-        <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
-          {EQUIPMENT_LAYOUT.map((row, rowIndex) => (
-            <Box key={rowIndex} sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
-              {row.map((slot) => renderSlot(slot))}
-            </Box>
-          ))}
-        </Box>
-      )}
+      {/* 장비 그리드 */}
+      <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 1 }}>
+        {EQUIPMENT_LAYOUT.map((row, rowIndex) => (
+          <Box key={rowIndex} sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
+            {row.map((slot) => renderSlot(slot))}
+          </Box>
+        ))}
+      </Box>
     </Box>
   );
 }

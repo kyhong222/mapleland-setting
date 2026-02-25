@@ -1,13 +1,8 @@
-import { Box, Typography, TextField, Divider, IconButton, Tooltip } from "@mui/material";
-import { WebAsset as WebAssetIcon } from "@mui/icons-material";
+import { Box, Typography, TextField, Divider } from "@mui/material";
 import { useCharacter } from "../contexts/CharacterContext";
 import { useMemo } from "react";
 
-interface StatTableProps {
-  onOpenDetailStat?: () => void;
-}
-
-export default function StatTable({ onOpenDetailStat }: StatTableProps) {
+export default function StatTable() {
   const { character, setLevel, setPureStat, buffMAD, heroEchoEnabled } = useCharacter();
 
   const stats = character.getStats();
@@ -88,13 +83,6 @@ export default function StatTable({ onOpenDetailStat }: StatTableProps) {
         <Typography variant="body2" sx={{ fontWeight: "bold" }}>
           스탯
         </Typography>
-        {onOpenDetailStat && (
-          <Tooltip title="상세 스탯">
-            <IconButton onClick={onOpenDetailStat} size="small" sx={{ p: 0.5 }}>
-              <WebAssetIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-        )}
       </Box>
 
       {/* 스탯 내용 */}

@@ -10,7 +10,7 @@ import { getPostItemCategoryKey, loadPostItemData } from "../utils/postItemLoade
 import ItemTooltip from "./ItemTooltip";
 
 interface InventoryProps {
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 export default function Inventory({ onClose }: InventoryProps) {
@@ -149,9 +149,11 @@ export default function Inventory({ onClose }: InventoryProps) {
             (더블클릭: 장착 / 더블우클릭: 삭제)
           </Typography>
         </Typography>
-        <IconButton onClick={onClose} size="small" sx={{ p: 0.5 }}>
-          <CloseIcon fontSize="small" />
-        </IconButton>
+        {onClose && (
+          <IconButton onClick={onClose} size="small" sx={{ p: 0.5 }}>
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        )}
       </Box>
 
       {/* 4x6 인벤토리 그리드 */}

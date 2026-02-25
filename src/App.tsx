@@ -1,7 +1,9 @@
 import { Box, Button, Typography } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { CharacterProvider, useCharacter } from "./contexts/CharacterContext";
+import { MonsterProvider } from "./contexts/MonsterContext";
 import TopAppBar from "./components/TopAppBar";
+import MonsterVsCharacterHeader from "./components/MonsterVsCharacterHeader";
 import StatTable from "./components/StatTable";
 import EquipTable from "./components/EquipTable";
 import BuffTable from "./components/BuffTable";
@@ -20,8 +22,6 @@ function AppContent() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [itemMakerOpen, setItemMakerOpen] = useState(false);
   const [itemMakerMode, setItemMakerMode] = useState<"equip" | "inventory">("equip");
-  const [middlePanel, setMiddlePanel] = useState<"buff" | "inventory" | "detailStat">("buff");
-  const [equipExpanded, setEquipExpanded] = useState(false);
   const initializedRef = useRef(false);
 
   const currentJob = character.getJob();
@@ -119,25 +119,36 @@ function AppContent() {
           </Box>
         ) : (
           <>
-            {/* 직업이 선택된 경우: 테이블들 렌더링 */}
-            <Box sx={{ display: "flex", gap: 3, justifyContent: "center", mb: 3 }}>
-              {/* 왼쪽: 장비 + 스탯 */}
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                <EquipTable onSlotClick={handleOpenItemMakerForSlot} onOpenItemMaker={handleOpenItemMakerForInventory} onOpenInventory={() => setMiddlePanel((v) => v === "inventory" ? "buff" : "inventory")} onExpandedChange={setEquipExpanded} />
-                {!equipExpanded && <StatTable onOpenDetailStat={() => setMiddlePanel((v) => v === "detailStat" ? "buff" : "detailStat")} />}
+            {/* 직업이 선택된 경우: 헤더 + 4열 레이아웃 */}
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+              {/* 상단: 캐릭터 vs 몬스터 헤더 */}
+              <MonsterVsCharacterHeader />
+
+              {/* 하단: 4열 레이아웃 */}
+              <Box sx={{ display: "flex", gap: 2, justifyContent: "center", maxWidth: 1400, margin: "0 auto" }}>
+                {/* 1열: 장비 + 인벤토리 */}
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 2, minWidth: 280 }}>
+                  <EquipTable onSlotClick={handleOpenItemMakerForSlot} onOpenItemMaker={handleOpenItemMakerForInventory} />
+                  <Inventory />
+                </Box>
+
+                {/* 2열: 스탯 + 상세스탯 */}
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 2, minWidth: 280 }}>
+                  <StatTable />
+                  <DetailStatTable />
+                </Box>
+
+                {/* 3열: 버프 */}
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 2, minWidth: 280 }}>
+                  <BuffTable />
+                </Box>
+
+                {/* 4열: 데미지 계산기 + 피격/회피 계산기 */}
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 2, minWidth: 320 }}>
+                  <DamageTable />
+                  <DamageReceivedTable />
+                </Box>
               </Box>
-
-              {/* 중간: 버프 / 인벤토리 / 상세스탯 */}
-              {middlePanel === "inventory" ? (
-                <Inventory onClose={() => setMiddlePanel("buff")} />
-              ) : middlePanel === "detailStat" ? (
-                <DetailStatTable onClose={() => setMiddlePanel("buff")} />
-              ) : (
-                <BuffTable />
-              )}
-
-              {/* 오른쪽: 데미지 */}
-              {middlePanel === "detailStat" ? <DamageReceivedTable /> : <DamageTable />}
             </Box>
           </>
         )}
@@ -170,9 +181,11 @@ function DynamicThemeProvider({ children }: { children: React.ReactNode }) {
 function App() {
   return (
     <CharacterProvider>
-      <DynamicThemeProvider>
-        <AppContent />
-      </DynamicThemeProvider>
+      <MonsterProvider>
+        <DynamicThemeProvider>
+          <AppContent />
+        </DynamicThemeProvider>
+      </MonsterProvider>
     </CharacterProvider>
   );
 }
