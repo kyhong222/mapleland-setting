@@ -4,9 +4,10 @@
 
 import { getPostItemIcon, getPostItemCategoryKey } from "../utils/postItemLoader";
 
-const API_BASE_URL = "https://maplestory.io/api/gms/62/item";
-const MOB_API_BASE_URL = "https://maplestory.io/api/gms/62/mob";
-const MOB_KMS_API_BASE_URL = "https://maplestory.io/api/kms/284/mob";
+const isDev = import.meta.env.DEV;
+const API_ORIGIN = isDev ? "/api/maplestory" : "https://maplestory.io/api";
+const API_BASE_URL = `${API_ORIGIN}/gms/62/item`;
+const MOB_KMS_API_BASE_URL = `${API_ORIGIN}/kms/284/mob`;
 
 // 부위별 API 필터 매핑
 export const ARMOR_FILTERS = {
@@ -291,13 +292,15 @@ export interface MobDetails {
 }
 
 /**
- * 몬스터 ID로 상세 정보 조회 (GMS/62)
+ * 몬스터 ID로 상세 정보 조회
  * @param mobId - 몬스터 ID
+ * @param version - GMS 버전 (기본 62)
  * @returns 몬스터 상세 정보
  */
-export async function fetchMobDetails(mobId: number): Promise<MobDetails | null> {
+export async function fetchMobDetails(mobId: number, version = 62): Promise<MobDetails | null> {
   try {
-    const response = await fetch(`${MOB_API_BASE_URL}/${mobId}`);
+    const url = `${API_ORIGIN}/gms/${version}/mob/${mobId}`;
+    const response = await fetch(url);
     if (!response.ok) return null;
     const data = await response.json();
     return data;
@@ -325,15 +328,17 @@ export async function fetchMobNameKMS(mobId: number): Promise<string | null> {
 }
 
 /**
- * 몬스터 아이콘 이미지 URL 조회 (gms/62 → gms/200 → kms/284 순서로 시도)
+ * 몬스터 아이콘 이미지 URL 조회 (지정버전 → gms/62 → gms/200 → kms/284 순서로 시도)
  * @param mobId - 몬스터 ID
+ * @param version - GMS 버전 (기본 62)
  * @returns 아이콘 이미지 blob URL
  */
-export async function fetchMobIcon(mobId: number): Promise<string | null> {
+export async function fetchMobIcon(mobId: number, version = 62): Promise<string | null> {
   const bases = [
-    "https://maplestory.io/api/gms/62/mob",
-    "https://maplestory.io/api/gms/200/mob",
-    "https://maplestory.io/api/kms/284/mob",
+    `${API_ORIGIN}/gms/${version}/mob`,
+    ...(version !== 62 ? [`${API_ORIGIN}/gms/62/mob`] : []),
+    `${API_ORIGIN}/gms/200/mob`,
+    `${API_ORIGIN}/kms/284/mob`,
   ];
   for (const base of bases) {
     try {

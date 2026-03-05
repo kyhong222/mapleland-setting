@@ -7330,6 +7330,168 @@
       }
     }
   },
+  "9400589": {
+    "id": 9400589,
+    "wzVersion": 83,
+    "level": 30,
+    "PADamage": 150,
+    "MADamage": 20,
+    "PDDamage": 500,
+    "MDDamage": 450,
+    "acc": 1000,
+    "eva": 10,
+    "exp": 500,
+    "maxHP": 400000,
+    "boss": 1,
+    "skills": {
+      "attack1": {
+        "type": 0,
+        "PADamage": 180
+      },
+      "attack2": {
+        "type": 0,
+        "PADamage": 200
+      }
+    }
+  },
+  "9400590": {
+    "id": 9400590,
+    "wzVersion": 83,
+    "level": 130,
+    "PADamage": 620,
+    "MADamage": 500,
+    "PDDamage": 800,
+    "MDDamage": 1000,
+    "acc": 280,
+    "eva": 42,
+    "exp": 4300000,
+    "maxHP": 200000000,
+    "boss": 1,
+    "elemAttr": "H1L2F2I2F2",
+    "skills": {
+      "attack1": {
+        "type": 0,
+        "PADamage": 620
+      }
+    }
+  },
+  "9400591": {
+    "id": 9400591,
+    "wzVersion": 83,
+    "level": 130,
+    "PADamage": 630,
+    "MADamage": 480,
+    "PDDamage": 1000,
+    "MDDamage": 850,
+    "acc": 260,
+    "eva": 39,
+    "exp": 4550000,
+    "maxHP": 255000000,
+    "boss": 1,
+    "skills": {
+      "attack1": {
+        "type": 0,
+        "PADamage": 630
+      },
+      "attack2": {
+        "type": 0,
+        "PADamage": 630
+      }
+    }
+  },
+  "9400592": {
+    "id": 9400592,
+    "wzVersion": 83,
+    "level": 130,
+    "PADamage": 600,
+    "MADamage": 490,
+    "PDDamage": 800,
+    "MDDamage": 900,
+    "acc": 300,
+    "eva": 45,
+    "exp": 4450000,
+    "maxHP": 231000000,
+    "boss": 1,
+    "elemAttr": "H1F3",
+    "skills": {
+      "attack1": {
+        "type": 0,
+        "magic": 1
+      },
+      "attack2": {
+        "type": 0,
+        "magic": 1,
+        "elemAttr": "L"
+      },
+      "attack3": {
+        "type": 0,
+        "magic": 1
+      },
+      "attack4": {
+        "type": 0,
+        "PADamage": 600
+      }
+    }
+  },
+  "9400593": {
+    "id": 9400593,
+    "wzVersion": 83,
+    "level": 130,
+    "PADamage": 610,
+    "MADamage": 490,
+    "PDDamage": 8000,
+    "MDDamage": 900,
+    "acc": 230,
+    "eva": 55,
+    "exp": 4510000,
+    "maxHP": 233000000,
+    "boss": 1,
+    "elemAttr": "I3H1",
+    "skills": {
+      "attack1": {
+        "type": 0,
+        "PADamage": 610
+      },
+      "attack2": {
+        "type": 0,
+        "PADamage": 610
+      },
+      "attack3": {
+        "type": 0,
+        "PADamage": 610
+      },
+      "attack4": {
+        "type": 0,
+        "PADamage": 610
+      }
+    }
+  },
+  "9400594": {
+    "id": 9400594,
+    "wzVersion": 83,
+    "level": 100,
+    "PADamage": 450,
+    "MADamage": 500,
+    "PDDamage": 1000,
+    "MDDamage": 800,
+    "acc": 230,
+    "eva": 40,
+    "exp": 10000,
+    "maxHP": 7000000,
+    "boss": 1,
+    "elemAttr": "I1F1S1L1H1",
+    "skills": {
+      "attack1": {
+        "type": 0,
+        "magic": 1,
+        "PADamage": 450
+      },
+      "attack2": {
+        "type": 0,
+        "PADamage": 450
+      }
+    }
+  },
   "9410000": {
     "id": 9410000,
     "level": 23,

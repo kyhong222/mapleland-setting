@@ -22,6 +22,10 @@ interface MobSkillInfo {
   MADamage?: number;
 }
 
+interface MobWzEntryWithVersion {
+  wzVersion?: number;
+}
+
 /** 주어진 레벨 이하의 가장 가까운 키 값을 반환 */
 function lookupPDD(jobEngName: string, level: number): number {
   const table = standardPDD[jobEngName];
@@ -608,30 +612,40 @@ export default function DamageReceivedTable() {
       </Box>
 
       {/* 피격 데미지 섹션 */}
-      <DamageResultSection
-        label="접촉 데미지"
-        result={physicalResult}
-        appliedSkills={getAppliedSkills("touch")}
-      />
-      {skillResults.map((entry) => {
-        // 각 스킬 데미지에 적용된 특수 스킬 찾기
-        const dmgType = entry.label.includes("물리") ? "physical" :
-                       entry.label.includes("불속성") ? "fire" :
-                       entry.label.includes("얼음속성") ? "ice" :
-                       entry.label.includes("번개속성") ? "lightning" :
-                       entry.label.includes("독속성") ? "poison" : "magic";
-        return (
+      {selectedMob && mobWzData && (mobWzData[String(selectedMob.id)] as MobWzEntryWithVersion | undefined)?.wzVersion ? (
+        <Box sx={{ p: 2, borderBottom: "1px solid #ccc" }}>
+          <Typography variant="body2" sx={{ color: "#999", textAlign: "center" }}>
+            이 몬스터는 자료가 없어 피격 데미지를 제공하지 않습니다.
+          </Typography>
+        </Box>
+      ) : (
+        <>
           <DamageResultSection
-            key={entry.name}
-            label={`스킬 - ${entry.label}`}
-            result={entry.result}
-            appliedSkills={getAppliedSkills(dmgType)}
-            endAdornment={selectedMob ? <>{entry.names.map(name => (
-              <SkillAnimationTooltip key={`${selectedMob.id}-${name}`} mobId={selectedMob.id} skillName={name} />
-            ))}</> : undefined}
+            label="접촉 데미지"
+            result={physicalResult}
+            appliedSkills={getAppliedSkills("touch")}
           />
-        );
-      })}
+          {skillResults.map((entry) => {
+            // 각 스킬 데미지에 적용된 특수 스킬 찾기
+            const dmgType = entry.label.includes("물리") ? "physical" :
+                           entry.label.includes("불속성") ? "fire" :
+                           entry.label.includes("얼음속성") ? "ice" :
+                           entry.label.includes("번개속성") ? "lightning" :
+                           entry.label.includes("독속성") ? "poison" : "magic";
+            return (
+              <DamageResultSection
+                key={entry.name}
+                label={`스킬 - ${entry.label}`}
+                result={entry.result}
+                appliedSkills={getAppliedSkills(dmgType)}
+                endAdornment={selectedMob ? <>{entry.names.map(name => (
+                  <SkillAnimationTooltip key={`${selectedMob.id}-${name}`} mobId={selectedMob.id} skillName={name} />
+                ))}</> : undefined}
+              />
+            );
+          })}
+        </>
+      )}
 
       {/* 회피확률 */}
       <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 1 }}>

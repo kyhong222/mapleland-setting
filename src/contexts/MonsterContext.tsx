@@ -13,6 +13,7 @@ interface MobListEntry {
 
 interface MobWzEntry {
   id: number;
+  wzVersion?: number;
   PADamage?: number;
   MADamage?: number;
   acc?: number;
@@ -114,6 +115,7 @@ export function MonsterProvider({ children }: { children: ReactNode }) {
     // WZ 데이터 동적 로드 후 우선 사용 (ATT/MATT/ACC), 없으면 API 폴백
     const wzData = await loadMobWzData();
     const wzEntry = wzData[String(mob.id)];
+    const wzVersion = wzEntry?.wzVersion ?? 62;
     if (wzEntry) {
       if (wzEntry.PADamage !== undefined) setMonsterATT(wzEntry.PADamage);
       if (wzEntry.MADamage !== undefined) setMonsterMATT(wzEntry.MADamage);
@@ -121,8 +123,8 @@ export function MonsterProvider({ children }: { children: ReactNode }) {
       setMonsterLevel(mob.level);
     }
 
-    // HP/PDD/MDD/EVA는 WZ에 없으므로 항상 API에서 fetch
-    const details = await fetchMobDetails(mob.id);
+    // HP/PDD/MDD/EVA는 API에서 fetch (WZ 버전에 맞춰 요청)
+    const details = await fetchMobDetails(mob.id, wzVersion);
     if (details) {
       if (!wzEntry) {
         setMonsterATT(details.meta.physicalDamage);
@@ -136,7 +138,7 @@ export function MonsterProvider({ children }: { children: ReactNode }) {
       setMonsterEVA(details.meta.evasion);
     }
 
-    const iconUrl = await fetchMobIcon(mob.id);
+    const iconUrl = await fetchMobIcon(mob.id, wzVersion);
     if (iconUrl) setMobIcon(iconUrl);
   }, []);
 
