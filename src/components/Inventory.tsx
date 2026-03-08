@@ -218,6 +218,7 @@ export default function Inventory({ onClose }: InventoryProps) {
                 >
                   {iconSrc ? (
                     <img
+                      key={iconSrc}
                       src={iconSrc}
                       alt=""
                       style={{ maxWidth: "100%", maxHeight: "100%" }}

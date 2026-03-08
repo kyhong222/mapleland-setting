@@ -215,6 +215,7 @@ export default function EquipTable({ onSlotClick, onOpenItemMaker }: EquipTableP
               const iconSrc = getIconSrc(equipment);
               return iconSrc ? (
                 <img
+                  key={iconSrc}
                   src={iconSrc}
                   alt={equipment.name || ""}
                   style={{ maxWidth: "100%", maxHeight: "100%" }}

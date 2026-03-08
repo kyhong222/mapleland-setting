@@ -96,6 +96,7 @@ export default function EquipDetailTable({
             >
               {iconSrc ? (
                 <img
+                  key={iconSrc}
                   src={iconSrc}
                   alt={eq.name || ""}
                   style={{ maxWidth: "100%", maxHeight: "100%" }}
