@@ -4529,5 +4529,30 @@
       "int": 0,
       "luk": 0
     }
+  },
+  "1072369": {
+    "koreanName": "물컹물컹한 신발",
+    "icon": "https://maplestory.io/api/GMS/200/item/1072369/icon",
+    "stats": {
+      "attack": 0,
+      "str": 1,
+      "dex": 1,
+      "int": 1,
+      "luk": 1,
+      "mad": 0,
+      "pdef": 10,
+      "mdef": 5,
+      "acc": 0,
+      "eva": 0,
+      "speed": 3
+    },
+    "requireStats": {
+      "level": 20,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0
+    },
+    "tuc": 5
   }
 }

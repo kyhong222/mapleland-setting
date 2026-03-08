@@ -13,6 +13,13 @@
     "reqJob": 0,
     "reqLevel": 50
   },
+  {
+    "id": 1122010,
+    "name": "Horus's Eye",
+    "koreanName": "호루스의 눈",
+    "reqJob": 0,
+    "reqLevel": 70
+  },
    {
     "id": 1122059,
     "name": "Horntail Necklace",

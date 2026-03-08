@@ -280,6 +280,13 @@
     "reqLevel": 20
   },
   {
+    "id": 1072369,
+    "name": "Squishy Shoes",
+    "koreanName": "물컹물컹한 신발",
+    "reqJob": 0,
+    "reqLevel": 20
+  },
+  {
     "id": 1072017,
     "name": "Blue Ankle-strap Sandals",
     "koreanName": "파란색 도로시 구두",
