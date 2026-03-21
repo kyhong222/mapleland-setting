@@ -112,6 +112,34 @@
     "reqLevel": 65
   },
   {
+    "id": 1382045,
+    "name": "Elemental Staff 1",
+    "koreanName": "파이어 스태프",
+    "reqJob": 0,
+    "reqLevel": 70
+  },
+  {
+    "id": 1382046,
+    "name": "Elemental Staff 2",
+    "koreanName": "포이즌 스태프",
+    "reqJob": 0,
+    "reqLevel": 70
+  },
+  {
+    "id": 1382047,
+    "name": "Elemental Staff 3",
+    "koreanName": "아이스 스태프",
+    "reqJob": 0,
+    "reqLevel": 70
+  },
+  {
+    "id": 1382048,
+    "name": "Elemental Staff 4",
+    "koreanName": "라이트닝 스태프",
+    "reqJob": 0,
+    "reqLevel": 70
+  },
+  {
     "id": 1382010,
     "name": "Dark Ritual",
     "koreanName": "레이든 스태프",
@@ -124,6 +152,13 @@
     "koreanName": "케이그",
     "reqJob": 2,
     "reqLevel": 85
+  },
+  {
+    "id": 1382016,
+    "name": "Pyogo Mushroom",
+    "koreanName": "표고버섯",
+    "reqJob": 0,
+    "reqLevel": 92
   },
   {
     "id": 1382035,

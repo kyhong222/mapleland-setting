@@ -359,6 +359,30 @@
       "luk": 0
     }
   },
+  "1432039": {
+    "koreanName": "낚싯대",
+    "icon": "https://maplestory.io/api/GMS/200/item/1432039/icon",
+    "stats": {
+      "attack": 67,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 15,
+      "eva": 0,
+      "attackSpeed": 5
+    },
+    "requireStats": {
+      "level": 45,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0
+    }
+  },
   "1432040": {
     "koreanName": "메이플 베리트 스피어",
     "icon": "https://maplestory.io/api/GMS/200/item/1432040/icon",

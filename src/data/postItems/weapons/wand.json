@@ -239,6 +239,30 @@
       "luk": 100
     }
   },
+  "1372011": {
+    "koreanName": "우선",
+    "icon": "https://maplestory.io/api/GMS/200/item/1372011/icon",
+    "stats": {
+      "attack": 40,
+      "str": 0,
+      "dex": 0,
+      "int": 2,
+      "luk": 1,
+      "mad": 65,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 4
+    },
+    "requireStats": {
+      "level": 50,
+      "str": 0,
+      "dex": 0,
+      "int": 150,
+      "luk": 48
+    }
+  },
   "1372012": {
     "koreanName": "크리스탈 완드",
     "icon": "https://maplestory.io/api/GMS/200/item/1372012/icon",
@@ -381,6 +405,31 @@
       "dex": 0,
       "int": 325,
       "luk": 110
+    }
+  },
+  "1372033": {
+    "koreanName": "하트 완드",
+    "icon": "https://maplestory.io/api/GMS/200/item/1372033/icon",
+    "stats": {
+      "attack": 45,
+      "str": 0,
+      "dex": 0,
+      "int": 2,
+      "luk": 0,
+      "mad": 68,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "hp": 50,
+      "attackSpeed": 5
+    },
+    "requireStats": {
+      "level": 54,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 51
     }
   },
   "1372034": {

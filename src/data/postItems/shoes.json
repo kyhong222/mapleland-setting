@@ -4484,6 +4484,32 @@
       "luk": 0
     }
   },
+  "1072238": {
+    "koreanName": "바이올렛 아이젠",
+    "icon": "https://maplestory.io/api/GMS/200/item/1072238/icon",
+    "stats": {
+      "attack": 0,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 55,
+      "mdef": 20,
+      "acc": 0,
+      "eva": 0,
+      "speed": 5,
+      "jump": 5
+    },
+    "requireStats": {
+      "level": 80,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0
+    },
+    "tuc": 5
+  },
   "1072275": {
     "koreanName": "폰라의 슬리퍼",
     "icon": "https://maplestory.io/api/GMS/200/item/1072275/icon",

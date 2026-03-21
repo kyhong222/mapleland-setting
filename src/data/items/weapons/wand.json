@@ -70,6 +70,20 @@
     "reqLevel": 48
   },
   {
+    "id": 1372011,
+    "name": "Zhu-Ge-Liang Wand",
+    "koreanName": "우선",
+    "reqJob": 0,
+    "reqLevel": 50
+  },
+  {
+    "id": 1372033,
+    "name": "Heart Wand",
+    "koreanName": "하트 완드",
+    "reqJob": 0,
+    "reqLevel": 54
+  },
+  {
     "id": 1372014,
     "name": "Evil Tale",
     "koreanName": "이블테일러",

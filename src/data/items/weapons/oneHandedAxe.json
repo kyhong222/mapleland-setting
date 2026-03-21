@@ -63,11 +63,25 @@
     "reqLevel": 40
   },
   {
+    "id": 1312012,
+    "name": "Hula Hoop",
+    "koreanName": "훌라후프",
+    "reqJob": 0,
+    "reqLevel": 45
+  },
+  {
     "id": 1312008,
     "name": "Buck",
     "koreanName": "벅",
     "reqJob": 1,
     "reqLevel": 50
+  },
+  {
+    "id": 1312014,
+    "name": "Black Paint Brush",
+    "koreanName": "그림붓",
+    "reqJob": 0,
+    "reqLevel": 55
   },
   {
     "id": 1312009,

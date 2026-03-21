@@ -112,6 +112,13 @@
     "reqLevel": 40
   },
   {
+    "id": 1332021,
+    "name": "Plastic Bottle",
+    "koreanName": "페트병",
+    "reqJob": 0,
+    "reqLevel": 40
+  },
+  {
     "id": 1332031,
     "name": "Dragon Toenail",
     "koreanName": "드래곤 토네일",

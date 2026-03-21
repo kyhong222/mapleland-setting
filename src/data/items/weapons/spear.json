@@ -63,6 +63,13 @@
     "reqLevel": 43
   },
   {
+    "id": 1432039,
+    "name": "Fishing Pole",
+    "koreanName": "낚싯대",
+    "reqJob": 0,
+    "reqLevel": 45
+  },
+  {
     "id": 1432004,
     "name": "Serpent's Tongue",
     "koreanName": "장팔사모",

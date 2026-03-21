@@ -98,6 +98,13 @@
     "reqLevel": 100
   },
   {
+    "id": 1422031,
+    "name": "Blue Seal Cushion",
+    "koreanName": "파란색 물개 쿠션",
+    "reqJob": 0,
+    "reqLevel": 105
+  },
+  {
     "id": 1422028,
     "name": "Dragon Flame",
     "koreanName": "드래곤 플레임",

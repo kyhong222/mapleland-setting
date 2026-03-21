@@ -503,6 +503,30 @@
       "luk": 0
     }
   },
+  "1332021": {
+    "koreanName": "페트병",
+    "icon": "https://maplestory.io/api/GMS/200/item/1332021/icon",
+    "stats": {
+      "attack": 53,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 3,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 3
+    },
+    "requireStats": {
+      "level": 40,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0
+    }
+  },
   "1332022": {
     "koreanName": "카타르",
     "icon": "https://maplestory.io/api/GMS/200/item/1332022/icon",

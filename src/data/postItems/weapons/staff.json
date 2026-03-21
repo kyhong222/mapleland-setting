@@ -310,6 +310,30 @@
       "luk": 41
     }
   },
+  "1382016": {
+    "koreanName": "표고버섯",
+    "icon": "https://maplestory.io/api/GMS/200/item/1382016/icon",
+    "stats": {
+      "attack": 65,
+      "str": 0,
+      "dex": 0,
+      "int": 2,
+      "luk": 0,
+      "mad": 105,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 5
+    },
+    "requireStats": {
+      "level": 92,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 95
+    }
+  },
   "1382017": {
     "koreanName": "써클윈드 스태프",
     "icon": "https://maplestory.io/api/GMS/200/item/1382017/icon",
@@ -476,6 +500,102 @@
       "dex": 0,
       "int": 0,
       "luk": 0
+    }
+  },
+  "1382045": {
+    "koreanName": "파이어 스태프",
+    "icon": "https://maplestory.io/api/GMS/200/item/1382045/icon",
+    "stats": {
+      "attack": 72,
+      "str": 0,
+      "dex": 0,
+      "int": 1,
+      "luk": 0,
+      "mad": 85,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 7
+    },
+    "requireStats": {
+      "level": 70,
+      "str": 0,
+      "dex": 0,
+      "int": 213,
+      "luk": 73
+    }
+  },
+  "1382046": {
+    "koreanName": "포이즌 스태프",
+    "icon": "https://maplestory.io/api/GMS/200/item/1382046/icon",
+    "stats": {
+      "attack": 72,
+      "str": 0,
+      "dex": 0,
+      "int": 1,
+      "luk": 0,
+      "mad": 85,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 7
+    },
+    "requireStats": {
+      "level": 70,
+      "str": 0,
+      "dex": 0,
+      "int": 213,
+      "luk": 73
+    }
+  },
+  "1382047": {
+    "koreanName": "아이스 스태프",
+    "icon": "https://maplestory.io/api/GMS/200/item/1382047/icon",
+    "stats": {
+      "attack": 72,
+      "str": 0,
+      "dex": 0,
+      "int": 1,
+      "luk": 0,
+      "mad": 85,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 7
+    },
+    "requireStats": {
+      "level": 70,
+      "str": 0,
+      "dex": 0,
+      "int": 213,
+      "luk": 73
+    }
+  },
+  "1382048": {
+    "koreanName": "라이트닝 스태프",
+    "icon": "https://maplestory.io/api/GMS/200/item/1382048/icon",
+    "stats": {
+      "attack": 72,
+      "str": 0,
+      "dex": 0,
+      "int": 1,
+      "luk": 0,
+      "mad": 85,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 7
+    },
+    "requireStats": {
+      "level": 70,
+      "str": 0,
+      "dex": 0,
+      "int": 213,
+      "luk": 73
     }
   },
   "1382060": {

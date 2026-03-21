@@ -378,6 +378,30 @@
       "luk": 0
     }
   },
+  "1402029": {
+    "koreanName": "금쇄봉",
+    "icon": "https://maplestory.io/api/GMS/200/item/1402029/icon",
+    "stats": {
+      "attack": 65,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 8,
+      "eva": 0,
+      "attackSpeed": 6
+    },
+    "requireStats": {
+      "level": 45,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0
+    }
+  },
   "1402035": {
     "koreanName": "참화도",
     "icon": "https://maplestory.io/api/GMS/200/item/1402035/icon",

@@ -63,6 +63,13 @@
     "reqLevel": 40
   },
   {
+    "id": 1402029,
+    "name": "Aluminum Bat",
+    "koreanName": "금쇄봉",
+    "reqJob": 0,
+    "reqLevel": 45
+  },
+  {
     "id": 1402003,
     "name": "Lion's Fang",
     "koreanName": "호검",

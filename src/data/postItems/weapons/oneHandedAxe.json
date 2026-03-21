@@ -263,6 +263,30 @@
       "luk": 0
     }
   },
+  "1312012": {
+    "koreanName": "훌라후프",
+    "icon": "https://maplestory.io/api/GMS/200/item/1312012/icon",
+    "stats": {
+      "attack": 64,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 5
+    },
+    "requireStats": {
+      "level": 45,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0
+    }
+  },
   "1312013": {
     "koreanName": "붓",
     "icon": "https://maplestory.io/api/GMS/200/item/1312013/icon",
@@ -281,6 +305,30 @@
     },
     "requireStats": {
       "level": 30,
+      "str": 5,
+      "dex": 0,
+      "int": 0,
+      "luk": 0
+    }
+  },
+  "1312014": {
+    "koreanName": "그림붓",
+    "icon": "https://maplestory.io/api/GMS/200/item/1312014/icon",
+    "stats": {
+      "attack": 75,
+      "str": 0,
+      "dex": 0,
+      "int": 0,
+      "luk": 0,
+      "mad": 0,
+      "pdef": 0,
+      "mdef": 0,
+      "acc": 0,
+      "eva": 0,
+      "attackSpeed": 5
+    },
+    "requireStats": {
+      "level": 55,
       "str": 5,
       "dex": 0,
       "int": 0,
